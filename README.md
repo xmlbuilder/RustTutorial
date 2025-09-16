@@ -129,7 +129,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 
 ### 📦 [Chapter-07(컬렉션과 반복자)](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29)
 - [01-Collection.md](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/01-Collection.md)
-- [02-Map.md](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/02-Mpa.md)
+- [02-map.md](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/02-map.md)
 - [03-FilterMap.md](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/03-FilterMap.md)
 - [04-Iterator.md](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/04-Iterator.md)
 - [05-iterator-consuming.md](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/05-iterator-consuming.md)
