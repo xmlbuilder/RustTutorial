@@ -227,6 +227,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [05-Rc.md](./Chapter-15%28SmartPointers_and_MemoryModels%29/05-Rc.md)
 - [06-Arc.md](./Chapter-15%28SmartPointers_and_MemoryModels%29/06-Arc.md)
 - [07-Box&Rc&RcCell&Arc&Mutex요약.md](./Chapter-15%28SmartPointers_and_MemoryModels%29/07-Box%26Rc%26RcCell%26Arc%26Mutex%EC%9A%94%EC%95%BD.md)
+- [08-static_for_box_rc.md](./Chapter-15%28SmartPointers_and_MemoryModels%29/08-static_for_box_rc.md)
 
 
 ### [Chapter-16(문자열처리)](./Chapter-16%28%EB%AC%B8%EC%9E%90%EC%97%B4%EC%B2%98%EB%A6%AC%29)
