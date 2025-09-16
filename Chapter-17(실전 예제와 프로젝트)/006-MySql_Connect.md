@@ -378,10 +378,32 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     "join_date": "2025-09-10 15:30:00"
   }
 ]
-
-
-
 ```
+
+---
+
+## 🔧 실전 확장 아이디어
+- 📝 사용자 등록/조회/삭제 기능: CRUD API처럼 구성
+- 🔐 비밀번호 해싱 및 로그인 검증: bcrypt 또는 argon2 연동
+- 📦 데이터 페이징 처리: LIMIT, OFFSET 쿼리로 페이지별 조회
+- 📊 통계 기능: 가입자 수, 지역별 분포, 최근 가입자 등
+- 🌐 웹 서버 연동: axum, warp, rocket으로 REST API 서버 구성
+
+### 💡 예시: 사용자 로그인 검증 흐름
+```rust
+// 비밀번호 비교 예시
+use bcrypt::{verify, hash};
+
+let stored_hash = get_password_from_db("chulsoo@example.com")?;
+let is_valid = verify("입력된_비밀번호", &stored_hash)?;
+if is_valid {
+    println!("로그인 성공");
+} else {
+    println!("로그인 실패");
+}
+```
+
+
 
 
 
