@@ -105,7 +105,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 
 
 ### 🧰 [Chapter-06(트레잇과 제네릭)](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29)
-- [01-Generic&Trait&Lifetime.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/01-.md)
+- [01-Generic&Trait&Lifetime.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/01-Generic%26Trait%26Lifetime.md)
 - [02-Generic.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/02-Generic.md)
 - [03-Generic_Trait.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/03-Generic_Trait.md)
 - [04-Generic_Structure.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/04-Generic_Structure.md)
