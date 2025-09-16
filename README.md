@@ -104,7 +104,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [05-EnumPatternMatching_심화.md](./Chapter-05%28%ED%8C%A8%ED%84%B4%20%EB%A7%A4%EC%B9%AD%EA%B3%BC%20%EB%B6%84%ED%95%B4%29/05-EnumPatternMatching_%EC%8B%AC%ED%99%94.md)
 
 
-### 🧰 [Chapter-06(트레잇과 제네릭)](Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29)
+### 🧰 [Chapter-06(트레잇과 제네릭)](Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29)
 - [01-Generic_Trait_Lifetime.md](Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/01-Generic_Trait_Lifetime.md)
 - [02-Generic.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/02-Generic.md)
 - [03-Generic_Trait.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/03-Generic_Trait.md)
