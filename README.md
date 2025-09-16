@@ -216,7 +216,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [023-재귀및메모라이즈패턴.md](./Chapter-14%28DesignPattern%29/023-%EC%9E%AC%EA%B7%80%EB%B0%8F%EB%A9%94%EB%AA%A8%EB%9D%BC%EC%9D%B4%EC%A6%88%ED%8C%A8%ED%84%B4.md)
 
 
-
 ### 🧑‍🎓 [Chapter-15(SmartPointers_and_MemoryModels)](./Chapter-15%28SmartPointers_and_MemoryModels%29)
 - [01-메모리관리.md](./Chapter-15%28SmartPointers_and_MemoryModels%29/01-%EB%A9%94%EB%AA%A8%EB%A6%AC%EA%B4%80%EB%A6%AC.md)
 - [02-메모리해제.md](./Chapter-15%28SmartPointers_and_MemoryModels%29/02-%EB%A9%94%EB%AA%A8%EB%A6%AC%ED%95%B4%EC%A0%9C.md)
@@ -226,11 +225,14 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [06-Arc.md](./Chapter-15%28SmartPointers_and_MemoryModels%29/06-Arc.md)
 - [07-Box&Rc&RcCell&Arc&Mutex요약.md](./Chapter-15%28SmartPointers_and_MemoryModels%29/07-Box%26Rc%26RcCell%26Arc%26Mutex%EC%9A%94%EC%95%BD.md)
 
+  
+
 ### 🛠️ [Chapter-16(도구와 생산성)](./Chapter-16%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29)
 - [01-Clippy.md](./Chapter-16%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/01-Clippy.md)
 - [02-Coverage.md](./Chapter-16%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/02-Coverage.md)
 - [03-rustfmt.md](./Chapter-16%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/03-rustfmt.md)
 - [04-rust-analyzer.md](./Chapter-16%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/04-rust-analyzer.md)
+
 
 ### 🧪 [Chapter-17(실험적 주제 및 기타)](./Chapter-17%28%EC%8B%A4%ED%97%98%EC%A0%81%20%EC%A3%BC%EC%A0%9C%20%EB%B0%8F%20%EA%B8%B0%ED%83%80%29)
 - [001-lazy_static.md](./Chapter-17%28%EC%8B%A4%ED%97%98%EC%A0%81%20%EC%A3%BC%EC%A0%9C%20%EB%B0%8F%20%EA%B8%B0%ED%83%80%29/001-lazy_static.md)
