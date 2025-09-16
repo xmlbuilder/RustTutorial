@@ -225,24 +225,13 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [06-Arc.md](./Chapter-15%28SmartPointers_and_MemoryModels%29/06-Arc.md)
 - [07-Box&Rc&RcCell&Arc&Mutex요약.md](./Chapter-15%28SmartPointers_and_MemoryModels%29/07-Box%26Rc%26RcCell%26Arc%26Mutex%EC%9A%94%EC%95%BD.md)
 
-  
 
-### 🛠️ [Chapter-16(도구와 생산성)](./Chapter-16%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29)
-- [01-Clippy.md](./Chapter-16%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/01-Clippy.md)
-- [02-Coverage.md](./Chapter-16%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/02-Coverage.md)
-- [03-rustfmt.md](./Chapter-16%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/03-rustfmt.md)
-- [04-rust-analyzer.md](./Chapter-16%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/04-rust-analyzer.md)
+### [Chapter-16(문자열처리)](./Chapter-16%28%EB%AC%B8%EC%9E%90%EC%97%B4%EC%B2%98%EB%A6%AC%29)
+- [01-r#.md](./Chapter-16%28%EB%AC%B8%EC%9E%90%EC%97%B4%EC%B2%98%EB%A6%AC%29/01-r%23.md)
+- [02-문자열파싱.md](./Chapter-16%28%EB%AC%B8%EC%9E%90%EC%97%B4%EC%B2%98%EB%A6%AC%29/02-%EB%AC%B8%EC%9E%90%EC%97%B4%ED%8C%8C%EC%8B%B1.md)
+- [03-문자열ASCII출력.md](./Chapter-16%28%EB%AC%B8%EC%9E%90%EC%97%B4%EC%B2%98%EB%A6%AC%29/03-%EB%AC%B8%EC%9E%90%EC%97%B4ASCII%EC%B6%9C%EB%A0%A5.md)
+- [04-출력진법.md](./Chapter-16%28%EB%AC%B8%EC%9E%90%EC%97%B4%EC%B2%98%EB%A6%AC%29/04-%EC%B6%9C%EB%A0%A5%EC%A7%84%EB%B2%95.md)
 
-
-### 🧪 [Chapter-17(실험적 주제 및 기타)](./Chapter-17%28%EC%8B%A4%ED%97%98%EC%A0%81%20%EC%A3%BC%EC%A0%9C%20%EB%B0%8F%20%EA%B8%B0%ED%83%80%29)
-- [001-lazy_static.md](./Chapter-17%28%EC%8B%A4%ED%97%98%EC%A0%81%20%EC%A3%BC%EC%A0%9C%20%EB%B0%8F%20%EA%B8%B0%ED%83%80%29/001-lazy_static.md)
-- [002-dyn.md](./Chapter-17%28%EC%8B%A4%ED%97%98%EC%A0%81%20%EC%A3%BC%EC%A0%9C%20%EB%B0%8F%20%EA%B8%B0%ED%83%80%29/002-dyn.md)
-- [003-PartialEq.md](./Chapter-17%28%EC%8B%A4%ED%97%98%EC%A0%81%20%EC%A3%BC%EC%A0%9C%20%EB%B0%8F%20%EA%B8%B0%ED%83%80%29/003-PartialEq.md)
-- [004-객체비교.md](./Chapter-17%28%EC%8B%A4%ED%97%98%EC%A0%81%20%EC%A3%BC%EC%A0%9C%20%EB%B0%8F%20%EA%B8%B0%ED%83%80%29/004-%EA%B0%9D%EC%B2%B4%EB%B9%84%EA%B5%90.md)
-- [005-메모리주소출력.md](./Chapter-17%28%EC%8B%A4%ED%97%98%EC%A0%81%20%EC%A3%BC%EC%A0%9C%20%EB%B0%8F%20%EA%B8%B0%ED%83%80%29/005-%EB%A9%94%EB%AA%A8%EB%A6%AC%EC%A3%BC%EC%86%8C%EC%B6%9C%EB%A0%A5.md)
-- [006-FilterMap.md](./Chapter-17%28%EC%8B%A4%ED%97%98%EC%A0%81%20%EC%A3%BC%EC%A0%9C%20%EB%B0%8F%20%EA%B8%B0%ED%83%80%29/006-FilterMap.md)
-- [007-saturating_sub.md](./Chapter-17%28%EC%8B%A4%ED%97%98%EC%A0%81%20%EC%A3%BC%EC%A0%9C%20%EB%B0%8F%20%EA%B8%B0%ED%83%80%29/007-saturating_sub.md)
-- [008-Default.md](./Chapter-17%28%EC%8B%A4%ED%97%98%EC%A0%81%20%EC%A3%BC%EC%A0%9C%20%EB%B0%8F%20%EA%B8%B0%ED%83%80%29/008-Default.md)
 
 ### 🧪 [Chapter-17(실전 예제와 프로젝트)](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29)
 - [001-HermiteCurve.md](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/001-HermiteCurve.md)
@@ -252,5 +241,24 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [005-Directory파일찾기.md](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/005-Directory%ED%8C%8C%EC%9D%BC%EC%B0%BE%EA%B8%B0.md)
 
 
+### 🧪 [Chapter-18(기타 및 실험적 항목)](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29)
+- [01-io.md](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/01-io.md)
+- [02-lazy_static.md](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/02-lazy_static.md)
+- [03-Rand.md](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/03-Rand.md)
+- [04-FileIO.md](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/04-FileIO.md)
+- [05-PartialEq.md](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/05-PartialEq.md)
+- [06-객체비교.md](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/06-%EA%B0%9D%EC%B2%B4%EB%B9%84%EA%B5%90.md)
+- [07-PrintOrderChange.md](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/07-PrintOrderChange.md)
+- [08-FromInto.md](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/08-FromInto.md)
+- [09-Argument.md](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/09-Argument.md)
+- [10-CrossPlatform.md](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/10-CrossPlatform.md)
+- [11-Math.md](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/11-Math.md)
+- [12-함수형_프로그램밍.md](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/12-%ED%95%A8%EC%88%98%ED%98%95_%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8%EB%B0%8D.md)
 
+
+### 🛠️ [Chapter-19(도구와 생산성)](./Chapter-19%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29)
+- [(예정) 01-Clippy.md](./Chapter-19%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/01-Clippy.md)
+- [(예정) 02-Coverage.md](./Chapter-19%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/02-Coverage.md)
+- [(예정) 03-rustfmt.md](./Chapter-19%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/03-rustfmt.md)
+- [(예정) 04-rust-analyzer.md](./Chapter-19%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/04-rust-analyzer.md)
 
