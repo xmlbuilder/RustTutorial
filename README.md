@@ -55,7 +55,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [29-TimeDate.md](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/29-TimeDate.md)
 - [30-Overloading.md](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/30-Overloading.md)
 - [31-기본연산.md](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/31-%EA%B8%B0%EB%B3%B8%EC%97%B0%EC%82%B0.md)
-- [30-변수범위.md](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/30-%EB%B3%80%EC%88%98%EB%B2%94%EC%9C%84.md)
+- [32-변수범위.md](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/32-%EB%B3%80%EC%88%98%EB%B2%94%EC%9C%84.md)
 ### 🧵 [Chapter-03(제어 흐름과 함수)](./Chapter-03%28%EC%A0%9C%EC%96%B4%20%ED%9D%90%EB%A6%84%EA%B3%BC%20%ED%95%A8%EC%88%98%29)
 - [01-Function.md](./Chapter-03%28%EC%A0%9C%EC%96%B4%20%ED%9D%90%EB%A6%84%EA%B3%BC%20%ED%95%A8%EC%88%98%29/01-Function.md)
 - [02-FunctionParameter.md](./Chapter-03%28%EC%A0%9C%EC%96%B4%20%ED%9D%90%EB%A6%84%EA%B3%BC%20%ED%95%A8%EC%88%98%29/02-FunctionParameter.md)
