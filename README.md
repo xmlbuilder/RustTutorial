@@ -105,7 +105,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 
 
 ### 🧰 [Chapter-06(트레잇과 제네릭)](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29)
-
 - [01-Generic&Trait&Lifetime.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/01-.md)
 - [02-Generic.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/02-Generic.md)
 - [03-Generic_Trait.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/03-Generic_Trait.md)
@@ -120,7 +119,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [12-DropTrait.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/12-DropTrait.md)
 - [13-trait_가시성.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/13-trait_%EA%B0%80%EC%8B%9C%EC%84%B1.md)
 - [14-재귀에빠질수있는_trait.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/14-%EC%9E%AC%EA%B7%80%EC%97%90%EB%BF%90%EC%A7%88%EC%88%98%EC%9E%88%EB%8A%94_trait.md)
-
 - [15-dyn.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/15-dyn.md)
 - [16-Trait_Borrow](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/16-Trait_Borrow.md)
 - [17-AsRef](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%97%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/17-AsRef.md)
