@@ -10,7 +10,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 ## 📚 목차
 
 ### 📘 Chapter-01: Rust 소개 및 환경 설정
-- [00-Rust_소개.md](./Chapter-01(Rust 소개 및 환경 설정)/00-Rust_소개.md)
+- [00-Rust_소개.md](.%20Chapter-01(Rust 소개 및 환경 설정)%2000-Rust_소개.md)
 - [01-Cargo.toml_파일분석.md](.%20Chapter-01%2001-Cargo.toml_파일분석.md)
 - [02-RustBuild.md](./Chapter-01(Rust 소개 및 환경 설정)/02-RustBuild.md)
 - [03-Crate.md](./Chapter-01/03-Crate.md)
