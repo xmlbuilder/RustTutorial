@@ -214,6 +214,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [021-Command.md](./Chapter-14%28DesignPattern%29/021-Command.md)
 - [022-Memento.md](./Chapter-14%28DesignPattern%29/022-Memento.md)
 - [023-재귀및메모라이즈패턴.md](./Chapter-14%28DesignPattern%29/023-%EC%9E%AC%EA%B7%80%EB%B0%8F%EB%A9%94%EB%AA%A8%EB%9D%BC%EC%9D%B4%EC%A6%88%ED%8C%A8%ED%84%B4.md)
+- [024-Proxy.md](./Chapter-14%28DesignPattern%29/024-Proxy.md)
 
 
 ### 🧑‍🎓 [Chapter-15(SmartPointers_and_MemoryModels)](./Chapter-15%28SmartPointers_and_MemoryModels%29)
