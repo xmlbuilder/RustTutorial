@@ -1,5 +1,4 @@
-좋아요 JungHwan님, 주신 코드와 이미지 속 내용, 그리고 에러 메시지까지 모두 종합해서
-**Rust 클로저의 환경 캡처(Closure Environment Capture)**에 대한 문서를 정리해 드릴게요.
+# **Rust 클로저의 환경 캡처(Closure Environment Capture)** 정리.
 
 ## 📚 Rust 클로저의 환경 캡처 정리
 ### 1. 클로저(Closure)란?
