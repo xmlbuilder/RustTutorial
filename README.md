@@ -182,12 +182,15 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 
 
 ### 🧩 [Chapter-13(매크로와 메타프로그래밍)](Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%29)
-- [01-macro_rules.md](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8%EB%B0%8D%29/01-macro_rules.md)
-- [02-derive_macro.md](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8%EB%B0%8D%29/02-derive_macro.md)
-- [03-procedural_macro.md](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8%EB%B0%8D%29/03-procedural_macro.md)
-- [04-inner_attribute.md](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8%EB%B0%8D%29/04-inner_attribute.md)
-- [05-repr.md](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8%EB%B0%8D%29/05-repr.md)
-- [06-Turbofish.md](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8%EB%B0%8D%29/06-Turbofish.md)
+- [01-macro_rules.md](Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%29
+/01-macro_rules.md)
+- [02-macro위치.md](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%29/02-macro%EC%9C%84%EC%B9%98.md)
+- [03-Turbofish.md](Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%29
+/03-Turbofish.md)
+- [(예정) 04-procedural_macro.md](Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%29
+/04-procedural_macro.md)
+
+
 
 ### 🧑‍🎓 [Chapter-14(디자인 패턴)](./Chapter-14%28%EB%94%94%EC%9E%90%EC%9D%B8%20%ED%8C%A8%ED%84%B4%29)
 - [000-UML설명문서.md](./Chapter-14%28%EB%94%94%EC%9E%90%EC%9D%B8%20%ED%8C%A8%ED%84%B4%29/000-UML%EC%84%A4%EB%AA%85%EB%AC%B8%EC%84%9C.md)
