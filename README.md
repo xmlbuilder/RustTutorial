@@ -69,7 +69,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [10-For.md](./Chapter-03%28%EC%A0%9C%EC%96%B4%20%ED%9D%90%EB%A6%84%EA%B3%BC%20%ED%95%A8%EC%88%98%29/10-For.md)
 - [11-Closure.md](./Chapter-03%28%EC%A0%9C%EC%96%B4%20%ED%9D%90%EB%A6%84%EA%B3%BC%20%ED%95%A8%EC%88%98%29/11-Closure.md)
 - [12-Closure_Capture.md](./Chapter-03%28%EC%A0%9C%EC%96%B4%20%ED%9D%90%EB%A6%84%EA%B3%BC%20%ED%95%A8%EC%88%98%29/12-Closure_Capture.md)
-- [13-함수형_프로그래밍.md](./Chapter-03%28%EC%A0%9C%EC%96%B4%20%ED%9D%90%EB%A6%84%EA%B3%BC%20%ED%95%A8%EC%88%98%29/13-%ED%95%A8%EC%88%98%ED%98%95_%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8%EB%B0%8D.md)
+- [13-함수인자.md](./Chapter-03%28%EC%A0%9C%EC%96%B4%20%ED%9D%90%EB%A6%84%EA%B3%BC%20%ED%95%A8%EC%88%98%29/13-%ED%95%A8%EC%88%98%EC%9D%B8%EC%9E%90.md)
 - [14-Static_Method_호출.md](./Chapter-03%28%EC%A0%9C%EC%96%B4%20%ED%9D%90%EB%A6%84%EA%B3%BC%20%ED%95%A8%EC%88%98%29/14-Static_Method_%ED%98%B8%EC%B6%9C.md)
 
 ### 🧠 [Chapter-04(소유권과 참조)](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29)
