@@ -1,7 +1,8 @@
-**반복자 패턴 (Iterator Pattern)**을 Rust를 중심으로, C++, C#, Python, Java까지 비교하며 설명해드릴게요. 마지막엔 구조를 시각화한 Mermaid 다이어그램도 포함할게요.
+# **반복자 패턴 (Iterator Pattern)**
 
 ## 🧠 반복자 패턴이란?
 반복자 패턴은 컬렉션의 내부 구조를 노출하지 않고, 그 요소들을 순차적으로 접근할 수 있게 해주는 디자인 패턴입니다.
+
 ### 🔑 핵심 구성 요소
 - Iterator 인터페이스: hasNext(), next() 같은 순회 메서드 정의
 - ConcreteIterator: 실제 순회 로직 구현
