@@ -16,7 +16,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [03-Crate.md](./Chapter-01%28Rust%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EC%84%A4%EC%A0%95%29/03-Crate.md)
 - [04-Crate_Package.md](./Chapter-01%28Rust%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EC%84%A4%EC%A0%95%29/04-Crate_Package.md)
 - [05-rust-cargo-cheatsheet.md](./Chapter-01%28Rust%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EC%84%A4%EC%A0%95%29/05-rust-cargo-cheatsheet.md)
-- [06-빌드_옵션.md](./Chapter-01%28Rust%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EC%84%A4%EC%A0%95%29/06-%EB%B9%8C%EB%93%9C_%EC%98%B5%EC%85%98.md)
+- [06-작명규칙.md](./Chapter-01%28Rust%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EC%84%A4%EC%A0%95%29/06-%EC%9E%91%EB%AA%85%EA%B7%9C%EC%B9%99.md)
 - [07-프로젝트_구조.md](./Chapter-01%28Rust%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EC%84%A4%EC%A0%95%29/07-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8_%EA%B5%AC%EC%A1%B0.md)
 - [08-테스트_구조.md](./Chapter-01%28Rust%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EC%84%A4%EC%A0%95%29/08-%ED%85%8C%EC%8A%A4%ED%8A%B8_%EA%B5%AC%EC%A1%B0.md)
 - [09-CI_CD.md](./Chapter-01%28Rust%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EC%84%A4%EC%A0%95%29/09-CI_CD.md)
