@@ -206,7 +206,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [013-Prototype.md](./Chapter-14%28DesignPattern%29/013-Prototype.md)
 - [014-Bridge.md](./Chapter-14%28DesignPattern%29/014-Bridge.md)
 - [015-Facade.md](./Chapter-14%28DesignPattern%29/015-Facade.md)
-- [016-Proxy.md](./Chapter-14%28DesignPattern%29/016-Proxy.md)
+- [016-Visitor.md](./Chapter-14%28DesignPattern%29/016-Visitor.md)
 - [017-TemplateMethod.md](./Chapter-14%28DesignPattern%29/017-TemplateMethod.md)
 - [018-Iterator.md](./Chapter-14%28DesignPattern%29/018-Iterator.md)
 - [019-Mediator.md](./Chapter-14%28DesignPattern%29/019-Mediator.md)
