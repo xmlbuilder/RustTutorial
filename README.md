@@ -139,7 +139,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [01-Option.md](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/01-Option.md)
 - [02-에러처리.md](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/02-%EC%97%90%EB%9F%AC%EC%B2%98%EB%A6%AC.md)
 - [03-에러처리전파.md](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/03-%EC%97%90%EB%9F%AC%EC%B2%98%EB%A6%AC%EC%A0%84%ED%8C%8C.md)
-- [04-에러처리전파_심화.md](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/04-%EC%97%90%EB%9F%AC%EC%B2%98%EB%A6%AC%EC%A0%84%ED%8F%AC_%EC%8B%AC%ED%99%94.md)
+- [04-에러처리전파_심화.md](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/04-%EC%97%90%EB%9F%AC%EC%B2%98%EB%A6%AC%EC%A0%84%ED%8C%8C_%EC%8B%AC%ED%99%94.md)
 - [05-에러처리정리.md](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/05-%EC%97%90%EB%9F%AC%EC%B2%98%EB%A6%AC%EC%A0%95%EB%A6%AC.md)
 - [06-Panic.md](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/06-Panic.md)
 - [07-anyhow.md](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/07-anyhow.md)
