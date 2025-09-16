@@ -133,7 +133,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [03-FilterMap.md](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/03-FilterMap.md)
 - [04-Iterator.md](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/04-Iterator.md)
 - [05-iterator-consuming.md](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/05-iterator-consuming.md)
-- [06-Vector심화.md][06-Vector심화.md](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/06-Vector%EC%8B%AC%ED%99%94.md)
+- [06-Vector심화.md](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/06-Vector%EC%8B%AC%ED%99%94.md)
 
 ### 🚨 [Chapter-08(에러 처리)](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%29)
 - [01-Option.md](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%29/01-Option.md)
