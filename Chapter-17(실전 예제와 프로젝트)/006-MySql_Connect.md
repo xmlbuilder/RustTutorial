@@ -218,16 +218,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 ---
 
 ## 📦 2. serde로 JSON 출력하기
+
 Rust에서 DB 결과를 JSON으로 출력하려면 serde를 사용하면 깔끔하게 직렬화할 수 있어요.
 
 
-✅ 설치
+### ✅ 설치
+```
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+```
 
-
-✅ 구조체 정의
+### ✅ 구조체 정의
+```rust
 use serde::Serialize;
 
 #[derive(Debug, Serialize)]
@@ -236,26 +239,29 @@ struct Customer {
     email: String,
     join_date: String,
 }
+```
 
-
-✅ DB 결과를 구조체로 매핑
+### ✅ DB 결과를 구조체로 매핑
+```rust
 let customers: Vec<Customer> = conn.query_map(
     "SELECT name, email, join_date FROM customers",
     |(name, email, join_date): (String, String, String)| {
         Customer { name, email, join_date }
     },
 )?;
+```
 
-
-✅ JSON 출력
+### ✅ JSON 출력
+```rust
 let json = serde_json::to_string_pretty(&customers)?;
 println!("{}", json);
-
+```
 
 to_string_pretty는 보기 좋은 들여쓰기 형태로 출력합니다.
 
 
-🧠 결과 예시
+### 🧠 결과 예시
+```
 [
   {
     "name": "김철수",
@@ -264,6 +270,7 @@ to_string_pretty는 보기 좋은 들여쓰기 형태로 출력합니다.
   },
   ...
 ]
+```
 
 ### 전체 코드
 
@@ -375,5 +382,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 
 ```
+
 
 
