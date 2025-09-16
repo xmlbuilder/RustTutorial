@@ -167,17 +167,18 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [(예정) 06-외부라이브러리.md](Chapter-10%28%EB%AA%A8%EB%93%88%2C%20%ED%81%AC%EB%A0%88%EC%9D%B4%ED%8A%B8%2C%20Cargo%29/06-%EC%99%B8%EB%B6%80%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC.md)
 
 ### 🔀 [Chapter-11(비동기와 병렬 처리)](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29)
-- [01-async_await.md](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/01-async_await.md)
-- [02-tokio_futures.md](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/02-tokio_futures.md)
-- [03-thread_channel.md](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/03-thread_channel.md)
-- [04-Send_Sync.md](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/04-Send_Sync.md)
+- [01-Async.md](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/01-Async.md)
+- [02-Rayon.md](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/02-Rayon.md)
+- [(예정) 03-tokio_futures.md](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/03-tokio_futures.md)
+- [(예정) 04-thread_channel.md](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/04-thread_channel.md)
+- [(예정) 05-Send_Sync.md](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/05-Send_Sync.md)
 
 
 ### 🧨 [Chapter-12(Unsafe와 FFI)](./Chapter-12%28Unsafe%EC%99%80%20FFI%29)
-- [01-unsafe.md](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/01-unsafe.md)
-- [02-raw_pointer.md](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/02-raw_pointer.md)
-- [03-FFI기초.md](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/03-FFI%EA%B8%B0%EC%B4%88.md)
-- [04-FFI_C호출.md](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/04-FFI_C%ED%98%B8%EC%B6%9C.md)
+- [(예정)01-unsafe.md](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/01-unsafe.md)
+- [(예정)02-raw_pointer.md](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/02-raw_pointer.md)
+- [(예정)03-FFI기초.md](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/03-FFI%EA%B8%B0%EC%B4%88.md)
+- [(예정)04-FFI_C호출.md](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/04-FFI_C%ED%98%B8%EC%B6%9C.md)
 
 
 ### 🧩 [Chapter-13(매크로와 메타프로그래밍)](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8%EB%B0%8D%29)
