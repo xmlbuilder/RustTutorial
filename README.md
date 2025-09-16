@@ -153,8 +153,10 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [05-UnitTest.md](./Chapter-09%28%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%94%94%EB%B2%84%EA%B9%85%29/05-UnitTest.md)
 - [06-Test비동기함수.md](./Chapter-09%28%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%94%94%EB%B2%84%EA%B9%85%29/06-Test%EB%B9%84%EB%8F%99%EA%B8%B0%ED%95%A8%EC%88%98.md)
 - [07-Test문서.md](./Chapter-09%28%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%94%94%EB%B2%84%EA%B9%85%29/07-Test%EB%AC%B8%EC%84%9C.md)
-- [08-Debugging.md](./Chapter-09%28%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%94%94%EB%B2%84%EA%B9%85%29/08-Debugging.md)
-- [09-assert_panic.md](./Chapter-09%28%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%94%94%EB%B2%84%EA%B9%85%29/09-assert_panic.md)
+- [07-Test문서.md](./Chapter-09%28%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%94%94%EB%B2%84%EA%B9%85%29/07-Test%EB%AC%B8%EC%84%9C.md)
+- [08-InnerAttriubte_Clippy.md](./Chapter-09%28%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%94%94%EB%B2%84%EA%B9%85%29/08-InnerAttriubte_Clippy.md)
+- [09-InnerAttriubte_repr.md](./Chapter-09%28%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%94%94%EB%B2%84%EA%B9%85%29/09-InnerAttriubte_repr.md)
+- [10-커버리지측정.md](./Chapter-09%28%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%94%94%EB%B2%84%EA%B9%85%29/10-%EC%BB%A4%EB%B2%84%EB%A6%AC%EC%A7%80%EC%B8%A1%EC%A0%95.md)
 
 ### 🧱 [Chapter-10(모듈과 크레이트)](./Chapter-10%28%EB%AA%A8%EB%93%88%EA%B3%BC%20%ED%81%AC%EB%A0%88%EC%9D%B4%ED%8A%B8%29)
 - [01-module.md](./Chapter-10%28%EB%AA%A8%EB%93%88%EA%B3%BC%20%ED%81%AC%EB%A0%88%EC%9D%B4%ED%8A%B8%29/01-module.md)
