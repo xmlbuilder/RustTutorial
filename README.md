@@ -171,7 +171,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [01-module.md](Chapter-10%28%EB%AA%A8%EB%93%88%2C%20%ED%81%AC%EB%A0%88%EC%9D%B4%ED%8A%B8%2C%20Cargo%29/01-module.md)
 - [02-use.md](./Chapter-10%28%EB%AA%A8%EB%93%88%2C%20%ED%81%AC%EB%A0%88%EC%9D%B4%ED%8A%B8%2C%20Cargo%29/02-use.md)
 - [03-제한자.md](./Chapter-10%28%EB%AA%A8%EB%93%88%2C%20%ED%81%AC%EB%A0%88%EC%9D%B4%ED%8A%B8%2C%20Cargo%29/03-%EC%A0%9C%ED%95%9C%EC%9E%90.md)
-- [(예정) 04-Crate구조.md](Chapter-10%28%EB%AA%A8%EB%93%88%2C%20%ED%81%AC%EB%A0%88%EC%9D%B4%ED%8A%B8%2C%20Cargo%29/04-Crate%EA%B5%AC%EC%A1%B0.md)
+- [04-Crate구조.md](./Chapter-10%28%EB%AA%A8%EB%93%88%2C%20%ED%81%AC%EB%A0%88%EC%9D%B4%ED%8A%B8%2C%20Cargo%29/04-Crate%EA%B5%AC%EC%A1%B0.md)
 - [(예정) 05-Workspace.md](Chapter-10%28%EB%AA%A8%EB%93%88%2C%20%ED%81%AC%EB%A0%88%EC%9D%B4%ED%8A%B8%2C%20Cargo%29/05-Workspace.md)
 - [(예정) 06-외부라이브러리.md](Chapter-10%28%EB%AA%A8%EB%93%88%2C%20%ED%81%AC%EB%A0%88%EC%9D%B4%ED%8A%B8%2C%20Cargo%29/06-%EC%99%B8%EB%B6%80%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC.md)
 
