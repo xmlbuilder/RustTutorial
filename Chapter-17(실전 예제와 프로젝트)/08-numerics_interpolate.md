@@ -7,9 +7,9 @@
 
 ## 표기(Notation)
 
-- 구간: $\([a,b]\)$, 길이 $\(L = b-a\)$, 선형변환 $\(x = \tfrac{a+b}{2} + \tfrac{b-a}{2}\,t\)$, $\(t\in[-1,1]\)$  
-  편의로 $\(c_1=\tfrac{b-a}{2},\; c_2=\tfrac{a+b}{2}\)$ 사용.
-- 체비셰프–로바토 노드: $\(\theta_k=\frac{k\pi}{n},\; t_k=\cos\theta_k,\; x_k=c_2+c_1 t_k,\; k=0,\dots,n\)$
+- 구간: $\([a,b]\)$, 길이 $\(L = b-a\)$, 선형변환 $\(x = \tfrac{a+b}{2} + \tfrac{b-a}{2}t\)$, $\(t\in[-1,1]\)$  
+  편의로 $\(c_1=\tfrac{b-a}{2}, c_2=\tfrac{a+b}{2}\)$ 사용.
+- 체비셰프–로바토 노드: $\(\theta_k=\frac{k\pi}{n}, t_k=\cos\theta_k, x_k=c_2+c_1 t_k, k=0,\dots,n\)$
 - B-spline: 차수 $\(p\)$, 컨트롤포인트 개수 $\(n+1\)$, 매듭 개수 $\(m+1\)$  
   **관계식:** $\(m = n + p + 1 \iff |U|= n + p + 2\)$.
 
@@ -21,7 +21,7 @@
 - 공식
 
 $$
-  \int_a^b f(x)\,dx \approx \frac{b-a}{6}\bigl[f(a)+4f(\tfrac{a+b}{2})+f(b)\bigr].
+  \int_a^b f(x) dx \approx \frac{b-a}{6}\bigl[f(a)+4f(\tfrac{a+b}{2})+f(b)\bigr].
 $$
 
 - 정밀도: 구간 길이 $\(h=b-a\)$ 에서 **오차 $\(O(h^5)\)$**, 복합 규칙을 $\(N\)$ 분할로 쓰면 전체 $\(O(N^{-4})\)$.
@@ -39,9 +39,9 @@ $$
 - u, v 각각 Simpson을 적용한 텐서곱
 
 $$
-  \iint_{[u_0,u_1]\times[v_0,v_1]} f\,\mathrm{d}u\,\mathrm{d}v
+  \iint_{[u_0,u_1]\times[v_0,v_1]} f \mathrm{d}u \mathrm{d}v
   \approx \frac{(u_1-u_0)(v_1-v_0)}{36}
-  \sum_{i,j\in\{0,1,2\}} w_i w_j\, f(u_i,v_j)
+  \sum_{i,j\in\{0,1,2\}} w_i w_j f(u_i,v_j)
 $$
 
 단, 1D 가중치 \(w = (1,4,1)\), 격자점은 \((u_0,u_m,u_1)\times(v_0,v_m,v_1)\).
@@ -53,7 +53,7 @@ $$
 - 표준구간 $\([-1,1]\)$ 의 노드 $\(\xi_i\)$, 가중치 $\(w_i\)$ 를 사용하여
 
 $$
-  \int_a^b f(x)\,dx \approx c_1 \sum_{i=1}^{24} w_i\, f(c_1 \xi_i + c_2).
+  \int_a^b f(x) dx \approx c_1 \sum_{i=1}^{24} w_i  f(c_1 \xi_i + c_2).
 $$
 
 - 2D는 텐서곱 $\(\sum_i\sum_j w_i w_j f(u(\xi_i),v(\xi_j))\)$ 후 $\(c_u c_v\)$ 배.
@@ -72,10 +72,10 @@ $$
 - 표준구간 적분은
 
 $$
-  \int_{-1}^1 f(t)\,dt = a_0 + 2\sum_{\substack{j\ge 2\\ j\ \text{even}}}\frac{a_j}{1-j^2}.
+  \int_{-1}^1 f(t) dt = a_0 + 2\sum_{\substack{j\ge 2\\ j\ \text{even}}}\frac{a_j}{1-j^2}.
 $$
 
-- 일반구간은 $\([a,b]\)$ 스케일로 $\(c_1\int_{-1}^1 f(c_2+c_1 t)\,dt\)$.
+- 일반구간은 $\([a,b]\)$ 스케일로 $\(c_1\int_{-1}^1 f(c_2+c_1 t) dt\)$.
 
 ### **비매끈 \(f\)에 대한 분할(Automatic split)**
 - $\(|x|\)$, $\(\max(0,x)\)$ 등 **모서리**가 있는 함수는 단일 구간 CC 수렴이 $\(O(n^{-2})\)$.
@@ -105,7 +105,7 @@ $$
   k_1=f(x_n),\ k_2=f(x_n+\tfrac{h}{2}),\ k_3=f(x_n+\tfrac{h}{2}),\ k_4=f(x_n+h).
 $$
 
-- 1D 적분 $\(\int_a^b f(x)\,dx\)$ 는 $\(y'(x)=f(x),\,y(a)=0\)$ 로 두고 $\(y(b)\)$ 를 반환.
+- 1D 적분 $\(\int_a^b f(x) dx\)$ 는 $\(y'(x)=f(x), y(a)=0\)$ 로 두고 $\(y(b)\)$ 를 반환.
 
 ## 3.2 RK45 (Dormand–Prince, 적응 스텝)
 - 5차/4차 쌍으로 국소 오차 추정, 수용 시 스텝 증감:
