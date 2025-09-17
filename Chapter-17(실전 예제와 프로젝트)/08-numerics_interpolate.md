@@ -112,7 +112,7 @@ $$
 
 $$
   h_{\text{new}} = h\cdot \mathrm{safety}\cdot\Bigl(\frac{\text{tol}}{\text{err}}\Bigr)^{1/5},
-$$\
+$$
 
   범위 제한($\(0.2\sim5.0\)$) 적용.  
 - 코드에 사용된 계수는 표준 Dormand–Prince(5(4)) 계수.
