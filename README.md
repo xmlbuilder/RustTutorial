@@ -21,7 +21,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [08-의존성_설정.md](./Chapter-01%28Rust%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EC%84%A4%EC%A0%95%29/08-%EC%9D%98%EC%A1%B4%EC%84%B1_%EC%84%A4%EC%A0%95.md)
 - [09-CI_CD.md](./Chapter-01%28Rust%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EC%84%A4%EC%A0%95%29/09-CI_CD.md)
 - [10-Rust이해돕기.md](./Chapter-01%28Rust%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EC%84%A4%EC%A0%95%29/10-Rust%EC%9D%B4%ED%95%B4%EB%8F%95%EA%B8%B0.md)
-
+- [11-Variable_NameRule.md](./Chapter-01%28Rust%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EC%84%A4%EC%A0%95%29/11-Variable_NameRule.md)
 ---
 
 ### 🧮 [Chapter-02(기본 문법과 타입 시스템)](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29)
