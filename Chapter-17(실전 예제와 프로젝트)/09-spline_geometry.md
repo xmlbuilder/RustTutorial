@@ -33,14 +33,14 @@ $$
 - 1차 이상 미분은 보조 테이블 $\(a\)$ 와 경계
 
 $$
-  j_1=\begin{cases}
-  1,& r-k\ge -1\\
-  - (r-k),& \text{else}
-  \end{cases},\qquad
-  j_2=\begin{cases}
-  k-1,& r-1\le p-k\\
-  p-r,& \text{else}
-  \end{cases}
+j_1 = \begin{cases}
+1, & \text{if } r - k \ge -1 \\
+-(r - k), & \text{otherwise}
+\end{cases}, \qquad
+j_2 = \begin{cases}
+k - 1, & \text{if } r - 1 \le p - k \\
+p - r, & \text{otherwise}
+\end{cases}
 $$
 
   을 사용하여 내부 합을 정확히 집계.  
