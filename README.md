@@ -101,6 +101,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [21-mut_위치_주의.md](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/21-mut_%EC%9C%84%EC%B9%98_%EC%A3%BC%EC%9D%98.md)
 - [22-saturating_sub.md](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/22-saturating_sub.md)
 - [23-Upcasting.md](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/23-Upcasting.md)
+- [24-for_lifetime(HRTB).md](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/24-for_lifetime(HRTB).md)
+
 
 ### 🧬 [Chapter-05(패턴 매칭과 분해)](./Chapter-05%28%ED%8C%A8%ED%84%B4%20%EB%A7%A4%EC%B9%AD%EA%B3%BC%20%EB%B6%84%ED%95%B4%29)
 - [01-Match.md](./Chapter-05%28%ED%8C%A8%ED%84%B4%20%EB%A7%A4%EC%B9%AD%EA%B3%BC%20%EB%B6%84%ED%95%B4%29/01-Match.md)
