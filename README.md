@@ -196,7 +196,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [01-macro_rules.md](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%29/01-macro_rules.md)
 - [02-macro위치.md](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%29/02-macro%EC%9C%84%EC%B9%98.md)
 - [03-Turbofish.md](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%29/03-Turbofish.md)
-- [(예정) 04-procedural_macro.md](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%29/04-procedural_macro.md)
+- [04-procedural_macro.md](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%29/04-procedural_macro.md)
 
 
 
