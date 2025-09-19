@@ -189,7 +189,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [01-unsafe.md](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/01-unsafe.md)
 - [02-raw_pointer.md](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/02-raw_pointer.md)
 - [03-FFI기초.md](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/03-FFI%EA%B8%B0%EC%B4%88.md)
-- [(예정)04-FFI_C호출.md](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/04-FFI_C%ED%98%B8%EC%B6%9C.md)
+- [04-FFI_C호출.md](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/04-FFI_C%ED%98%B8%EC%B6%9C.md)
 
 
 ### 🧩 [Chapter-13(매크로와 메타프로그래밍)](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%29)
