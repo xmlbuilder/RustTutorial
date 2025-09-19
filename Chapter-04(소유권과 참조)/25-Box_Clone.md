@@ -1,6 +1,6 @@
 # clone_box
 
-ust에서 Box<dyn Trait>를 복제하려면 일반적인 .clone()으로는 안 되고, trait object cloning 패턴을 따라야 함.
+Rust에서 Box<dyn Trait>를 복제하려면 일반적인 .clone()으로는 안 되고, trait object cloning 패턴을 따라야 함.
 아래에 clone_box 문법을 정리하고, 전체 수식 타입별로 어떻게 적용되는지도 깔끔하게 정리.
 
 ## 🧠 clone_box 문법 정리
@@ -140,5 +140,6 @@ Rust의 소유권 시스템 덕분에:
 | Box::new(...)  | 복제된 객체를 힙에 할당하고 Box 스마트 포인터로 감쌈   |
 | 반환           | 새 Box<dyn Exp>가 복제된 객체의 소유권을 갖고 반환됨   |
 | 결과           | 원본과 독립적인 복제본이 생기며 안전하게 사용 가능     |
+
 
 
