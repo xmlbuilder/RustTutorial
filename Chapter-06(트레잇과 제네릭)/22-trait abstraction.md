@@ -149,6 +149,7 @@ classDiagram
     HomogeneousPoint <|.. Point3D
     HomogeneousPoint <|.. Point4D
   ```
+---
 
 ## 🧠 Rust의 trait vs 전통적인 interface
 | 항목                     | Rust: trait                  | Java/C#: interface         |
@@ -172,6 +173,7 @@ Rust의 trait는 단순히 "이 타입은 이 메서드를 구현해야 해"가 
 "이 타입은 이 행동을 할 수 있어"라는 능력 기반(capability-based) 설계.
 
 ---
+
 
 
 
