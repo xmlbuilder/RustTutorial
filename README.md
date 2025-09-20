@@ -288,7 +288,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 
 ### 🛠️ [Chapter-19(도구와 생산성)](./Chapter-19%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29)
 - [01-Clippy.md](./Chapter-19%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/01-Clippy.md)
-- [(예정) 02-Coverage.md](./Chapter-19%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/02-Coverage.md)
+- [02-Coverage.md](./Chapter-19%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/02-Coverage.md)
 - [(예정) 03-rustfmt.md](./Chapter-19%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/03-rustfmt.md)
 - [(예정) 04-rust-analyzer.md](./Chapter-19%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/04-rust-analyzer.md)
 
