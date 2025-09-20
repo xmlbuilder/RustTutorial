@@ -6,26 +6,26 @@ Rust에서 Option<T>과 Result<T, E>는 에러 없는 안전한 프로그래밍�
 | 메서드                        | 동작 조건      | 반환 타입                 | 설명                                      |
 |-------------------------------|----------------|--------------------------|-------------------------------------------|
 | `.unwrap()`                     | Some             | T                      | None이면 panic 발생 (❌ 위험)              |
-| `.expect("msg")`              | Some            | T                       | None이면 panic + 메시지 출력 (❌ 위험)     |
+| `.expect("msg")`                | Some            | T                       | None이면 panic + 메시지 출력 (❌ 위험)     |
 | `.unwrap_or(default)`           | 항상            | T                       | None이면 기본값 반환 (✅ 안전)             |
-| `.unwrap_or_else(||)`           | 항상            | T                       | None이면 함수 실행해서 값 반환 (✅ 안전)   |
-| `.map(|v| ...)`                 | Some            | Option<U>               | 값에 함수 적용 (✅ 안전)                  |
-| `.and_then(|v| ...)`            | Some            | Option<U>              | 체이닝 처리 (Option → Option) (✅ 안전)   |
-| `.ok_or(err)`                   | Some/None       | Result<T, E>          | None → Err(err)로 변환 (✅ 안전)           |
-| `.ok_or_else(|| err)`           | Some/None       | Result<T, E>          | None → Err(err) (지연 생성) (✅ 안전)      |
+| <code>`.unwrap_or_else(||)</code>  | 항상            | T                       | None이면 함수 실행해서 값 반환 (✅ 안전)   |
+| <code>`.map(|v| ...)</code>       | Some            | Option<U>               | 값에 함수 적용 (✅ 안전)                  |
+| <code>`.and_then(|v| ...)</code>  | Some            | Option<U>              | 체이닝 처리 (Option → Option) (✅ 안전)   |
+| `.ok_or(err)`                     | Some/None       | Result<T, E>          | None → Err(err)로 변환 (✅ 안전)           |
+| <code>`.ok_or_else(|| err)`</code> | Some/None       | Result<T, E>          | None → Err(err) (지연 생성) (✅ 안전)      |
 
 
 ## ✅ 2. Result<T, E>에서 값 추출하는 방법
 | 메서드                  | 동작 조건     | 반환 타입         | 설명                                      |
 |-------------------------|----------------|--------------------|-------------------------------------------|
-| .unwrap()               | Ok             | T                  | Err이면 panic 발생 (❌ 위험)               |
-| .expect("msg")          | Ok             | T                  | Err이면 panic + 메시지 출력 (❌ 위험)      |
-| .unwrap_or(default)     | 항상           | T                  | Err이면 기본값 반환 (✅ 안전)              |
-| .unwrap_or_else(|e| ...) | 항상          | T                  | Err이면 함수 실행해서 값 반환 (✅ 안전)    |
-| .map(|v| ...)           | Ok             | Result<U, E>       | 값에 함수 적용 (✅ 안전)                  |
-| .and_then(|v| ...)      | Ok             | Result<U, E>       | 체이닝 처리 (Result → Result) (✅ 안전)   |
-| .ok()                   | Ok/Err         | Option<T>          | Err → None, Ok → Some (✅ 안전)            |
-| .err()                  | Ok/Err         | Option<E>          | Ok → None, Err → Some (✅ 안전)            |
+| `.unwrap()`               | Ok             | T                  | Err이면 panic 발생 (❌ 위험)               |
+| `.expect("msg")`         | Ok             | T                  | Err이면 panic + 메시지 출력 (❌ 위험)      |
+| `.unwrap_or(default)`     | 항상           | T                  | Err이면 기본값 반환 (✅ 안전)              |
+| `.unwrap_or_else(|e| ...)`</code> | 항상          | T                  | Err이면 함수 실행해서 값 반환 (✅ 안전)    |
+| <code>`.map(|v| ...)`</code>           | Ok             | Result<U, E>       | 값에 함수 적용 (✅ 안전)                  |
+| <code>`.and_then(|v| ...)`</code>      | Ok             | Result<U, E>       | 체이닝 처리 (Result → Result) (✅ 안전)   |
+| `.ok()`                   | Ok/Err         | Option<T>          | Err → None, Ok → Some (✅ 안전)            |
+| `.err()`                  | Ok/Err         | Option<E>          | Ok → None, Err → Some (✅ 안전)            |
 
 
 ## 🔄 3. Option ↔ Result 변환 방법
