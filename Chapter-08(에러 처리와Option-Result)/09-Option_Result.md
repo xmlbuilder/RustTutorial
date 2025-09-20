@@ -31,20 +31,20 @@ Rust에서 Option<T>과 Result<T, E>는 에러 없는 안전한 프로그래밍�
 ## 🔄 3. Option ↔ Result 변환 방법
 | 변환 방향              | 메서드             | 설명                                 |
 |------------------------|--------------------|--------------------------------------|
-| Option<T> → Result<T,E> | .ok_or(err)        | None → Err(err)                      |
-| Option<T> → Result<T,E> | .ok_or_else(||err) | None → Err(err) (지연 생성)          |
-| Result<T,E> → Option<T> | .ok()              | Ok → Some, Err → None                |
-| Result<T,E> → Option<E> | .err()             | Err → Some, Ok → None                |
+| `Option<T> → Result<T,E>` | .ok_or(err)        | None → Err(err)                      |
+| `Option<T> → Result<T,E>` | .ok_or_else(||err) | None → Err(err) (지연 생성)          |
+| `Result<T,E> → Option<T>` | .ok()              | Ok → Some, Err → None                |
+| `Result<T,E> → Option<E>` | .err()             | Err → Some, Ok → None                |
 
 
 
 ## 💡 어떤 방식이 좋은가요?
 | 방식                          | 안전성     | 추천 상황                          | 설명                                               |
 |------------------------------|------------|------------------------------------|----------------------------------------------------|
-| .expect("msg")               | ❌ 위험    | 테스트 중 빠르게 실패 확인         | None/Err이면 panic 발생, 디버깅에 유용              |
-| .unwrap_or(...).map(...).and_then(...) | ✅ 안전 | 실전 코드에서 안전하게 처리       | 기본값, 체이닝, 함수 적용 등 유연한 흐름 제어 가능 |
-| Result<T, String>            | ✅ 안전    | 오류 메시지를 명확히 전달할 때     | 실패 시 에러 메시지 포함, 로깅/UI에 적합            |
-| Result<T, String>? (with ?)  | ✅ 매우 안전 | 함수 내부에서 오류 전파할 때       | `?` 연산자로 깔끔하게 상위로 오류 전달 가능        |
+| `.expect("msg")`               | ❌ 위험    | 테스트 중 빠르게 실패 확인         | None/Err이면 panic 발생, 디버깅에 유용              |
+| `.unwrap_or(...).map(...).and_then(...)` | ✅ 안전 | 실전 코드에서 안전하게 처리       | 기본값, 체이닝, 함수 적용 등 유연한 흐름 제어 가능 |
+| `Result<T, String>`            | ✅ 안전    | 오류 메시지를 명확히 전달할 때     | 실패 시 에러 메시지 포함, 로깅/UI에 적합            |
+| `Result<T, String>? (with ?)`  | ✅ 매우 안전 | 함수 내부에서 오류 전파할 때       | `?` 연산자로 깔끔하게 상위로 오류 전달 가능        |
 
 
 ## ✨ 예시로 정리
@@ -123,10 +123,10 @@ let f = |vars: &HashMap<String, f64>| -> Result<f64, String> {
 ## ✨ 정리
 | 사용 방식                          | 설명                                               |
 |-----------------------------------|----------------------------------------------------|
-| Ok(10.0)                          | 성공 결과로 `f64` 값을 직접 감싸서 반환            |
-| Err("에러 메시지".to_string())    | 실패 결과로 에러 메시지를 담아 반환                |
-| .ok_or("에러")                    | `Option<f64>` → `Result<f64, String>` 변환          |
-| fn → Result<f64, String>         | 함수에서 `Result` 타입으로 안전하게 반환           |
+| `Ok(10.0)`                          | 성공 결과로 `f64` 값을 직접 감싸서 반환            |
+| `Err("에러 메시지".to_string())`    | 실패 결과로 에러 메시지를 담아 반환                |
+| `.ok_or("에러")`                    | `Option<f64>` → `Result<f64, String>` 변환          |
+| `fn → Result<f64, String>`         | 함수에서 `Result` 타입으로 안전하게 반환           |
 
 ## 💡 예시 코드 스니펫
 ```rust
@@ -165,6 +165,7 @@ Err(E)   → Result<T, E>에서 실패
 - Result는 실패 이유를 명확히 전달함 → Err("이유")
 
 ---
+
 
 
 
