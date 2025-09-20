@@ -159,6 +159,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [06-Panic.md](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/06-Panic.md)
 - [07-anyhow.md](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/07-anyhow.md)
 - [08-사용자_정의에러타입.md](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/08-%EC%82%AC%EC%9A%A9%EC%9E%90_%EC%A0%95%EC%9D%98%EC%97%90%EB%9F%AC%ED%83%80%EC%9E%85.md)
+- [09-Option_Result.md](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/09-Option_Result.md)
+  
 
 ### 🧪 [Chapter-09(테스트와 디버깅)](./Chapter-09%28%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%94%94%EB%B2%84%EA%B9%85%29)
 - [01-Test기본.md](./Chapter-09%28%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%94%94%EB%B2%84%EA%B9%85%29/01-Test%EA%B8%B0%EB%B3%B8.md)
