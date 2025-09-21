@@ -211,8 +211,6 @@ pub fn get_parameter_tolerance(t0: f64, t1: f64, mut t: f64) -> Option<(f64, f64
 
 ### 사용법
 ```rust
-
-```
 #[test]
     fn pullback_basic_and_offset() {
         // paraboloid at (u,v) = (0.5, -0.3)
@@ -242,6 +240,8 @@ pub fn get_parameter_tolerance(t0: f64, t1: f64, mut t: f64) -> Option<(f64, f64
         let (pa, pb) = pullback_3d_vector(w2, d, ds, dt, dss, dst, dtt).unwrap();
         assert!(approx(pa, a, 1e-8) && approx(pb, b, 1e-8));
     }
+```
+
 ---
 
 ## 4) `on_ev_normal` — 단위 법선 $\(N\)$
