@@ -144,8 +144,6 @@ pub fn pullback_3d_vector(
 
 ### 사용법
 ```rust
-
-```
 #[test]
     fn pullback_basic_and_offset() {
         // paraboloid at (u,v) = (0.5, -0.3)
@@ -175,6 +173,7 @@ pub fn pullback_3d_vector(
         let (pa, pb) = pullback_3d_vector(w2, d, ds, dt, dss, dst, dtt).unwrap();
         assert!(approx(pa, a, 1e-8) && approx(pb, b, 1e-8));
     }
+```
 ---
 
 ## 3) `get_parameter_tolerance` — 파라미터 공차
