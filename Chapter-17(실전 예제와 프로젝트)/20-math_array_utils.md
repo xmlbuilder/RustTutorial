@@ -5,21 +5,21 @@
 
 - **C0**: 위치만 일치
 
-  $$
+$$
   P_a = P_b
-  $$
+$$
 
 - **C1**: 위치 + 1차 미분 벡터(접선)도 동일
 
-  $$
+$$
   P_a = P_b, \quad D1_a = D1_b
-  $$
+$$
 
 - **G1**: 위치 + 접선 방향만 동일(크기는 다를 수 있음)
 
-  $$
+$$
   \cos \theta = \frac{D1_a \cdot D1_b}{\lVert D1_a\rVert\lVert D1_b\rVert} \approx 1
-  $$
+$$
 
 - **G2**: 위치, 접선 방향, 곡률 벡터 방향까지 동일
 
@@ -120,7 +120,7 @@ pub fn is_continuous(
 조건:
 
 $$
-a[i] \leq t < a[i+1]
+  a[i] \leq t < a[i+1]
 $$
 
 경계값 처리:
@@ -184,7 +184,7 @@ pub fn search_monotone_array(array: &[f64], t: f64) -> i32 {
 이항계수:
 
 $$
-\binom{i+j}{i} = \frac{(i+j)!}{i!\,j!}
+  \binom{i+j}{i} = \frac{(i+j)!}{i!\,j!}
 $$
 
 예:  
@@ -235,7 +235,7 @@ pub fn binomial_coefficient(i: i32, j: i32) -> f64 {
 ## 4. trinomial_coefficient(i,j,k)
 삼항계수:
 $$
-\frac{(i+j+k)!}{i!\,j!\,k!}
+  \frac{(i+j+k)!}{i!\,j!\,k!}
 $$
 
 예:  
@@ -376,8 +376,10 @@ pub fn reverse_point_grid_f64(
 포인트 좌표의 특정 축을 서로 교환.
 
 예:  
+```
 입력: `[(1,2), (-3,4)]`, swap(x,y) →  
 출력: `[(2,1), (4,-3)]`
+```
 
 ### 소스
 ```rust
@@ -417,15 +419,15 @@ pub fn swap_point_list_coords_f64(count: i32, stride: i32, p: &mut [f64], i: i32
 
 - **비가중 (Affine)**:
 
-  $$
+$$
   p' = T \cdot p
-  $$
+$$
 
 - **가중 (Rational, NURBS용)**:
 
-  $$
+$$
   [x,y,z,w]' = T \cdot [x,y,z,1]^T,\quad 결과는 다시 w로 나눔
-  $$
+$$
 
 ### 소스
 ```rust
@@ -519,7 +521,7 @@ pub fn transform_point_list_f64(
 ⚠️ Translation은 무시됨 (벡터는 방향만 의미).
 
 $$
-v' = R \cdot v
+  v' = R \cdot v
 $$
 
 ### 소스
