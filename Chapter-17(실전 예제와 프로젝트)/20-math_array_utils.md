@@ -234,6 +234,7 @@ pub fn binomial_coefficient(i: i32, j: i32) -> f64 {
 
 ## 4. trinomial_coefficient(i,j,k)
 삼항계수:
+
 $$
   \frac{(i+j+k)!}{i!\,j!\,k!}
 $$
