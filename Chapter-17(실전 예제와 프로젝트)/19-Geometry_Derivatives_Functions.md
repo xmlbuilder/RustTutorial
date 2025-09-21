@@ -11,7 +11,7 @@ $$
 의 $\(u,v\)$ -방향 미분을 계산합니다.
 
 $$
-N'=\frac{V'}{\|V\|}-\frac{V\cdot V'}{\|V\|^3}\,V,\qquad
+N'=\frac{V'}{\|V\|}-\frac{V\cdot V'}{\|V\|^3} V,\qquad
 V_s = dss\times dt + ds\times dst,\quad
 V_t = dst\times dt + ds\times dtt.
 $$
@@ -100,14 +100,14 @@ pub fn on_ev_normal_partials(
 
 ## 2) `pullback_3d_vector` — 3D 벡터의 (u,v) 성분 분해
 
-3D 벡터 $\(\mathbf{w}\)$ 를 $\(\mathbf{w}\approx \alpha\,ds+\beta\,dt\)$ 로 분해합니다.  
+3D 벡터 $\(\mathbf{w}\)$ 를 $\(\mathbf{w}\approx \alpha ds+\beta dt\)$ 로 분해합니다.  
 오프셋 거리 $\(d\neq 0\)$ 이면 법선 편미분으로 기저를 보정합니다.
 
 $$
 \mathbf{w}\approx
 \begin{cases}
-\alpha\,ds+\beta\,dt, & d=0\\[2pt]
-\alpha\,(ds+d\,N_s)+\beta\,(dt+d\,N_t), & d\neq 0
+\alpha ds+\beta dt, & d=0\\[2pt]
+\alpha (ds+d N_s)+\beta (dt+d N_t), & d\neq 0
 \end{cases}
 $$
 
@@ -184,7 +184,7 @@ pub fn pullback_3d_vector(
 $$
 \Delta t = 8\sqrt{\varepsilon}(t_1-t_0) + \varepsilon(|t_0|+|t_1|),\qquad
 \Delta t \le \tfrac12(t_1-t_0),\quad
-[t^- , t^+] = [t-\Delta t,\, t+\Delta t].
+[t^- , t^+] = [t-\Delta t, t+\Delta t].
 $$
 
 **Plain text**
@@ -262,7 +262,7 @@ $$
 수치적으로는
 
 $$
-aA+bB = Du\times(a\,Duv+b\,Dvv)\;-\;Dv\times(a\,Duu+b\,Duv)
+aA+bB = Du\times(a Duv+b Dvv)  -  Dv\times(a Duu+b Duv)
 $$
 
 가 안정적입니다.
@@ -340,7 +340,7 @@ $$
 T=\frac{D1}{\|D1\|}.
 $$
 
-만약 $\(D1=0,\,D2\ne 0\)$ 이면 로피탈에 의해
+만약 $\(D1=0, D2\ne 0\)$ 이면 로피탈에 의해
 
 $$
 T=\pm\frac{D2}{\|D2\|}.
@@ -457,7 +457,7 @@ $$
 
 $$
 k'=\frac{(q\cdot q')\|D1\|^2 - 3\|q\|^2(D1\cdot D2)}
-{\|q\|\,\|D1\|^{5}},\qquad q' = D1\times D3.
+{\|q\| \|D1\|^{5}},\qquad q' = D1\times D3.
 $$
 
 $$
@@ -545,16 +545,16 @@ M = Su\times Sv,\qquad
 D1 = (Su\times Sv)\times n.
 $$
 
-$\(D1 = a\,Su + b\,Sv\)$ 를 풀어 $\(a,b\)$ 를 구하고,
+$\(D1 = a  Su + b  Sv\)$ 를 풀어 $\(a,b\)$ 를 구하고,
 
 $$
-M_1 = (a\,Suu+b\,Suv)\times Sv \;+\; Su\times(a\,Suv+b\,Svv),
+M_1 = (a  Suu+b  Suv)\times Sv   +   Su\times(a  Suv+b  Svv),
 \quad
 D2 = M_1 \times n.
 $$
 
 $$
-K=\frac{D2 - \dfrac{D2\cdot D1}{D1\cdot D1}\,D1}{D1\cdot D1}.
+K=\frac{D2 - \dfrac{D2\cdot D1}{D1\cdot D1}  D1}{D1\cdot D1}.
 $$
 
 **Plain text**
