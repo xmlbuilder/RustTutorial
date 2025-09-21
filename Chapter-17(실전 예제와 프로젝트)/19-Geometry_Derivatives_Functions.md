@@ -106,7 +106,7 @@ pub fn on_ev_normal_partials(
 $$
 \mathbf{w}\approx
 \begin{cases}
-\alpha ds+\beta dt, & d=0\\[2pt]
+\alpha ds+\beta dt, & d=
 \alpha (ds+d N_s)+\beta (dt+d N_t), & d\neq 0
 \end{cases}
 $$
