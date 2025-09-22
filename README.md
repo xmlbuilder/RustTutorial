@@ -141,7 +141,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [19-Default.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/19-Default.md)
 - [20-Scope_Drop.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/20-Scope_Drop.md)
 - [21-From_Into.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/21-From_Into.md)
-- [22-trait abstraction.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/22-trait abstraction.md)
+- [22-trait_abstraction.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/22-trait_abstraction.md)
 - [23-Orphan_Trait.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/23-Orphan_Trait.md)
 
 
