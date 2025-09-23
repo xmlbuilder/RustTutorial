@@ -144,7 +144,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [21-From_Into.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/21-From_Into.md)
 - [22-trait_abstraction.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/22-trait_abstraction.md)
 - [23-Orphan_Trait.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/23-Orphan_Trait.md)
-
+- [24-FnOnce.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/24-FnOnce.md)
 
 ### 📦 [Chapter-07(컬렉션과 반복자)](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29)
 - [01-Collection.md](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/01-Collection.md)
