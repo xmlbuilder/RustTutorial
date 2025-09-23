@@ -60,7 +60,7 @@ graph TD
 | [tx_delta_list.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/tx_delta_list.rs) | 트랜잭션 작업 묶음 |
 | [tx_stream.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/tx_stream.rs) | 트랜잭션 직렬화/복구 |
 | [define.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/define.rs) | TxAction 정의 |
-| [undo_redo_tests.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/undo_redo.rs) | undo/redo 관련 로직 |
+| [undo_redo_tests.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/undo_redo_tests.rs) | undo/redo test 코드 |
 
 
 ## 실행 예제
