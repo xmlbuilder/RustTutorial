@@ -46,6 +46,7 @@ graph TD
 | 파일 이름            | 설명                                                  |
 |---------------------|-------------------------------------------------------|
 | [main.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/main.rs) | 전체 시스템 실행 진입점 |
+| [main.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/main.rs) | 전체 시스템 실행 진입점 |
 | [guid.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/guid.rs) | GUID 생성 및 문자열 변환 |
 | [dbutil.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/dbutil.rs) | 문자열 포맷 및 경로 유틸리티 |
 | [mem_pool.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/mem_pool.rs) | 커스텀 메모리 풀 |
