@@ -45,7 +45,7 @@ graph TD
 
 | 파일 이름            | 설명                                                  |
 |---------------------|-------------------------------------------------------|
-| [main.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/main.rs) | 전체 시스템 실행 진입점 |
+| [Rust_For_Undo_Redo.md](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/main.rs) | 프로그램 구조 설명 |
 | [main.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/main.rs) | 전체 시스템 실행 진입점 |
 | [guid.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/guid.rs) | GUID 생성 및 문자열 변환 |
 | [dbutil.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/dbutil.rs) | 문자열 포맷 및 경로 유틸리티 |
@@ -60,8 +60,8 @@ graph TD
 | [tx_delta_list.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/tx_delta_list.rs) | 트랜잭션 작업 묶음 |
 | [tx_stream.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/tx_stream.rs) | 트랜잭션 직렬화/복구 |
 | [define.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/define.rs) | TxAction 정의 |
-| [undo_redo.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/undo_redo.rs) | undo/redo 관련 로직 |
-| [README.md](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/README.md) | 프로젝트 설명 문서 |
+| [undo_redo_tests.rs](https://github.com/xmlbuilder/RustTutorial/blob/main/Chapter-17(%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8)/DBMS/Project/src/undo_redo.rs) | undo/redo 관련 로직 |
+
 
 ## 실행 예제
 ```
