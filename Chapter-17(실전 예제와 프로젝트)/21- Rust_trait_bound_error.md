@@ -70,12 +70,13 @@ self.point_at(u)
 
 ### ✅ 2. generic 타입 T에 필요한 trait bound가 명시되어 있는가?
 예를 들어 Curve trait이 내부적으로 T: Debug + Clone + HomogeneousPoint를 요구한다면, BSplineCurve<T>를 사용할 때도 이 조건을 명시적으로 만족시켜야 합니다.
+```rust
 impl<T: HomogeneousPoint> BSplineCurve<T> {
     fn eval_point(&self, u: f64) -> Point3D {
         Point3D::from_h4(self.point_at(u)) // ❌ 에러 발생
     }
 }
-
+```
 → 여기서 BSplineCurve<T>가 Curve를 구현했다는 사실이 보장되지 않기 때문에 point_at() 호출이 불가능합니다.
 
 ## ✅ 해결 원칙: Trait Bound 에러 대응
@@ -157,9 +158,10 @@ use std::fmt::Debug;
 fn describe<T>(item: T) {
     println!("{:?}", item); // ❌ 에러 발생: T가 Debug를 구현하지 않음
 }
+```
 
-
-✅ 해결 방법
+### ✅ 해결 방법
+```rust
 fn describe<T: Debug>(item: T) {
     println!("{:?}", item); // ✅ 정상 작동
 }
@@ -172,6 +174,7 @@ fn describe<T: Debug>(item: T) {
 | trait 메서드 호출 시 에러 | `T: TraitName` 명시                  |
 | `println!("{:?}")` 사용 시 | `T: Debug` 명시                      |
 | 여러 trait 필요할 때      | `T: TraitA + TraitB + 'static` 등 조합 |
+
 
 
 
