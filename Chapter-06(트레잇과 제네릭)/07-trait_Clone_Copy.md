@@ -1,4 +1,4 @@
-# trait 파생
+# trait Clone / Copy
 
 ## 🧬 #[derive]란?
 Rust에서 #[derive(...)]는 컴파일러가 자동으로 트레이트 구현을 생성해주는 기능입니다.  
