@@ -196,6 +196,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [03-tokio_futures.md](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/03-tokio_futures.md)
 - [04-thread_channel.md](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/04-thread_channel.md)
 - [05-Send_Sync.md](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/05-Send_Sync.md)
+- [06-Iterator_Generator.md](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/06-Iterator_Generator.md)
 
 
 ### 🧨 [Chapter-12(Unsafe와 FFI)](./Chapter-12%28Unsafe%EC%99%80%20FFI%29)
