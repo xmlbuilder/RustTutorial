@@ -280,7 +280,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [18-formular_parser.md](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/18-formular_parser.md)
 - [19-Geometry_Derivatives_Functions.md](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/19-Geometry_Derivatives_Functions.md)
 - [20-math_array_utils.md](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/20-math_array_utils.md)
-- [21- Rust_trait_bound_error.md](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/21- Rust_trait_bound_error.md)
+- [21-Rust_trait_bound_error.md](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/21-Rust_trait_bound_error.md)
 - [22-FixedSizeMemMgr.md](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/22-FixedSizeMemMgr.md)
 
   
