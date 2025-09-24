@@ -129,7 +129,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [04-Generic_Structure.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/04-Generic_Structure.md)
 - [05-Generic_Method.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/05-Generic_Method.md)
 - [06-impl_trait.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/06-impl_trait.md)
-- [07-trait_파생.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/07-trait_%ED%8C%8C%EC%83%9D.md)
+- [07-trait_Clone_Copy.md.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/07-trait_Clone_Copy.md)
 - [08-trait_심화.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/08-trait_%EC%8B%AC%ED%99%94.md)
 - [09-trait_generic_type_비교.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/09-trait_generic_type_%EB%B9%84%EA%B5%90.md)
 - [10-trait_display.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/10-trait_display.md)
