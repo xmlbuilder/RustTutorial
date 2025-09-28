@@ -84,6 +84,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [13-함수인자.md](./Chapter-03%28%EC%A0%9C%EC%96%B4%20%ED%9D%90%EB%A6%84%EA%B3%BC%20%ED%95%A8%EC%88%98%29/13-%ED%95%A8%EC%88%98%EC%9D%B8%EC%9E%90.md)
 - [14-Static_Method_호출.md](./Chapter-03%28%EC%A0%9C%EC%96%B4%20%ED%9D%90%EB%A6%84%EA%B3%BC%20%ED%95%A8%EC%88%98%29/14-Static_Method_%ED%98%B8%EC%B6%9C.md)
 
+🔼 [맨 위로](#-목차)
+
 ### 🧠 [Chapter-04(소유권과 참조)](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29)
 - [00-Lifetime.md](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/00-Lifetime.md)
 - [01-Ownership&Borrowing.md](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/01-Ownership%26Borrowing.md)
@@ -114,6 +116,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [27-swap.md](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/27-swap.md)
 - [28-NonNull.md](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/28-NonNull.md)
 
+🔼 [맨 위로](#-목차)
 
 ### 🧬 [Chapter-05(패턴 매칭과 분해)](./Chapter-05%28%ED%8C%A8%ED%84%B4%20%EB%A7%A4%EC%B9%AD%EA%B3%BC%20%EB%B6%84%ED%95%B4%29)
 - [01-Match.md](./Chapter-05%28%ED%8C%A8%ED%84%B4%20%EB%A7%A4%EC%B9%AD%EA%B3%BC%20%EB%B6%84%ED%95%B4%29/01-Match.md)
@@ -122,6 +125,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [04-match_실전코드.md](./Chapter-05%28%ED%8C%A8%ED%84%B4%20%EB%A7%A4%EC%B9%AD%EA%B3%BC%20%EB%B6%84%ED%95%B4%29/04-match_%EC%8B%A4%EC%A0%84%EC%BD%94%EB%93%9C.md)
 - [05-EnumPatternMatching_심화.md](./Chapter-05%28%ED%8C%A8%ED%84%B4%20%EB%A7%A4%EC%B9%AD%EA%B3%BC%20%EB%B6%84%ED%95%B4%29/05-EnumPatternMatching_%EC%8B%AC%ED%99%94.md)
 
+🔼 [맨 위로](#-목차)
 
 ### 🧰 [Chapter-06(트레잇과 제네릭)](Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29)
 - [01-Generic_Trait_Lifetime.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/01-Generic_Trait_Lifetime.md)
@@ -150,6 +154,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [24-FnOnce.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/24-FnOnce.md)
 - [25-Trait_Index_IndexMut.md](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/25-Trait_Index_IndexMut.md)
 
+🔼 [맨 위로](#-목차)
+
 ### 📦 [Chapter-07(컬렉션과 반복자)](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29)
 - [01-Collection.md](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/01-Collection.md)
 - [02-map.md](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/02-map.md)
@@ -157,6 +163,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [04-Iterator.md](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/04-Iterator.md)
 - [05-iterator-consuming.md](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/05-iterator-consuming.md)
 - [06-Vector심화.md](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/06-Vector%EC%8B%AC%ED%99%94.md)
+
+🔼 [맨 위로](#-목차)
 
 ### 🚨 [Chapter-08(에러 처리)](Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29)
 - [01-Option.md](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/01-Option.md)
@@ -169,6 +177,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [08-사용자_정의에러타입.md](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/08-%EC%82%AC%EC%9A%A9%EC%9E%90_%EC%A0%95%EC%9D%98%EC%97%90%EB%9F%AC%ED%83%80%EC%9E%85.md)
 - [09-Option_Result.md](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/09-Option_Result.md)
   
+🔼 [맨 위로](#-목차)
 
 ### 🧪 [Chapter-09(테스트와 디버깅)](./Chapter-09%28%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%94%94%EB%B2%84%EA%B9%85%29)
 - [01-Test기본.md](./Chapter-09%28%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%94%94%EB%B2%84%EA%B9%85%29/01-Test%EA%B8%B0%EB%B3%B8.md)
@@ -183,6 +192,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [09-InnerAttriubte_repr.md](./Chapter-09%28%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%94%94%EB%B2%84%EA%B9%85%29/09-InnerAttriubte_repr.md)
 - [10-커버리지측정.md](./Chapter-09%28%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%94%94%EB%B2%84%EA%B9%85%29/10-%EC%BB%A4%EB%B2%84%EB%A6%AC%EC%A7%80%EC%B8%A1%EC%A0%95.md)
 
+🔼 [맨 위로](#-목차)
+
 ### 🧱 [Chapter-10(모듈과 크레이트 Cargo)](Chapter-10%28%EB%AA%A8%EB%93%88%2C%20%ED%81%AC%EB%A0%88%EC%9D%B4%ED%8A%B8%2C%20Cargo%29)
 - [01-module.md](Chapter-10%28%EB%AA%A8%EB%93%88%2C%20%ED%81%AC%EB%A0%88%EC%9D%B4%ED%8A%B8%2C%20Cargo%29/01-module.md)
 - [02-use.md](./Chapter-10%28%EB%AA%A8%EB%93%88%2C%20%ED%81%AC%EB%A0%88%EC%9D%B4%ED%8A%B8%2C%20Cargo%29/02-use.md)
@@ -190,6 +201,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [04-Crate구조.md](./Chapter-10%28%EB%AA%A8%EB%93%88%2C%20%ED%81%AC%EB%A0%88%EC%9D%B4%ED%8A%B8%2C%20Cargo%29/04-Crate%EA%B5%AC%EC%A1%B0.md)
 - [05-Workspace.md](Chapter-10%28%EB%AA%A8%EB%93%88%2C%20%ED%81%AC%EB%A0%88%EC%9D%B4%ED%8A%B8%2C%20Cargo%29/05-Workspace.md)
 - [06-외부라이브러리.md](Chapter-10%28%EB%AA%A8%EB%93%88%2C%20%ED%81%AC%EB%A0%88%EC%9D%B4%ED%8A%B8%2C%20Cargo%29/06-%EC%99%B8%EB%B6%80%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC.md)
+
+🔼 [맨 위로](#-목차)
 
 ### 🔀 [Chapter-11(비동기와 병렬 처리)](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29)
 - [01-Async.md](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/01-Async.md)
@@ -199,6 +212,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [05-Send_Sync.md](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/05-Send_Sync.md)
 - [06-Iterator_Generator.md](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/06-Iterator_Generator.md)
 
+🔼 [맨 위로](#-목차)
 
 ### 🧨 [Chapter-12(Unsafe와 FFI)](./Chapter-12%28Unsafe%EC%99%80%20FFI%29)
 - [01-unsafe.md](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/01-unsafe.md)
@@ -206,6 +220,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [03-FFI기초.md](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/03-FFI%EA%B8%B0%EC%B4%88.md)
 - [04-FFI_C호출.md](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/04-FFI_C%ED%98%B8%EC%B6%9C.md)
 
+🔼 [맨 위로](#-목차)
 
 ### 🧩 [Chapter-13(매크로와 메타프로그래밍)](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%29)
 - [01-macro_rules.md](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%29/01-macro_rules.md)
@@ -214,6 +229,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [04-procedural_macro.md](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%29/04-procedural_macro.md)
 - [05-tokenStream.md](./Chapter-13%28%EB%A7%A4%ED%81%AC%EB%A1%9C%EC%99%80%20%EB%A9%94%ED%83%80%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%29/05-tokenStream.md)
 
+🔼 [맨 위로](#-목차)
 
 ### 🧑‍🎓 [Chapter-14(디자인 패턴)](./Chapter-14%28DesignPattern%29)
 - [000-UML설명문서.md](./Chapter-14%28DesignPattern%29/000-UML%EC%84%A4%EB%AA%85%EB%AC%B8%EC%84%9C.md)
@@ -242,6 +258,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [023-재귀및메모라이즈패턴.md](./Chapter-14%28DesignPattern%29/023-%EC%9E%AC%EA%B7%80%EB%B0%8F%EB%A9%94%EB%AA%A8%EB%9D%BC%EC%9D%B4%EC%A6%88%ED%8C%A8%ED%84%B4.md)
 - [024-Proxy.md](./Chapter-14%28DesignPattern%29/024-Proxy.md)
 
+🔼 [맨 위로](#-목차)
 
 ### 🧑‍🎓 [Chapter-15(SmartPointers_and_MemoryModels)](./Chapter-15%28SmartPointers_and_MemoryModels%29)
 - [01-메모리관리.md](./Chapter-15%28SmartPointers_and_MemoryModels%29/01-%EB%A9%94%EB%AA%A8%EB%A6%AC%EA%B4%80%EB%A6%AC.md)
@@ -253,6 +270,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [07-Box&Rc&RcCell&Arc&Mutex요약.md](./Chapter-15%28SmartPointers_and_MemoryModels%29/07-Box%26Rc%26RcCell%26Arc%26Mutex%EC%9A%94%EC%95%BD.md)
 - [08-static_for_box_rc.md](./Chapter-15%28SmartPointers_and_MemoryModels%29/08-static_for_box_rc.md)
 
+🔼 [맨 위로](#-목차)
 
 ### [Chapter-16(문자열처리)](./Chapter-16%28%EB%AC%B8%EC%9E%90%EC%97%B4%EC%B2%98%EB%A6%AC%29)
 - [01-r#.md](./Chapter-16%28%EB%AC%B8%EC%9E%90%EC%97%B4%EC%B2%98%EB%A6%AC%29/01-r%23.md)
@@ -260,6 +278,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [03-문자열ASCII출력.md](./Chapter-16%28%EB%AC%B8%EC%9E%90%EC%97%B4%EC%B2%98%EB%A6%AC%29/03-%EB%AC%B8%EC%9E%90%EC%97%B4ASCII%EC%B6%9C%EB%A0%A5.md)
 - [04-출력진법.md](./Chapter-16%28%EB%AC%B8%EC%9E%90%EC%97%B4%EC%B2%98%EB%A6%AC%29/04-%EC%B6%9C%EB%A0%A5%EC%A7%84%EB%B2%95.md)
 
+🔼 [맨 위로](#-목차)
 
 ### 🧪 [Chapter-17(실전 예제와 프로젝트)](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29)
 - [01-HermiteCurve.md](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/01-HermiteCurve.md)
@@ -287,6 +306,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [22-FixedSizeMemMgr.md](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/22-FixedSizeMemMgr.md)
 - [23-Spatial_Partition.md](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/23-Spatial_Partition.md)
 
+🔼 [맨 위로](#-목차)
   
 ### 🧪 [Chapter-18(기타 및 실험적 항목)](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29)
 - [01-io.md](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/01-io.md)
@@ -302,6 +322,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [11-Math.md](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/11-Math.md)
 - [12-함수형_프로그램밍.md](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/12-%ED%95%A8%EC%88%98%ED%98%95_%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8%EB%B0%8D.md)
 
+🔼 [맨 위로](#-목차)
 
 ### 🛠️ [Chapter-19(도구와 생산성)](./Chapter-19%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29)
 - [01-Clippy.md](./Chapter-19%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/01-Clippy.md)
@@ -309,3 +330,4 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [(예정) 03-rustfmt.md](./Chapter-19%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/03-rustfmt.md)
 - [(예정) 04-rust-analyzer.md](./Chapter-19%28%EB%8F%84%EA%B5%AC%EC%99%80%20%EC%83%9D%EC%82%B0%EC%84%B1%29/04-rust-analyzer.md)
 
+🔼 [맨 위로](#-목차)
