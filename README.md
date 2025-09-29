@@ -40,7 +40,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [기여 가이드](#기여-가이드)
 
 
-### 📘 [Chapter-01: Rust 소개 및 환경 설정](./Chapter-01%28Rust%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EC%84%A4%EC%A0%95%29)
+### 📘 [Chapter-01 Rust 소개 및 환경 설정](./Chapter-01%28Rust%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EC%84%A4%EC%A0%95%29)
 - [00-Rust_소개.md](./Chapter-01%28Rust%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EC%84%A4%EC%A0%95%29/00-Rust_%EC%86%8C%EA%B0%9C.md)
 - [01-Cargo.toml_파일분석.md](./Chapter-01%28Rust%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EC%84%A4%EC%A0%95%29/01-Cargo.toml_%ED%8C%8C%EC%9D%BC%EB%B6%84%EC%84%9D.md)
 - [02-RustBuild.md](./Chapter-01%28Rust%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EC%84%A4%EC%A0%95%29/02-RustBuild.md)
