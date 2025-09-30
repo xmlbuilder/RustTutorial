@@ -160,10 +160,10 @@ let maybe_some_len = maybe_some_string.map(|s| s.len());
 ## 📦 요약표: map 사용법
 | 타입        | 사용 예시                        | 특징 또는 반환 구조       |
 |-------------|-----------------------------------|----------------------------|
-| `Iterator`  | `.map(|x| x * 2)`                 | `collect()`으로 결과 수집  |
-| `Option`    | `.map(|x| x + 1)`                 | `Some`만 변환, `None` 유지 |
-| `Result`    | `.map(|x| x.to_string())`         | `Ok`만 변환, `Err` 유지    |
-| `filter_map`| `.filter_map(|x| x.ok())`         | `None` 제거, `Some`만 유지 |
+| `Iterator`  | `.map(\|x\| x * 2)`                 | `collect()`으로 결과 수집  |
+| `Option`    | `.map(\|x\| x + 1)`                 | `Some`만 변환, `None` 유지 |
+| `Result`    | `.map(\|x\| x.to_string())`         | `Ok`만 변환, `Err` 유지    |
+| `filter_map`| `.filter_map(\|x\| x.ok())`         | `None` 제거, `Some`만 유지 |
 
 
 --- 
