@@ -32,9 +32,9 @@ We are interested in solving $\(A x \approx b\)$ (least squares if $\(m \gt n\)$
 The Moore–Penrose pseudoinverse of $\(A\)$ is
 
 $$
-A^{+} = V\,\Sigma^{+}\,U^\top,
+A^{+} = V \Sigma^{+} U^\top,
 \qquad
-\Sigma^{+} = \mathrm{diag}\!\big(\sigma_1^{+},\dots,\sigma_n^{+}\big),
+\Sigma^{+} = \mathrm{diag} \big(\sigma_1^{+},\dots,\sigma_n^{+}\big),
 $$
 
 with
@@ -140,7 +140,7 @@ Solve $\(\min_x \big(\|A x - b\|_2^2 + \lambda^2 \|x\|_2^2\big)\)$. With SVD,
 $$
 x_\lambda = V \Phi_\lambda U^\top b,
 \qquad
-\Phi_\lambda = \mathrm{diag}\!\Big( \frac{\sigma_i}{\sigma_i^2 + \lambda^2} \Big).
+\Phi_\lambda = \mathrm{diag} \Big( \frac{\sigma_i}{\sigma_i^2 + \lambda^2} \Big).
 $$
 
 Component‑wise filter form:
