@@ -67,7 +67,7 @@ let plane = match self.get_plane_equation(verts) {
 
 ```
 ### 1. self.get_plane_equation(verts)
-- 이 함수는 Option<PlaneEquation>을 반환한다고 가정
+- 이 함수는 `Option<PlaneEquation>`을 반환한다고 가정
 - 즉, 결과가 Some(pe)일 수도 있고 None일 수도 있음
 
 ### 2. match 구문으로 분기
@@ -77,7 +77,7 @@ let plane = match self.get_plane_equation(verts) {
 | `None`     | `out_plane`에 `UNSET` 저장 후 `false` 반환 |
 
 
-match를 쓰면 흐름이 더 명확하고, plane이 초기화되지 않는 경로도 없어서 안전  
+`match`를 쓰면 흐름이 더 명확하고, plane이 초기화되지 않는 경로도 없어서 안전  
 
 
 ## 💡 요약
@@ -103,8 +103,8 @@ if let Some(o) = out_plane {
 - *o = ...는 그 참조가 가리키는 실제 PlaneEquation 값을 변경  
 
 ## ✅ 누가 초기화되는가?
-out_plane가 Some(&mut target)일 때,  
-*o = PlaneEquation::UNSET;는 target을 초기화  
+`out_plane`가 `Some(&mut target)`일 때,  
+`*o = PlaneEquation::UNSET;`는 target을 초기화  
 즉, 이 함수 바깥에서 out_plane으로 넘겨준 실제 PlaneEquation 인스턴스가 변경됩니다.  
 
 ## 💡 요약
