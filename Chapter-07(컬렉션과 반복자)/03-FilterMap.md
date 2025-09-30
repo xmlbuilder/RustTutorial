@@ -1,7 +1,6 @@
 # filter / filter_map
 Rust에서 자주 사용되는 이터레이터 메서드인 filter와 filter_map의 차이점과 사용 방식에 대한 설명입니다.
 
-
 ## 🧠 filter vs filter_map 비교 요약
 | 메서드        | 조건 검사 방식               | 반환 타입             | 사용 목적                          | 예시 상황                         |
 |---------------|------------------------------|-----------------------|------------------------------------|-----------------------------------|
@@ -138,7 +137,6 @@ for (key, group) in &data.into_iter().group_by(|x| *x) {
 }
 ```
 
-
 - 인접한 동일 값을 묶음
 - group_by는 itertools 크레이트에서 제공됨
 - 비슷한 날짜, 상태, 키 값으로 묶을 때 유용
@@ -177,6 +175,95 @@ println!("Sum: {}", sum);
 | 누적 계산 또는 집계를 수행할 때      | `fold`            | 초기값부터 누적하며 계산 수행             |
 
 ---
+
+## 🧠 핵심 개념: filter_map과 filter (chain 사용)
+### 🔹 filter_map
+- Option<T>을 반환하는 클로저를 받아서
+- Some(value)만 남기고 None은 제거
+- 동시에 Some(value)의 값을 꺼내서 반환
+```rust
+let result: Vec<i32> = vec![Some(1), None, Some(3)]
+    .into_iter()
+    .filter_map(|x| x)
+    .collect();
+// result = [1, 3]
+```
+
+### 🔹 filter
+- bool을 반환하는 클로저를 받아서
+- true인 값만 남기고 false는 제거
+```rust
+let result: Vec<i32> = vec![1, 2, 3, 4]
+    .into_iter()
+    .filter(|x| x % 2 == 0)
+    .collect();
+// result = [2, 4]
+```
+
+
+## 🔗 함께 쓰는 이유
+```rust
+for header in (0..header_count)
+    .filter_map(|i| loader.get_header_by_index(i)) // Option<String> → String
+    .filter(|h| !h.is_empty())                     // 빈 문자열 제거
+{
+    // header는 유효한 String
+}
+```
+
+## 🔄 동작 순서
+- 0..header_count 범위를 반복
+- 각 i에 대해 loader.get_header_by_index(i) 호출 → Option<String>
+- filter_map이 Some(h)만 남기고 None은 제거
+- filter가 h.is_empty()가 아닌 것만 남김
+- 최종적으로 header는 빈 문자열이 아닌 유효한 값들만 반복됨
+
+###  🧪 예시로 이해하기
+```rust
+let headers = vec![Some("Name"), None, Some(""), Some("Age")];
+
+for header in headers
+    .into_iter()
+    .filter_map(|h| h.map(|s| s.to_string())) // Option<&str> → Option<String>
+    .filter(|h| !h.is_empty())
+{
+    println!("Header: {}", header);
+}
+```
+
+### 출력 결과:
+```
+Header: Name
+Header: Age
+```
+
+
+## 💡 팁: 가독성 높이기
+긴 체이닝은 가독성이 떨어질 수 있으니, 중간에 변수로 분리해도 좋음:
+```rust
+let valid_headers = (0..header_count)
+    .filter_map(|i| loader.get_header_by_index(i))
+    .filter(|h| !h.is_empty());
+
+for header in valid_headers {
+    // ...
+}
+```
+## 실전 예제
+```rust
+    let header_count = loader.header_count();
+    for header in (0..header_count)
+        .filter_map(|i| loader.get_header_by_index(i))
+        .filter(|h| !h.is_empty())
+    {
+        if let Some(raw) = loader.get_column(header) {
+            let src = TArray::from(raw.clone());
+            let mut tgt = TArray::from(vec![]);
+            exec_sae_filter(&src, &mut tgt, 0.0001, 300.0);
+            container.insert(header.clone(), tgt);
+        }
+    }
+```
 
 
 
