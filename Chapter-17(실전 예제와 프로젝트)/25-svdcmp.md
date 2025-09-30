@@ -1,6 +1,6 @@
 # svdcmp: Jacobi-Eigen 기반 SVD 정리
 
-> 이 문서는 현재 구현한 `svdcmp`(Rust) 함수가 사용하는 **AᵀA 고유분해 → SVD** 절차를 수식으로 정리한 문서입니다. GitHub Markdown의 LaTeX 수식을 사용하므로 그대로 올려도 수식이 깨지지 않습니다.
+> 이 문서는 현재 구현한 `svdcmp`(Rust) 함수가 사용하는 **AᵀA 고유분해 → SVD** 절차를 수식으로 정리한 문서입니다.
 
 ---
 
