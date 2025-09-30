@@ -10,7 +10,7 @@ Formulas are written in GitHub‑friendly LaTeX.
 Given $\(A \in \mathbb{R}^{m\times n}\)$ and the SVD
 
 $$
-A = U\SigmaV^\top,
+A = U\ SigmaV^ \top,
 $$
 
 where
