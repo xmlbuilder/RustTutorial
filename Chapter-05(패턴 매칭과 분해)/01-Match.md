@@ -110,7 +110,7 @@ if let Some(o) = out_plane {
 ### 코드 설명
 out_plane이 Some으로 들어왔다는 건, 호출하는 쪽에서 PlaneEquation을 받아서 뭔가 활용하고 싶다는 의도.  
 그런데 self.get_plane_equation(verts)가 None을 반환하면 평면을 계산할 수 없다는 뜻,  
-그 경우 out_plane이 Some이면 그 안의 값을 PlaneEquation::UNSET으로 설정해줌.
+그 경우 out_plane이 Some이면 그 안의 값을 PlaneEquation::UNSET으로 설정해줌.  
 즉, 이 코드는 다음과 같은 의미를 담고 있어요:
 - get_plane_equation이 실패했을 때,
 - out_plane이 Some이면 → 그 값을 UNSET으로 설정
