@@ -93,14 +93,14 @@ $$
 
 - 회전 파라미터 (NR 형식):
 
-\[
+$$
 \tau = \frac{b_{qq} - b_{pp}}{2\,b_{pq}},\qquad
 t =
 \begin{cases}
   \dfrac{1}{2\tau}, & \text{if } |\tau| \text{ is very large (approximation)} \\
   \dfrac{\text{sgn}(\tau)}{|\tau| + \sqrt{1 + \tau^2}}, & \text{otherwise}
 \end{cases}
-\]
+$$
 
 $$
   c = \frac{1}{\sqrt{1+t^2}},\qquad s = t\,c.
@@ -136,7 +136,10 @@ $$
 회전이 수렴하면 $\(B \approx V\,\Lambda\,V^\top\)$ 가 되며, $\(\Lambda\)$ 는 대각 $(\(\lambda_i\)$ ).
 
 ### 3) 특이값/정렬/부호
-$$\sigma_i = \sqrt{\max(\lambda_i,\,0)}.$$
+
+$$
+\sigma_i = \sqrt{\max(\lambda_i,\,0)}.
+$$
 
 $\(\sigma\)$ 를 내림차순 정렬하고, 동일한 순서로 $\(V\)$ 의 열도 재정렬한다.
 ( $\(U,V\)$ 의 각 열벡터는 부호 반전이 허용된다. 구현상 $\(\sigma_i \ge 0\)$ 를 강제하고 필요 시 열 부호를 반전하는 관례를 따른다.)
