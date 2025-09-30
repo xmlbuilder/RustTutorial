@@ -130,8 +130,7 @@ $$
 
 $$
 \sqrt{\sum_{p<q} b_{pq}^2} < \varepsilon
-\quad \text{또는} \quad
-\text{sweep }
+\quad \text{or sweep count limit reached}
 $$
 
 회전이 수렴하면 $\(B \approx V\,\Lambda\,V^\top\)$ 가 되며, $\(\Lambda\)$ 는 대각 $(\(\lambda_i\)$ ).
