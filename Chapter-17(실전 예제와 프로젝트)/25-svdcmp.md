@@ -93,14 +93,14 @@ $$
 
 - 회전 파라미터 (NR 형식):
 
-$$
+\[
 \tau = \frac{b_{qq} - b_{pp}}{2\,b_{pq}},\qquad
 t =
 \begin{cases}
   \dfrac{1}{2\tau}, & \text{if } |\tau| \text{ is very large (approximation)} \\
-  \dfrac{\operatorname{sgn}(\tau)}{|\tau| + \sqrt{1 + \tau^2}}, & \text{otherwise}
+  \dfrac{\text{sgn}(\tau)}{|\tau| + \sqrt{1 + \tau^2}}, & \text{otherwise}
 \end{cases}
-$$
+\]
 
 $$
   c = \frac{1}{\sqrt{1+t^2}},\qquad s = t\,c.
