@@ -6,10 +6,10 @@
 
 ## 표기
 
-- 입력 행렬: $\(A \in \mathbb{R}^{m\times n}\)$  $\((m \ge n\)$ 가 일반적$\()\)$
+- 입력 행렬: $\(A \in \mathbb{R}^{m\times n}\)$  $\((m \ge n\)$ 가 일반적
 - 특이값 분해(SVD):  
 $$
-  A = U\,\Sigma\,V^\top
+  A = U \Sigma V^\top
 $$
 
   where
