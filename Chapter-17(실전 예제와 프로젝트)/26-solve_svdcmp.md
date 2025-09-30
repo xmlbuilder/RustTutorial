@@ -120,7 +120,7 @@ Small $\(\sigma_i\)$ $\((\le \tau)\)$ are effectively “numerical zero”; sett
 
 ---
 
-## Truncated SVD (Rank‑$\(k\)$) Solution
+## Truncated SVD (Rank‑ $\(k\)$ ) Solution
 
 Keep only the first $\(k\)$ singular triplets $\((U_k,\Sigma_k,V_k)\)$. The rank‑$\(k\)$ solution is
 
