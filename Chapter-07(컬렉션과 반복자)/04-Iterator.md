@@ -101,8 +101,8 @@ fn main() {
 | `iter()`       | 불변 참조로 반복                          | `for x in vec.iter()`                  |
 | `iter_mut()`   | 가변 참조로 반복                          | `for x in vec.iter_mut()`              |
 | `into_iter()`  | 값 자체를 반복 (소유권 이동)              | `for x in vec.into_iter()`             |
-| `.map()`       | 각 요소에 함수 적용                       | `vec.iter().map(|x| x + 1)`            |
-| `.filter()`    | 조건에 맞는 요소만 추출                   | `vec.iter().filter(|x| ...)`           |
+| `.map()`       | 각 요소에 함수 적용                       | `vec.iter().map(\|x\| x + 1)`            |
+| `.filter()`    | 조건에 맞는 요소만 추출                   | `vec.iter().filter(\|x\| ...)`           |
 | `.collect()`   | 결과를 새로운 컬렉션으로 수집             | `vec.iter().map(...).collect()`        |
 
 
