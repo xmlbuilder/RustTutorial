@@ -27,7 +27,7 @@ match 값 {
 
 
 
-## 🎨 예제 ①: 단순 enum 매칭
+## 🎨 ① 예제: 단순 enum 매칭
 ```rust
 enum Color {
     Red,
@@ -78,7 +78,7 @@ fn main() {
 
 ```
 
-## 🧩 예제 ②: 데이터 포함 enum 매칭
+## 🧩 ② 예제: 데이터 포함 enum 매칭
 ```rust
 enum Message {
     StartGame,
@@ -133,7 +133,7 @@ fn main() {
 
 
 
-## 🧪 예제 ③: Option 타입 매칭
+## 🧪 ③ 예제: Option 타입 매칭
 fn increment(x: Option<i32>) -> Option<i32> {
     match x {
         Some(i) => Some(i + 1),
@@ -164,7 +164,7 @@ fn main() {
 ```
 
 
-## 🧼 예제 ④: 값 무시하기 (_)
+## 🧼 ④ 예제: 값 무시하기 (_)
 ```rust
 match message {
     Message::WinPoint { who: _ } => println!("득점"),
@@ -204,7 +204,7 @@ fn main() {
 ```
 
 
-## 🚫 예제 ⑤: 일부만 처리하고 나머지 무시 (_ catch-all)
+## 🚫 ⑤ 예제: 일부만 처리하고 나머지 무시 (_ catch-all)
 ```rust
 match message {
     Message::StartGame => println!("게임시작"),
