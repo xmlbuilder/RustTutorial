@@ -23,7 +23,7 @@ Our `svdcmp(&mut a, &mut w, &mut v)` returns:
 - `w`  $\(\Rightarrow\)$ $\(\{\sigma_i\}_{i=1}^n\)$,
 - `v`  $\(\Rightarrow\)$ $\(V\)$ ( size $\(n\times n\)$ ).
 
-We are interested in solving $\(A x \approx b\)$ (least squares if $\(m \gt n\)$).
+We are interested in solving $\(A x \approx b\)$ ( least squares if $\(m \gt n\)$ ).
 
 ---
 
