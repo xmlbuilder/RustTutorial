@@ -53,13 +53,13 @@ where $\(\tau\)$ is a numerical tolerance (see **Tolerances** below).
 Then the minimum‑norm least‑squares solution is
 
 $$
-x^{\*} = V\,\Sigma^{+}\,U^\top b.
+x^{\*} = V \Sigma^{+} U^\top b.
 $$
 
 **Coordinate form.** Let $\(c_i = U[:,i]^\top b\)$. Then
 
 $$
-x^{\*} = \sum_{i:\ \sigma_i \gt \tau} \frac{c_i}{\sigma_i}\,V[:,i].
+x^{\*} = \sum_{i:\ \sigma_i \gt \tau} \frac{c_i}{\sigma_i} V[:,i].
 $$
 
 Equivalently:
@@ -78,7 +78,7 @@ $$
 In exact arithmetic,
 
 $$
-r = \sum_{i:\ \sigma_i \le \tau} (U[:,i]^\top b)\,U[:,i],
+r = \sum_{i:\ \sigma_i \le \tau} (U[:,i]^\top b) U[:,i],
 \qquad
 \|r\|_2 = \Big(\sum_{i:\ \sigma_i \le \tau} (U[:,i]^\top b)^2\Big)^{1/2}.
 $$
@@ -125,8 +125,8 @@ Small $\(\sigma_i\)$ $\((\le \tau)\)$ are effectively “numerical zero”; sett
 Keep only the first $\(k\)$ singular triplets $\((U_k,\Sigma_k,V_k)\)$. The rank‑$\(k\)$ solution is
 
 $$
-x_k = V_k\,\Sigma_k^{-1}\,U_k^\top b
-= \sum_{i=1}^{k} \frac{U[:,i]^\top b}{\sigma_i}\,V[:,i].
+x_k = V_k \Sigma_k^{-1} U_k^\top b
+= \sum_{i=1}^{k} \frac{U[:,i]^\top b}{\sigma_i} V[:,i].
 $$
 
 This minimizes $\(\|A x - b\|_2\)$ over all $\(x\)$ in the span of the top $\(k\)$ right singular vectors and implements the optimal low‑rank regularizer (Eckart–Young–Mirsky).
@@ -138,14 +138,14 @@ This minimizes $\(\|A x - b\|_2\)$ over all $\(x\)$ in the span of the top $\(k\
 Solve $\(\min_x \big(\|A x - b\|_2^2 + \lambda^2 \|x\|_2^2\big)\)$. With SVD,
 
 $$
-x_\lambda = V\,\Phi_\lambda\,U^\top b,
+x_\lambda = V \Phi_\lambda U^\top b,
 \qquad
 \Phi_\lambda = \mathrm{diag}\!\Big( \frac{\sigma_i}{\sigma_i^2 + \lambda^2} \Big).
 $$
 
 Component‑wise filter form:
 $$
-x_\lambda = \sum_{i=1}^{n} \frac{\sigma_i}{\sigma_i^2 + \lambda^2}\,(U[:,i]^\top b)\,V[:,i].
+x_\lambda = \sum_{i=1}^{n} \frac{\sigma_i}{\sigma_i^2 + \lambda^2} (U[:,i]^\top b) V[:,i].
 $$
 
 Larger $\(\lambda\)$ damps directions associated with small $\(\sigma_i\)$, trading bias for variance.
@@ -212,7 +212,7 @@ for j in 0..n {
 With `svdcmp` we have $\(A = U\Sigma V^\top\)$. Solving $\(A x \approx b\)$ reduces to three stable steps:
 
 $$
-x^{\*} = V\,\Sigma^{+}\,U^\top b,\quad
+x^{\*} = V \Sigma^{+} U^\top b,\quad
 \Sigma^{+}_{ii} =
 \begin{cases}
 1/\sigma_i,& \sigma_i \gt \tau,\\
