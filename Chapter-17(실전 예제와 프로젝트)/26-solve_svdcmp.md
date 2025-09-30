@@ -19,7 +19,7 @@ where
 - $\(\Sigma = \mathrm{diag}(\sigma_1,\dots,\sigma_n)\)$ with $\(\sigma_1 \ge \cdots \ge \sigma_n \ge 0\)$.
 
 Our `svdcmp(&mut a, &mut w, &mut v)` returns:
-- `a`  $\(\Rightarrow\)$ $\(U\)$ (thin, size $\(m\times n\)$),
+- `a`  $\(\Rightarrow\)$ $\(U\)$ (thin, size $\(m\times n\)$ ),
 - `w`  $\(\Rightarrow\)$ $\(\{\sigma_i\}_{i=1}^n\)$,
 - `v`  $\(\Rightarrow\)$ $\(V\)$ ( size $\(n\times n\)$ ).
 
