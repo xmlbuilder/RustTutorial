@@ -42,7 +42,7 @@ with
 $$
 \sigma_i^{+} =
 \begin{cases}
-1/\sigma_i, & \sigma_i \gt \tau,\\[6pt]
+1/\sigma_i, & \sigma_i \gt \tau,
 0, & \sigma_i \le \tau,
 \end{cases}
 $$
