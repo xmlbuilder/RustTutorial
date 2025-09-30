@@ -94,12 +94,12 @@ $$
 - 회전 파라미터 (NR 형식):
 
 $$
-  \tau = \frac{b_{qq} - b_{pp}}{2\,b_{pq}},\qquad
-  t =
-  \begin{cases}
-    \dfrac{1}{2\tau}, & |\tau| \text{가 매우 클 때 근사}\$$6pt]
-    \dfrac{\operatorname{sgn}(\tau)}{|\tau|+\sqrt{1+\tau^2}}, & \text{일반}
-  \end{cases}
+\tau = \frac{b_{qq} - b_{pp}}{2\,b_{pq}},\qquad
+t =
+\begin{cases}
+  \dfrac{1}{2\tau}, & \text{if } |\tau| \text{ is very large (approximation)} \\
+  \dfrac{\operatorname{sgn}(\tau)}{|\tau| + \sqrt{1 + \tau^2}}, & \text{otherwise}
+\end{cases}
 $$
 
 $$
