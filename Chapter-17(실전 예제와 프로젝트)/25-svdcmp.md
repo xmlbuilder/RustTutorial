@@ -52,13 +52,13 @@ $$
 
 4. **좌특이벡터**:
 
- $$
-   u_i =
-   \begin{cases}
-     \dfrac{A\,v_i}{\sigma_i}, & \sigma_i > 0,\$$8pt]
-     \text{영공간 보강(선택)}, & \sigma_i = 0.
-   \end{cases}
- $$
+$$
+u_i =
+\begin{cases}
+  \dfrac{A v_i}{\sigma_i}, & \sigma_i > 0 \\
+  \text{영공간 보강 (선택)}, & \sigma_i = 0
+\end{cases}
+$$
 
    $\(\sigma_i>0\)$ 이면
 
