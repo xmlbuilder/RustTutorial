@@ -2,10 +2,10 @@
 Rust에서 자주 사용되는 이터레이터 메서드인 filter와 filter_map의 차이점과 사용 방식에 대한 설명입니다.
 
 ## 🧠 filter vs filter_map 비교 요약
-| 메서드        | 조건 검사 방식             | 반환 타입             | 사용 목적                          | 예시 상황                          |
+| 메서드        | 조건 검사 방식 | 반환 타입 | 사용 목적  | 예시 상황  |
 |---------------|------------------------------|-----------------------|------------------------------------|-------------|
-|`filter`   |`bool` <br/>반환 조건식 사용      |`Iterator<Item=T>`|요소를 걸러내기만 할 때        |filter<br/>(|x| x > 10)           |
-|`filter_map`|`Option<T>` <br/>반환 조건 + 변환|`Iterator<Item=U>`|조건 검사와 <br/>동시에 값 추출/변환|filter_map<br/>(|x| Some(x.len()))|
+|`filter`   |`bool` <br/>반환 조건식 사용      |`Iterator<Item=T>`|요소를 걸러내기만 할 때        | `filter<br/>(|x| x > 10)`           |
+|`filter_map`|`Option<T>` <br/>반환 조건 + 변환|`Iterator<Item=U>`|조건 검사와 <br/>동시에 값 추출/변환|`filter_map (|x| Some(x.len()))`|
 
 ## 예제 코드
 ```rust
