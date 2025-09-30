@@ -48,9 +48,9 @@ return false가 없으면 컴파일 에러가 날 수 있음
 
 
 ### ✅ 이 코드의 목적
-- get_plane_equation()이 성공하면 → plane에 결과 저장
-- 실패하면 → out_plane에 실패 상태 저장하고 → false 반환
-즉, 이 코드는 조건에 따라 흐름을 분기하면서 동시에 값을 추출하는 아주 Rust스러운 방식.
+- get_plane_equation()이 성공하면 → plane에 결과 저장  
+- 실패하면 → out_plane에 실패 상태 저장하고 → false 반환  
+즉, 이 코드는 조건에 따라 흐름을 분기하면서 동시에 값을 추출하는 아주 Rust스러운 방식.  
 
 
 ## 수정 코드
@@ -77,7 +77,7 @@ let plane = match self.get_plane_equation(verts) {
 | `None`     | `out_plane`에 `UNSET` 저장 후 `false` 반환 |
 
 
-match를 쓰면 흐름이 더 명확하고, plane이 초기화되지 않는 경로도 없어서 안전
+match를 쓰면 흐름이 더 명확하고, plane이 초기화되지 않는 경로도 없어서 안전  
 
 
 ## 💡 요약
@@ -98,14 +98,14 @@ if let Some(o) = out_plane {
 ```
 
 ### 해석:
-- out_plane는 Option<&mut PlaneEquation> 타입이에요
-- Some(o)일 경우, o는 &mut PlaneEquation — 즉, 다른 곳에 있는 PlaneEquation을 가리키는 가변 참조
-- *o = ...는 그 참조가 가리키는 실제 PlaneEquation 값을 변경
+- out_plane는 Option<&mut PlaneEquation> 타입이에요  
+- Some(o)일 경우, o는 &mut PlaneEquation — 즉, 다른 곳에 있는 PlaneEquation을 가리키는 가변 참조  
+- *o = ...는 그 참조가 가리키는 실제 PlaneEquation 값을 변경  
 
 ## ✅ 누가 초기화되는가?
-out_plane가 Some(&mut target)일 때,
-*o = PlaneEquation::UNSET;는 target을 초기화
-즉, 이 함수 바깥에서 out_plane으로 넘겨준 실제 PlaneEquation 인스턴스가 변경됩니다.
+out_plane가 Some(&mut target)일 때,  
+*o = PlaneEquation::UNSET;는 target을 초기화  
+즉, 이 함수 바깥에서 out_plane으로 넘겨준 실제 PlaneEquation 인스턴스가 변경됩니다.  
 
 ## 💡 요약
 | 표현                     | 의미                                 |
