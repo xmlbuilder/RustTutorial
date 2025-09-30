@@ -8,9 +8,11 @@ Formulas are written in GitHub‑friendly LaTeX.
 ## Setup and Notation
 
 Given $\(A \in \mathbb{R}^{m\times n}\)$ and the SVD
+
 $$
 A = U\,\Sigma\,V^\top,
 $$
+
 where
 - $\(U \in \mathbb{R}^{m\times n}\)$ has orthonormal columns $\((U^\top U = I_n)\)$,
 - $\(V \in \mathbb{R}^{n\times n}\)$ is orthogonal $\((V^\top V = I_n)\)$,
