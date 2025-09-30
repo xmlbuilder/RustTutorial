@@ -98,14 +98,23 @@ if let Some(o) = out_plane {
 ```
 
 ### 해석:
-- out_plane는 Option<&mut PlaneEquation> 타입이에요  
-- Some(o)일 경우, o는 &mut PlaneEquation — 즉, 다른 곳에 있는 PlaneEquation을 가리키는 가변 참조  
+- out_plane는 Option<&mut PlaneEquation> 타입  
+- Some(o)일 경우, o는 &mut PlaneEquation - 즉, 다른 곳에 있는 PlaneEquation을 가리키는 가변 참조  
 - *o = ...는 그 참조가 가리키는 실제 PlaneEquation 값을 변경  
 
 ## ✅ 누가 초기화되는가?
 `out_plane`가 `Some(&mut target)`일 때,  
 `*o = PlaneEquation::UNSET;`는 target을 초기화  
 즉, 이 함수 바깥에서 out_plane으로 넘겨준 실제 PlaneEquation 인스턴스가 변경됩니다.  
+
+### 코드 설명
+out_plane이 Some으로 들어왔다는 건, 호출하는 쪽에서 PlaneEquation을 받아서 뭔가 활용하고 싶다는 의도.  
+그런데 self.get_plane_equation(verts)가 None을 반환하면 평면을 계산할 수 없다는 뜻,  
+그 경우 out_plane이 Some이면 그 안의 값을 PlaneEquation::UNSET으로 설정해줌.
+즉, 이 코드는 다음과 같은 의미를 담고 있어요:
+- get_plane_equation이 실패했을 때,
+- out_plane이 Some이면 → 그 값을 UNSET으로 설정
+- 그리고 false를 반환해서 실패를 알림
 
 ## 💡 요약
 | 표현                     | 의미                                 |
