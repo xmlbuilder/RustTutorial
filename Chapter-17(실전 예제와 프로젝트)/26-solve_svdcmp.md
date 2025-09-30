@@ -222,3 +222,79 @@ x^{\*} = V \Sigma^{+} U^\top b,\quad
 $$
 
 This yields the minimum‑norm least‑squares solution; truncated SVD and Tikhonov filters fall out as simple modifications.
+
+## 수식
+```rust
+pub fn solve_least_squares_svd(mut a: Matrix, b: &[f64], tol: f64) -> Vec<f64> {
+    let m = a.row_count();
+    let n = a.col_count();
+    assert_eq!(b.len(), m, "b must have length m");
+
+    // SVD
+    let mut w = TArray::<f64>::with_size(n);
+    let mut v = Matrix::with_dims(n, n);
+    assert!(svdcmp(&mut a, &mut w, &mut v)); // a=U, w=σ, v=V
+
+    // y = Uᵀ b  (길이 n)
+    let mut y = vec![0.0; n];
+    for i in 0..n {
+        let mut dot = 0.0;
+        for r in 0..m {
+            dot += a.at(r as i32, i as i32) * b[r]; // U[:,i]·b
+        }
+        let sigma = w[i].abs();
+        y[i] = if sigma > tol { dot / sigma } else { 0.0 };
+    }
+
+    // x = V y  (길이 n)
+    let mut x = vec![0.0; n];
+    for j in 0..n {
+        let mut s = 0.0;
+        for i in 0..n {
+            s += v.at(j as i32, i as i32) * y[i]; // V[:,i]*y[i] 누적
+        }
+        x[j] = s;
+    }
+    x
+}
+```
+
+## 테스트 코드
+```rust
+#[test]
+    fn solve_svdcmd(){
+        let a = Matrix::from_nested(&[
+            &[1.0, 1.0],
+            &[1.0, 2.0],
+            &[1.0, 3.0],
+            &[1.0, 4.0],
+        ]);
+        let x_true = [2.0, -1.0];
+        let mut b = vec![
+            1.0 * x_true[0] + 1.0 * x_true[1],
+            1.0 * x_true[0] + 2.0 * x_true[1],
+            1.0 * x_true[0] + 3.0 * x_true[1],
+            1.0 * x_true[0] + 4.0 * x_true[1],
+        ];
+        b[2] += 0.05; // 노이즈
+
+        let x = solve_least_squares_svd(a.clone(), &b, 1e-12);
+        println!("x* = {:?}", x);
+
+        // 잔차 노름
+        let mut s2 = 0.0;
+        for i in 0..a.row_count() {
+            let ax = a.at(i as i32,0)*x[0] + a.at(i as i32,1)*x[1];
+            let r = b[i] - ax;
+            s2 += r*r;
+        }
+        println!("||r||2 = {}", s2.sqrt());
+
+    }
+
+```
+### 출력
+```
+x* = [2.0, -0.9950000000000001]
+||r||2 = 0.04183300132670382
+```
