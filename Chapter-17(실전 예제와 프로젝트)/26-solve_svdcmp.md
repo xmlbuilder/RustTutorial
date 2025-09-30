@@ -154,7 +154,7 @@ Larger $\(\lambda\)$ damps directions associated with small $\(\sigma_i\)$, trad
 
 ## Error and Conditioning at a Glance
 
-- Spectral norm: $\(\|A\|_2 = \sigma_{\max}\)$ , Frobenius: $\(\|A\|_F = \big(\sum_i \sigma_i^2\big)^{1/2}\)$.
+- Spectral norm: $\|A\|_2 = \sigma_{\max}$, Frobenius: $\(\|A\|_F = \big(\sum_i \sigma_i^2\big)^{1/2}\)$.
 - Condition number: $\(\kappa_2(A) = \sigma_{\max}/\sigma_{\min}\)$ (or $\(\sigma_{\min\gt\tau}\)$ in floating‑point).
 - Minimum‑norm property: among all least‑squares solutions, $\(x^{\*} = A^{+} b\)$ is the one with smallest $\(\|x\|_2\)$.
 
@@ -193,7 +193,7 @@ for j in 0..n {
 
 ## Complexity
 
-- Once the SVD is available, solving one RHS costs $\(O(mn + n^2)\)$ (forming $\(U^\top b\)$ and multiplying by $\(V\)$).
+- Once the SVD is available, solving one RHS costs $\(O(mn + n^2)\)$ (forming $\(U^\top b\)$ and multiplying by $\(V\)$ ).
 - For $\(r\)$ RHS, cost is $\(O(r(mn + n^2))\)$ with simple batching (can be reduced by BLAS‑level operations).
 
 ---
