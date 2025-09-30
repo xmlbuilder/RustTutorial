@@ -144,6 +144,7 @@ x_\lambda = V \Phi_\lambda U^\top b,
 $$
 
 Component‑wise filter form:
+
 $$
 x_\lambda = \sum_{i=1}^{n} \frac{\sigma_i}{\sigma_i^2 + \lambda^2} (U[:,i]^\top b) V[:,i].
 $$
@@ -154,7 +155,7 @@ Larger $\(\lambda\)$ damps directions associated with small $\(\sigma_i\)$, trad
 
 ## Error and Conditioning at a Glance
 
-- Spectral norm: $\|A\|_2 = \sigma_{\max}$, Frobenius: $\(\|A\|_F = \big(\sum_i \sigma_i^2\big)^{1/2}\)$.
+- Spectral norm: $\(\|A\|_2 = \sigma_{\max}\)$, Frobenius: $\(\|A\|_F = \big(\sum_i \sigma_i^2\big)^{1/2}\)$.
 - Condition number: $\(\kappa_2(A) = \sigma_{\max}/\sigma_{\min}\)$ (or $\(\sigma_{\min\gt\tau}\)$ in floating‑point).
 - Minimum‑norm property: among all least‑squares solutions, $\(x^{\*} = A^{+} b\)$ is the one with smallest $\(\|x\|_2\)$.
 
