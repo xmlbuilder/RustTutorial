@@ -280,3 +280,447 @@ U[:,i] = \frac{A\,V[:,i]}{\sigma_i}
 $$
 
 절차로 $\(A=U\Sigma V^\top\)$ 을 구성합니다. 수치적으로 건전하며, 테스트 가능한 불변식(정규직교, 재구성 오차, $\(\sigma\)$ 정렬/비음수)을 만족하도록 설계되어 있습니다.
+
+---
+
+## 소스
+```rust
+use std::f64::EPSILON;
+use crate::core::tarray::TArray;
+use crate::math::prelude::matrix::Matrix;
+
+#[inline]
+fn hypot2(a: f64, b: f64) -> f64 { a.hypot(b) }
+
+/// 대칭행렬 B (n×n)를 야코비 회전으로 고유분해.
+/// 결과: B는 대각(고유값), v는 열-고유벡터(정규직교).
+fn jacobi_symmetric_eigen(b: &mut Matrix, vals: &mut Vec<f64>, v: &mut Matrix) -> bool {
+    let n = b.row_count();
+    if n == 0 || b.col_count() != n { return false; }
+
+    // v <- I
+    if !v.create(n as i32, n as i32) { return false; }
+    for i in 0..n { for j in 0..n { *v.at_mut(i as i32, j as i32) = if i==j {1.0} else {0.0}; } }
+
+    // 반복 파라미터
+    let max_sweeps = 50 * n * n;
+    let tol = 1e-14_f64;
+
+    // 도움: 합 오프대각의 제곱합
+    let mut off2 = |m: &Matrix| -> f64 {
+        let mut s=0.0;
+        for p in 0..n { for q in 0..n {
+            if p!=q { let x=*m.at(p as i32,q as i32); s+=x*x; }
+        }}
+        s
+    };
+
+    // 반복
+    let mut sweep = 0usize;
+    loop {
+        let mut changed = false;
+
+        for p in 0..n {
+            for q in (p+1)..n {
+                let app = *b.at(p as i32, p as i32);
+                let aqq = *b.at(q as i32, q as i32);
+                let apq = *b.at(p as i32, q as i32);
+                if apq.abs() <= tol * hypot2(app.abs(), aqq.abs()) { continue; }
+
+                // 회전계수 (NR 방식)
+                let tau = (aqq - app) / (2.0 * apq);
+                let t = if tau.abs() + 1.0 == 1.0 {
+                    1.0 / (2.0 * tau)
+                } else {
+                    let sgn = if tau >= 0.0 { 1.0 } else { -1.0 };
+                    sgn / (tau.abs() + (1.0 + tau*tau).sqrt())
+                };
+                let c = 1.0 / (1.0 + t*t).sqrt();
+                let s = t * c;
+
+                // B <- Jᵀ B J  (대칭 유지)
+                // 행/열 p,q 업데이트
+                let bpp = app - t*apq;
+                let bqq = aqq + t*apq;
+                *b.at_mut(p as i32, p as i32) = bpp;
+                *b.at_mut(q as i32, q as i32) = bqq;
+                *b.at_mut(p as i32, q as i32) = 0.0;
+                *b.at_mut(q as i32, p as i32) = 0.0;
+
+                for r in 0..n {
+                    if r != p && r != q {
+                        let arp = *b.at(r as i32, p as i32);
+                        let arq = *b.at(r as i32, q as i32);
+                        let nrp = c*arp - s*arq;
+                        let nrq = s*arp + c*arq;
+                        *b.at_mut(r as i32, p as i32) = nrp;
+                        *b.at_mut(p as i32, r as i32) = nrp;
+                        *b.at_mut(r as i32, q as i32) = nrq;
+                        *b.at_mut(q as i32, r as i32) = nrq;
+                    }
+                }
+
+                // V <- V J (열-고유벡터)
+                for r in 0..n {
+                    let vrp = *v.at(r as i32, p as i32);
+                    let vrq = *v.at(r as i32, q as i32);
+                    *v.at_mut(r as i32, p as i32) = c*vrp - s*vrq;
+                    *v.at_mut(r as i32, q as i32) = s*vrp + c*vrq;
+                }
+
+                changed = true;
+            }
+        }
+
+        sweep += 1;
+        if !changed { break; }
+        if sweep > max_sweeps { break; } // 안전 탈출
+        if off2(b) < tol { break; }
+    }
+
+    // 고유값 추출
+    vals.clear();
+    vals.resize(n, 0.0);
+    for i in 0..n { vals[i] = *b.at(i as i32, i as i32); }
+    true
+}
+
+/// SVD via Jacobi-eigen on AᵀA
+/// 입력:  a (m×n)  — 변경 후 U 저장 (m×n)
+/// 출력:  w (n)    — 특이값
+///        v (n×n)  — 우직교 행렬
+pub fn svdcmp(a: &mut Matrix, w: &mut TArray<f64>, v: &mut Matrix) -> bool {
+    let m = a.row_count();
+    let n = a.col_count();
+    if m == 0 || n == 0 { return false; }
+
+    // A 보존
+    let a0 = a.clone();
+
+    // B = AᵀA (n×n)
+    let mut at = a0.clone(); at.transpose();           // n×m
+    let mut b  = &at * &a0;                            // (n×m)*(m×n) = n×n
+
+    // 대칭 수치화(미세한 비대칭 제거)
+    for i in 0..n {
+        for j in 0..n {
+            let x = 0.5 * (*b.at(i as i32,j as i32) + *b.at(j as i32,i as i32));
+            *b.at_mut(i as i32,j as i32) = x;
+        }
+    }
+
+    // 고유분해
+    let mut evals: Vec<f64> = Vec::new();
+    if !jacobi_symmetric_eigen(&mut b, &mut evals, v) { return false; }
+
+    // 고유값↓ 정렬 + V 열 재정렬
+    let mut idx: Vec<usize> = (0..n).collect();
+    idx.sort_by(|&i,&j| evals[j].partial_cmp(&evals[i]).unwrap());
+
+    let mut wvec = vec![0.0f64; n];
+    let mut v_sorted = Matrix::with_dims(n, n);
+    for (col, &k) in idx.iter().enumerate() {
+        wvec[col] = evals[k].max(0.0).sqrt();
+        for r in 0..n {
+            *v_sorted.at_mut(r as i32, col as i32) = *v.at(r as i32, k as i32);
+        }
+    }
+    *v = v_sorted;
+    w.set_size(n);
+    for i in 0..n { w[i] = wvec[i]; }
+
+    // U = A * V * Σ^{-1}  (σ_i > 0만)
+    if !a.create(m as i32, n as i32) { return false; }
+    let eps = 1e-12_f64;
+    for j in 0..n {
+        let sigma = w[j];
+        if sigma > eps {
+            for r in 0..m {
+                let mut s = 0.0;
+                for k in 0..n { s += *a0.at(r as i32, k as i32) * *v.at(k as i32, j as i32); }
+                *a.at_mut(r as i32, j as i32) = s / sigma;
+            }
+        } else {
+            // σ=0: 임의의 직교 완성 (여기서는 0 벡터로 두고, 필요하면 그람-슈미트로 보강 가능)
+            for r in 0..m { *a.at_mut(r as i32, j as i32) = 0.0; }
+        }
+    }
+
+    // 선택: U 열 정규화(수치 안정)
+    for j in 0..n {
+        let mut s=0.0; for r in 0..m { let x=*a.at(r as i32,j as i32); s+=x*x; }
+        let nrm = s.sqrt();
+        if nrm > EPSILON { for r in 0..m { *a.at_mut(r as i32,j as i32) /= nrm; } }
+    }
+
+    true
+}
+
+```
+
+## 테스트 코드
+```rust
+
+#[cfg(test)]
+mod tests {
+    use geometry::core::tarray::TArray;
+    use geometry::math::prelude::matrix::Matrix;
+    use geometry::math::svd::{solve_least_squares_svd, svdcmp};
+
+    // 외부 크레이트 없이 작성.
+    // -----------------------------------------------------------------------------
+    // 헬퍼들
+    // -----------------------------------------------------------------------------
+    fn approx_eq(a: f64, b: f64, tol: f64) -> bool { (a - b).abs() <= tol }
+
+    fn diff_fro_norm(a: &Matrix, b: &Matrix) -> f64 {
+        assert_eq!(a.row_count(), b.row_count());
+        assert_eq!(a.col_count(), b.col_count());
+        let (r, c) = (a.row_count(), a.col_count());
+        let mut s = 0.0;
+        for i in 0..r { for j in 0..c {
+            let v = *a.at(i as i32, j as i32) - *b.at(i as i32, j as i32);
+            s += v * v;
+        }}
+        s.sqrt()
+    }
+
+    // Σ (n×n, n = w.len())
+    fn make_sigma_square(w: &[f64]) -> Matrix {
+        let n = w.len();
+        let mut s = Matrix::with_dims(n, n);
+        s.zero();
+        for i in 0..n { *s.at_mut(i as i32, i as i32) = w[i]; }
+        s
+    }
+
+    fn mat_t_mat(m: &Matrix, n: &Matrix) -> Matrix {
+        let mut mt = m.clone();
+        mt.transpose();
+        &mt * n
+    }
+
+    fn has_orthonormal_cols(u: &Matrix, tol: f64) -> bool {
+        // U: m×n → UᵀU: n×n
+        let utu = mat_t_mat(u, u);
+        let n = u.col_count();
+        for i in 0..n {
+            for j in 0..n {
+                let want = if i==j {1.0} else {0.0};
+                if !approx_eq(*utu.at(i as i32, j as i32), want, tol) { return false; }
+            }
+        }
+        true
+    }
+
+    fn is_orthonormal(v: &Matrix, tol: f64) -> bool {
+        let vtv = mat_t_mat(v, v);
+        let n = v.row_count();
+        for i in 0..n {
+            for j in 0..n {
+                let want = if i==j {1.0} else {0.0};
+                if !approx_eq(*vtv.at(i as i32, j as i32), want, tol) { return false; }
+            }
+        }
+        true
+    }
+
+    // Â = U Σ Vᵀ  (U: m×n, Σ: n×n, V: n×n)  — NR 스타일(m≥n)
+    fn sorted_desc(mut xs: Vec<f64>) -> Vec<f64> {
+        xs.sort_by(|a,b| b.partial_cmp(a).unwrap());
+        xs
+    }
+
+    fn assert_all_nonneg(ws: &[f64], tol: f64) {
+        for &x in ws { assert!(x >= -tol, "singular value is negative: {}", x); }
+    }
+
+    // ------------------- tests -------------------
+
+    #[test]
+    fn svd_identity_3x3() {
+        let mut a = Matrix::with_dims(3,3);
+        a.set_diagonal_scalar(1.0);
+        let a0 = a.clone();
+
+        let mut w = TArray::<f64>::new();
+        let mut v = Matrix::new();
+        assert!(svdcmp(&mut a, &mut w, &mut v));
+
+        assert!(has_orthonormal_cols(&a, 1e-12), "UᵀU ≉ I");
+        assert!(is_orthonormal(&v, 1e-12), "VᵀV ≉ I");
+
+        let got = sorted_desc(w.data.clone());
+        let expect = vec![1.0, 1.0, 1.0];
+        for (g,e) in got.iter().zip(expect.iter()) {
+            assert!(approx_eq(*g, *e, 1e-12), "σ mismatch: {g} vs {e}");
+        }
+
+        let a_rec = reconstruct(&a, &w.data, &v);
+        let err = diff_fro_norm(&a0, &a_rec);
+        assert!(err <= 1e-12, "reconstruction error = {}", err);
+    }
+
+    #[test]
+    fn svd_diagonal_rect_3x2() {
+        // A = diag(3,2) in 3x2 (m≥n)
+        let mut a = Matrix::with_dims(3,2);
+        a.zero();
+        *a.at_mut(0,0) = 3.0;
+        *a.at_mut(1,1) = 2.0;
+        let a0 = a.clone();
+
+        let mut w = TArray::<f64>::new();
+        let mut v = Matrix::new();
+        assert!(svdcmp(&mut a, &mut w, &mut v));
+
+        assert_all_nonneg(&w.data, 1e-12);
+        let got = sorted_desc(w.data.clone());
+        let expect = vec![3.0, 2.0];
+        for (g,e) in got.iter().zip(expect.iter()) {
+            assert!(approx_eq(*g, *e, 1e-10), "σ mismatch: {g} vs {e}");
+        }
+
+        assert!(has_orthonormal_cols(&a, 1e-12));
+        assert!(is_orthonormal(&v, 1e-12));
+
+        let a_rec = reconstruct(&a, &w.data, &v);
+        let err = diff_fro_norm(&a0, &a_rec);
+        assert!(err <= 1e-12, "reconstruction error = {}", err);
+    }
+
+    fn reconstruct(u: &Matrix, w: &[f64], v: &Matrix) -> Matrix {
+        let n = w.len();
+        let mut s = Matrix::with_dims(n, n);
+        s.zero();
+        for i in 0..n { *s.at_mut(i as i32, i as i32) = w[i]; }
+        let mut vt = v.clone(); vt.transpose();
+        &(*&u * &s) * &vt
+    }
+    fn fro(a: &Matrix) -> f64 {
+        let (r,c) = (a.row_count(), a.col_count());
+        let mut s=0.0;
+        for i in 0..r { for j in 0..c { let x=*a.at(i as i32,j as i32); s+=x*x; } }
+        s.sqrt()
+    }
+    fn fro_diff(a: &Matrix, b: &Matrix) -> f64 {
+        assert_eq!(a.row_count(), b.row_count());
+        assert_eq!(a.col_count(), b.col_count());
+        let (r,c) = (a.row_count(), a.col_count());
+        let mut s=0.0;
+        for i in 0..r { for j in 0..c { let x=*a.at(i as i32,j as i32)-*b.at(i as i32,j as i32); s+=x*x; } }
+        s.sqrt()
+    }
+
+    #[test]
+    fn dbg_rank1_rect_3x2() {
+        // A = u vᵀ (랭크 1) → σ = [9, 0]
+        let u = [1.0, 2.0, 2.0];
+        let v2 = [0.0, 3.0];
+        let mut a = Matrix::with_dims(3, 2);
+        for i in 0..3 { for j in 0..2 { *a.at_mut(i as i32,j as i32)=u[i]*v2[j]; } }
+        let a0 = a.clone();
+
+        let mut w = TArray::<f64>::new();
+        let mut v = Matrix::new();
+        let ok = svdcmp(&mut a, &mut w, &mut v);
+        println!("\n[rank1 3x2] ok={ok}, w={:?}", w.data);
+
+        assert!(ok, "svdcmp failed");
+
+        let mut ws = w.data.clone();
+        ws.sort_by(|a,b| b.partial_cmp(a).unwrap());
+        println!("sorted σ = {:?}", ws);
+
+        let a_rec = reconstruct(&a, &w.data, &v);
+        let err = fro_diff(&a0, &a_rec);
+        println!("reconstruct error (fro) = {:.6e}", err);
+        println!("‖A‖_F = {:.6},  ‖UΣVᵀ‖_F = {:.6}", fro(&a0), fro(&a_rec));
+
+        assert!((ws[0]-9.0).abs()<1e-8 && ws[1].abs()<1e-10, "σ = {:?} (expected [9,0])", ws);
+        assert!(err < 1e-8, "reconstruction error too large");
+    }
+
+    #[test]
+    fn dbg_constructed_answer_4x3() {
+        // Σ = diag(7,3,1) 를 인위적으로 구성한 4×3 케이스
+        let mut u0 = Matrix::with_dims(4, 3); u0.zero();
+        *u0.at_mut(0,0)=1.0; *u0.at_mut(1,1)=1.0; *u0.at_mut(2,2)=1.0;
+
+        let sigma = [7.0,3.0,1.0];
+        let mut s = Matrix::with_dims(3,3); s.zero();
+        for i in 0..3 { *s.at_mut(i as i32,i as i32)=sigma[i]; }
+
+        let (c, s_) = ((std::f64::consts::PI/7.0).cos(), (std::f64::consts::PI/7.0).sin());
+        let mut v0 = Matrix::with_dims(3,3);
+        *v0.at_mut(0,0)=c;  *v0.at_mut(0,1)=-s_; *v0.at_mut(0,2)=0.0;
+        *v0.at_mut(1,0)=s_; *v0.at_mut(1,1)= c;  *v0.at_mut(1,2)=0.0;
+        *v0.at_mut(2,0)=0.0;*v0.at_mut(2,1)=0.0; *v0.at_mut(2,2)=1.0;
+
+        let mut v0t = v0.clone(); v0t.transpose();
+        let a0 = &(&u0 * &s) * &v0t;
+
+        let mut a = a0.clone();
+        let mut w = TArray::<f64>::new();
+        let mut v = Matrix::new();
+        let ok = svdcmp(&mut a, &mut w, &mut v);
+        println!("\n[constructed 4x3] ok={ok}, w={:?}", w.data);
+
+        assert!(ok, "svdcmp failed");
+
+        let mut ws = w.data.clone();
+        ws.sort_by(|a,b| b.partial_cmp(a).unwrap());
+        println!("sorted σ = {:?}", ws);
+
+        let a_rec = reconstruct(&a, &w.data, &v);
+        let err = fro_diff(&a0, &a_rec);
+        println!("reconstruct error (fro) = {:.6e}", err);
+        println!("‖A‖_F = {:.6},  ‖UΣVᵀ‖_F = {:.6}", fro(&a0), fro(&a_rec));
+
+        let mut ex = sigma.to_vec(); ex.sort_by(|a,b| b.partial_cmp(a).unwrap());
+        for (g,e) in ws.iter().zip(ex.iter()) {
+            assert!((g-e).abs()<1e-8, "σ mismatch: got {}, expect {}", g, e);
+        }
+        assert!(err < 1e-8, "reconstruction error too large");
+    }
+
+    #[test]
+    fn svd_constructed_answer_4x3() {
+        // Σ = diag(7,3,1) 를 인위적으로 구성한 4×3
+        let mut u0 = Matrix::with_dims(4, 3); u0.zero();
+        *u0.at_mut(0,0)=1.0; *u0.at_mut(1,1)=1.0; *u0.at_mut(2,2)=1.0; // 직교 열 3개(간단)
+
+        let sigma = [7.0,3.0,1.0];
+        let mut s = Matrix::with_dims(3,3); s.zero();
+        for i in 0..3 { *s.at_mut(i as i32,i as i32)=sigma[i]; }
+
+        let (c, s_) = ((std::f64::consts::PI/7.0).cos(), (std::f64::consts::PI/7.0).sin());
+        let mut v0 = Matrix::with_dims(3,3);
+        *v0.at_mut(0,0)=c;  *v0.at_mut(0,1)=-s_; *v0.at_mut(0,2)=0.0;
+        *v0.at_mut(1,0)=s_; *v0.at_mut(1,1)= c;  *v0.at_mut(1,2)=0.0;
+        *v0.at_mut(2,0)=0.0;*v0.at_mut(2,1)=0.0; *v0.at_mut(2,2)=1.0;
+
+        let mut v0t = v0.clone(); v0t.transpose();
+        let a0 = &(&u0 * &s) * &v0t;
+
+        let mut a = a0.clone();
+        let mut w = TArray::<f64>::new();
+        let mut v = Matrix::new();
+        let ok = svdcmp(&mut a, &mut w, &mut v);
+        assert!(ok, "svdcmp failed");
+
+        let mut ws = w.data.clone();
+        ws.sort_by(|a,b| b.partial_cmp(a).unwrap());
+        println!("constructed σ = {:?}", ws);
+        let mut ex = sigma.to_vec(); ex.sort_by(|a,b| b.partial_cmp(a).unwrap());
+        for (g,e) in ws.iter().zip(ex.iter()) {
+            assert!((g-e).abs()<1e-10, "σ mismatch: got {}, expect {}", g, e);
+        }
+
+        let a_rec = reconstruct(&a, &w.data, &v);
+        let err = fro_diff(&a0, &a_rec);
+        println!("recon err = {:.3e}", err);
+        assert!(err < 1e-10, "reconstruction error too large");
+    }
+}
+```
