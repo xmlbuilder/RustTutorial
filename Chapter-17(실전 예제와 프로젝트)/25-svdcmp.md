@@ -149,8 +149,8 @@ $\(\sigma\)$ 를 내림차순 정렬하고, 동일한 순서로 $\(V\)$ 의 열�
 $$
 U[:,i] =
 \begin{cases}
-\displaystyle \frac{A\,V[:,i]}{\sigma_i}, & \sigma_i > \varepsilon,\$$10pt]
-\text{0 또는 직교 보강}, & \sigma_i \le \varepsilon.
+\displaystyle \frac{A\,V[:,i]}{\sigma_i}, & \sigma_i > \varepsilon \\
+\text{0 또는 직교 보강}, & \sigma_i \le \varepsilon
 \end{cases}
 $$
 
