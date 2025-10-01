@@ -539,16 +539,18 @@ mod my_module; 선언을 했는데 src/my_module.rs가 없으면 에러.
 폴더 모듈에서 mod.rs 누락:
 src/bots/mod.rs가 없으면 src/bots/hello_bot.rs를 모듈로 찾지 못함.
 
-
 ### 빌드/실행 빠른 레퍼런스
-bash# 디버그 빌드
+```
 cargo build
-
+```
 ### 실행(자동 빌드)
+```
 cargo run
-
+```
 ### 빠른 타입체크
+```
 cargo check
+```
 
 ## 마무리
 
