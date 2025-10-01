@@ -27,7 +27,7 @@ fn main() {
 클로저는 안 되고, 정적 함수만 가능합니다.
 
 
-### ✅ 2. 클로저 지원: Box<dyn Fn(T) -> R>
+### ✅ 2. 클로저 지원: `Box<dyn Fn(T) -> R>`
 ```rust
 struct Processor {
     callback: Box<dyn Fn(i32) -> i32>,
