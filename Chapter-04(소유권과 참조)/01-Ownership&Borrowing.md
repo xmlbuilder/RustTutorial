@@ -1,15 +1,17 @@
 # Ownership & Borrowing
+
 Rust의 Ownership과 Borrowing은 처음엔 좀 장황하게 느껴질 수 있지만,  
 핵심만 잘 잡으면 아주 직관적이고 강력한 개념.
 
 ## 🧠 왜 Ownership이 필요한가?
-Rust는 **GC(Garbage Collector)**가 없어요. 대신 컴파일 타임에 메모리 안전성을 보장하는 방식으로 설계됐어요.
+Rust는 **GC(Garbage Collector)** 가 없음. 대신 컴파일 타임에 메모리 안전성을 보장하는 방식으로 설계.
 - Java, Python, Go: 런타임에 GC가 메모리 정리
 - C, C++: 개발자가 직접 malloc, free 또는 new, delete로 관리
 - Rust: 컴파일러가 자동으로 메모리 해제를 결정함 → 안전 + 빠름
 
 ## 🧩 Ownership이란?
-Rust에서는 **모든 값은 소유자(owner)**를 갖습니다. 이 소유자는 변수입니다.
+Rust에서는 **모든 값은 소유자(owner)** 를 갖습니다. 이 소유자는 변수입니다.
+
 ### 📜 소유권 규칙
 - 모든 값은 하나의 owner를 가진다
 - 한 번에 하나의 owner만 존재할 수 있다
@@ -57,7 +59,7 @@ fn main() {
 
 
 ## 🚫 왜 이런 규칙이 필요한가?
-- **데이터 경쟁(race condition)**을 방지
+- **데이터 경쟁(race condition)** 을 방지
 - 이중 해제(double free) 방지
 - 런타임 비용 없이 안전성 확보
 Rust는 이런 규칙을 컴파일 타임에 검사해서, 런타임 오류 없이 안전한 코드를 보장합니다.
@@ -78,7 +80,7 @@ Rust의 Ownership은 처음엔 까다롭지만, 익숙해지면 버그 없는 �
 ---
 
 # 시각적 이해와 샘플
-Rust의 Ownership과 Borrowing 개념을 시각적으로 이해하고, 실전 예제로 감 잡는 것이 핵심이.  
+Rust의 Ownership과 Borrowing 개념을 시각적으로 이해하고, 실전 예제로 감 잡는 것이 핵심임.  
 아래에 다이어그램, 코드 예제와 함께 엮어서 Rust의 메모리 관리 철학을 이해.
 
 🧭 Ownership & Borrowing 다이어그램
@@ -102,7 +104,7 @@ fn main() {
 ➡️ s1은 더 이상 사용할 수 없어요. Rust는 이중 해제 방지를 위해 소유권을 강하게 관리합니다.
 
 📺 Rust: Ownership and Borrowing에서는 이런 소유권 이동이 왜 중요한지,  
-그리고 GC 없는 Rust가 어떻게 안전성을 확보하는지 설명해요.
+그리고 GC 없는 Rust가 어떻게 안전성을 확보하는지 설명.
 
 ### 2. Borrowing (참조)
 ```rust
@@ -125,13 +127,13 @@ fn add_exclamation(s: &mut String) {
 }
 
 fn main() {
-    let mut s = String::from("Rust");
+    let mut s = String::from("Rust"); 
     add_exclamation(&mut s);
     println!("{}", s); // Rust!
 }
 ```
 
-➡️ &mut s는 한 번에 하나만 허용되는 가변 참조입니다. 이 규칙 덕분에 **데이터 경쟁(race condition)**을 방지할 수 있어요.
+➡️ &mut s는 한 번에 하나만 허용되는 가변 참조입니다. 이 규칙 덕분에 **데이터 경쟁(race condition)** 을 방지할 수 있음.
 
 ### 4. Stack vs Heap 메모리 구조
 Rust는 값이 Stack에 있는지 Heap에 있는지에 따라 동작이 달라집니다.
@@ -219,11 +221,11 @@ fn main() {
 }
 ```
 
-➡️ clone()을 사용하면 소유권을 유지하면서 복사할 수 있어요. 단, 비용이 발생하므로 신중하게 사용해야 합니다.
+➡️ clone()을 사용하면 소유권을 유지하면서 복사할 수 있음. 단, 비용이 발생하므로 신중하게 사용해야 합니다.
 
 
 ### 6. Rust의 철학
-Rust는 런타임 비용 없이 메모리 안전성을 확보합니다. 이게 바로 Rust의 가장 독특한 기능이죠.
+Rust는 런타임 비용 없이 메모리 안전성을 확보합니다. 이게 바로 Rust의 가장 독특한 기능.
 
 ## 🧾 마무리 요약
 | 개념             | 설명                                                                 | 예시 코드 또는 키워드       |
