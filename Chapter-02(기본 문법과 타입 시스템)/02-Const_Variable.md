@@ -69,8 +69,8 @@ fn is_big(n: i32) -> bool { n > THRESHOLD } // 값이 인라인됨
 
 ## static
 **런타임에 단 하나의 인스턴스(고정된 주소)** 가 존재합니다(전역 변수).
-기본은 불변(static 자체는 mut 아님). 내부를 바꾸려면 UnsafeCell/Mutex 등으로 “안쪽 가변성”을 써야 함.
-외부 크레이트에서 심볼로 링크되어 같은 주소를 가리킵니다.
+기본은 불변(static 자체는 mut 아님). 내부를 바꾸려면 UnsafeCell/Mutex 등으로 “안쪽 가변성”을 써야 함.  
+외부 크레이트에서 심볼로 링크되어 같은 주소를 가리킵니다.  
 
 ```rust
 pub static ANSWER: i32 = 42;
@@ -79,9 +79,9 @@ fn addr() -> *const i32 { &ANSWER as *const i32 } // 항상 같은 주소
 
 ### static mut (주의!)
 
-전역 가변 변수. 데이터 레이스 위험 → 모든 접근이 unsafe.
-멀티스레드에서 정의상 UB(미정의 동작) 가능. 실무에서는 피해야 하고,
-`static + Mutex/Atomic/OnceLock` 같은 안전 래퍼를 사용.
+전역 가변 변수. 데이터 레이스 위험 → 모든 접근이 unsafe.  
+멀티스레드에서 정의상 UB(미정의 동작) 가능. 실무에서는 피해야 하고,  
+`static + Mutex/Atomic/OnceLock` 같은 안전 래퍼를 사용.  
 
 ```rust
 static mut COUNTER: u64 = 0;
@@ -93,7 +93,7 @@ fn bump_unsafe() {
 
 ### 안전한 대안들
 ```rust
-use std::sync::{Mutex, OnceLock}; // 1.70+는 OnceLock 안정화
+use std::sync::{Mutex, OnceLock}; // 1.70+는 OnceLock 안정화  
 
 static LOGS: OnceLock<Mutex<Vec<String>>> = OnceLock::new();
 
@@ -116,26 +116,24 @@ fn push_log(s: String) {
 라이브러리의 값을 바꾸면 소비자 재컴파일이 필요(안 그러면 옛날 값이 박혀 있음).
 
 ### C# static readonly ≈ Rust static(불변)
-
 둘 다 런타임에 한 인스턴스/한 주소가 존재.
-동적 링크 시, 라이브러리 교체로 값이 달라지면 소비자 재컴파일 없이도 새 값을 볼 여지가 있음(심볼 참조).
-→ Rust에서도 pub static FOO: i32 = 123;를 동적 링크로 가져오면 주소를 통해 접근합니다.
+동적 링크 시, 라이브러리 교체로 값이 달라지면 소비자 재컴파일 없이도 새 값을 볼 여지가 있음(심볼 참조).  
+→ Rust에서도 pub static FOO: i32 = 123;를 동적 링크로 가져오면 주소를 통해 접근합니다.  
 
 ### C# static 가변 + 락/Interlocked ≈ Rust static + Mutex/Atomic
 
-전역 가변 상태는 락/원자 연산으로 안전하게 관리.
-**Rust static mut**는 C#에 직접 대응 없음. C# 전역 가변이라도 안전 장치를 쓰지만, Rust static mut은 언어 차원에서 unsafe로 표시됩니다.
-“DLL 런타임 때 달라지는가?” (버전 교체/재빌드 관점)
+전역 가변 상태는 락/원자 연산으로 안전하게 관리.  
+**Rust static mut**는 C#에 직접 대응 없음. C# 전역 가변이라도 안전 장치를 쓰지만, Rust static mut은 언어 차원에서 unsafe로 표시됩니다.  
+“DLL 런타임 때 달라지는가?” (버전 교체/재빌드 관점)  
 
 ## C#
-
-const: 호출 사이트에 값이 박히므로 라이브러리의 const 값을 바꾸고 소비자만 교체하면 옛 값이 유지됩니다. 소비자 재컴파일 필요.
-static readonly: 런타임 바인딩이라 라이브러리만 교체해도 새 값이 반영됩니다(참조가 라이브러리 쪽 심볼을 가리킴).
+const: 호출 사이트에 값이 박히므로 라이브러리의 const 값을 바꾸고 소비자만 교체하면 옛 값이 유지됩니다. 소비자 재컴파일 필요.  
+static readonly: 런타임 바인딩이라 라이브러리만 교체해도 새 값이 반영됩니다(참조가 라이브러리 쪽 심볼을 가리킴).  
 
 ## Rust
-const: 컴파일 타임 인라인. 소비자 크레이트가 재컴파일되어야 새 값이 반영됩니다. (Cargo는 의존 버전이 바뀌면 보통 재빌드합니다.)
-static: 런타임 심볼로 참조(특히 동적 링크 시). 라이브러리 교체로 값이 바뀌면 재컴파일 없이도 새 값이 보일 수 있습니다.
-다만 Rust 생태계는 주로 **정적 링크(rlib → 최종 바이너리로 모노리식 링크)**가 일반적이라, 실무에서 “교체만으로 갱신” 시나리오는 드뭅니다.
+const: 컴파일 타임 인라인. 소비자 크레이트가 재컴파일되어야 새 값이 반영됩니다. (Cargo는 의존 버전이 바뀌면 보통 재빌드합니다.)  
+static: 런타임 심볼로 참조(특히 동적 링크 시). 라이브러리 교체로 값이 바뀌면 재컴파일 없이도 새 값이 보일 수 있습니다.  
+다만 Rust 생태계는 주로 **정적 링크(rlib → 최종 바이너리로 모노리식 링크)**가 일반적이라, 실무에서 “교체만으로 갱신” 시나리오는 드뭅니다.  
 
 ## 요약: 개념적으로는 C#과 동일한 차이가 존재합니다.
 
@@ -146,11 +144,11 @@ static: 런타임 심볼로 참조(특히 동적 링크 시). 라이브러리 �
 
 ## 보너스: 언제 무엇을 쓰나?
 
-수학 상수, 패턴/배열 크기, 제네릭 const 인자 → const
-전역 테이블/버퍼/캐시(불변 데이터) → static
-전역 초기화가 필요한 리소스(런타임 정보 필요) → static + OnceLock/OnceCell
-전역 가변 카운터/플래그 → static + Atomic* (예: AtomicU64)
-전역 가변 컬렉션 → static + Mutex<T> / RwLock<T>
+수학 상수, 패턴/배열 크기, 제네릭 const 인자 → const  
+전역 테이블/버퍼/캐시(불변 데이터) → static  
+전역 초기화가 필요한 리소스(런타임 정보 필요) → static + OnceLock/OnceCell  
+전역 가변 카운터/플래그 → static + Atomic* (예: AtomicU64)  
+전역 가변 컬렉션 → static + Mutex<T> / RwLock<T>  
 
 ---
 
