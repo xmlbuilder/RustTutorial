@@ -282,3 +282,67 @@ fn main() {
 }
 ```
 ---
+
+
+---
+
+# 다시 정리
+Rust에서 const와 static은 불변성과 메모리 수명에 관련된 중요한 개념입니다.
+
+## 🧠 핵심 개념 요약
+| 개념       | 설명                                                         |
+|------------|--------------------------------------------------------------|
+| `const`    | - 컴파일 타임에 값이 결정됨<br>- 불변이며 복사 가능<br>- 스코프에 따라 수명 결정 |
+| `static`   | - 프로그램 전체에서 하나만 존재하는 전역 변수<br>- 기본적으로 `'static` 수명 |
+| `'static`  | - 프로그램 전체 수명 동안 유효한 참조<br>- 프로모션된 `const` 값은 `'static` 참조 가능 |
+| `static mut` | - 가변 전역 변수<br>- `unsafe` 블록에서만 접근 가능<br>- `const`에서는 `&mut` 참조 불가 |
+
+
+## 🔍 예제 분석
+### 1. Promotion과 'static 수명
+```rust
+const BIT1: u32 = 1 << 0;
+const BIT2: u32 = 1 << 1;
+const BITS: [u32; 2] = [BIT1, BIT2];
+const STRING: &'static str = "bitstring";
+```
+- BIT1, BIT2, BITS는 모두 컴파일 타임에 결정되는 상수.
+- STRING은 'static 수명을 가진 문자열 리터럴. 문자열 리터럴은 기본적으로 'static입니다.
+- 이 값들은 프로모션(promoted) 되어 'static 수명을 가지므로 다른 'static 참조에 안전하게 사용 가능.
+### 2. 구조체에 'static 참조 사용
+```rust
+struct BitsNStrings<'a> {
+    mybits: [u32; 2],
+    mystring: &'a str,
+}
+
+const BITS_N_STRINGS: BitsNStrings<'static> = BitsNStrings {
+    mybits: BITS,
+    mystring: STRING,
+};
+```
+
+- BitsNStrings는 'a 수명을 가진 참조를 포함하는 구조체.
+- BITS_N_STRINGS는 'static 수명을 가진 상수로 선언되었고, 내부 값들도 모두 'static이므로 문제 없음.
+
+### ⚠️ const에서 mutable 참조는 금지
+```rust
+static mut S: u8 = 0;
+const C: &u8 = unsafe { &mut S }; // ✅ OK: 불변 참조로 사용
+
+static S: AtomicU8 = AtomicU8::new(0);
+const C: &AtomicU8 = &S; // ✅ OK: AtomicU8은 내부적으로 안전하게 공유 가능
+
+static mut S: u8 = 0;
+const C: &mut u8 = unsafe { &mut S }; // ❌ ERROR: const에는 가변 참조 불가
+```
+
+- const는 가변 참조(&mut)를 포함할 수 없습니다. 이는 Rust의 안전성 모델을 위반하기 때문입니다.
+- static mut은 unsafe 블록에서 접근 가능하지만, 그 참조를 const로 가변하게 저장하는 것은 금지됩니다.
+
+## ✅ 정리
+- const는 컴파일 타임에 결정되며, 'static 수명을 가질 수 있음 (프로모션될 경우).
+- static은 전역 변수로, 'static 수명을 기본적으로 가짐.
+- const는 가변 참조를 포함할 수 없음.
+- 구조체에 'static 참조를 넣고 const로 선언하려면 내부 값들도 'static이어야 함.
+
