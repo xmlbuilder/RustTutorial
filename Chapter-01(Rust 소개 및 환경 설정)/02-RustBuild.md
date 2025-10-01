@@ -41,13 +41,22 @@ $ ./target/release/프로젝트이름
 $ ./target/debug/프로젝트이름
 ```
 
-- 빌드 설정을 커스터마이징하고 싶다면 Cargo.toml에 [profile] 섹션을 추가할 수 있어요:
+- 빌드 설정을 커스터마이징하고 싶다면 Cargo.toml에 [profile] 섹션을 추가할 수 있음:
+```
 [profile.release]
 opt-level = 3
 debug = false
 lto = true
-
+```
 ---
+
+## 전체 내용 정리
+
+- **cargo new** 로 새 프로젝트를 생성할 수 있습니다.
+- **cargo build** 명령으로 프로젝트를 빌드할 수 있습니다.
+- **cargo run** 명령어는 한 번에 프로젝트를 빌드하고 실행할 수 있습니다.
+- **cargo check** 명령으로 바이너리를 생성하지 않고 프로젝트의 에러를 체크할 수 있습니다.
+- 빌드로 만들어진 파일은 작성한 소스 코드와 뒤섞이지 않도록 target/debug 디렉터리에 저장됩니다.
 
 
 
