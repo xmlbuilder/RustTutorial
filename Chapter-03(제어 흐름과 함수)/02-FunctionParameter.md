@@ -105,3 +105,71 @@ fn change(some_string: &mut String) {
 
 ---
 
+## Rust와 C++ 비교
+
+Rust와 C++ 모두 함수 인자로 **참조(reference)**를 전달할 수 있지만,  
+두 언어는 메모리 안전성, 소유권 모델, 가변성 제어 방식이 다르기 때문에 그 의미와 사용법도 꽤 다릅니다.
+
+## 🧭 기본 개념 비교: C++ vs Rust 함수 인자 참조
+| 개념             | C++                          | Rust                          |
+|------------------|-------------------------------|-------------------------------|
+| 참조 문법        | `T&`, `const T&`              | `&T`, `&mut T`                |
+| 가변성 제어      | `const` 키워드로 제어         | 타입 수준에서 `&` / `&mut`로 구분 |
+| 소유권 개념      | 없음                          | 있음 (`ownership`, `borrowing`) |
+| 라이프타임 개념  | 없음                          | 있음 (`'a` 등으로 명시 또는 추론) |
+| 안전성           | 개발자 책임                   | 컴파일러가 강제 검사 (safe by default) |
+
+
+## 🧪 예시 비교
+### C++ 예시
+```cpp
+void printName(const std::string& name) {
+    std::cout << name << std::endl;
+}
+```
+
+- const std::string&는 복사 없이 참조만 전달.
+- const를 붙여서 함수 내에서 수정하지 않겠다는 의도 표현.
+- 하지만 const_cast로 강제 수정도 가능 → 위험!
+
+### Rust 예시
+```rust
+fn print_name(name: &String) {
+    println!("{}", name);
+}
+```
+
+- &String은 불변 참조.
+- 함수 내에서 name을 수정할 수 없음.
+- &mut String을 쓰면 가변 참조로 변경 가능.
+
+## 🔐 Rust의 안전성: Borrow Checker
+Rust는 borrow checker를 통해 다음을 강제합니다:
+- 하나의 &mut 가변 참조만 허용
+- 여러 개의 & 불변 참조는 허용
+- 불변 참조와 가변 참조는 동시에 불가
+이 덕분에 **데이터 경쟁(race condition)**이나 dangling pointer가 발생하지 않아요.
+
+## 🧠 라이프타임(Lifetime)의 차이
+Rust에서는 참조가 얼마나 오래 살아야 하는지를 명시해야 할 때가 있음:
+```rust
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() { x } else { y }
+}
+```
+
+- 'a는 두 참조가 같은 라이프타임을 가져야 함을 의미.
+- C++에서는 이런 개념이 없고, dangling reference는 런타임 오류로 이어질 수 있음.
+
+## 🧩 정리: C++ vs Rust 참조 방식
+| 개념             | C++                      | Rust                      |
+|------------------|---------------------------|---------------------------|
+| 참조 문법        | `T&`, `const T&`          | `&T`, `&mut T`            |
+| 가변성 제어      | `const` 키워드            | 타입 수준에서 `&` / `&mut` |
+| 소유권 개념      | 없음                      | 있음 (`ownership`)        |
+| 라이프타임 개념  | 없음                      | 있음 (`'a`)               |
+| 안전성           | 개발자 책임               | 컴파일러가 강제 검사       |
+
+
+
+
