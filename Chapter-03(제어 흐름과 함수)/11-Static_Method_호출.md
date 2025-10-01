@@ -12,9 +12,9 @@
 ```
 
 ## 🔍 문제 핵심
-h_add, h_scale, h_lerp는 모두 impl Point4D 블록 안에 있는 정적 메서드.  
-즉, self를 받지 않고 &Self를 인자로 받는 associated function입니다.  
-그런데 h_lerp 안에서 h_add(...)라고만 쓰면,  
+`h_add`, `h_scale`, `h_lerp`는 모두 impl Point4D 블록 안에 있는 정적 메서드.  
+즉, `self`를 받지 않고 `&Self`를 인자로 받는 associated function입니다.  
+그런데 `h_lerp` 안에서 `h_add(...)`라고만 쓰면,  
 Rust는 현재 스코프에서 h_add라는 함수가 어디 있는지 모릅니다.  
 
 ## ✅ 해결 방법
