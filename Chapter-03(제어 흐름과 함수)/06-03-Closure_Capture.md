@@ -127,7 +127,7 @@ fn main() {
 - FnMut → 가변 참조 캡처, 호출 시마다 가변 대여 필요
 - FnOnce → 소유권 이동 캡처, 한 번만 호출 가능 (값을 소비하기 때문)
 
-
+```rust
 fn main() {
     println!("=== Fn (불변 참조 캡처) ===");
     fn_example();
@@ -138,6 +138,7 @@ fn main() {
     println!("\n=== FnOnce (소유권 이동 캡처) ===");
     fnonce_example();
 }
+```
 
 ### Fn: 불변 참조 캡처
 ```rust
