@@ -25,11 +25,11 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 ---
 
 ### 🧮 [Chapter-02(기본 문법과 타입 시스템)](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29)
-- [00-Array.md](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/00-Array.md)
+- [00-데이터_타입.md](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/04-%EB%8D%B0%EC%9D%B4%ED%84%B0_%ED%83%80%EC%9E%85.md)
 - [01-mutable.md](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/01-mutable.md)
 - [02-Const_Variable.md](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/02-Const_Variable.md)
 - [03-Shadowing.md](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/03-Shadowing.md)
-- [04-데이터_타입.md](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/04-%EB%8D%B0%EC%9D%B4%ED%84%B0_%ED%83%80%EC%9E%85.md)
+- [04-Array.md](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/00-Array.md)
 - [05-Boolean.md](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/05-Boolean.md)
 - [06-Char.md](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/06-Char.md)
 - [07-Tuple.md](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/07-Tuple.md)
