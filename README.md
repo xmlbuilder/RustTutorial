@@ -187,6 +187,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [08-사용자_정의에러타입](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/08-%EC%82%AC%EC%9A%A9%EC%9E%90_%EC%A0%95%EC%9D%98%EC%97%90%EB%9F%AC%ED%83%80%EC%9E%85.md)
 - [09-Option_Result](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/09-Option_Result.md)
 - [10-dbg!](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/10-dbg!.md)
+- [11-Array_접근_Panic](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/11-Array_접근_Panic.md)
+
   
 🔼 [맨 위로](#-목차)
 
