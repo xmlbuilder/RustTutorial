@@ -18,6 +18,23 @@ let StructName { field1: new_var1, field2: new_var2 } = instance;
 
 ## 🧪 예제 ①: Person 구조체 분해
 ```rust
+struct Foo {
+    x: (u32, u32),
+    y: u32,
+}
+
+#[rustfmt::skip]
+fn main() {
+    let foo = Foo { x: (1, 2), y: 3 };
+    match foo {
+        Foo { x: (1, b), y } => println!("x.0 = 1, b = {b}, y = {y}"),
+        Foo { y: 2, x: i }   => println!("y = 2, x = {i:?}"),
+        Foo { y, .. }        => println!("y = {y}, 다른 필드는 무시됨"),
+    }
+}
+```
+
+```rust
 #[derive(Debug)]
 struct Person {
     name: String,
