@@ -323,17 +323,7 @@ quote! {
 }
 ```
 이건 TokenStream으로 변환되어 컴파일러에게 전달.
-
-
-## 🎯 요약: quote! 매크로 내 #vis, #sig 예시
-이건 함수의 **가시성(visibility)**과 **시그니처(signature)**를 의미
-| 표현     | 의미 또는 역할                         | 실제 예시 값                         |
-|----------|----------------------------------------|--------------------------------------|
-| `#vis`   | 함수의 가시성 (visibility)              | `pub`, `private` (없음)              |
-| `#sig`   | 함수의 시그니처 (signature)             | `fn greet(...) -> ...`               |
-|          |                                        | `fn greet(name: &str) -> String`     |
-
-이걸 Procedural Macro에서 쓰면, 원래 함수의 구조를 그대로 유지하면서 본문만 수정하거나 감싸는 작업이 가능해.
+이걸 Procedural Macro에서 쓰면, 원래 함수의 구조를 그대로 유지하면서 본문만 수정하거나 감싸는 작업이 가능.
 
 ## ✨ 예시 코드
 ```rust
@@ -349,7 +339,7 @@ let expanded = quote! {
 
 이건 원래 함수의 vis, sig, block을 그대로 유지하면서, 실행 전후에 로그를 추가하는 매크로.
 
-## 🎯 quote! 매크로 내 #vis, #sig 의미
+### 🎯 quote! 매크로 내 #vis, #sig 의미
 | 표현     | 설명                                      |
 |----------|-------------------------------------------|
 | `#vis`   | 함수의 가시성 (예: `pub`)                  |
@@ -358,16 +348,14 @@ let expanded = quote! {
 
 ---
 
-## stringify!
+### stringify!
 Rust의 stringify! 매크로는 코드 조각을 문자열로 변환하는 매크로입니다.  
 하지만 중요한 특징은:
 실제 값이 아닌, 코드 자체를 문자열로 바꾼다.
 
-
 ---
 
-
-## 매크로 log_execution 단계별 설명
+# 매크로 log_execution 단계별 설명
 매크로 log_execution은 함수 실행 전후에 로그를 출력하는 기능을 자동으로 삽입합니다.  
 아래에 단계별로 구조와 동작 원리를 자세히 설명.
 
@@ -390,8 +378,6 @@ fn my_function() {
     result
 }
 ```
-
-
 ### 🧩 단계별 설명
 ####  🔹 1단계: 매크로 선언
 ```rust
@@ -482,7 +468,7 @@ Hello, JungHwan!
 
 ---
 
-### 🔍 stringify!의 역할
+# 🔍 stringify!의 역할
 ```rust
 let s = stringify!(1 + 2);
 println!("{}", s); // 출력: "1 + 2"
@@ -525,7 +511,8 @@ Result: 13
 
 ### ⚠️ 주의할 점
 - stringify!는 컴파일 타임에 문자열을 생성합니다.
-- 변수 값을 문자열로 바꾸고 싶다면 format!이나 .to_string()을 사용해야 해요.
+- 변수 값을 문자열로 바꾸고 싶다면 format!이나 .to_string()을 사용해야 함.
+
 
 
 
