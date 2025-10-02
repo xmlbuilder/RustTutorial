@@ -1,5 +1,5 @@
 # enum 패턴 매칭(Pattern Matching)
-좋Rust의 **enum 패턴 매칭(Pattern Matching)**은 언어의 핵심 기능 중 하나로,  
+좋Rust의 **enum 패턴 매칭(Pattern Matching)** 은 언어의 핵심 기능 중 하나로,  
 값의 종류에 따라 분기 처리하면서 내부 데이터를 꺼내는 기능까지 제공합니다.    
 다른 언어의 switch 문보다 훨씬 강력하고 안전하죠.
 
@@ -163,6 +163,29 @@ fn main() {
 
 ```
 
+
+### 예제 (Result)
+
+```rust
+enum Result {
+    Ok(i32),
+    Err(String),
+}
+fn divide_in_two(n: i32) -> Result {
+    if n % 2 == 0 {
+        Result::Ok(n / 2)
+    } else {
+        Result::Err(format!("{n}을(를) 두 개의 동일한 부분으로 나눌 수 없음"))
+    }
+}
+fn main() {
+    let n = 100;
+    match divide_in_two(n) {
+        Result::Ok(half) => println!("{n}을(를) 둘로 나눈 값은 {half}입니다."),
+        Result::Err(msg) => println!("죄송합니다. 오류가 발생했습니다. {msg}"),
+    }
+}
+```
 
 ## 🧼 ④ 예제: 값 무시하기 (_)
 ```rust
