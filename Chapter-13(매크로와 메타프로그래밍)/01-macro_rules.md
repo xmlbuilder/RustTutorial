@@ -33,7 +33,7 @@ use my_project::say_hello;
 fn main() {
     say_hello!(); // Hello from macro! 출력
 }
-``
+```
 
 - #[macro_export]를 붙이면 크레이트 루트에 등록되어 외부에서도 사용 가능
 - 다양한 패턴을 정의해 입력에 따라 다른 코드를 생성 가능
