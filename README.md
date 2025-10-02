@@ -188,7 +188,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [09-Option_Result](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/09-Option_Result.md)
 - [10-dbg!](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/10-dbg!.md)
 - [11-Array_접근_Panic](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/11-Array_접근_Panic.md)
-
+- [12-디버깅_출력용_포맷](./Chapter-08%28%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80Option-Result%29/12-디버깅_출력용_포맷.md)
   
 🔼 [맨 위로](#-목차)
 
