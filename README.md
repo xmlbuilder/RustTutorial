@@ -68,7 +68,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [39-to_bits](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/39-to_bits.md)
 - [40-Eager_Lazy_Evaluation](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/40-Eager_Lazy_Evaluation.md)
 - [41-삼항_연산자_표현식](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/41-삼항_연산자_표현식.md)
-- [42-iterator_무력화문제](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/42-iterator_무력화문제.md)
+- 
+- [43-StringBuilder_필요성](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/43-StringBuilder_필요성.md)
 
 
 🔼 [맨 위로](#-목차)
