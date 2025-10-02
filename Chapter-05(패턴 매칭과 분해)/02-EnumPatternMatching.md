@@ -134,14 +134,13 @@ fn main() {
 
 
 
-## 🧪 ③ 예제: Option 타입 매칭
+## 🧪 ③ 예제: Option / Result 타입 매칭
 fn increment(x: Option<i32>) -> Option<i32> {
     match x {
         Some(i) => Some(i + 1),
         None => None,
     }
 }
-
 
 - Option은 enum Option<T> { Some(T), None } 형태
 - Some(i)에서 i를 꺼내 연산 가능
@@ -163,8 +162,6 @@ fn main() {
 }
 
 ```
-
-
 ### 예제 (Result)
 
 ```rust
