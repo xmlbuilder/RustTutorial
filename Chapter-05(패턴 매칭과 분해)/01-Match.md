@@ -24,6 +24,9 @@ pub fn is_planar(
 }
 ```
 
+
+
+
 ### ✅ 문법적으로 OK인 이유
 - let mut plane;은 선언만 하고, 이후 조건문에서 초기화됨
 - if let Some(pe) = ... 패턴 매칭도 올바름
@@ -37,7 +40,28 @@ pub fn is_planar(
 - Rust는 컴파일 타임에 “모든 경로에서 초기화됨”을 확인해야 하므로
 return false가 없으면 컴파일 에러가 날 수 있음
 
-#### 2. 스코프 중첩이 불필요할 수 있음
+#### 2. `|` / `..` / `if`
+```rust
+#[rustfmt::skip]
+fn main() {
+    let input = 'x';
+    match input {
+        'q'                       => println!("Quitting"),
+        'a' | 's' | 'w' | 'd'     => println!("이리저리 이동"),
+        '0'..='9'                 => println!("숫자 입력"),
+        key if key.is_lowercase() => println!("소문자: {key}"),
+        _                         => println!("기타"),
+    }
+}
+```
+
+#### 패턴에서 사용되는 특수 문자들
+- |: or 기호입니다
+- ..: 필요한 만큼 확장합니다
+- 1..=5: 끝 값(여기서는 5)을 포함하는 범위를 나타냅니다
+- _: 와일드카드입니다
+
+#### 3. 스코프 중첩이 불필요할 수 있음
 ```rust
 {
     if let Some(pe) = ... { ... } else { ... }
