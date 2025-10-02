@@ -5,8 +5,8 @@ Rust의 매크로는 단순한 코드 치환을 넘어서 컴파일 타임에 �
 ## 🧠 매크로란?
 - 컴파일 타임에 코드 생성을 수행하는 기능
 - 반복되는 패턴을 줄이고, 다양한 입력을 처리하며, 런타임 비용 없이 코드 확장 가능
-- 함수와 달리 ! 기호를 사용하며, 런타임이 아닌 컴파일 타임에 실행됨
-예: println!, vec!, assert_eq! 등은 모두 매크로
+- 함수와 달리 ! 기호를 사용하며, 런타임이 아닌 컴파일 타임에 실행됨  
+예: `println!`, `vec!`, `assert_eq!` 등은 모두 매크로
 
 ## 🧩 매크로의 종류
 | 종류       | 예시 또는 설명                                |
@@ -26,6 +26,14 @@ macro_rules! say_hello {
     };
 }
 ```
+### 사용법
+```rust
+// 매크로를 정의한 크레이트를 가져옵니다
+use my_project::say_hello;
+fn main() {
+    say_hello!(); // Hello from macro! 출력
+}
+``
 
 - #[macro_export]를 붙이면 크레이트 루트에 등록되어 외부에서도 사용 가능
 - 다양한 패턴을 정의해 입력에 따라 다른 코드를 생성 가능
@@ -54,7 +62,6 @@ pub fn my_trait_derive(input: TokenStream) -> TokenStream {
 | `Copy`와 `Drop`은 양립 불가  | `Drop`을 구현한 타입은 `Copy`를 붙일 수 없음 → 매크로로 생성된 타입도 주의 필요 |
 
 
-
 ## ✨ 언제 매크로를 쓰면 좋은가?
 - 반복되는 코드 패턴을 줄이고 싶을 때
 - 다양한 입력을 유연하게 처리하고 싶을 때
@@ -68,7 +75,6 @@ pub fn my_trait_derive(input: TokenStream) -> TokenStream {
 | `#[macro_export]`           | 매크로를 크레이트 루트에 등록하여 외부에서도 사용할 수 있게 함          |
 | 이름에 prefix 붙이기        | `math_approx_f64!`, `util_log!` 등으로 이름 충돌 방지                  |
 | 내부 전용은 export 생략     | `macro_rules!`만 사용하고 `pub(crate)` 수준에서 제한하면 안전하게 관리 가능 |
-
 
 ---
 
@@ -112,7 +118,7 @@ fn main() {
 }
 ```
 
-### 🔎 #[macro_use] extern crate ...;는 Rust 2015 스타일로, 지금은 명시적 use 방식이 권장돼요
+### 🔎 #[macro_use] extern crate ...;는 Rust 2015 스타일로, 지금은 명시적 `use` 방식이 권장돼요
 
 ## ⚠️ 주의 요약
 | 항목               | 설명                                                                 |
