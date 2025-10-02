@@ -78,7 +78,7 @@ pub fn my_attr(_attr: TokenStream, item: TokenStream) -> TokenStream {
 fn foo() {}
 ```
 
-
+---
 
 ## 🔧 주요 크레이트: Procedural Macro 개발에 필수
 | 크레이트       | 주요 역할 또는 기능                                |
@@ -512,6 +512,7 @@ Result: 13
 ### ⚠️ 주의할 점
 - stringify!는 컴파일 타임에 문자열을 생성합니다.
 - 변수 값을 문자열로 바꾸고 싶다면 format!이나 .to_string()을 사용해야 함.
+
 
 
 
