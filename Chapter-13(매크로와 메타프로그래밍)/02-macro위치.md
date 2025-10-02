@@ -2,9 +2,10 @@
 ### ✅ 1. 공용 매크로 모듈 생성
 
 가장 일반적인 방식은 macros.rs 또는 macros/mod.rs 같은 파일을 만들어
-모든 공통 매크로를 여기에 모아두는 거예요.
+모든 공통 매크로를 여기에 모아둠.  
+
+```rust
 // src/macros.rs
-```
 #[macro_export]
 macro_rules! my_macro {
     ($x:expr) => {
@@ -13,12 +14,12 @@ macro_rules! my_macro {
 }
 ```
 
-그리고 루트에서 mod macros;로 선언한 뒤, 다른 모듈에서 use crate::my_macro;로 사용 가능.
-🔑 #[macro_export]는 크레이트 전체에서 사용할 수 있도록 매크로를 공개하는 키워드예요.
+그리고 루트에서 `mod macros;` 로 선언한 뒤, 다른 모듈에서 `use crate::my_macro;` 로 사용 가능.
+🔑 #[macro_export]는 크레이트 전체에서 사용할 수 있도록 매크로를 공개하는 키워드.
 
 
 ### ✅ 2. 루트 모듈에 선언
-작은 프로젝트에서는 lib.rs 또는 main.rs에 직접 선언해도 괜찮아요.
+작은 프로젝트에서는 lib.rs 또는 main.rs에 직접 선언해도 괜찮음.
 ```rust
 #[macro_export]
 macro_rules! debug_log {
@@ -29,14 +30,15 @@ macro_rules! debug_log {
 ```
 
 이 방식은 간단하지만 확장성은 떨어짐.
-모듈이 많아지면 매크로 위치 찾기 어려워지고, 중복 선언 위험도 생겨요.
+모듈이 많아지면 매크로 위치 찾기 어려워지고, 중복 선언 위험도 생김.
 
 ### ✅ 3. 매크로 전용 크레이트 분리
 라이브러리나 대규모 프로젝트에서는
-매크로를 별도의 크레이트로 분리해서 macro_crate로 관리하기도 해요.
-예: serde_derive, tokio_macros, hello_macro_derive 등
+매크로를 별도의 크레이트로 분리해서 macro_crate로 관리함.
+
+예: `serde_derive`, `tokio_macros`, `hello_macro_derive` 등
 이 방식은 절대적인 재사용성과 독립성을 보장하지만,
-일반적인 애플리케이션 수준에서는 과할 수 있어요.
+일반적인 애플리케이션 수준에서는 과할 수 있음.
 
 
 ## 📦 사용 시 주의사항
@@ -55,6 +57,7 @@ macro_rules! debug_log {
 | `macros.rs`            | 공통 매크로를 모아두는 전용 모듈로 추천  |
 | `mod.rs` (매크로 전용) | 여러 매크로를 계층적으로 관리할 때 사용  |
 
+---
 
 
 
