@@ -386,7 +386,7 @@ match result {
 
 ## 🔁 무한 확장성: 표현식 트리의 깊이와 다양성
 - enum Expression은 Box<Expression>을 통해 자기 자신을 포함할 수 있음.
-- 이 구조는 트리 형태로 무한히 깊은 수식을 표현할 수 있게 해줍니다.
+- 이 구조는 트리 형태로 무한히 깊은 수식을 표현할 수 있게 해줍니다.  
 예:
 ```rust
 Expression::Op {
@@ -707,6 +707,7 @@ C++에서는 std::variant를 쓰면서 std::holds_alternative<T>로 먼저 타�
 
 
 ----
+
 
 
 
