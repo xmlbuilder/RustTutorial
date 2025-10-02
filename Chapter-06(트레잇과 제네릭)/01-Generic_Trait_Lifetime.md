@@ -13,6 +13,9 @@
 - 제약 없는 일반 타입부터 시작 → Trait bound로 확장
 - 예: fn add<T: Add>(a: T, b: T) -> T
 ### ② Trait
+- 트레잇은 타입을 추상화 하는데 사용됩니다.
+- 인터페이스와 비슷합니다
+- 트레잇은 해당 트레잇을 구현하기 위해 타입이 가져야 하는 여러 메서드를 정의합니다.
 - trait 정의 → impl로 구현
 - dyn Trait vs impl Trait 차이
 - Trait object, default method, supertrait 등 고급 개념도 있음
