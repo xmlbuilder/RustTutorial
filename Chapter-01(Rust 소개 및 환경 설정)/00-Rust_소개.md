@@ -75,9 +75,9 @@ rustc 1.85.1 (4eb161250 2025-03-15)
 ---
 
 ### 참고 사이트
-https://google.github.io/comprehensive-rust/ko/other-resources.html
-https://doc.rust-lang.org/book/
-https://doc.rust-lang.org/rust-by-example/
+- https://google.github.io/comprehensive-rust/ko/other-resources.html
+- https://doc.rust-lang.org/book/
+- https://doc.rust-lang.org/rust-by-example/
 
 
 
