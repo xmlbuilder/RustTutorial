@@ -103,7 +103,7 @@ fn main() {
 
 ---
 
-## try_from_secs_f32
+# try_from_secs_f32
 
 try_from_secs_f32는 Rust에서 부동소수점(f32) 값을 안전하게 Duration으로 변환하기 위한 함수입니다.  
 아래에 관련 함수들과 함께 개념, 사용법, 주의사항까지 정리.
@@ -156,6 +156,7 @@ match Duration::try_from_secs_f32(-1.0) {
 try_from_secs_f32는 시간을 부동소수점으로 다룰 때 안전하게 Duration으로 변환하는 도구입니다.  
 실시간 시스템, 사용자 입력, 외부 API 등에서 예외가 발생할 수 있는 상황에서는  
 반드시 try_from_ 계열을 사용하는 것이 바람직합니다.
+
 
 
 
