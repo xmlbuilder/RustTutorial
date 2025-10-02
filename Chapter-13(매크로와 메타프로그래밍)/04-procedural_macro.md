@@ -127,8 +127,7 @@ fn foo() {}
 
 # procedural macro 작동 원리
 
-개발자가 구조체를 정의하고 #[derive(무언가)]를 붙이면, 컴파일 타임에 매크로가 자동으로 트레잇 구현 코드를 생성해줌. 
-마치 “코드를 써주는 로봇”처럼!
+개발자가 구조체를 정의하고 #[derive(무언가)]를 붙이면, 컴파일 타임에 매크로가 자동으로 트레잇 구현 코드를 생성해줌.   
 우리가 직접 #[derive(Hello)]를 만들면, 구조체에 hello() 메서드를 자동으로 추가해주는 매크로를 구현할 수 있음.
 
 ### 🧪 1. 프로젝트 구조
@@ -171,7 +170,6 @@ use syn::{parse_macro_input, DeriveInput};
 pub fn hello_derive(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     let name = input.ident;
-
     let expanded = quote! {
         impl Hello for #name {
             fn hello() {
@@ -179,7 +177,6 @@ pub fn hello_derive(input: TokenStream) -> TokenStream {
             }
         }
     };
-
     TokenStream::from(expanded)
 }
 ```
@@ -217,10 +214,10 @@ Hello from MyStruct!
 
 ---
 
-# Attribute Procedural Macro 
+## Attribute Procedural Macro 
 
 Rust에서 직접 만들 수 있는 Attribute Procedural Macro의 실제적인 샘플. 
-이 매크로는 함수에 #[log_execution]을 붙이면, 해당 함수가 실행될 때 자동으로 로그를 출력해주는 기능. 
+이 매크로는 함수에 `#[log_execution]` 을 붙이면, 해당 함수가 실행될 때 자동으로 로그를 출력해주는 기능. 
 실전에서 디버깅, 로깅, 성능 측정 등에 아주 유용하게 쓰일 수 있음.
 
 ## 🧪 프로젝트 구조
@@ -275,7 +272,6 @@ pub fn log_execution(_attr: TokenStream, item: TokenStream) -> TokenStream {
             result
         }
     };
-
     TokenStream::from(expanded)
 }
 ```
@@ -296,11 +292,13 @@ fn main() {
 }
 ```
 
+
+### ✅ 실행 결과
 ```
-✅ 실행 결과
 🔍 실행 시작: greet
-✅ 실행 완료: greet
 Hello, JungHwan!
+✅ 실행 완료: greet
+
 ```
 
 
@@ -311,8 +309,6 @@ Hello, JungHwan!
 | `proc_macro_attribute` | Attribute 매크로를 정의하는 핵심 어노테이션   |
 | `syn::ItemFn`         | 함수 전체를 파싱해서 이름, 시그니처, 본문을 추출 |
 | `quote!`              | 새로운 함수 본문을 생성하는 코드 생성기 역할     |
-
-
 
 
 ## 🔍 quote! 매크로란?
@@ -326,7 +322,7 @@ quote! {
     }
 }
 ```
-이건 TokenStream으로 변환되어 컴파일러에게 전달돼.
+이건 TokenStream으로 변환되어 컴파일러에게 전달.
 
 
 ## 🎯 요약: quote! 매크로 내 #vis, #sig 예시
@@ -351,7 +347,7 @@ let expanded = quote! {
 };
 ```
 
-이건 원래 함수의 vis, sig, block을 그대로 유지하면서, 실행 전후에 로그를 추가하는 매크로야.
+이건 원래 함수의 vis, sig, block을 그대로 유지하면서, 실행 전후에 로그를 추가하는 매크로.
 
 ## 🎯 quote! 매크로 내 #vis, #sig 의미
 | 표현     | 설명                                      |
@@ -361,6 +357,175 @@ let expanded = quote! {
 | `#block` | 함수 본문                                 |
 
 ---
+
+## stringify!
+Rust의 stringify! 매크로는 코드 조각을 문자열로 변환하는 매크로입니다.  
+하지만 중요한 특징은:
+실제 값이 아닌, 코드 자체를 문자열로 바꾼다.
+
+
+---
+
+
+## 매크로 log_execution 단계별 설명
+매크로 log_execution은 함수 실행 전후에 로그를 출력하는 기능을 자동으로 삽입합니다.  
+아래에 단계별로 구조와 동작 원리를 자세히 설명.
+
+### 🧠 전체 목적
+```rust
+#[log_execution]
+fn my_function() {
+    // 실제 로직
+}
+```
+
+이렇게 매크로를 붙이면 다음과 같은 코드로 확장됩니다:
+```rust
+fn my_function() {
+    println!("🔍 실행 시작: my_function");
+    let result = (|| {
+        // 실제 로직
+    })();
+    println!("✅ 실행 완료: my_function");
+    result
+}
+```
+
+
+### 🧩 단계별 설명
+####  🔹 1단계: 매크로 선언
+```rust
+#[proc_macro_attribute]
+pub fn log_execution(_attr: TokenStream, item: TokenStream) -> TokenStream
+```
+
+- `#[proc_macro_attribute]`: 이 매크로는 attribute macro임을 나타냅니다.
+- item: 매크로가 적용된 함수 코드가 TokenStream으로 들어옵니다.
+- _attr: 매크로 인자 (사용하지 않으므로 _로 무시)
+
+#### 🔹 2단계: 함수 파싱
+```rust
+let input = parse_macro_input!(item as ItemFn);
+```
+
+- item을 syn::ItemFn으로 파싱 → 함수 전체 구조를 AST로 변환
+- ItemFn은 함수의 이름, 시그니처, 블록, 어트리뷰트 등을 포함
+
+#### 🔹 3단계: 주요 정보 추출
+```rust
+let fn_name = &input.sig.ident;
+let block = &input.block;
+let sig = &input.sig;
+let vis = &input.vis;
+
+```
+- `fn_name`: 함수 이름 (my_function)
+- `block`: 함수 본문 { ... }
+- `sig`: 함수 시그니처 (fn my_function())
+- `vis`: 함수의 공개 여부 (pub, private 등)
+
+#### 🔹 4단계: 코드 생성
+```rust
+let expanded = quote! {
+    #vis #sig {
+        println!("🔍 실행 시작: {}", stringify!(#fn_name));
+        let result = (|| #block )();
+        println!("✅ 실행 완료: {}", stringify!(#fn_name));
+        result
+    }
+};
+```
+
+- `quote!`: Rust 코드 조각을 생성하는 매크로
+- `stringify!(#fn_name)`: 함수 이름을 문자열로 출력
+- `(|| #block )()`: 클로저로 감싸서 함수 본문을 실행하고 result에 저장
+- `result`: 함수의 반환값을 그대로 유지
+
+#### 🔹 5단계: 반환
+```rust
+TokenStream::from(expanded)
+```
+
+- 생성된 코드를 TokenStream으로 변환하여 컴파일러에 반환
+
+### 📦 핵심 타입 요약
+| 타입           | 설명                                                                 |
+|----------------|----------------------------------------------------------------------|
+| `TokenStream`  | 매크로 입출력용 코드 스트림. 컴파일러가 매크로에 전달하거나 반환함. |
+| `ItemFn`       | 함수 전체를 표현하는 syn의 AST 타입. 이름, 시그니처, 본문 등을 포함. |
+| `quote!`       | Rust 코드 조각을 생성하는 매크로. 변수 삽입과 코드 템플릿에 사용됨.  |
+| `stringify!`   | 코드 조각을 문자열로 변환. 실제 값이 아닌 코드 자체를 문자열로 만듦. |
+
+
+
+### 🧪 사용 예시
+```rust
+#[log_execution]
+fn greet() -> &'static str {
+    println!("Hello, JungHwan!");
+    "완료"
+}
+
+fn main() {
+    let msg = greet();
+    println!("결과: {}", msg);
+}
+```
+
+### 출력 결과:
+```
+🔍 실행 시작: greet
+Hello, JungHwan!
+✅ 실행 완료: greet
+결과: 완료
+```
+
+---
+
+### 🔍 stringify!의 역할
+```rust
+let s = stringify!(1 + 2);
+println!("{}", s); // 출력: "1 + 2"
+```
+
+- stringify!(1 + 2)는 **"1 + 2"**라는 문자열을 생성합니다.
+- 실제로 계산하지 않고, 코드 그대로를 문자열로 바꿉니다.
+
+## 🧠 언제 쓰냐면…
+| 용도                         | 설명                                                                 |
+|------------------------------|----------------------------------------------------------------------|
+| 디버깅용                     | 코드 조각을 그대로 문자열로 출력하고 싶을 때                         |
+| 매크로 내부에서 코드 추적    | 어떤 식이 들어왔는지 문자열로 확인하고 싶을 때                       |
+| 코드 생성용 매크로에서 활용  | `quote!`와 함께 사용해 코드 조각을 문자열로 삽입할 때                |
+| 문서 자동 생성               | 코드 조각을 설명이나 주석으로 변환할 때                              |
+
+
+### 🧪 예제: 매크로 내부에서 사용
+```rust
+macro_rules! log_expr {
+    ($e:expr) => {
+        println!("Evaluating: {}", stringify!($e));
+        println!("Result: {}", $e);
+    };
+}
+
+fn main() {
+    log_expr!(3 * 4 + 1);
+}
+```
+
+### 출력:
+```
+Evaluating: 3 * 4 + 1
+Result: 13
+```
+
+- stringify!($e)는 "3 * 4 + 1"을 출력
+- $e는 실제로 계산되어 13을 출력
+
+### ⚠️ 주의할 점
+- stringify!는 컴파일 타임에 문자열을 생성합니다.
+- 변수 값을 문자열로 바꾸고 싶다면 format!이나 .to_string()을 사용해야 해요.
 
 
 
