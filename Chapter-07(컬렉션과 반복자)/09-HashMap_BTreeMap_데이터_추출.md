@@ -53,7 +53,7 @@ for value in map.values_mut() {
 ```
 
 values_mut()은 &mut V를 반환하므로
-직접 값을 수정할 수 있어요.
+직접 값을 수정할 수 있음.
 
 
 #### 5. 🔄 key/value를 분리해서 각각 Vec에 담기
