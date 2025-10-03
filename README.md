@@ -72,6 +72,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [42-iterator_무력화문제](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/42-iterator_무력화문제.md)
 - [43-StringBuilder_필요성](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/43-StringBuilder_필요성.md)
 - [44-split_split_inclusive](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/44-split_split_inclusive.md)
+- [45-Asscociated_Types](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/45-Asscociated_Types.md)
 
 🔼 [맨 위로](#-목차)
 
