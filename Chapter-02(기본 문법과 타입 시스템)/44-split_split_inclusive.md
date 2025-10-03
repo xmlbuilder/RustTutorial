@@ -1,5 +1,5 @@
 # split / split_inclusive
-split_inclusive()는 Rust의 문자열이나 슬라이스를 특정 조건 기준으로 나누되, 그 조건을 포함해서 분할하는 함수입니다.
+split_inclusive()는 Rust의 문자열이나 슬라이스를 특정 조건 기준으로 나누되, 그 조건을 포함해서 분할하는 함수입니다.  
 보통 split()은 조건을 기준으로 나누지만, split_inclusive()는 조건이 걸린 요소를 각 조각의 끝에 포함.
 
 ## 🔍 핵심 개념
