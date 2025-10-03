@@ -141,8 +141,8 @@ fn main() {
 
 
 ## ✅ 핵심 포인트
-- abs()로 절대값 차이를 구하고
-→ TOLERANCE보다 작으면 같다고 판단
+- abs()로 절대값 차이를 구하고      
+    → TOLERANCE보다 작으면 같다고 판단
 - Eq는 구현하지 않음 → 반사성은 만족하지만, NaN 같은 예외를 고려하면 안전하게 PartialEq만
 
 Rust에서는 표준 타입(f64, i32 등)에 대해 직접 impl을 추가하는 것이 막혀 있습니다.    
@@ -167,8 +167,8 @@ impl PartialEq for Approximate {
 }
 ```
 
-- f64에 직접 impl은 불가능하지만
-→ Approximate(f64)처럼 newtype 패턴을 쓰면 가능
+- f64에 직접 impl은 불가능하지만  
+    → Approximate(f64)처럼 newtype 패턴을 쓰면 가능
 - 이 방식은 타입 안전성과 커스터마이징을 동시에 확보할 수 있어요
 
 ## 🧠 Orphan Rule 요약
@@ -215,8 +215,8 @@ impl MyTrait for f64 {
 }
 ```
 
-- 이건 내 crate에서 만든 trait이기 때문에
-→ 표준 타입 f64에 자유롭게 impl 가능
+- 이건 내 crate에서 만든 trait이기 때문에  
+    → 표준 타입 f64에 자유롭게 impl 가능
 
 ### ⚠️ 반대로는 불가능
 ```rust
@@ -245,8 +245,8 @@ impl PartialEq for Approximate {
 }
 ```
 
-- Approximate는 내가 만든 타입이므로
-→ 표준 trait PartialEq, Ord, Hash 등을 자유롭게 구현 가능
+- Approximate는 내가 만든 타입이므로  
+    → 표준 trait PartialEq, Ord, Hash 등을 자유롭게 구현 가능
 ### 2. 내 trait을 f64에 붙이기
 ```rust
 trait MyFloatOps {
