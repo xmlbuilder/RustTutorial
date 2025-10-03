@@ -148,9 +148,9 @@ impl Drop for NativeQuat {
 
 ### 4) 요약
 
-Drop을 붙이면 Copy를 포기해야 하고, 값 전달은 move가 됩니다.
+Drop을 붙이면 Copy를 포기해야 하고, 값 전달은 move가 됩니다.  
 소유권 보존이 필요하면 API를 &self/&Self로 바꾸고 내부에서 clone()
-또는 참조용 Mul 구현을 추가하세요.
+또는 참조용 Mul 구현을 추가.  
 수치용 구조체는 보통 Drop 없이 #[derive(Copy, Clone)]가 권장 패턴입니다.
 
 ---
