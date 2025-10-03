@@ -156,12 +156,12 @@ fn main() {
 | 함수       | 설명                                 | 예제 코드                                      |
 |------------|--------------------------------------|------------------------------------------------|
 | zeros      | 모든 요소가 0인 배열 생성             | `let a = Array2::<f64>::zeros((3, 3));`          |
-| ones       | 모든 요소가 1인 배열 생성             | let a = Array2::<f64>::ones((2, 2));           |
-| eye        | 단위 행렬 (Identity matrix) 생성      | let a = Array::eye(4);                         |
-| from_vec   | Vec로부터 배열 생성                   | let a = Array1::from_vec(vec![1, 2, 3]);       |
-| from_shape_vec | shape와 Vec으로 배열 생성         | let a = Array2::from_shape_vec((2, 2), vec![1, 2, 3, 4]).unwrap(); |
-| linspace   | 일정 간격의 값으로 1D 배열 생성       | let a = Array1::linspace(0., 1., 5);           |
-| range      | 범위 기반 1D 배열 생성                | let a = Array1::range(0., 10., 2.);            |
+| ones       | 모든 요소가 1인 배열 생성             | `let a = Array2::<f64>::ones((2, 2));`           |
+| eye        | 단위 행렬 (Identity matrix) 생성      | `let a = Array::eye(4);`                         |
+| from_vec   | Vec로부터 배열 생성                   | `let a = Array1::from_vec(vec![1, 2, 3]);`       |
+| from_shape_vec | shape와 Vec으로 배열 생성         | `let a = Array2::from_shape_vec((2, 2), vec![1, 2, 3, 4]).unwrap();` |
+| linspace   | 일정 간격의 값으로 1D 배열 생성       | `let a = Array1::linspace(0., 1., 5);`           |
+| range      | 범위 기반 1D 배열 생성                | `let a = Array1::range(0., 10., 2.);`            |
 
 
 ---
