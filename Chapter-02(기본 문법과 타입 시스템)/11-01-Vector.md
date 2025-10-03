@@ -1,4 +1,5 @@
 # 🧠 Vector란?
+
 Rust에서 Vec<T>는 동적 배열을 의미합니다.
 - 고정 길이인 배열([T; N])과 달리, Vec은 크기를 자유롭게 늘릴 수 있는 구조입니다.
 - 모든 요소는 동일한 타입이어야 하며, 힙(heap)에 저장됩니다.
@@ -89,7 +90,53 @@ let squared_even: Vec<i32> = v
 
 println!("{:?}", squared_even); // 출력: [4, 16]
 ```
-### 7. 안전한 접근 vs 위험한 접근
+
+
+
+
+### 7. v.extend(&other_vec)
+다른 벡터의 요소를 v에 추가합니다.
+```rust
+fn main() {
+    let mut v = vec![1, 2, 3];
+    let other_vec = vec![4, 5];
+
+    v.extend(&other_vec); // v = [1, 2, 3, 4, 5]
+    println!("{:?}", v);
+}
+```
+
+- &other_vec는 슬라이스로 받아들이므로 Vec, 배열, 슬라이스 모두 확장 가능
+- 내부적으로 push를 반복하는 것보다 훨씬 효율적
+
+### 8. for x in v.drain(..)
+Vec의 요소를 꺼내면서 비웁니다 (소유권 이동).
+```rust
+fn main() {
+    let mut v = vec![10, 20, 30];
+    for x in v.drain(..) {
+        println!("Drained: {}", x);
+    }
+    println!("After drain: {:?}", v); // v = []
+}
+```
+- drain(..)은 Vec의 요소를 반복자 형태로 반환하면서 제거
+- for x in v처럼 보이지만, v는 비워지고 x는 move됨
+
+### 9. as_slice()
+Vec을 슬라이스(&[T])로 변환합니다.
+```rust
+fn main() {
+    let v = vec![7, 8, 9];
+    let slice: &[i32] = v.as_slice();
+
+    println!("{:?}", slice); // [7, 8, 9]
+}
+```
+- &v[..]와 거의 동일한 효과
+- 함수 인자로 &[T]를 요구할 때 유용
+
+### 10. 안전한 접근 vs 위험한 접근
 ```rust
 fn main() {
     let v = vec![1, 2, 3];
@@ -114,6 +161,13 @@ fn main() {
 | 반복             | `for`, `.iter()`, `.into_iter()`    |
 | 변환/필터        | `map()`, `filter()`, `collect()`     |
 
+## ✅ 요약 확장
+| 메서드        | 동작 또는 목적           | 대상 또는 반환 타입 | 비고 또는 특징                     |
+|---------------|--------------------------|----------------------|------------------------------------|
+| `extend()`     | 다른 컬렉션을 뒤에 추가     | `Vec`                | `Vec`, 슬라이스, 배열 모두 확장 가능 |
+| `drain(..)`    | 요소를 꺼내면서 제거       | `Vec` → 반복자        | 소유권 이동, 원본 `Vec`은 비워짐     |
+| `as_slice()`   | 슬라이스로 참조           | `&[T]` (`&v[..]`)     | `Vec`을 슬라이스로 변환             |
+
 
 ## 🧩 팁
 - Vec<T>는 Clone, Debug, IntoIterator 등 다양한 트레잇을 구현하고 있어 매우 유연합니다.
@@ -121,7 +175,6 @@ fn main() {
 - VecDeque, LinkedList 등 다른 컬렉션과 비교해도 성능과 사용성이 뛰어납니다.
 
 ---
-
 
 ## ⚠️ 함수에 벡터를 넘길 때 생기는 주요 소유권 문제
 
