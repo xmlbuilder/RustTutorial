@@ -174,13 +174,13 @@ Rust의 ndarray에서 데이터를 꺼내 쓰는 방법은 Python의 numpy와 �
 ## 🔍 ndarray에서 데이터 꺼내는 방법
 | 방식              | 설명                                | 예제 코드                                           |
 |-------------------|-------------------------------------|-----------------------------------------------------|
-| `[[i, j]]`        | 인덱스로 직접 접근 (panic 가능)     | let val = arr[[1, 2]];                              |
-| `.get(i)`         | 안전한 접근 (Option 반환)           | if let Some(v) = arr.get(3) { println!("{}", v); }  |
-| `.slice(s![..])`  | 슬라이싱 (부분 배열 추출)           | let sub = arr.slice(s![0..2, 1..3]);                |
-| `.iter()`         | 전체 요소 반복                      | for x in arr.iter() { println!("{}", x); }          |
-| `.rows()`         | 행 단위 반복                        | for row in arr.rows() { println!("{:?}", row); }    |
-| `.to_vec()`       | Vec로 복사                          | let v = arr.to_vec();                               |
-| `.as_slice()`     | &[T] 참조 (연속 메모리일 때만)      | let slice = arr.as_slice().unwrap();               |
+| `[[i, j]]`        | 인덱스로 직접 접근 (panic 가능)     | `let val = arr[[1, 2]];`                            |
+| `.get(i)`         | 안전한 접근 (Option 반환)           | `if let Some(v) = arr.get(3) { println!("{}", v); }`  |
+| `.slice(s![..])`  | 슬라이싱 (부분 배열 추출)           | `let sub = arr.slice(s![0..2, 1..3]);`                |
+| `.iter()`         | 전체 요소 반복                      | `for x in arr.iter() { println!("{}", x); }`          |
+| `.rows()`         | 행 단위 반복                        | `for row in arr.rows() { println!("{:?}", row); }`    |
+| `.to_vec()`       | Vec로 복사                          | `let v = arr.to_vec();`                               |
+| `.as_slice()`     | &[T] 참조 (연속 메모리일 때만)      | `let slice = arr.as_slice().unwrap();`               |
 
 ## 🔧 예제: 2D 배열에서 값 꺼내기
 ```rust
@@ -228,13 +228,13 @@ fn main() {
 ## 📐 선형대수: ndarray-linalg 주요 함수 + 예제
 | 함수       | 기능 설명                            | 예제 코드                                 |
 |------------|---------------------------------------|--------------------------------------------|
-| solve      | 선형 방정식 Ax = b 해법               | let x = a.solve(&b)?;                      |
-| inv        | 행렬의 역행렬                         | let inv_a = a.inv()?;                      |
-| eig        | 고유값 및 고유벡터 계산               | let (eigvals, eigvecs) = a.eig()?;         |
-| svd        | 특이값 분해                           | let (u, s, vt) = a.svd(true, true)?;       |
-| qr         | QR 분해                               | let (q, r) = a.qr()?;                      |
-| cholesky   | Cholesky 분해 (양의 정부호 행렬)      | let l = a.cholesky()?;                     |
-| lu         | LU 분해                               | let (l, u, p) = a.lu()?;                   |
+| solve      | 선형 방정식 Ax = b 해법               | `let x = a.solve(&b)?;`                      |
+| inv        | 행렬의 역행렬                         | `let inv_a = a.inv()?;`                      |
+| eig        | 고유값 및 고유벡터 계산               | `let (eigvals, eigvecs) = a.eig()?;`         |
+| svd        | 특이값 분해                           | `let (u, s, vt) = a.svd(true, true)?;`       |
+| qr         | QR 분해                               | `let (q, r) = a.qr()?;`                      |
+| cholesky   | Cholesky 분해 (양의 정부호 행렬)      | `let l = a.cholesky()?;`                     |
+| lu         | LU 분해                               | `let (l, u, p) = a.lu()?;`                   |
 
 
 ## 🔧 예제:
@@ -252,12 +252,12 @@ println!("Solution: {}", x);
 ## 📊 통계: ndarray-stats 주요 함수 + 예제
 | 함수       | 기능 설명                          | 예제 코드                                 |
 |------------|-------------------------------------|--------------------------------------------|
-| mean       | 평균값 계산                         | let m = arr.mean()?;                       |
-| std        | 표준편차 계산                       | let s = arr.std(0.0);                      |
-| quantile   | 분위수 계산                         | let q = arr.quantile(0.75)?;              |
-| zscore     | Z-점수 정규화                       | let z = arr.zscore(0.0)?;                 |
-| histogram  | 히스토그램 생성                     | let h = arr.histogram(10)?;               |
-| minmax     | 최솟값 / 최댓값 계산                | let min = arr.min()?;                     |
+| mean       | 평균값 계산                         | `let m = arr.mean()?;`                       |
+| std        | 표준편차 계산                       | `let s = arr.std(0.0);`                      |
+| quantile   | 분위수 계산                         | `let q = arr.quantile(0.75)?;`              |
+| zscore     | Z-점수 정규화                       | `let z = arr.zscore(0.0)?;`                 |
+| histogram  | 히스토그램 생성                     | `let h = arr.histogram(10)?;`               |
+| minmax     | 최솟값 / 최댓값 계산                | `let min = arr.min()?;`                     |
 
 
 ### 🔧 예제:
