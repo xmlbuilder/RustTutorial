@@ -1,7 +1,7 @@
 # Vector에 소유권 적용 여부
 
 지금까지 살펴본 split_at_mut(), chunks_mut(), windows_mut() 같은 기법들은
-array뿐 아니라 Vec<T>에도 그대로 적용 가능합니다.
+array뿐 아니라 Vec<T>에도 그대로 적용 가능합니다.  
 왜냐하면 Vec<T>는 내부적으로 &mut [T]로 변환이 가능하기 때문.
 
 ## ✅ Vector에서도 그대로 적용 가능한 기법들
