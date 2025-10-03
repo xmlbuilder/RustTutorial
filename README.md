@@ -39,6 +39,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [10-String_소유권정리](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/10-String_%EC%86%8C%EC%9C%A0%EA%B6%8C%EC%A0%95%EB%A6%AC.md)
 - [11-01-Vector](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/11-01-Vector.md)
 - [11-02-Vec_사용법_총정리](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/11-02-Vec_사용법_총정리.md)
+- [11-03-Vector_cmd_partial_cmp](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/11-03-Vector_cmd_partial_cmp.md)
 - [12-HashMap](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/12-HashMap.md)
 - [13-VecDeque](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/13-VecDeque.md)
 - [14-structure](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/14-structure.md)
@@ -70,7 +71,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [41-삼항_연산자_표현식](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/41-삼항_연산자_표현식.md)
 - [42-iterator_무력화문제](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/42-iterator_무력화문제.md)
 - [43-StringBuilder_필요성](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/43-StringBuilder_필요성.md)
-
+- [44-split_split_inclusive](./Chapter-02%28%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EB%B2%95%EA%B3%BC%20%ED%83%80%EC%9E%85%20%EC%8B%9C%EC%8A%A4%ED%85%9C%29/44-split_split_inclusive.md)
 
 🔼 [맨 위로](#-목차)
 
@@ -95,6 +96,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 ### 🧠 [Chapter-04(소유권과 참조)](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29)
 - [00-Lifetime](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/00-Lifetime.md)
 - [01-Ownership&Borrowing](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/01-Ownership%26Borrowing.md)
+- [02-Reference&Borrowing](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/02-Reference&Borrowing.md)
 - [03-소유권관련](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/03-%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B4%80%EB%A0%A8.md)
 - [04-소유권복사](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/04-%EC%86%8C%EC%9C%A0%EA%B6%8C%EB%B3%B5%EC%82%AC.md)
 - [05-함수소유권이전](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/05-%ED%95%A8%EC%88%98%EC%86%8C%EC%9C%A0%EA%B6%8C%EC%9D%B4%EC%A0%84.md)
@@ -122,6 +124,12 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [27-swap](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/27-swap.md)
 - [28-NonNull](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/28-NonNull.md)
 - [29-Cow](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/29-Cow.md)
+- [30-struct_update_syntax](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/30-struct_update_syntax.md)
+- [31-가변참조_불변참조_회피](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/31-가변참조_불변참조_회피.md)
+- [32-unsafe_회피기술](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/32-unsafe_회피기술.md)
+- [33-Matrix_소유권충돌_회피](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/33-Matrix_소유권충돌_회피.md)
+- [34-01-Vector_Borrow](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/34-01-Vector_Borrow.md)
+- [34-02-Vector_소유권충돌_회피](./Chapter-04%28%EC%86%8C%EC%9C%A0%EA%B6%8C%EA%B3%BC%20%EC%B0%B8%EC%A1%B0%29/34-02-Vector_소유권충돌_회피.md)
 
 
 🔼 [맨 위로](#-목차)
@@ -132,6 +140,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [03-구조체_Destructuring](./Chapter-05%28%ED%8C%A8%ED%84%B4%20%EB%A7%A4%EC%B9%AD%EA%B3%BC%20%EB%B6%84%ED%95%B4%29/03-%EA%B5%AC%EC%A1%B0%EC%B2%B4_Destructuring.md)
 - [04-match_실전코드](./Chapter-05%28%ED%8C%A8%ED%84%B4%20%EB%A7%A4%EC%B9%AD%EA%B3%BC%20%EB%B6%84%ED%95%B4%29/04-match_%EC%8B%A4%EC%A0%84%EC%BD%94%EB%93%9C.md)
 - [05-EnumPatternMatching_심화](./Chapter-05%28%ED%8C%A8%ED%84%B4%20%EB%A7%A4%EC%B9%AD%EA%B3%BC%20%EB%B6%84%ED%95%B4%29/05-EnumPatternMatching_%EC%8B%AC%ED%99%94.md)
+- [06-PatternMatching_ExpressionTree](./Chapter-05%28%ED%8C%A8%ED%84%B4%20%EB%A7%A4%EC%B9%AD%EA%B3%BC%20%EB%B6%84%ED%95%B4%29/06-PatternMatching_ExpressionTree.md)
 
 🔼 [맨 위로](#-목차)
 
@@ -161,6 +170,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [23-Orphan_Trait](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/23-Orphan_Trait.md)
 - [24-FnOnce](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/24-FnOnce.md)
 - [25-Trait_Index_IndexMut](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/25-Trait_Index_IndexMut.md)
+- [26-trait_Iterator](./Chapter-06%28%ED%8A%B8%EB%A0%88%EC%9E%87%EA%B3%BC%20%EC%A0%9C%EB%84%A4%EB%A6%AD%29/26-trait_Iterator.md)
 
 🔼 [맨 위로](#-목차)
 
@@ -170,9 +180,11 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [03-FilterMap](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/03-FilterMap.md)
 - [04-Iterator](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/04-Iterator.md)
 - [05-iterator-consuming](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/05-iterator-consuming.md)
-- [06-Vector심화](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/06-Vector%EC%8B%AC%ED%99%94.md)
+- [06-Vector_Borrow](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/06-Vector_Borrow.md)
 - [07-불변참조자_이후_가변참조자문제](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/07-불변참조자_이후_가변참조자문제.md)
-
+- [08-Vector_Array_Convert](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/08-Vector_Array_Convert.md)
+- [09-HashMap_BTreeMap_데이터_추출](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/09-HashMap_BTreeMap_데이터_추출.md)
+- [10-zip_unzip](./Chapter-07%28%EC%BB%AC%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%B0%98%EB%B3%B5%EC%9E%90%29/10-zip_unzip.md)
 
 🔼 [맨 위로](#-목차)
 
@@ -224,6 +236,10 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [04-thread_channel](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/04-thread_channel.md)
 - [05-Send_Sync](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/05-Send_Sync.md)
 - [06-Iterator_Generator](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/06-Iterator_Generator.md)
+- [07-Future_Poll](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/07-Future_Poll.md)
+- [08-Pin](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/08-Pin.md)
+- [09-SubProcessing](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/09-SubProcessing.md)
+- [10-Duration](./Chapter-11%28%EB%B9%84%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B3%91%EB%A0%AC%20%EC%B2%98%EB%A6%AC%29/10-Duration.md)
 
 🔼 [맨 위로](#-목차)
 
@@ -232,6 +248,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [02-raw_pointer](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/02-raw_pointer.md)
 - [03-FFI기초](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/03-FFI%EA%B8%B0%EC%B4%88.md)
 - [04-FFI_C호출](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/04-FFI_C%ED%98%B8%EC%B6%9C.md)
+- [05-repr](./Chapter-12%28Unsafe%EC%99%80%20FFI%29/05-repr.md)
 
 🔼 [맨 위로](#-목차)
 
@@ -321,6 +338,11 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [22-FixedSizeMemMgr](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/22-FixedSizeMemMgr.md)
 - [23-01-Spatial_Partition(Insert_PointOnly)](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/23-01-Spatial_Partition(Insert_PointOnly).md)
 - [23-02-Spatial_Partition_완성본](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/23-02-Spatial_Partition_완성본.md)
+- [23-02-Spatial_Partition_완성본](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/23-02-Spatial_Partition_완성본.md)
+- [24-SpatialPartition2D](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/24-SpatialPartition2D.md)
+- [25-svdcmp](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/25-svdcmp.md)
+- [26-solve_svdcmp](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/26-solve_svdcmp.md)
+- [27-웹_스크래핑](./Chapter-17%28%EC%8B%A4%EC%A0%84%20%EC%98%88%EC%A0%9C%EC%99%80%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%29/27-웹_스크래핑.md)
 
 🔼 [맨 위로](#-목차)
   
@@ -337,6 +359,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [10-CrossPlatform](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/10-CrossPlatform.md)
 - [11-Math](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/11-Math.md)
 - [12-함수형_프로그램밍](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/12-%ED%95%A8%EC%88%98%ED%98%95_%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8%EB%B0%8D.md)
+- [13-ndarray](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/13-ndarray.md)
 
 🔼 [맨 위로](#-목차)
 
