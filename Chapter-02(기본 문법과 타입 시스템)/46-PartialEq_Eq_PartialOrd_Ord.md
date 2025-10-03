@@ -1,5 +1,5 @@
 # PartialEq / Eq / PartialOrd / Ord
-아래는 요청하신 PartialEq, Eq, PartialOrd, Ord에 대한 핵심 정리입니다.
+아래는 요청하신 PartialEq, Eq, PartialOrd, Ord에 대한 핵심 정리입니다.  
 실무에서 타입 비교와 정렬을 설계할 때 꼭 알아야 할 부분만 간결하게 정리:
 
 ## ✅ PartialEq & Eq
@@ -117,7 +117,7 @@ struct Point {
 
 # PartialEq fro f64
 
-아래는 f64 타입에 대해 **허용 오차(tolerance)**를 적용한 PartialEq 구현 예시입니다.
+아래는 f64 타입에 대해 **허용 오차(tolerance)**를 적용한 PartialEq 구현 예시입니다.  
 두 값이 10e-5 이내로 차이가 나면 같다고 판단하는 방식:
 ```rust
 const TOLERANCE: f64 = 1e-5;
@@ -145,7 +145,7 @@ fn main() {
 → TOLERANCE보다 작으면 같다고 판단
 - Eq는 구현하지 않음 → 반사성은 만족하지만, NaN 같은 예외를 고려하면 안전하게 PartialEq만
 
-Rust에서는 표준 타입(f64, i32 등)에 대해 직접 impl을 추가하는 것이 막혀 있습니다.  
+Rust에서는 표준 타입(f64, i32 등)에 대해 직접 impl을 추가하는 것이 막혀 있습니다.    
 이건 Rust의 고의적인 안전 설계.
 
 ## 🔒 왜 직접 impl이 막혀 있을까?
@@ -190,7 +190,7 @@ impl PartialEq for Approximate {
 
 # impl MyTrait for f64 허용 이유
 
-impl MyTrait for f64가 가능한 이유는 From, Into 같은 trait을 사용자 정의 타입에 적용하기 위한 확장성도 있지만,
+impl MyTrait for f64가 가능한 이유는 From, Into 같은 trait을 사용자 정의 타입에 적용하기 위한 확장성도 있지만,  
 핵심은 Rust의 Orphan Rule이 허용하는 범위 내에서 표준 타입에 대해 내가 만든 trait은 자유롭게 구현할 수 있도록 설계되어 있기 때문.
 
 ## 🔍 왜 impl MyTrait for f64는 허용될까?
