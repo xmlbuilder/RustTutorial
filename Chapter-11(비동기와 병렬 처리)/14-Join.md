@@ -69,8 +69,8 @@ results = join_all(futures).await
 dict = zip(urls, results)
 ```
 
-→ 병렬로 요청하고,
-→ 모두 끝나면 결과를 매핑해서 출력
+→ 병렬로 요청하고,  
+→ 모두 끝나면 결과를 매핑해서 출력  
 
 📊 시퀀스 다이어그램
 ```mermaid
@@ -95,6 +95,7 @@ sequenceDiagram
 
     Main->>Main: zip(urls, results) → HashMap
 ```
+
 
 
 
