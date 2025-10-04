@@ -167,6 +167,53 @@ println!("{}", total); // 출력: 6.0
 여기서 u32는 Into<f64>를 구현하고 있으므로 변환이 가능합니다.
 
 ----
+# From / Into 정리
+
+## 🧩 핵심 관계: From<T> → Into<T>
+Rust 표준 라이브러리에는 이런 관계가 정의되어 있음:
+```rust
+impl<T, U> Into<U> for T
+where
+    U: From<T>,
+{
+    fn into(self) -> U {
+        U::from(self)
+    }
+}
+```
+
+즉:
+- 내가 From<T> for U를 구현하면
+- Rust는 자동으로 Into<U> for T도 만들어줍니다  
+  → t.into()는 내부적으로 U::from(t)를 호출
+
+## ✅ 예시
+```rust
+struct MyInt(i32);
+
+impl From<i32> for MyInt {
+    fn from(value: i32) -> Self {
+        MyInt(value)
+    }
+}
+
+fn main() {
+    let x: MyInt = 42.into(); // Into<MyInt>가 자동으로 만들어짐
+}
+```
+- 여기서 into()는 From<i32>를 기반으로 자동 구현된 Into<MyInt>를 호출
+
+## 🔍 반대는 왜 안 될까?
+- Into<T>는 **“나를 T로 바꿀 수 있다”**는 의미지만
+- From<T>는 **“T를 나로 바꿀 수 있다”**는 의미
+  → Into는 자기 자신이 구현해야 하는 트레이트이고
+  → From은 대상 타입이 구현해야 하는 트레이트
+즉, 방향성이 다르기 때문에  
+Into만 구현하면 From은 자동으로 만들 수 없습니다.
+
+---
+
+
 
 
 
