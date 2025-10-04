@@ -274,12 +274,13 @@ assert_sync::<MyStruct>(); // ❌ 컴파일 오류
 - 우리가 #[derive(Send)] 같은 걸 붙일 수 없음
 
 ## ✅ unsafe로 강제 구현은 가능하지만 위험
-``rust
+```rust
 unsafe impl Send for MyStruct {}
 ```
 - 이건 컴파일러의 판단을 무시하고 강제로 Send로 간주
 - 하지만 내부 필드가 Send가 아니면 런타임 오류 발생 가능
 - 실무에서는 절대 권장되지 않음
+
 
 
 
