@@ -191,7 +191,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [09-HashMap_BTreeMap_데이터_추출](./Chapter-07(컬렉션과%20반복자)/09-HashMap_BTreeMap_데이터_추출.md)
 - [10-zip_unzip](./Chapter-07(컬렉션과%20반복자)/10-zip_unzip.md)
 - [11-IntoIterator_FromIterator](./Chapter-07(컬렉션과%20반복자)/11-IntoIterator_FromIterator.md)
-
+- [12-Vector_Array_함수정리](./Chapter-07(컬렉션과%20반복자)/12-Vector_Array_함수정리.md)
+- [13-HashMap_BTreeMap_함수정리](./Chapter-07(컬렉션과%20반복자)/13-HashMap_BTreeMap_함수정리.md)
 
 🔼 [맨 위로](#-목차)
 
