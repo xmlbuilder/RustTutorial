@@ -1,4 +1,4 @@
-# Box, Rc, Arc, RefCell
+# Box, Rc, Arc, RefCell, Rc::strong_count
 
 ## 📦 Box<T> — 힙에 저장, 단일 소유
 ### ✅ 언제 사용하나요?
@@ -664,5 +664,42 @@ fn main() {
 | 읽기        | `borrow()`       | `Ref<T>`       |
 | 쓰기        | `borrow_mut()`   | `RefMut<T>`    |
     → 모든 접근은 반드시 RefCell을 통해 빌려야 함
+
+---
+
+# Rc::strong_count
+Rc::strong_count는 Rc<T>의 현재 강한 참조자 수를 확인하는 함수입니다.
+    → 즉, 이 데이터를 몇 개의 Rc가 공유하고 있는지를 알려주는 도구.
+
+## ✅ 기본 사용법
+```rust
+use std::rc::Rc;
+fn main() {
+    let a = Rc::new(5);
+    let b = Rc::clone(&a);
+    let c = Rc::clone(&a);
+
+    println!("Strong count: {}", Rc::strong_count(&a)); // 출력: 3
+}
+```
+
+- Rc::strong_count(&a)는 a를 기준으로 현재 강한 참조자 수를 반환
+- 위 예시에서는 a, b, c가 모두 같은 데이터를 참조 → count는 3
+
+## 🔍 언제 쓰면 좋을까?
+### 1. Rc::make_mut() 호출 전에 참조자 수 확인
+```rust
+if Rc::strong_count(&rc) == 1 {
+    // 안전하게 수정 가능
+}
+```
+
+### 2. 디버깅이나 상태 추적
+- 구조가 복잡할 때 → 참조자가 몇 개나 살아있는지 확인
+- 메모리 누수나 참조 해제 타이밍을 파악할 때 유용
+
+### ⚠️ 주의할 점
+- Rc::strong_count()는 정확한 숫자를 반환하지만, 그 순간의 값일 뿐이고 이후에 바뀔 수 있음
+- Rc::weak_count()도 함께 쓰면 약한 참조자 수도 확인 가능
 
 
