@@ -143,15 +143,15 @@ sequenceDiagram
 ##  구조도: multi-thread 런타임에서 블로킹 분산
 ```mermaid
 flowchart LR
-    subgraph Executor[Tokio Multi-thread Executor]
+    subgraph Executor
         A1[Worker Thread 1]
         A2[Worker Thread 2]
         A3[Worker Thread 3]
     end
 
-    B1[Future A (블로킹)]
-    B2[Future B (Running)]
-    B3[Future C (Running)]
+    B1[Future A - 블로킹]
+    B2[Future B - 실행 중]
+    B3[Future C - 실행 중]
 
     A1 --> B1
     A2 --> B2
@@ -160,6 +160,7 @@ flowchart LR
 
 - Future A가 블로킹되더라도  
     → Future B, Future C는 다른 스레드에서 계속 실행됨
+
 
 
 
