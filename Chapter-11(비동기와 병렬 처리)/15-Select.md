@@ -1,6 +1,6 @@
 # Select
 이제 Rust 비동기 처리의 마지막 핵심 퍼즐인 select!에 대한 이해.  
-JavaScript의 Promise.race, Python의 asyncio.wait(..., FIRST_COMPLETED)와 구조적으로 동일한 역할을 합니다. 
+JavaScript의 Promise.race, Python의 asyncio.wait(..., FIRST_COMPLETED)와 구조적으로 동일한 역할을 합니다.  
 아래에 개념 설명 → 단계별 흐름 → 절차도까지 정리
 
 ## 🧩 tokio::select!이란?
@@ -132,6 +132,7 @@ sequenceDiagram
     Note over Select: 고양이 recv는 drop됨
 
 ```
+
 
 
 
