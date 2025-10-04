@@ -112,7 +112,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [11-Spawn](./Chapter-04(소유권과%20참조)/11-Spawn.md)
 - [12-MessagePassing](./Chapter-04(소유권과%20참조)/12-MessagePassing.md)
 - [13-01-CopyClone](./Chapter-04(소유권과%20참조)/13-01-CopyClone.md)
-- [13-02-소유권_복사_ 참조_주의](./Chapter-04(소유권과%20참조)/13-02-소유권_복사_ 참조_주의.md)
+- [13-02-소유권_복사_참조_주의](./Chapter-04(소유권과%20참조)/13-02-소유권_복사_참조_주의.md)
 - [14-clone_from_slice_copy_from_slice](./Chapter-04(소유권과%20참조)/14-clone_from_slice_copy_from_slice.md)
 - [15-Borrow_에러](./Chapter-04(소유권과%20참조)/15-Borrow_%EC%97%90%EB%9F%AC.md)
 - [16-ref사용](./Chapter-04(소유권과%20참조)/16-ref%EC%82%AC%EC%9A%A9.md)
