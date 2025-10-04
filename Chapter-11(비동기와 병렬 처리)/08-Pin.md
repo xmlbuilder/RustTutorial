@@ -1,5 +1,19 @@
-# 📌 Pin이 왜 필요한가?
-Rust는 기본적으로 **값을 자유롭게 이동(move)**시킬 수 있음.  
+# Pin
+이번 주제는 Rust 비동기에서의 핵심 개념인 Pin입니다.  
+특히 Future가 자기참조(self-referential) 구조를 가질 수 있기 때문에  
+메모리 위치가 고정되어야만 안전하게 poll할 수 있다는 원리를 이해하는 게 핵심입니다.
+
+## ✅ 핵심 원리 요약
+| 개념 요소           | 설명                                                                 |
+|--------------------|----------------------------------------------------------------------|
+| Future 내부 구조    | async fn은 상태 머신으로 변환됨 → 내부에 지역 변수와 참조가 포함됨         |
+| 이동(Move)의 위험   | Future가 이동되면 내부 참조가 무효화됨 → UB 가능성                         |
+| Pin의 역할          | 메모리 위치를 고정시켜 이동을 방지함 → poll은 Pin<&mut Self>로만 가능       |
+| Box::pin 사용 이유  | 힙에 Future를 고정하고 &mut로 
+
+
+## 📌 Pin이 왜 필요한가?
+Rust는 기본적으로 **값을 자유롭게 이동(move)** 시킬 수 있음.  
 하지만 어떤 타입은 자기 자신을 참조하거나, 메모리 위치가 바뀌면 안 되는 구조를 가질 수 있음:
 ```rust
 struct SelfRef {
@@ -131,3 +145,138 @@ fn main() {
 - poll()은 Future 내부 상태를 참조하거나 수정할 수 있음
 - Future가 자기 자신을 참조하거나, 내부에서 비동기 흐름을 만들 경우 이동되면 위험함
 - Pin은 그런 Future를 고정된 위치에서 안전하게 실행할 수 있도록 보장해줌
+
+---
+
+# 샘플 코드 분석
+
+## 샘플 코드
+```rust
+use tokio::sync::{mpsc, oneshot};
+use tokio::task::spawn;
+use tokio::time::{sleep, Duration};
+
+// 작업 항목. 이 경우 지정된 시간 동안 절전 모드이고
+// `respond_on` 채널의 메시지로 응답합니다.
+#[derive(Debug)]
+struct Work {
+    input: u32,
+    respond_on: oneshot::Sender<u32>,
+}
+
+// 큐에서 작업을 수신 대기하고 실행하는 worker입니다.
+async fn worker(mut work_queue: mpsc::Receiver<Work>) {
+    let mut iterations = 0;
+    loop {
+        tokio::select! {
+            Some(work) = work_queue.recv() => {
+                sleep(Duration::from_millis(10)).await; // 작업하는 척합니다.
+                work.respond_on
+                    .send(work.input * 1000)
+                    .expect("응답을 보내지 못했습니다.");
+                iterations += 1;
+            }
+            // TODO: 100밀리초마다 반복 횟수를 보고합니다.
+        }
+    }
+}
+
+// 작업을 요청하고 작업이 완료되기를 기다리는 요청자입니다.
+async fn do_work(work_queue: &mpsc::Sender<Work>, input: u32) -> u32 {
+    let (tx, rx) = oneshot::channel();
+    work_queue
+        .send(Work { input, respond_on: tx })
+        .await
+        .expect("작업 큐에서 전송하지 못했습니다.");
+    rx.await.expect("응답 대기 실패")
+}
+
+#[tokio::main]
+async fn main() {
+    let (tx, rx) = mpsc::channel(10);
+    spawn(worker(rx));
+    for i in 0..100 {
+        let resp = do_work(&tx, i).await;
+        println!("반복 작업 결과 {i}: {resp}");
+    }
+}
+```
+
+## 🔍 코드 절차적 설명
+### 1. 문제 상황: sleep()을 select! 안에 직접 넣음
+```rust
+tokio::select! {
+    _ = sleep(Duration::from_millis(100)) => println!("타임아웃"),
+}
+```
+- sleep()은 Future를 반환
+- select!는 내부적으로 move 시멘틱을 요구
+- sleep()은 자기참조 구조일 수 있음 → 이동되면 불안정
+
+### 2. 해결 시도: loop 외부에 Future를 만들고 재사용
+```rust
+let mut timeout_fut = sleep(Duration::from_millis(100));
+loop {
+    tokio::select! {
+        _ = timeout_fut => println!("타임아웃"),
+    }
+}
+```
+- 컴파일러 오류 발생: timeout_fut는 이동될 수 있음
+- 해결하려면 Pin으로 고정해야 함
+
+### 3. 해결 방법: Box::pin으로 고정
+```rust
+let mut timeout_fut = Box::pin(sleep(Duration::from_millis(100)));
+loop {
+    tokio::select! {
+        _ = &mut timeout_fut => println!("타임아웃"),
+    }
+}
+```
+
+- Box::pin은 Future를 힙에 고정
+- &mut로 접근하면 Pin<&mut T>로 변환됨 → poll 가능
+- select!는 내부적으로 poll을 호출하므로 Pin이 필수
+
+### 4. 추가 개선: 타임아웃 후 Future 재생성
+``` rust
+loop {
+    let mut timeout_fut = Box::pin(sleep(Duration::from_millis(100)));
+    tokio::select! {
+        _ = &mut timeout_fut => println!("타임아웃"),
+        // 다른 작업 ...
+    }
+}
+```
+
+- sleep()은 융합된(fused) Future가 아니므로
+→ 완료되면 다시 poll하면 Ready만 반환됨
+- 그래서 매번 새로 생성해야 정상 동작
+
+📊 절차도: Pin을 사용한 select! 흐름
+sequenceDiagram
+    participant Main
+    participant TimeoutFuture
+    participant Worker
+
+    Main->>TimeoutFuture: Box::pin(sleep(100ms))
+    loop 루프 반복
+        Main->>TimeoutFuture: &mut timeout_fut → poll
+        alt 타임아웃 발생
+            TimeoutFuture-->>Main: Ready
+            Main->>Main: println!("타임아웃")
+        else 작업 수신
+            Worker-->>Main: 응답 처리
+        end
+    end
+
+---
+
+- Rust의 Future는 자기참조 구조를 가질 수 있기 때문에, 메모리 위치가 바뀌면 내부 참조가 무효화된다.
+- poll은 반드시 Pin<&mut Self>로 호출해야 하고, Box::pin을 통해 Future를 힙에 고정하고 안전하게 poll하는 구조가 필요하다.
+- 결국은 ‘이동을 막아야 안전하다’는 원칙이 Rust의 async 시스템 전체에 적용된다.”
+
+
+
+  
