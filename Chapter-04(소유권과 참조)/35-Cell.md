@@ -34,7 +34,7 @@ fn main() {
 # Cell / RefCell
 
 이제 Cell<T>와 RefCell<T>의 차이점을 구조적으로 정리해볼게요.  
-둘 다 **Interior Mutability (내부 가변성)**을 제공하지만,  
+둘 다 **Interior Mutability (내부 가변성)** 을 제공하지만,  
 사용 방식, 제약 조건, 성능 특성이 다릅니다.  
 
 ✅ Cell<T> vs RefCell<T> 차이 요약
@@ -68,6 +68,7 @@ v.borrow_mut().push(3);
 println!("{:?}", v.borrow()); // 출력: [1, 2, 3]
 
 ```
+
 
 
 
