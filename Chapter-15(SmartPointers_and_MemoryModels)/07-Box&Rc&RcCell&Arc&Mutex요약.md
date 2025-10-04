@@ -398,10 +398,11 @@ fn main() {
 
 ---
 
-
 - Vec<Rc<RefCell<dyn Observer>>>
 - Arc<Mutex<Vec<Box<dyn Observer>>>>
-이 둘은 Observer 패턴을 구현할 때 자주 등장하는 구조인데, 각각 단일 스레드용과 멀티 스레드용이에요. 아래에 자세히 설명드릴게요.
+  
+이 둘은 Observer 패턴을 구현할 때 자주 등장하는 구조인데, 각각 단일 스레드용과 멀티 스레드용.  
+아래에 자세히 설명.
 
 
 ## 🧵 1. Vec<Rc<RefCell<dyn Observer>>> — 단일 스레드용
@@ -418,24 +419,26 @@ fn main() {
 ```rust
 let observers: Vec<Rc<RefCell<dyn Observer>>> = vec![];
 ```
-이 구조는 Subject가 여러 Observer를 등록하고, 각 Observer가 자신의 상태를 바꾸거나 반응할 수 있도록 해줘요.
-\
+이 구조는 Subject가 여러 Observer를 등록하고, 각 Observer가 자신의 상태를 바꾸거나 반응할 수 있도록 해줌.
+
 ## 🧵 2. Arc<Mutex<Vec<Box<dyn Observer>>>> — 멀티 스레드용
 ### 🔍 구조 설명
 - Arc<T>: 여러 스레드에서 안전하게 공유
 - Mutex<T>: 내부 가변성을 스레드 안전하게 보장
 - Vec<...>: Observer 리스트
 - Box<dyn Observer>: 트레잇 객체를 힙에 저장 (다형성)
+  
 ### ✅ 언제 사용하나요?
 - 멀티 스레드 환경에서
 - 여러 스레드가 Observer를 등록하거나 알림을 보내야 할 때
 - 웹 서버, 백엔드 시스템, 병렬 작업 처리 등
-💡 예시
+- 
+### 💡 예시
 ```rust
 let observers: Arc<Mutex<Vec<Box<dyn Observer + Send + Sync>>>> = Arc::new(Mutex::new(vec![]));
 ```
 
-여기서 Send + Sync는 Observer가 스레드 간 안전하게 이동되고 공유될 수 있도록 보장해요.
+여기서 Send + Sync는 Observer가 스레드 간 안전하게 이동되고 공유될 수 있도록 보장.
 
 
 ## 🔁 비교 요약: Observer 패턴에서의 포인터 조합
@@ -451,18 +454,17 @@ let observers: Arc<Mutex<Vec<Box<dyn Observer + Send + Sync>>>> = Arc::new(Mutex
 
 
 ## 🧘‍♂️ 왜 이렇게 복잡할까?
-Rust는 컴파일 타임에 안전성을 보장하려고 해요. 그래서 단순한 포인터 대신, 상황에 맞는 스마트 포인터 조합을 써야 해요.
-처음엔 어렵지만, 이 구조를 이해하면 버그 없는 고성능 프로그램을 만들 수 있는 강력한 무기가 돼요.
-
+Rust는 컴파일 타임에 안전성을 보장하려고 해요. 그래서 단순한 포인터 대신, 상황에 맞는 스마트 포인터 조합을 써야 함.  
+처음엔 어렵지만, 이 구조를 이해하면 버그 없는 고성능 프로그램을 만들 수 있는 강력한 무기가 됨.
 
 ---
+
 # Vec의 위치
 
-Vec의 위치가 Vec<Rc<RefCell<dyn Observer>>>와 Arc<Mutex<Vec<Box<dyn Observer>>>>처럼 다르게 쓰이는 이유는 스마트 포인터의 역할과 소유권 구조에 따라 데이터를 어디에 두는지가 달라지기 때문이에요.  
-이걸 이해하면 Rust의 메모리 모델이 훨씬 명확해져요.
+Vec의 위치가 Vec<Rc<RefCell<dyn Observer>>>와 Arc<Mutex<Vec<Box<dyn Observer>>>>처럼 다르게 쓰이는 이유는 스마트 포인터의 역할과 소유권 구조에 따라 데이터를 어디에 두는지가 달라지기 때문.  
+이걸 이해하면 Rust의 메모리 모델이 훨씬 명확해짐.
 
 ## 🔍 핵심 차이: Vec이 안에 있느냐, 밖에 있느냐
-
 | 구조                          | Vec의 위치                  | 의미 및 설계 이유                                               |
 |-------------------------------|-----------------------------|------------------------------------------------------------------|
 | `Vec<Rc<RefCell<...>>>`       | 바깥쪽 (최상위에 위치)      | 리스트는 스택에 있고, 각 요소만 힙에 저장됨. 단일 스레드에서 충분 |
@@ -471,10 +473,11 @@ Vec의 위치가 Vec<Rc<RefCell<dyn Observer>>>와 Arc<Mutex<Vec<Box<dyn Observe
 
 
 ## 🧠 왜 이렇게 다르게 설계할까?
+
 ### 1. 단일 스레드 vs 멀티 스레드
-- Vec<Rc<RefCell<...>>>는 단일 스레드에서만 사용되므로, 리스트 자체를 스택에 두고 각 Observer만 힙에 저장하면 충분해요.
-- Arc<Mutex<Vec<...>>>는 멀티 스레드에서 사용되므로, 리스트 전체를 힙에 저장하고 동기화해야 해요.  
-그래서 Vec이 Mutex 안에 들어가고, 그걸 Arc로 감싸서 공유하는 구조가 되는 거죠.
+- Vec<Rc<RefCell<...>>>는 단일 스레드에서만 사용되므로, 리스트 자체를 스택에 두고 각 Observer만 힙에 저장하면 충분.
+- Arc<Mutex<Vec<...>>>는 멀티 스레드에서 사용되므로, 리스트 전체를 힙에 저장하고 동기화해야 함.  
+그래서 Vec이 Mutex 안에 들어가고, 그걸 Arc로 감싸서 공유하는 구조가 됨.
 
 ### 2. 공유 범위의 차이
 - Vec<Rc<...>>: 리스트는 한 곳에서만 관리하고, 각 Observer를 여러 곳에서 공유
