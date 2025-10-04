@@ -229,8 +229,8 @@ pub static SCENARIO_REGISTER: Lazy<Mutex<ScenarioRegister>> = Lazy::new(|| {
 ---
 
 # Sync + Send 판단 기준
-Rust에서 어떤 struct에 Sync + Send를 붙는다고 해서 자동으로 그 타입이 Sync나 Send가 되는 건 아닙니다.
-컴파일러는 그 타입의 내부 필드들이 실제로 안전하게 공유되거나 이동될 수 있는지를 분석해서
+Rust에서 어떤 struct에 Sync + Send를 붙는다고 해서 자동으로 그 타입이 Sync나 Send가 되는 건 아닙니다.  
+컴파일러는 그 타입의 내부 필드들이 실제로 안전하게 공유되거나 이동될 수 있는지를 분석해서  
 자동으로 Sync와 Send 트레잇을 구현하거나 거부합니다.
 
 ## 🧩 핵심: Sync와 Send는 자동 파생되는 marker trait
@@ -280,6 +280,7 @@ unsafe impl Send for MyStruct {}
 - 이건 컴파일러의 판단을 무시하고 강제로 Send로 간주
 - 하지만 내부 필드가 Send가 아니면 런타임 오류 발생 가능
 - 실무에서는 절대 권장되지 않음
+
 
 
 
