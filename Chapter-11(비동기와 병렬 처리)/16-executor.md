@@ -83,19 +83,20 @@ sequenceDiagram
     participant Future2
     participant Future3
 
-    Main->>Executor: join_all([F1, F2, F3...])
+    Main->>Executor: join_all([F1, F2, F3])
     Executor->>Future1: 실행 시작
-    Future1->>Executor: thread::sleep(10ms) → 블로킹
+    Future1->>Executor: thread::sleep(10ms)
     Note over Executor: 다른 Future 실행 불가
 
     Future1-->>Executor: 완료
     Executor->>Future2: 실행 시작
-    Future2->>Executor: thread::sleep(20ms) → 블로킹
+    Future2->>Executor: thread::sleep(20ms)
     Note over Executor: 또다시 블로킹
 
     Future2-->>Executor: 완료
     Executor->>Future3: 실행 시작
-    ...
+    Future3->>Executor: thread::sleep(30ms)
+    Future3-->>Executor: 완료
 ```
 
 ## ✅ 핵심 요약
@@ -148,13 +149,14 @@ flowchart LR
         A3[Worker Thread 3]
     end
 
-    A1 -->|Future A (블로킹)| Blocked
-    A2 -->|Future B| Running
-    A3 -->|Future C| Running
+    A1 --> B1[Future A (블로킹)]
+    A2 --> B2[Future B (Running)]
+    A3 --> B3[Future C (Running)]
 ```
 
 - Future A가 블로킹되더라도  
     → Future B, Future C는 다른 스레드에서 계속 실행됨
+
 
 
 
