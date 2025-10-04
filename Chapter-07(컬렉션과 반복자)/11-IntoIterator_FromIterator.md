@@ -124,7 +124,7 @@ impl Iterator for GridIter {
 
 - next()는 (x, y)를 하나씩 반환
 - x축을 순회하다가 끝나면 y축을 하나 증가시키고 x축을 다시 시작
-- → 전체 (x, y) 조합을 순회
+  → 전체 (x, y) 조합을 순회
 
 ### 5. main()에서 사용
 ```rust
