@@ -135,7 +135,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [33-Matrix_소유권충돌_회피](./Chapter-04(소유권과%20참조)/33-Matrix_소유권충돌_회피.md)
 - [34-01-Vector_Borrow](./Chapter-04(소유권과%20참조)/34-01-Vector_Borrow.md)
 - [34-02-Vector_소유권충돌_회피](./Chapter-04(소유권과%20참조)/34-02-Vector_소유권충돌_회피.md)
-
+- [35-Cell](./Chapter-04(소유권과%20참조)/35-Cell.md)
 
 🔼 [맨 위로](#-목차)
 
