@@ -7,7 +7,7 @@ Rust의 union 타입은 C와의 FFI(Foreign Function Interface) 호환성을 위
 ## 🧩 왜 Rust에 union이 있는가?
 ### ✅ 1. C와의 구조적 호환
 - C에서는 union을 통해 여러 타입을 같은 메모리 공간에 저장함
-- 예: union Value { int i; float f; char* s; };
+- 예: `union Value { int i; float f; char* s; };`
 - Rust가 C 라이브러리와 안전하게 연동하려면  
     → 동일한 메모리 표현을 갖는 union이 필요
 ### ✅ 2. #[repr(C)]의 의미
