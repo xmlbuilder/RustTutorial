@@ -99,7 +99,7 @@ sequenceDiagram
     participant Server
     participant TokioRuntime
 
-    Server->>TokioRuntime: 시작 (`#[tokio::main]`)
+    Server->>TokioRuntime: 시작 (`main`)
     TokioRuntime->>Server: TCP 바인딩 (127.0.0.1:0)
     Server->>Client: 수신 대기
 
@@ -111,5 +111,6 @@ sequenceDiagram
     Server->>Client: "홍길동님, 전화해 주셔서 감사합니다.\n"
 
 ```
+
 
 
