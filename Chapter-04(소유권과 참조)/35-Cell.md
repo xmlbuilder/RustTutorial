@@ -1,6 +1,6 @@
 # Cell
 
-Rust에서 Cell<T>는 **내부 가변성(Interior Mutability)**을 제공하는 핵심 타입 중 하나입니다.
+Rust에서 Cell<T>는 **내부 가변성(Interior Mutability)**을 제공하는 핵심 타입 중 하나입니다.  
 즉, 불변 참조(&T)를 통해서도 값을 변경할 수 있게 해주는 구조입니다.
 
 ## ✅ Cell<T> 핵심 요약
@@ -33,9 +33,9 @@ fn main() {
 
 # Cell / RefCell
 
-이제 Cell<T>와 RefCell<T>의 차이점을 구조적으로 정리해볼게요.
-둘 다 **Interior Mutability (내부 가변성)**을 제공하지만,
-사용 방식, 제약 조건, 성능 특성이 다릅니다.
+이제 Cell<T>와 RefCell<T>의 차이점을 구조적으로 정리해볼게요.  
+둘 다 **Interior Mutability (내부 가변성)**을 제공하지만,  
+사용 방식, 제약 조건, 성능 특성이 다릅니다.  
 
 ✅ Cell<T> vs RefCell<T> 차이 요약
 | 항목         | Cell<T>                                | RefCell<T>                                 |
@@ -68,6 +68,7 @@ v.borrow_mut().push(3);
 println!("{:?}", v.borrow()); // 출력: [1, 2, 3]
 
 ```
+
 
 
 
