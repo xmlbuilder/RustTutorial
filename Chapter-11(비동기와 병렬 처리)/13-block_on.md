@@ -92,8 +92,8 @@ main()
           └── println! 수: 1~10개!
 ```
 
-→ block_on은 비동기 흐름을 동기적으로 실행하는 진입점
-→ await는 비동기 함수 내부에서 다른 Future를 실행하는 연결점
+→ block_on은 비동기 흐름을 동기적으로 실행하는 진입점  
+→ await는 비동기 함수 내부에서 다른 Future를 실행하는 연결점  
 
 ---
 
@@ -154,5 +154,6 @@ fn main() {
 - do_work()는 Future를 반환
 - sleep().await는 진짜 비동기 작업 → 스케줄링 발생
 - block_on(...)은 메인 스레드를 멈추고, do_work()가 끝날 때까지 기다림
+
 
 
