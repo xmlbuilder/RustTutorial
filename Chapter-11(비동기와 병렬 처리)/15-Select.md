@@ -110,7 +110,7 @@ tokio::spawn(async move {
 ```rust
 let winner = first_animal_to_finish_race(...).await;
 println!("우승자: {winner:?}");
-``
+```
 
 - select!에서 먼저 도착한 렉스가 우승자로 출력됨
 
@@ -132,6 +132,7 @@ sequenceDiagram
     Note over Select: 고양이 recv는 drop됨
 
 ```
+
 
 
 
