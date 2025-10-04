@@ -12,7 +12,7 @@ Rust에서 스레드 간 데이터 공유를 안전하게 하기 위해
 | Send  | 값을 다른 스레드로 이동할 수 있음 | thread::spawn, Mutex<T> 등 | i32, f64, Vec<T>, Box<T> | Rc<T>, RefCell<T>, Box<dyn> |
 | Sync  | 여러 스레드에서 동시에 참조(&T) 가능 | Arc<T>, &T 공유 시 | i32, f64, Vec<T>, Arc<T> | RefCell<T>, Rc<T>, Box<dyn> |
 
-이 두 trait은 Rust가 **멀티스레드 환경에서 데이터 경쟁(race condition)**을 막기 위해
+이 두 trait은 Rust가 **멀티스레드 환경에서 데이터 경쟁(race condition)** 을 막기 위해
 컴파일 타임에 검사하는 안전 장치입니다.
 
 ## 🔍 Send 자세히 보기
@@ -29,7 +29,6 @@ fn spawn_thread(v: Vec<i32>) {
     });
 }
 ```
-
 - Vec<i32>는 Send를 구현하므로 스레드로 이동 가능
 - 만약 Rc<T>를 넘기면 컴파일 에러 발생 → Rc는 Send가 아님
 
@@ -50,7 +49,6 @@ let d2 = data.clone();
 std::thread::spawn(move || println!("{:?}", d1));
 std::thread::spawn(move || println!("{:?}", d2));
 ```
-
 - Arc<T>는 Sync를 구현하므로 여러 스레드에서 안전하게 참조 가능
 
 ### ⚠️ 왜 Box<dyn Fn()>는 기본적으로 Send가 아닌가?
@@ -64,13 +62,11 @@ Box<dyn Fn(...) + Send + Sync>
 “이 함수는 스레드 간 안전하게 이동/참조 가능하다”고 판단합니다.
 
 ## ✅ 정리
-
 | 타입           | 의미                         | 예시 타입                     | 주의사항 / 요구사항         |
 |----------------|------------------------------|-------------------------------|------------------------------|
 | `Send`         | 다른 스레드로 이동 가능       | `Vec<T>`, `Box<T>`, `Arc<T>`  | `Mutex<T>` 사용 시 필요      |
 | `Sync`         | 여러 스레드에서 참조 가능     | `&T`                          | `Arc<T>`로 공유 시 필요      |
 | `Box<dyn Fn>`  | 동적 함수 호출               | -                             | `+ Send + Sync + 'static` 필요 |
-
 
 
 ## 🧩 실전 팁
@@ -99,7 +95,6 @@ pub enum FunctionType {
     Vector(Box<dyn Fn(&[&TArray<f64>]) -> Vec<f64> + Send + Sync>),
 }
 
-
 pub fn register_scalar<F>(&mut self, name: &str, func: F)
 where
     F: Fn(&[&TArray<f64>]) -> f64 + Send + Sync + 'static,
@@ -107,7 +102,7 @@ where
 ```
 
 ### ⚠️ 왜 에러가 났나?
-- Mutex<T>는 내부 타입 T가 **Send**를 만족해야 함
+- Mutex<T>는 내부 타입 T가 **Send** 를 만족해야 함
 - FunctionRegister 안에는 Box<dyn Fn(...)>가 들어있음
 - Box<dyn Fn>는 기본적으로 Send가 아니기 때문에
 → Mutex<FunctionRegister>가 스레드 안전하지 않다고 판단됨
@@ -153,9 +148,7 @@ Mutex로 감싸서 전역에서 안전하게 사용할 수 있게 됨.
 ```rust
 Box<dyn Fn(...) + Send + Sync + 'static>
 ```
-
 이렇게 하면 Mutex로 감싸도 컴파일 타임에 스레드 안전성이 보장됩니다.
-
 
 ## 실전 예제
 ```rust
@@ -164,7 +157,6 @@ type AnalysisScenario = Box<dyn Fn(&mut ResultContainer, &DataContainer) + Send 
 pub struct ScenarioRegister {
     scenarios: HashMap<String, AnalysisScenario>,
 }
-
 
 impl ScenarioRegister {
     pub fn new() -> Self {
@@ -199,8 +191,6 @@ pub static SCENARIO_REGISTER: Lazy<Mutex<ScenarioRegister>> = Lazy::new(|| {
     reg.register("HeadInjury",  Box::new(calc_head_injury));
     Mutex::new(reg)
 });
-
-
 ```
 ---
 
@@ -235,5 +225,6 @@ pub static SCENARIO_REGISTER: Lazy<Mutex<ScenarioRegister>> = Lazy::new(|| {
 - 러스트는 주로 아래 두 가지 타입을 이용해서 공유 데이터 동기화를 수행합니다:
 - Arc<T>, T에 대한 아토믹 참조 카운트: 이 참조는 다수의 스레드 사이에서 공유될 수 있고, 참조하던 마지막 스레드가 종료할 경우 T를 반환합니다.
 - Mutex<T>: T값에 대한 상호 배제 엑세스를 보장합니다.
+
 
 
