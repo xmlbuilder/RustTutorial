@@ -141,3 +141,147 @@ println!("{:?}", tokens); // ["a", "b", "c", "d"]
 | 전체 코드 길이      | 10줄 이상                  | 2~3줄                              |
 
 ---
+
+# 🧩 split_first()란?
+
+split_first()는 slice에서 첫 번째 요소와 나머지를 분리하는 메서드입니다.  
+```rust
+fn split_first(&self) -> Option<(&T, &[T])>
+```
+- &self: 대상 slice (&[T])
+- 반환값: Option<(첫 요소 참조, 나머지 slice)>
+- 빈 slice면 None, 그 외엔 Some((first, rest))
+
+## ✅ 예시
+```rust
+let arr = [10, 20, 30];
+if let Some((first, rest)) = arr.split_first() {
+    println!("First: {}", first);       // 10
+    println!("Rest: {:?}", rest);       // [20, 30]
+}
+```
+
+- first: &10
+- rest: &[20, 30]
+
+### ❗ 주의할 점
+- slice를 소비하지 않음 → 원본은 그대로 유지됨
+- 참조를 반환 → first는 &T, rest는 &[T]
+- 빈 slice면 None → 반드시 Option 처리 필요
+
+---
+
+# 기타 함수 정리
+
+split_first()는 iterator 스타일의 재귀적 분해를 염두에 둔 함수.  
+Rust의 slice 처리 철학이 잘 드러나는 함수들이라서,  
+같이 쓰이는 split_last(), split_at(), chunks()도 정리.  
+
+## 🧩 split_first()
+```rust
+fn split_first(&self) -> Option<(&T, &[T])>
+```
+
+- 앞에서부터 하나 꺼내고 나머지 반환
+- 빈 slice면 None
+- 재귀적 처리, 패턴 매칭에 유용
+```rust
+let arr = [1, 2, 3];
+if let Some((head, tail)) = arr.split_first() {
+    println!("{head}, {:?}", tail); // 1, [2, 3]
+}
+```
+
+
+## 🧩 split_last()
+```rust
+fn split_last(&self) -> Option<(&T, &[T])>
+```
+
+- 뒤에서부터 하나 꺼내고 나머지 반환
+- split_first()의 반대 방향
+- 스택처럼 처리할 때 유용
+- 
+```rust
+let arr = [1, 2, 3];
+if let Some((last, rest)) = arr.split_last() {
+    println!("{last}, {:?}", rest); // 3, [1, 2]
+}
+```
+
+
+## 🧩 split_at()
+```rust
+fn split_at(&self, mid: usize) -> (&[T], &[T])
+```
+
+- 지정한 인덱스 기준으로 앞/뒤로 나눔
+- panic 발생 가능 → 인덱스 범위 주의
+- 
+```rust
+let arr = [1, 2, 3, 4];
+let (left, right) = arr.split_at(2);
+println!("{:?}, {:?}", left, right); // [1, 2], [3, 4]
+```
+
+
+## 🧩 chunks()
+```rust
+fn chunks(&self, size: usize) -> Chunks<'_, T>
+```
+
+- slice를 고정 크기 블록으로 나눔
+- 마지막 chunk는 size보다 작을 수 있음
+```rust
+let arr = [1, 2, 3, 4, 5];
+for chunk in arr.chunks(2) {
+    println!("{:?}", chunk); // [1, 2], [3, 4], [5]
+}
+```
+
+---
+
+# Borrow에 응용
+
+Rust에서 mut를 쓰는 건 단순히 값을 바꾸기 위한 게 아니라,  
+소유권과 빌림(borrowing) 문제를 해결하는 핵심 도구로 쓰이는 경우가 많음.  
+특히 slice나 iterator를 다룰 때, split_first() 같은 함수와 함께 쓰면  
+재귀적 처리나 상태 변경이 가능.  
+
+## 🔍 mut가 소유권 문제를 해결하는 방식
+### 1. 가변 참조로 빌림을 허용
+``rust
+fn consume(slice: &mut &[i32]) {
+    if let Some((first, rest)) = slice.split_first() {
+        println!("Consuming: {}", first);
+        *slice = rest; // slice를 앞으로 이동
+    }
+}
+```
+
+- &mut &[i32]는 slice 자체를 가변 참조로 빌림
+- *slice = rest로 slice의 내부를 바꿀 수 있음  
+    → 이게 바로 iterator처럼 slice를 소비하는 방식
+
+### 2. 재귀적 처리에 유리
+```rust
+fn walk(slice: &mut &[i32]) {
+    while let Some((first, rest)) = slice.split_first() {
+        println!("Next: {}", first);
+        *slice = rest;
+    }
+}
+```
+
+- slice를 점점 줄여가면서 순회  
+  → mut 없으면 *slice = rest가 불가능  
+  → 결국 소유권 문제로 막히게 됨  
+
+### 3. Iterator와 유사한 흐름
+- split_first()는 iterator처럼 앞에서 하나씩 꺼내는 구조
+- mut를 쓰면 slice를 줄여가면서 상태를 유지할 수 있음  
+  → 소유권을 넘기지 않고도 반복 처리 가능
+
+---
+
+
