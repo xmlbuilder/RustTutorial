@@ -304,6 +304,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [07-Box&Rc&RcCell&Arc&Mutex요약](./Chapter-15%28SmartPointers_and_MemoryModels%29/07-Box&Rc&RcCell&Arc&Mutex요약.md)
 - [08-static_for_box_rc](./Chapter-15%28SmartPointers_and_MemoryModels%29/08-static_for_box_rc.md)
 - [09-null_pointer_optimization](./Chapter-15%28SmartPointers_and_MemoryModels%29/09-null_pointer_optimization.md)
+- [10.Box_trait_메모리_레이아웃](./Chapter-15%28SmartPointers_and_MemoryModels%29/10.Box_trait_메모리_레이아웃.md)
+
 
 🔼 [맨 위로](#-목차)
 
