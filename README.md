@@ -358,7 +358,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [05-PartialEq](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/05-PartialEq.md)
 - [06-객체비교](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/06-%EA%B0%9D%EC%B2%B4%EB%B9%84%EA%B5%90.md)
 - [07-PrintOrderChange](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/07-PrintOrderChange.md)
-- [08-FromInto](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/08-FromInto.md)
+- [08-Iterator구현](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/08-Iterator구현.md)
 - [09-Argument](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/09-Argument.md)
 - [10-CrossPlatform](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/10-CrossPlatform.md)
 - [11-Math](./Chapter-18%28%EA%B8%B0%ED%83%80%20%EB%B0%8F%20%EC%8B%A4%ED%97%98%EC%A0%81%20%ED%95%AD%EB%AA%A9%29/11-Math.md)
