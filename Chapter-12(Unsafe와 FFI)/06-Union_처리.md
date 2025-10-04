@@ -88,9 +88,9 @@ union MyUnion {
 
 ---
 # C++ Union 활용법
-
-C++에서는 union, reinterpret_cast, 또는 memcpy를 통해 같은 메모리 공간을 다른 타입으로 해석하는 방식을 자주 씁니다.
-Rust에서도 이건 가능합니다. 하지만 Rust는 명시적으로 unsafe로 선언하고, 그 위험을 프로그래머가 책임지도록 설계되어 있습니다.
+C++에서는 union, reinterpret_cast, 또는 memcpy를 통해 같은 메모리 공간을 다른 타입으로 해석하는 방식을 자주 씁니다.  
+Rust에서도 이건 가능합니다.  
+하지만 Rust는 명시적으로 unsafe로 선언하고, 그 위험을 프로그래머가 책임지도록 설계되어 있습니다.
 
 ## 🧩 Rust에서 “같은 메모리를 다른 타입으로 보는” 방법
 ### ✅ 1. union을 사용하는 방식
