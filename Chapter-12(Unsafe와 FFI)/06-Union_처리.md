@@ -256,8 +256,8 @@ fn parse_step(buffer: &[u8]) -> Vec<f32> {
 }
 ```
 
-- 4바이트씩 쪼개서 f32로 해석
-- → LS-DYNA explicit 결과와 동일한 방식
+- 4바이트씩 쪼개서 f32로 해석  
+  → LS-DYNA explicit 결과와 동일한 방식
 
 ### ✅ 3. double 결과도 동일하게 처리
 ```rust
