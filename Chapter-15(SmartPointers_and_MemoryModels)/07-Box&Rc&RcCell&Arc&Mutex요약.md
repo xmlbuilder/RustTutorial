@@ -494,4 +494,172 @@ Vec의 위치가 Vec<Rc<RefCell<dyn Observer>>>와 Arc<Mutex<Vec<Box<dyn Observe
 
 ----
 
+# RefCell 보강
+
+# Rc::make_mut() vs Rc<RefCell<T>>
+→ 이건 Rust에서 불변 공유 vs 내부 가변성을 어떻게 설계할지에 대한 선택.
+
+## 🧩 핵심 비교: Rc::make_mut() vs Rc<RefCell<T>>
+| 항목                  | Rc::make_mut()                      | Rc<RefCell<T>>                      |
+|-----------------------|-------------------------------------|-------------------------------------|
+| 가변 접근 방식         | 참조 카운트가 1일 때만 직접 수정 가능 | 언제든지 `borrow_mut()`로 수정 가능 |
+| 복제 여부             | 참조자가 여러 명이면 내부 데이터 복제 | 복제 없음, 내부 상태 공유           |
+| 안전성                | 컴파일 타임 안전성                  | 런타임 체크 (panic 가능)             |
+| 성능                  | 복제 비용 발생 가능                 | 런타임 체크 비용 있음                |
+| 내부 구조             | `Rc<T>`                             | `Rc<RefCell<T>>`                    |
+| mutable 접근 예시     | `Rc::make_mut(&mut rc)`             | `rc.borrow_mut()`                   |
+| 스레드 안전성         | `Rc`: `!Send`, `!Sync`              | `RefCell`: `!Send`, `!Sync`         |
+
+
+## ✅ 언제 어떤 걸 써야 할까?
+### 🔹 Rc::make_mut()를 쓰는 경우
+- 대부분 읽기만 하고, 특정 순간에만 수정이 필요할 때
+- 복제해도 괜찮을 만큼 데이터가 작거나 clone이 가벼울 때
+- 컴파일 타임 안전성을 유지하고 싶을 때
+- 예: GUI 트리 구조, undo/redo 시스템, snapshot 기반 캐시
+### 🔹 Rc<RefCell<T>>를 쓰는 경우
+- 자주 수정이 필요하고, 복제 비용이 부담될 때
+- 여러 참조자가 동일한 내부 상태를 공유해야 할 때
+- 런타임 체크를 감수하고라도 유연한 상태 관리가 필요할 때
+- 예: 게임 엔티티 상태, 이벤트 핸들러, 동적 설정값
+
+## 소유권 이전
+RefCell<T>에서 borrow_mut()를 호출한다고 해서 소유권이 이전되는 건 아닙니다.  
+    → 대신, 런타임에 mutable 참조를 "빌려오는" 것.
+Rust의 소유권 모델은 여전히 유지되고, RefCell은 그걸 런타임 체크로 우회하는 구조입니다.
+
+### 🧩 핵심 개념: borrow_mut()는 소유권 이전이 아니다
+```rust
+let cell = RefCell::new(10);
+let mut_ref = cell.borrow_mut(); // &mut T가 아니라 RefMut<T>
+```
+
+- mut_ref는 RefMut<i32> 타입
+- 내부적으로 RefCell이 mutable borrow가 발생했음을 기록  
+    → 소유권은 여전히 RefCell이 가지고 있음
+    → mut_ref는 일시적인 가변 접근 권한만 가진 것
+
+### 🔍 왜 소유권 이전이 아닌가?
+- Rust는 소유권 이전은 move로만 발생
+- borrow_mut()는 move가 아니라 mutable borrow
+- RefMut<T>는 Drop될 때 → 내부 borrow 상태를 해제  
+    → 소유권은 절대 바뀌지 않음, 단지 가변 접근 권한을 잠시 빌려오는 것
+
+### ✅ 예시로 확인
+```rust
+use std::cell::RefCell;
+fn main() {
+    let cell = RefCell::new(String::from("Hello"));
+    {
+        let mut s = cell.borrow_mut();
+        s.push_str(" JungHwan");
+    }
+    println!("{}", cell.borrow()); // Hello JungHwan
+}
+```
+- cell은 여전히 소유권을 가지고 있음
+- s는 RefMut<String> → Drop되면 mutable borrow 해제  
+    → 소유권은 이동하지 않고, 상태만 바뀜
+
+
+##  borrow_mut() 아래에서 Rc::clone()을 호출하는 건 가능
+borrow_mut() 아래에서 Rc::clone()을 호출하는 건 가능하지만, 구조적으로 조심해야 합니다.  
+`→ 왜냐하면 RefCell의 내부 상태를 mutable하게 빌린 상태에서 그걸 공유하려는 시도는 구조적 충돌을 일으킬 수 있기 때문입니다.
+
+### 🔍 핵심 구조
+```rust
+use std::rc::Rc;
+use std::cell::RefCell;
+fn main() {
+    let rc = Rc::new(RefCell::new(42));
+
+    {
+        let mut_ref = rc.borrow_mut(); // 내부를 mutable하게 빌림
+        // Rc::clone(&rc) 호출은 가능
+        let rc2 = Rc::clone(&rc);      // 참조 카운트 증가
+        println!("Cloned Rc while mutably borrowed");
+    }
+
+    println!("Done");
+}
+```
+
+- ✅ 컴파일은 잘 됩니다
+- ✅ Rc::clone()은 RefCell의 내부 borrow 상태와 무관함
+- ❗ 하지만 의미적으로 조심해야 할 부분이 있음
+
+### ⚠️ 왜 조심해야 하는가?
+#### 1. mutable borrow 중에 공유가 일어남
+- borrow_mut()는 내부 데이터를 독점적으로 빌리는 것
+- 그 상태에서 Rc::clone()으로 다른 참조자를 만들면  
+    → 그 참조자가 내부 상태를 건드릴 수 있다는 오해를 줄 수 있음
+#### 2. 구조적 혼란 가능
+- Rc::clone()은 안전하지만  
+    → 그 아래에서 rc.borrow_mut()를 계속 유지한 채  
+    → 다른 곳에서 borrow()나 borrow_mut()를 시도하면  
+    → 런타임 panic 발생 가능  
+
+
+### ✅ 방법: std::mem::drop()으로 명시적 해제
+```rust
+use std::cell::RefCell;
+use std::mem::drop;
+
+fn main() {
+    let cell = RefCell::new(42);
+
+    let mut_ref = cell.borrow_mut();
+    println!("Before drop: {}", *mut_ref);
+    drop(mut_ref); // 명시적으로 mutable borrow 해제
+
+    // 이후 다시 borrow 가능
+    let again = cell.borrow();
+    println!("After drop: {}", *again);
+}
+```
+
+- drop(mut_ref)를 호출하면  
+    → RefMut<T>가 즉시 해제됨  
+    → 내부 borrow 상태가 즉시 풀림  
+- 이후에 borrow()나 borrow_mut()를 다시 호출해도 panic 없이 동작
+
+### 🔍 왜 이게 중요한가?
+- 긴 스코프에서 mutable borrow를 짧게 쓰고 싶을 때
+- 다시 borrow하려면 이전 borrow를 반드시 해제해야 할 때
+- 특히 Rc<RefCell<T>> 구조에서  
+    → borrow_mut()로 수정한 뒤  
+    → Rc::clone()이나 다른 접근을 하려면  
+    → mutable borrow를 먼저 해제해야 안전  
+
+### 🔍 왜 b.borrow()가 필요한가?
+```rust
+use std::rc::Rc;
+use std::cell::RefCell;
+
+fn main() {
+    let b = Rc::new(RefCell::new(100));
+
+    // 읽을 때
+    let val = b.borrow();
+    println!("Read: {}", *val);
+
+    // 쓸 때
+    let mut val_mut = b.borrow_mut();
+    *val_mut += 1;
+    println!("Updated: {}", *val_mut);
+}
+```
+
+- RefCell<T>는 내부에 T를 가지고 있지만  
+    → 직접 접근은 불가능 (b.value 같은 건 안 됨)
+- 대신 borrow()나 borrow_mut()를 통해  
+    → Ref<T> 또는 RefMut<T>를 얻어야만 접근 가능
+
+## ✅ 핵심 요약
+| 작업 방식   | 호출 메서드     | 반환 타입     |
+|-------------|------------------|----------------|
+| 읽기        | `borrow()`       | `Ref<T>`       |
+| 쓰기        | `borrow_mut()`   | `RefMut<T>`    |
+    → 모든 접근은 반드시 RefCell을 통해 빌려야 함
+
 
