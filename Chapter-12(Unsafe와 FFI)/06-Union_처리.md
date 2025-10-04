@@ -36,8 +36,7 @@ println!("부울: {}", unsafe {  u.b});       // ❌ UB (정의되지 않은 동
 ```
 - u.i는 우리가 직접 초기화했으므로 안전
 - u.b는 초기화하지 않았는데 접근 → undefined behavior
-- Rust는 이런 위험을 막기 위해  
-    union의 필드 접근을 unsafe로 제한
+- Rust는 이런 위험을 막기 위해 union의 필드 접근을 unsafe로 제한
 
 ## ✅ enum과의 차이점
 | 항목               | `enum`                                      | `union`                                       |
@@ -65,9 +64,9 @@ println!("부울: {}", unsafe {  u.b});       // ❌ UB (정의되지 않은 동
 
 ## 🔍 Rust에서는 왜 “어디에 데이터가 있는지” 알 수 없나?
 - union은 모든 필드가 같은 메모리 공간을 공유합니다
-- Rust는 enum처럼 tag를 저장하지 않기 때문에
-→ 현재 어떤 필드가 활성화됐는지 알 수 없음
-- → 이건 Rust가 일부러 안전하지 않다고 선언한 영역이에요
+- Rust는 enum처럼 tag를 저장하지 않기 때문에  
+    → 현재 어떤 필드가 활성화됐는지 알 수 없음  
+    → 이건 Rust가 일부러 안전하지 않다고 선언한 영역이에요
 ```rust
 union MyUnion {
     i: u8,
