@@ -1,5 +1,5 @@
 # Scoped Threads
-아래는 Rust의 범위 스레드(Scoped Threads) 개념을 두 샘플을 통해 단계적으로 구조적으로 정리한 내용입니다.
+아래는 Rust의 범위 스레드(Scoped Threads) 개념을 두 샘플을 통해 단계적으로 구조적으로 정리한 내용입니다.  
 C++ 스타일의 스레드와 비교해도 의미가 분명히 드러나는 구조.
 
 ## 🧩 Scoped Threads란?
@@ -97,4 +97,5 @@ fn main() {
 
 
 ---
+
 
