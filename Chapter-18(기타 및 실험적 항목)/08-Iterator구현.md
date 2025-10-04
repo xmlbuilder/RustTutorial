@@ -8,7 +8,7 @@ Rust의 반복자 시스템은 단순한 루프를 넘어서 메모리 안전성
 | `Iterator`  | `next()` 메서드를 통해 순차적으로 값을 반환           |
 | `Lifetime`  | 참조의 유효 범위를 명시하여 메모리 안전성 확보        |
 | 반복자 어댑터 | `map`, `filter`, `zip`, `collect`, `sum`, `next()` 등 |
-| 소비 어댑터 | `map`, `filter`는 게으름 / `collect`, `sum`은 소비함 |
+| 소비 어댑터 | `map`, `filter`는 lazy / `collect`, `sum`은 소비함 |
 
 
 
