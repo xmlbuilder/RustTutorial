@@ -174,7 +174,7 @@ let points: Vec<_> = grid.into_iter().collect();
 ```
 
 - collect()는 내부적으로 FromIterator를 호출
-- → 반복자에서 나온 값을 모아서 Vec, HashMap, String 등으로 변환
+    → 반복자에서 나온 값을 모아서 Vec, HashMap, String 등으로 변환
 ### ✅ 2. 구조적 수집을 자동화하려면
 - FromIterator를 구현하면  
     → 반복자에서 나온 값들을 내가 만든 구조체로 자동 수집 가능
