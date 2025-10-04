@@ -149,13 +149,18 @@ flowchart LR
         A3[Worker Thread 3]
     end
 
-    A1 --> B1[Future A (블로킹)]
-    A2 --> B2[Future B (Running)]
-    A3 --> B3[Future C (Running)]
+    B1[Future A (블로킹)]
+    B2[Future B (Running)]
+    B3[Future C (Running)]
+
+    A1 --> B1
+    A2 --> B2
+    A3 --> B3
 ```
 
 - Future A가 블로킹되더라도  
     → Future B, Future C는 다른 스레드에서 계속 실행됨
+
 
 
 
