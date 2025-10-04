@@ -99,8 +99,8 @@ struct GridIter {
 }
 ```
 
-- i는 x축 인덱스, j는 y축 인덱스
-- → x_coords[i], y_coords[j]를 조합해서 (x, y)를 생성
+- i는 x축 인덱스, j는 y축 인덱스  
+  → x_coords[i], y_coords[j]를 조합해서 (x, y)를 생성
 
 ### 4. Iterator 구현
 ```rust
@@ -142,7 +142,7 @@ let points: Vec<(u32, u32)> = grid.into_iter().collect();
 ```
 
 - collect()는 FromIterator를 구현한 타입에 대해 사용 가능
-- Vec<T>는 FromIterator<T>를 구현했기 때문에  
+- Vec<T>는 FromIterator<T>를 구현했기 때문에    
     → 반복자를 통해 값을 모아서 벡터로 만들 수 있음
 
 ---
@@ -164,7 +164,7 @@ Iterator::next()만 구현하면 반복은 되는데, 왜 굳이 IntoIterator와
 - Iterator만 구현하면 grid.next()는 가능하지만  
     → for x in grid는 안 됨
 ### ✅ 2. 소유권을 넘기면서 순회할 수 있게 하려면
-- into_iter(self)는 self를 소비하면서 반복자를 반환 
+- into_iter(self)는 self를 소비하면서 반복자를 반환  
     → 값을 move하면서 순회할 수 있음
 
 ## 🔍 왜 FromIterator가 필요한가?
@@ -173,7 +173,7 @@ Iterator::next()만 구현하면 반복은 되는데, 왜 굳이 IntoIterator와
 let points: Vec<_> = grid.into_iter().collect();
 ```
 
-- collect()는 내부적으로 FromIterator를 호출
+- collect()는 내부적으로 FromIterator를 호출  
     → 반복자에서 나온 값을 모아서 Vec, HashMap, String 등으로 변환
 ### ✅ 2. 구조적 수집을 자동화하려면
 - FromIterator를 구현하면  
