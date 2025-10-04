@@ -1,6 +1,10 @@
 # Send Sync
 
+- Send: T가 스레드 간 이동이 안전하다면, T의 타입은 Send입니다.
+- Sync: &T가 스레드 간 이동이 안전하다면, &T의 타입은 Sync입니다.
+
 ## 🧠 핵심 개념: Send와 Sync Trait
+
 Rust에서 스레드 간 데이터 공유를 안전하게 하기 위해
 두 가지 특성(trait)을 사용합니다:
 | Trait | 의미 | 언제 필요함 | 기본 구현 타입 | 구현되지 않는 대표 타입 |
@@ -14,6 +18,8 @@ Rust에서 스레드 간 데이터 공유를 안전하게 하기 위해
 ## 🔍 Send 자세히 보기
 - Send는 타입이 다른 스레드로 안전하게 이동될 수 있는지를 나타냅니다.
 - 대부분의 기본 타입(i32, f64, Vec<T>, Box<T>)은 Send를 자동 구현합니다.
+- 소유권을 다른 스레드로 이동하면 소멸자가 해당 스레드에서 실행됩니다.
+- 여기서 의문은 “언제 한 스레드에서 값을 할당하고 다른 스레드에서 값을 할당 해제할 수 있는가” 입니다.
 - 하지만 Rc<T>, RefCell<T>, Box<dyn Trait> 같은 타입은 기본적으로 Send가 아닙니다.
 ### 예시
 ```rust
@@ -28,8 +34,9 @@ fn spawn_thread(v: Vec<i32>) {
 - 만약 Rc<T>를 넘기면 컴파일 에러 발생 → Rc는 Send가 아님
 
 ## 🔍 Sync 자세히 보기
-- Sync는 타입이 **여러 스레드에서 동시에 참조(&T)**될 수 있는지를 나타냅니다.
+- Sync는 타입이 **여러 스레드에서 동시에 참조(&T)** 될 수 있는지를 나타냅니다.
 - &T가 Send가 되려면 T가 Sync여야 합니다.
+- &T가 Send인 경우에만 T의 타입이 Sync가 됩니다
 - 예를 들어 Arc<T>는 내부적으로 Sync를 구현해서 여러 스레드에서 참조 가능하게 해줍니다.
 예시
 ```rust
@@ -193,4 +200,32 @@ pub static SCENARIO_REGISTER: Lazy<Mutex<ScenarioRegister>> = Lazy::new(|| {
     Mutex::new(reg)
 });
 
+
 ```
+---
+
+## Send + Sync
+- i8, f32, bool, char, &str, …  
+- (T1, T2), [T; N], &[T], struct { x: T }, …  
+- String, Option<T>, Vec<T>, Box<T>, …  
+- Arc<T>: 참조 카운트 조작을 아토믹 하기 때문에 스레드 안전함.  
+- Mutex<T>: 값을 접근하기 위해 뮤택스를 잠궈야 하기 때문에 스레드 안전함.  
+- AtomicBool, AtomicU8, …: 값을 접근할 때 특별한 아토믹 명령어들을 사용합니다.  
+- 제네릭 타입은 일반적으로 타입 파라메터가 Send + Sync이면 Send + Sync 입니다.  
+
+## Send + !Sync
+- 아래 타입들은 다른 스레드로 이동될 수 있지만 내부적으로 값이 변경될 수 있기 때문에 스레드 안전하지 않습니다:
+    - mpsc::Sender<T>
+    - mpsc::Receiver<T>
+    - Cell<T>
+    - RefCell<T>
+
+## !Send + Sync
+- 아래 타입들은 스레드 안전하지만 다른 스레드로 이동될 수 없습니다:
+    - MutexGuard<T: Sync>: Uses OS level primitives which must be deallocated on the thread which created them.
+
+## !Send + !Sync
+- 아래 타입들은 스레드 안전하지도 않고 다른 스레드로 이동될 수도 없습니다:
+    - Rc<T>: Rc<T> 는 아토믹하지 않은 방식으로 참조 카운트를 조작하는 RcBox<T>를 참조합니다.
+    - *const T, *mut T: 러스트는 포인터가 스레드 안전하지 않다고 가정합니다.
+
