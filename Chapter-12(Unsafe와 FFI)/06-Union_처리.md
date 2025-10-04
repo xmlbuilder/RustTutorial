@@ -314,8 +314,8 @@ fn main() -> std::io::Result<()> {
 ## ✅ 추가 설명
 - SeekFrom::Start(pos) → 파일의 시작 위치에서 pos 바이트만큼 이동
 - SeekFrom::Current(offset) → 현재 위치 기준으로 이동
-- SeekFrom::End(offset) → 파일 끝 기준으로 이동
-    → C의 fseek(fp, offset, SEEK_SET)와 완전히 대응되는 구조입니다
+- SeekFrom::End(offset) → 파일 끝 기준으로 이동  
+    → C의 fseek(fp, offset, SEEK_SET)와 완전히 대응되는 구조입니다  
     → 기능적으로 동일하며, Rust는 타입 안전성과 에러 처리를 더 강화한 구조
 
 ---
