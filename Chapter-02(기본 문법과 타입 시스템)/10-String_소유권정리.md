@@ -1,4 +1,4 @@
-# String/&str
+ # String / &str
 String과 &str에 대한 핵심 개념, 메모리 관리, 메서드 사용, 참조 규칙까지 모두 포함.
 
 ## 🧵 1. String vs &str 기본 개념
@@ -11,6 +11,8 @@ String과 &str에 대한 핵심 개념, 메모리 관리, 메서드 사용, 참�
 | 생성 방법          | `String::from("text")`, `"text".to_string()`   | `"text"`, `&s[start..end]`                   |
 | 주요 용도          | 동적 문자열 조작                               | 읽기 전용 참조                               |
 
+- &str은 문자열 슬라이스에 대한 (불변) 참조입니다.
+- String은 문자열을 담을 수 있는 버퍼입니다.
 
 
 ## ⚙️ 2. 메모리 관리와 소유권 이동
