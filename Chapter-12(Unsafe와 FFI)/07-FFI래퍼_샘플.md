@@ -179,6 +179,7 @@ Rust는 FFI(Foreign Function Interface)를 통해 C 함수를 호출할 수 있�
 | `OsStr`, `OsString` | OS 정의   | OS 경로, 파일 이름 등과 연동 | `OsStr::from_bytes(&[u8])` → `.to_os_string()` |
 
 ## 🔄 주요 변환 흐름 요약
+```
 &str
   ↓ CString::new()
 CString
@@ -192,6 +193,7 @@ CString
 &OsStr
   ↓ .to_os_string()
 OsString
+```
 
 - CString::new(str) → NUL 종료 문자열 생성
 - .as_ptr() → C 함수에 넘길 포인터
