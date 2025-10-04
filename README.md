@@ -254,6 +254,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [03-FFI기초](./Chapter-12(Unsafe와%20FFI)/03-FFI기초.md)
 - [04-FFI_C호출](./Chapter-12(Unsafe와%20FFI)/04-FFI_C호출.md)
 - [05-repr](./Chapter-12(Unsafe와%20FFI)/05-repr.md)
+- [06-Union_처리](./Chapter-12(Unsafe와%20FFI)/06-Union_처리.md)
+
 
 🔼 [맨 위로](#-목차)
 
