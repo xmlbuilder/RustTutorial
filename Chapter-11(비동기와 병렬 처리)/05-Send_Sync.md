@@ -1,4 +1,4 @@
-# Send Sync
+# Send / Sync
 
 - Send: T가 스레드 간 이동이 안전하다면, T의 타입은 Send입니다.
 - Sync: &T가 스레드 간 이동이 안전하다면, &T의 타입은 Sync입니다.
@@ -194,7 +194,7 @@ pub static SCENARIO_REGISTER: Lazy<Mutex<ScenarioRegister>> = Lazy::new(|| {
 ```
 ---
 
-## Send + Sync
+## Send + Sync 
 - i8, f32, bool, char, &str, …  
 - (T1, T2), [T; N], &[T], struct { x: T }, …  
 - String, Option<T>, Vec<T>, Box<T>, …  
@@ -225,6 +225,61 @@ pub static SCENARIO_REGISTER: Lazy<Mutex<ScenarioRegister>> = Lazy::new(|| {
 - 러스트는 주로 아래 두 가지 타입을 이용해서 공유 데이터 동기화를 수행합니다:
 - Arc<T>, T에 대한 아토믹 참조 카운트: 이 참조는 다수의 스레드 사이에서 공유될 수 있고, 참조하던 마지막 스레드가 종료할 경우 T를 반환합니다.
 - Mutex<T>: T값에 대한 상호 배제 엑세스를 보장합니다.
+
+---
+
+# Sync + Send 판단 기준
+Rust에서 어떤 struct에 Sync + Send를 붙는다고 해서 자동으로 그 타입이 Sync나 Send가 되는 건 아닙니다.
+컴파일러는 그 타입의 내부 필드들이 실제로 안전하게 공유되거나 이동될 수 있는지를 분석해서
+자동으로 Sync와 Send 트레잇을 구현하거나 거부합니다.
+
+## 🧩 핵심: Sync와 Send는 자동 파생되는 marker trait
+컴파일러가 내부 필드 기반으로 판단한다
+
+### ✅ 기본 규칙
+- T: Send → T를 다른 스레드로 이동해도 안전
+- T: Sync → &T를 다른 스레드에서 동시에 읽어도 안전  
+    → 이건 컴파일러가 내부 필드들을 보고 자동으로 판단합니다  
+    → 우리가 명시적으로 impl Send for MyType 같은 걸 쓸 수는 없어요 (unsafe를 제외하면)
+
+## 🔍 컴파일러가 판단하는 기준
+```rust
+struct MyStruct {
+    a: String,         // ✅ Send + Sync
+    b: Rc<i32>,        // ❌ Rc는 Send도 Sync도 아님
+}
+```
+
+- String은 Send + Sync → OK
+- Rc<T>는 !Send + !Sync → ❌
+→ 그래서 MyStruct는 !Send + !Sync가 됨
+
+## ✅ Rc vs Arc
+| 타입     | Send | Sync | 설명                                      |
+|----------|------|------|-------------------------------------------|
+| Rc<T>    | ❌    | ❌    | 단일 스레드 전용 참조 카운터, 스레드 간 공유 불가 |
+| Arc<T>   | ✅    | ✅    | 다중 스레드 안전 참조 카운터, 공유 및 병렬 접근 가능 |
+
+
+## 🔧 실무에서 확인하는 방법
+```rust
+fn assert_send<T: Send>() {}
+fn assert_sync<T: Sync>() {}
+
+assert_send::<MyStruct>(); // ❌ 컴파일 오류
+assert_sync::<MyStruct>(); // ❌ 컴파일 오류
+```
+
+- 컴파일러가 타입 내부를 분석해서 트레잇 구현 여부를 결정함
+- 우리가 #[derive(Send)] 같은 걸 붙일 수 없음
+
+## ✅ unsafe로 강제 구현은 가능하지만 위험
+``rust
+unsafe impl Send for MyStruct {}
+```
+- 이건 컴파일러의 판단을 무시하고 강제로 Send로 간주
+- 하지만 내부 필드가 Send가 아니면 런타임 오류 발생 가능
+- 실무에서는 절대 권장되지 않음
 
 
 
