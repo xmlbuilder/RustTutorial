@@ -250,7 +250,7 @@ Rust에서 mut를 쓰는 건 단순히 값을 바꾸기 위한 게 아니라,
 
 ## 🔍 mut가 소유권 문제를 해결하는 방식
 ### 1. 가변 참조로 빌림을 허용
-``rust
+```rust
 fn consume(slice: &mut &[i32]) {
     if let Some((first, rest)) = slice.split_first() {
         println!("Consuming: {}", first);
