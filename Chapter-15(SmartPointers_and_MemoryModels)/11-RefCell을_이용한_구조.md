@@ -100,7 +100,7 @@ struct Node {
     children: Vec<Rc<RefCell<Node>>>,
     label: Option<String>, // 나중에 추가될 수도 있음
 }
-``
+```
 
 - 이런 식으로 필드가 늘어나면 → new() 함수도 수정해야 함
 - 하지만 ..Node::default()를 쓰면 → value만 지정하고 나머지는 자동 처리  
