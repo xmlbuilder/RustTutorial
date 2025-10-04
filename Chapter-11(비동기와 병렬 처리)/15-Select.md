@@ -5,7 +5,7 @@ JavaScript의 Promise.race, Python의 asyncio.wait(..., FIRST_COMPLETED)와 구�
 
 ## 🧩 tokio::select!이란?
 - 여러 Future 중 가장 먼저 완료되는 하나만 실행하고
-- 나머지는 **취소(drop)**됨
+- 나머지는 **취소(drop)** 됨
 - 비동기 조건 분기를 위한 구조적 매크로
 ```rust
 tokio::select! {
@@ -132,5 +132,6 @@ sequenceDiagram
     Note over Select: 고양이 recv는 drop됨
 
 ```
+
 
 
