@@ -19,6 +19,7 @@ RwLockWriteGuard는 RwLock에서 쓰기 락을 획득했을 때 반환되는 구
 ```rust
 let mut write_guard = lock.write().unwrap(); // RwLockWriteGuard 반환
 *write_guard += 1; // 내부 값 수정
+```
 
 - write() 메서드는 RwLockWriteGuard<T>를 반환합니다.
 - write_guard가 스코프를 벗어나면 자동으로 락이 해제됩니다.
@@ -54,4 +55,5 @@ fn main() {
 - RwLock은 멀티스레드 환경에서 안전하게 공유하려면 Arc<RwLock<T>>로 감싸야 합니다.
 - write()와 read()는 Result를 반환하므로 unwrap() 또는 ?로 처리해야 합니다.
 - RwLockWriteGuard는 락이 걸린 동안 다른 스레드 접근을 막기 때문에 오래 잡고 있으면 성능에 영향을 줄 수 있습니다.
+
 
