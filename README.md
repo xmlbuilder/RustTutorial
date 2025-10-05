@@ -176,6 +176,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [24-FnOnce](./Chapter-06(트레잇과%20제네릭)/24-FnOnce.md)
 - [25-Trait_Index_IndexMut](./Chapter-06(트레잇과%20제네릭)/25-Trait_Index_IndexMut.md)
 - [26-trait_Iterator](./Chapter-06(트레잇과%20제네릭)/26-trait_Iterator.md)
+- [27-RwLock_RwLockWriteGuard](./Chapter-06(트레잇과%20제네릭)/27-RwLock_RwLockWriteGuard.md)
+
 
 🔼 [맨 위로](#-목차)
 
