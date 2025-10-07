@@ -385,6 +385,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [11-Math](./Chapter-18(기타%20및%20실험적%20항목)/11-Math.md)
 - [12-함수형_프로그램밍](./Chapter-18(기타%20및%20실험적%20항목)/12-함수형_프로그램밍.md)
 - [13-ndarray](./Chapter-18(기타%20및%20실험적%20항목)/13-ndarray.md)
+- [14-bumpalo_실모델에적용_절차구성](./Chapter-18(기타%20및%20실험적%20항목)/14-bumpalo_실모델에적용_절차구성.md)
 - [15-DataSeriesLike(Adapter_Bridge)](./Chapter-18(기타%20및%20실험적%20항목)/15-DataSeriesLike(Adapter_Bridge).md)
 
 
