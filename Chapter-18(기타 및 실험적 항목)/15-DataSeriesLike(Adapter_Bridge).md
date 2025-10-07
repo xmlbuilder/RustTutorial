@@ -1,8 +1,8 @@
-# 어댑터(Adaptor)”/“브리지(Bridge)
+## 어댑터(Adaptor)”/“브리지(Bridge)
 우리가 만든 DataSeriesLike/ChannelLike는 전형적인 “어댑터(Adaptor)”/“브리지(Bridge)” 스타일을 Rust의 트레이트로 풀어낸 겁니다.  
 핵심은 알고리즘(함수) ↔ 데이터구조(타입) 를 느슨하게 결합해서 재사용성과 성능을 동시에 얻는 것.
 
-## 왜 이 기법이 좋은가 (일반적 관점)
+### 왜 이 기법이 좋은가 (일반적 관점)
 
 - 결합도↓, 재사용성↑: 알고리즘은 “시간축/값을 읽을 수 있다”는 계약(인터페이스)만 의존합니다. 
 - 실제 타입이 Channel, (xs, ys) 튜플, DataSeries 등 무엇이든 상관없음.
@@ -10,16 +10,16 @@
 - 점진적 이식/교체: 기존 C++ 구조를 그대로 옮겨오면서도 표면을 트레이트로 맞추면, 내부 구현은 나중에 바꿔도 외부 알고리즘은 그대로.
 - 여러 표현을 같은 API로: 원시 슬라이스, 소유 Vec, 참조 타입, 캐시 래퍼 등 다양한 “표현”을 같은 함수에 넣을 수 있음.
 
-## 왜 Rust에서 특히 더 좋나
+### 왜 Rust에서 특히 더 좋나
 - 제로코스트 추상화: 제네릭+트레이트(정적 디스패치)는 컴파일 타임에 모노모픽으로 풀려서 가상 호출 비용 없이 인라인 최적화됩니다.
 - 안전한 인터페이스: 소유권/수명 검사로 잘못된 참조, UAF를 컴파일러가 잡아줌.
 - 확장 가능한 다형성: 상속이 없는 Rust에서 “행동 공유”는 트레이트가 정석. 기본 메서드 제공으로 공통 유틸도 쉽게 얹음.
 - 어댑터를 쉽게 합성: 참조 타입(&T), 튜플((&[f64], &[f64])), 새 타입(newtype) 등 여러 레이어의 어댑터를 붙여도 비용이 거의 없음.
 - 동적 디스패치 옵션: 필요하면 Box<dyn ChannelLike>로 이질적 컬렉션도 담을 수 있음(성능/유연성 트레이드오프를 선택적으로).
 
-## 우리 코드에 바로 대응되는 이점
+### 우리 코드에 바로 대응되는 이점
 
-### 알고리즘-타입 분리
+#### 알고리즘-타입 분리
 - get_channel_total_sum* 류 함수는 Channel에 고정되지 않고 ChannelLike만 요구  
     → 나중에 파일 스트리밍 채널, 메모리맵 채널, 가공 파이프 채널도 그대로 사용 가능.
 
@@ -32,7 +32,7 @@
 - 참조/뷰를 그대로 사용  
     impl<T: ChannelLike + ?Sized> ChannelLike for &T 같은 참조에 대한 블랭킷 구현으로, &Channel도 바로 넣을 수 있어 불필요한 복제를 피함.
 
-### 간단 예시 (요약)
+#### 간단 예시 (요약)
 ```rust
 pub trait DataSeriesLike {
     fn xs(&self) -> &[f64];
@@ -58,7 +58,7 @@ pub fn area_under_curve<C: DataSeriesLike>(c: &C) -> f64 {
 }
 ```
 
-## 언제 어떤 방식?
+### 언제 어떤 방식?
 - 최고 성능·제네릭: fn foo<T: ChannelLike>(t: &T) (정적 디스패치, 모노모픽)
 - 런타임 다형성: fn foo(t: &dyn ChannelLike) (동적 디스패치, 이질적 컬렉션/플러그인)
 - 타입소유 바꾸지 못할 때: 새 타입(Newtype) 또는 래퍼로 트레이트를 “부여”해서 어댑터화
@@ -68,16 +68,16 @@ pub fn area_under_curve<C: DataSeriesLike>(c: &C) -> f64 {
     가장 적합한 접근입니다.
 
 ---
-# DataSeries 가 없어도 됌
+## DataSeries 가 없어도 됌
 특정 struct DataSeries가 없어도, 그 타입이 DataSeriesLike 트레이트만 구현하면 해당 함수를 그대로 쓸 수 있음.  
 Rust에선 “타입이 무엇이냐”보다 “그 타입이 무슨 동작(메서드) 을 제공하느냐(트레이트)로 다형성을 얻습니다.
 
-## 핵심 포인트만 정리하면:
+### 핵심 포인트만 정리하면:
 - 함수는 DataSeriesLike에만 의존 → 그 트레이트를 impl 한 어떤 타입이든 인자로 넣을 수 있음.
 - 실제 데이터 구조가 Channel, 튜플, 래퍼 등 무엇이든 상관없음.
 - 제네릭 + 트레이트는 정적 디스패치(제로코스트) 라서 성능 손해도 없음.
 
-## 예시들:
+### 예시들:
 ```rust
 pub trait DataSeriesLike {
     fn xs(&self) -> &[f64];
@@ -111,7 +111,7 @@ let ch = Channel { xs: xs.to_vec(), ys: ys.to_vec(), name: "A".into() };
 let p2 = peak_y(&ch); // 실제 채널 타입으로 사용
 ```
 
-## 보너스 팁:
+### 보너스 팁:
 - 외부 타입(고아 규칙 때문에 직접 impl 못 하는 경우)은 새 래퍼 타입(newtype) 으로 감싸서 impl DataSeriesLike for MyWrapper 하면 됩니다.
 - 여러 타입을 한 컨테이너에 담아 다루려면 Vec<Box<dyn DataSeriesLike>> 같은 동적 디스패치도 선택 가능(유연성↑, 약간의 비용).
 - 함수 시그니처를 fn f(s: &impl DataSeriesLike) 또는 fn f<T: DataSeriesLike + ?Sized>(s: &T)로 두면,  
@@ -119,8 +119,7 @@ let p2 = peak_y(&ch); // 실제 채널 타입으로 사용
 
 ---
 
-
-## 실제 코드
+### 실제 코드
 ```rust
 trait DataSeriesLikeX {
     fn xs(&self) -> &[f64];
@@ -218,4 +217,5 @@ fn channel_like_x_sum_works() {
     assert_eq!(sum_y, vec![1.5, 2.5, 3.5]);
 }
 ```
+
 
