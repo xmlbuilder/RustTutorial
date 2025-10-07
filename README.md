@@ -368,6 +368,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [25-svdcmp](./Chapter-17(실전%20예제와%20프로젝트)/25-svdcmp.md)
 - [26-solve_svdcmp](./Chapter-17(실전%20예제와%20프로젝트)/26-solve_svdcmp.md)
 - [27-웹_스크래핑](./Chapter-17(실전%20예제와%20프로젝트)/27-웹_스크래핑.md)
+- [28-소유권_Closure_lifetime이_동시에_얽힌문제](./Chapter-17(실전%20예제와%20프로젝트)/28-소유권_Closure_lifetime이_동시에_얽힌문제.md)
+
 
 🔼 [맨 위로](#-목차)
   
