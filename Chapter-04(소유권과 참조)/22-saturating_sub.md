@@ -11,19 +11,18 @@ let b: u8 = 20;
 let result = a.saturating_sub(b); // result = 0
 ```
 
-- 일반적으로 10 - 20은 -10인데, u8은 음수를 표현할 수 없어요  
-- saturating_sub는 이런 경우 패닉을 일으키지 않고, 결과를 0으로 고정시켜요
+- 일반적으로 10 - 20은 -10인데, u8은 음수를 표현할 수 없음  
+- saturating_sub는 이런 경우 패닉을 일으키지 않고, 결과를 0으로 고정
 
 ## 🧠 왜 필요한가?
-Rust는 기본적으로 정수 오버플로우/언더플로우에 민감해요:
+Rust는 기본적으로 정수 오버플로우/언더플로우에 민감:
 - 디버그 모드에서는 오버플로우 시 panic!
 - 릴리즈 모드에서는 wrap-around (예: 255 + 1 = 0 in u8)
 하지만 어떤 상황에서는 오버플로우를 허용하지 않고,  
-최댓값 또는 최솟값으로 고정하고 싶을 때가 있어요.  
-그럴 때 saturating_add, saturating_sub 같은 메서드가 유용하죠.
+최댓값 또는 최솟값으로 고정하고 싶을 때가 있음.  
+그럴 때 saturating_add, saturating_sub 같은 메서드가 유용.
 
 ## ✨ 관련 메서드들
-
 | 메서드 이름         | 설명                                                         |
 |--------------------|--------------------------------------------------------------|
 | `saturating_add(x)` | 덧셈 결과가 타입의 최대값을 초과하면, 최대값으로 고정         |
@@ -57,13 +56,13 @@ fn decrement_counter(counter: u32) -> u32 {
 
 ## 🔍 참고 자료
 Rust 공식 문서에서도 saturating_sub는
-**"overflow 없이 안전한 산술 연산을 보장하는 방법"**으로 소개.
+**"overflow 없이 안전한 산술 연산을 보장하는 방법"** 으로 소개.
 
 
 ## 💬 결론
 saturating_sub는 언더플로우를 막고,  
 최솟값으로 고정시켜주는 안전한 뺄셈 연산자입니다.  
-특히 u8, u32 같은 부호 없는 타입에서 유용하게 쓰여요.
+특히 u8, u32 같은 부호 없는 타입에서 유용하게 쓰임.
 
 ---
 
@@ -104,7 +103,7 @@ let degree_u = nu.saturating_sub(1);
 let degree_v = nv.saturating_sub(1);
 ```
 
-이건 일반적인 nu - 1, nv - 1 대신 **포화 뺄셈(saturating subtraction)**을 사용한 거예요.
+이건 일반적인 nu - 1, nv - 1 대신 **포화 뺄셈(saturating subtraction)**을 사용.
 
 ## 왜?
 - nu나 nv가 1일 경우 → degree = 0 (정상)
@@ -115,7 +114,7 @@ let degree_v = nv.saturating_sub(1);
 ## ✅ saturating_sub의 역할
 언더플로우가 발생할 경우, 결과를 0으로 고정시켜서 안전하게 처리
 
-즉, 이 코드는 제어점이 너무 적을 때도 안전하게 초기화되도록 설계된 거예요.
+즉, 이 코드는 제어점이 너무 적을 때도 안전하게 초기화되도록 설계.
 
 ## 💡 왜 assert로 이미 체크했는데도 또 saturating_sub을 썼을까?
 ```rust
@@ -123,7 +122,7 @@ assert!(!control_points.is_empty());
 assert!(nv > 0);
 ```
 
-→ 이 assert들이 이미 nu >= 1, nv >= 1을 보장하긴 해요.
+→ 이 assert들이 이미 nu >= 1, nv >= 1을 보장.
 하지만 saturating_sub를 쓰면:
 - 코드가 더 견고해지고
 - 나중에 assert가 제거되거나 변경되더라도 안전성 유지
