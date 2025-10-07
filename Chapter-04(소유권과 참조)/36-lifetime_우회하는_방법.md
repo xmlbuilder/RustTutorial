@@ -127,14 +127,13 @@ fn main() {
     solver.rk45_with_user(f_ud, t0, &y0, t1, &mut y1, &mut user, None, None, None);
 }
 ```
-
 - 여기서 user는 main() 함수의 스코프에 속해 있고
 - rk45_with_user()는 user를 참조하는 클로저를 내부에 저장하므로
 - OdeSolver<'a>와 user: &'a mut T가 같은 라이프타임 'a를 공유해야 안전해요
 
 ## ✅ 왜 호출자 스코프에서 써야 안전한가?
 Rust는 클로저가 참조를 캡처할 때, 그 참조가 클로저가 살아 있는 동안 유효해야 한다고 강하게 요구.  
-그래서:  
+그래서:
 - user가 너무 짧은 스코프에 있으면 → ❌ 라이프타임 오류
 - user가 rk45_with_user()를 호출하는 바깥 스코프에 충분히 오래 살아야 → ✅ 안전
 
@@ -413,6 +412,7 @@ let mut params = Params { k: 1.5 }; // ─────────────�
 } // solver 살아 있음 → 클로저가 params 참조하려 함 → ❌
 
 ```
+
 
 
 
