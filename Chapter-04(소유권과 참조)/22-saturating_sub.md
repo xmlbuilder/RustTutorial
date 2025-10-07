@@ -1,6 +1,7 @@
 # saturating_sub
-saturating_sub는 Rust에서 정수 타입의 안전한 뺄셈 연산을 제공하는 메서드.  
-핵심: 
+saturating_sub는 Rust에서 정수 타입의 안전한 뺄셈 연산을 제공하는 메서드.
+
+## 핵심: 
 언더플로우가 발생할 경우, 0으로 "포화(saturate)"시켜서 안전하게 처리한다.
 
 
@@ -55,7 +56,7 @@ fn decrement_counter(counter: u32) -> u32 {
 → 게임, UI, 타이머 등에서 자주 쓰이는 패턴
 
 ## 🔍 참고 자료
-Rust 공식 문서에서도 saturating_sub는
+Rust 공식 문서에서도 saturating_sub는  
 **"overflow 없이 안전한 산술 연산을 보장하는 방법"** 으로 소개.
 
 
@@ -103,7 +104,7 @@ let degree_u = nu.saturating_sub(1);
 let degree_v = nv.saturating_sub(1);
 ```
 
-이건 일반적인 nu - 1, nv - 1 대신 **포화 뺄셈(saturating subtraction)**을 사용.
+이건 일반적인 nu - 1, nv - 1 대신 **포화 뺄셈(saturating subtraction)** 을 사용.
 
 ## 왜?
 - nu나 nv가 1일 경우 → degree = 0 (정상)
@@ -124,14 +125,14 @@ assert!(nv > 0);
 
 → 이 assert들이 이미 nu >= 1, nv >= 1을 보장.
 하지만 saturating_sub를 쓰면:
-- 코드가 더 견고해지고
+- 코드가 더 견고해지고   
 - 나중에 assert가 제거되거나 변경되더라도 안전성 유지
 - 테스트나 디버깅 중 실수로 빈 벡터가 들어와도 panic 없이 처리 가능
 
 ## 💬 결론
-saturating_sub(1)은 언더플로우를 방지하고,
-degree_u, degree_v를 항상 0 이상으로 안전하게 설정하기 위한 선택입니다.
-assert로 이미 체크했더라도, 이건 방어적 프로그래밍.
+saturating_sub(1)은 언더플로우를 방지하고,  
+degree_u, degree_v를 항상 0 이상으로 안전하게 설정하기 위한 선택입니다.  
+assert로 이미 체크했더라도, 이건 방어적 프로그래밍.  
 
 
 
