@@ -200,7 +200,7 @@ fn rk45_with_user_param() {
 # 스코프 선언 위치 주의
 
 ## ✅ 정상 동작하는 코드
-``rust
+```rust
 #[test]
 fn rk45_with_user_param() {
     let mut params = Params { k: 1.5 };
@@ -407,6 +407,7 @@ let mut params = Params { k: 1.5 }; // ─────────────�
 } // solver 살아 있음 → 클로저가 params 참조하려 함 → ❌
 
 ```
+
 
 
 
