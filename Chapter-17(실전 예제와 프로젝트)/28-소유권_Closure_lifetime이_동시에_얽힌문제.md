@@ -340,7 +340,7 @@ self.set_function(move |t, y, dy| {
 이 클로저는 user: &mut T를 캡처했어요.  
 가변 참조를 캡처했다는 사실 자체만으로도 호출 시점에 그 클로저 객체는 “가변 상태를 만질 가능성”이 생김.  
 그래서 컴파일러는 이 클로저를 **FnMut** 으로만 안전하게 취급합니다.
-그런데 set_function이 Fn을 사용하면 → “FnMut는 Fn이 아닙니다” 에러가 납니다.
+그런데 set_function이 Fn을 사용하면 → “FnMut는 Fn이 아닙니다” 에러가 납니다.  
 
 저장 타입을 Box<dyn FnMut(..)>로 바꾸고,  
 이 콜백을 호출하는 쪽도 self.f.as_mut()로 꺼내서 호출해야 하므로 해당 메서드들이 &mut self를 요구하게 됩니다.
@@ -749,5 +749,6 @@ if let Some(ts_ref) = ts {
 - Option<&mut T>에서는 as_mut() 또는 직접 꺼내는 방식이 더 간단하고 직관적입니다
 
 ---
+
 
 
