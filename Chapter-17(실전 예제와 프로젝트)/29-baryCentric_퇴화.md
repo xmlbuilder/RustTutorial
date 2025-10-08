@@ -1,4 +1,4 @@
-# bicentric.md — Barycentric ambiguity in (degenerate) triangles
+# Barycentric ambiguity in (degenerate) triangles
 
 ## 왜 답이 둘인가? (퇴화 삼각형: 세 점이 일직선)
 세 점이 **일직선**(퇴화 삼각형)일 때, 임의의 점 $\(P\)$ 에서 삼각형에 내린 **최근접점 $\(Q\)$** 은
