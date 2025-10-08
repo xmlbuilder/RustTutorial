@@ -131,3 +131,174 @@ return chosen Q, barycentric
 - 외부 점 → 세 변 중 최단 변 선택
 - **퇴화(일직선)** → 동률 시 정책대로 바리센트릭이 **결정론적**
 - 매우 짧은 변 / 동일점 포함(0 길이) / 큰 좌표값 → 수치 안정성 확인
+
+---
+
+## 실전 코드
+```rust
+pub fn closest_pt_to_triangle(
+    input: &Point3D,
+    tri: &[Point3D; 3],
+) -> (Point3D, f64, f64, f64) {
+    let a = tri[0];
+    let b = tri[1];
+    let c = tri[2];
+
+    // 1) 평면 해 시도
+    if let Some((mut bary_a, mut bary_b, mut bary_c)) =
+        closest_pt_to_triangle_helper(&a, &b, &c, input)
+    {
+        // 아주 작은 음수/수치진동은 0으로
+        if bary_a <= ON_ZERO_TOLERANCE { bary_a = 0.0; }
+        if bary_b <= ON_ZERO_TOLERANCE { bary_b = 0.0; }
+        if bary_c <= ON_ZERO_TOLERANCE { bary_c = 0.0; }
+
+        // 한 변/꼭짓점으로 스냅되는 케이스: 에지 후보들 비교
+        if bary_a == 0.0 || bary_b == 0.0 || bary_c == 0.0 {
+            let mut a0 = -1.0; let mut b0 = -1.0; let mut c0 = -1.0;
+            let mut a1 = -1.0; let mut b1 = -1.0; let mut c1 = -1.0;
+            let mut has_second = false;
+
+            if bary_a == 0.0 {
+                if bary_b == 0.0 {
+                    // A=0,B=0 → AC, BC 두 에지 후보
+                    let (aa, cc) = closest_pt_to_edge_bary(input, &a, &c);
+                    a0 = aa; c0 = cc; b0 = 1.0 - a0 - c0;
+
+                    let (bb, cc2) = closest_pt_to_edge_bary(input, &b, &c);
+                    b1 = bb; c1 = cc2; a1 = 1.0 - b1 - c1;
+                    has_second = true;
+                } else if bary_c == 0.0 {
+                    // A=0,C=0 → AB, CB 두 후보
+                    let (aa, bb) = closest_pt_to_edge_bary(input, &a, &b);
+                    a0 = aa; b0 = bb; c0 = 1.0 - a0 - b0;
+
+                    let (cc, bb2) = closest_pt_to_edge_bary(input, &c, &b);
+                    c1 = cc; b1 = bb2; a1 = 1.0 - c1 - b1;
+                    has_second = true;
+                } else {
+                    // A=0만 0 → BC만 후보
+                    let (bb, cc) = closest_pt_to_edge_bary(input, &b, &c);
+                    b0 = bb; c0 = cc; a0 = 1.0 - b0 - c0;
+                }
+            } else if bary_b == 0.0 {
+                if bary_c == 0.0 {
+                    // B=0,C=0 → BA, CA 두 후보
+                    let (bb, aa) = closest_pt_to_edge_bary(input, &b, &a);
+                    b0 = bb; a0 = aa; c0 = 1.0 - b0 - a0;
+
+                    let (cc, aa2) = closest_pt_to_edge_bary(input, &c, &a);
+                    c1 = cc; a1 = aa2; b1 = 1.0 - c1 - a1;
+                    has_second = true;
+                } else {
+                    // B=0만 0 → CA만 후보
+                    let (cc, aa) = closest_pt_to_edge_bary(input, &c, &a);
+                    c0 = cc; a0 = aa; b0 = 1.0 - c0 - a0;
+                }
+            } else if bary_c == 0.0 {
+                // C=0만 0 → AB만 후보
+                let (aa, bb) = closest_pt_to_edge_bary(input, &a, &b);
+                a0 = aa; b0 = bb; c0 = 1.0 - a0 - b0;
+            }
+
+            // 우선 첫 후보 채택
+            let mut ba = a0; let mut bb_ = b0; let mut bc = c0;
+
+            if has_second {
+                let p0 = Point3D {
+                    x: ba*a.x + bb_*b.x + bc*c.x,
+                    y: ba*a.y + bb_*b.y + bc*c.y,
+                    z: ba*a.z + bb_*b.z + bc*c.z,
+                };
+                let p1 = Point3D {
+                    x: a1*a.x + b1*b.x + c1*c.x,
+                    y: a1*a.y + b1*b.y + c1*c.y,
+                    z: a1*a.z + b1*b.z + c1*c.z,
+                };
+                if Point3D::distance_squared_ref(&p0, input) > Point3D::distance_squared_ref(&p1, input) {
+                    ba = a1; bb_ = b1; bc = c1;
+                }
+            }
+
+            // 최종 미세 음수는 0으로
+            if ba <= ON_ZERO_TOLERANCE { ba = 0.0; }
+            if bb_ <= ON_ZERO_TOLERANCE { bb_ = 0.0; }
+            if bc <= ON_ZERO_TOLERANCE { bc = 0.0; }
+
+            let out = Point3D {
+                x: ba*a.x + bb_*b.x + bc*c.x,
+                y: ba*a.y + bb_*b.y + bc*c.y,
+                z: ba*a.z + bb_*b.z + bc*c.z,
+            };
+            return (out, ba, bb_, bc);
+        }
+
+        // 평면 내부 일반 케이스
+        let out = Point3D {
+            x: bary_a*a.x + bary_b*b.x + bary_c*c.x,
+            y: bary_a*a.y + bary_b*b.y + bary_c*c.y,
+            z: bary_a*a.z + bary_b*b.z + bary_c*c.z,
+        };
+        return (out, bary_a, bary_b, bary_c);
+    }
+
+    // 2) 헬퍼 실패(퇴화) → 에지 별로 비교
+    let (mut ba, mut bb) = closest_pt_to_edge_bary(input, &a, &b);
+    let mut bc = 0.0;
+    let mut best = Point3D {
+        x: ba*a.x + bb*b.x,
+        y: ba*a.y + bb*b.y,
+        z: ba*a.z + bb*b.z,
+    };
+    let mut best_d2 = Point3D::distance_squared_ref(&best, input);
+
+    // Edge BC
+    let (b2, c2) = closest_pt_to_edge_bary(input, &b, &c);
+    let cand = Point3D {
+        x: b2*b.x + c2*c.x,
+        y: b2*b.y + c2*c.y,
+        z: b2*b.z + c2*c.z,
+    };
+    let d2 = Point3D::distance_squared_ref(&cand, input);
+    if d2 < best_d2 {
+        best_d2 = d2;
+        ba = 0.0; bb = b2; bc = c2;
+        best = cand;
+    }
+
+    // Edge CA
+    let (c3, a3) = closest_pt_to_edge_bary(input, &c, &a);
+    let cand2 = Point3D {
+        x: c3*c.x + a3*a.x,
+        y: c3*c.y + a3*a.y,
+        z: c3*c.z + a3*a.z,
+    };
+    let d3  = Point3D::distance_squared_ref(&cand2, input);
+    if d3 < best_d2 {
+        ba = a3; bb = 0.0; bc = c3;
+        best = cand2;
+    }
+
+    (best, ba, bb, bc)
+}
+```
+
+## 테스트 코드
+```rust
+fn triangle_collinear_edge_case() {
+    // 세 점이 일직선: A(0), B(1), C(2) on X-axis
+    let tri = [pt(0.0,0.0,0.0), pt(1.0,0.0,0.0), pt(2.0,0.0,0.0)];
+    let p = pt(1.2, 2.0, 0.0); // 위쪽에서 투사 → 선분 AC의 x=1.2가 최단
+
+    let (q, a, b, c) = closest_pt_to_triangle(&p, &tri);
+    // 기대 사영점 (1.2,0,0)
+    assert!(dist2(&q, &pt(1.2,0.0,0.0)) < 1e-18);
+
+    // bary(둘 중 하나 허용)
+    let ok_bc = (a - 0.0).abs() < 1e-9 && (b - 0.8).abs() < 1e-9 && (c - 0.2).abs() < 1e-9;
+    let ok_ac = (a - 0.4).abs() < 1e-9 && (b - 0.0).abs() < 1e-9 && (c - 0.6).abs() < 1e-9;
+    assert!(ok_bc || ok_ac, "unexpected bary: a={a}, b={b}, c={c}");
+    assert_relative_eq!(a + b + c, 1.0, epsilon = 1e-12);
+}
+```
+
