@@ -40,29 +40,29 @@ Coons 보간은 “두 집합의 선형 보간 합”에서 “코너의 bilinea
 - **수평 보간(상·하 경계):**
 
 $$
-  \mathbf{S}(s,t)=(1-t)\,\mathbf{B}(s)+t\,\mathbf{T}(s)
+  \mathbf{S}(s,t)=(1-t) \mathbf{B}(s)+t \mathbf{T}(s)
 $$
 
 - **수직 보간(좌·우 경계):**
 
 $$
-  \mathbf{T\!r}(s,t)=(1-s)\,\mathbf{L}(t)+s\,\mathbf{R}(t)
+  \mathbf{T r}(s,t)=(1-s) \mathbf{L}(t)+s \mathbf{R}(t)
 $$
 
 - **중복 보정(코너의 bilinear):**
 $$
-  \mathbf{B\!l}(s,t)=
-  (1-s)(1-t)\,\mathbf{C}_{00}
-  + s(1-t)\,\mathbf{C}_{10}
-  + (1-s)t\,\mathbf{C}_{01}
-  + st\,\mathbf{C}_{11}
+  \mathbf{B l}(s,t)=
+  (1-s)(1-t) \mathbf{C}_{00}
+  + s(1-t) \mathbf{C}_{10}
+  + (1-s)t \mathbf{C}_{01}
+  + st \mathbf{C}_{11}
 $$
 
 ### 2.2 Coons 패치 정의
 
 $$
 \boxed{
-\mathbf{C}(s,t)=\mathbf{S}(s,t)+\mathbf{T\!r}(s,t)-\mathbf{B\!l}(s,t)
+\mathbf{C}(s,t)=\mathbf{S}(s,t)+\mathbf{T r}(s,t)-\mathbf{B l}(s,t)
 }
 $$
 
@@ -70,7 +70,7 @@ $$
 $\mathbf{C}(s,0)=\mathbf{B}(s)$, $s=1$ 이면 $\mathbf{C}(1,t)=\mathbf{R}(t)$ 등.
 
 > **직관**  
-> $\mathbf{S}$ 와 $\mathbf{T\!r}$ 을 단순 합하면 코너가 **두 번** 더해집니다. $\mathbf{B\!l}$ 은 정확히 그 중복을 제거하는 **bilinear 보정**입니다.
+> $\mathbf{S}$ 와 $\mathbf{T r}$ 을 단순 합하면 코너가 **두 번** 더해집니다. $\mathbf{B l}$ 은 정확히 그 중복을 제거하는 **bilinear 보정**입니다.
 
 ---
 
