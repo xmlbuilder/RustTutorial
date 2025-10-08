@@ -21,7 +21,6 @@ fn main() -> Result<()> {
 }
 ```
 
-
 - main() 함수에서 Result<()>를 반환하면 에러 발생 시 자동으로 메시지 출력
 - ? 연산자를 통해 에러를 간결하게 전파
 - anyhow::Error는 다양한 에러 타입을 자동으로 래핑함
@@ -77,7 +76,6 @@ bail!("Invalid input");
 | 프로토타이핑 / 테스트 코드 | ✅        | 에러 타입 설계 없이 빠르게 기능 구현 가능           |
 | 라이브러리 개발            | ❌        | 명확한 에러 타입이 필요하므로 `anyhow`는 부적합     |
 
-
 ---
 
 ## 🧠 백트레이스 캡처란?
@@ -89,17 +87,19 @@ bail!("Invalid input");
 - anyhow::Error는 내부적으로 백트레이스를 캡처할 수 있음
 - Rust 1.65 이상에서는 기본적으로 백트레이스를 자동 캡처함
 - 단, 출력하려면 환경 변수 설정이 필요함:
+```  
 RUST_BACKTRACE=1           # 패닉과 에러 모두 백트레이스 출력
 RUST_LIB_BACKTRACE=1       # 에러만 백트레이스 출력
-
+```
 
 - 에러 메시지 출력 시 다음과 같이 표시됨:
+```
 Error: Failed to read config file
 Caused by: No such file or directory (os error 2)
 Backtrace:
    0: my_app::read_config
    1: my_app::main
-
+```
 
 
 ## ✅ 왜 중요한가?
