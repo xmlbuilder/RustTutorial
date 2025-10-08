@@ -1,7 +1,7 @@
 # Coons Patch Builder
 
-- 사각 경계(네 개의 곡선 또는 폴리라인)로 둘러싸인 영역을 내부로 매끄럽게 보간하는 **Coons 보간(Côons Patch / Transfinite Interpolation)** 의 수학적 요약과,  
-  이를 유한 격자(mesh)로 구현하는 절차를 정리한 문서입니다.
+- 사각 경계(네 개의 곡선 또는 폴리라인)로 둘러싸인 영역을 내부로 매끄럽게 보간하는 **Coons 보간(Côons Patch / Transfinite Interpolation)** 의
+  수학적 요약과, 이를 유한 격자(mesh)로 구현하는 절차를 정리한 문서입니다.
 
 ---
 
