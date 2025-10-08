@@ -9,7 +9,7 @@ use anyhow::Result;
 
 - anyhow::Result<T>는 사실 Result<T, anyhow::Error>의 타입 별칭입니다.
 - 즉, anyhow::Result<T>는 성공 시 T, 실패 시 anyhow::Error를 반환하는 구조.
-- anyhow::Error는 다양한 에러 타입을 자동으로 래핑해주기 때문에, 여러 종류의 에러를 하나의 타입으로 처리할 수 있어요.
+- anyhow::Error는 다양한 에러 타입을 자동으로 래핑해주기 때문에, 여러 종류의 에러를 하나의 타입으로 처리할 수 있음.
 
 ## ✅ 주요 특징
 | 항목                  | 설명                                                                 |
