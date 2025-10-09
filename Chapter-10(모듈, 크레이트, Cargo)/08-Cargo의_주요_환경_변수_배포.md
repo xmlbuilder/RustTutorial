@@ -220,10 +220,10 @@ cargo bundle --release
 | 아이콘, 리소스 포함된 GUI 앱 패키징     | `cargo-bundle`                                |
 
 ## 🎯 배포 전략 요약
-### 1. 개발 완료 후 `cargo dist init`으로 릴리스 설정
-### 2. `cargo bundle`로 OS별 GUI 앱 패키지 생성
-### 3. `cargo dist build` → `cargo dist publish`로 릴리스 자동화
-### 4. GitHub Releases에 `.app`, `.msi`, `.deb` 등 포함
+- 개발 완료 후 `cargo dist init`으로 릴리스 설정
+- `cargo bundle`로 OS별 GUI 앱 패키지 생성
+- `cargo dist build` → `cargo dist publish`로 릴리스 자동화
+- GitHub Releases에 `.app`, `.msi`, `.deb` 등 포함
 
 이렇게 하면 Rust GUI 앱을 자동화된 릴리스 파이프라인과 함께 OS별 설치 파일로 배포할 수 있음.
 
@@ -479,6 +479,7 @@ fn read_file(path_buf: PathBuf) -> String {
 }
 ```
 ---
+
 
 
 
