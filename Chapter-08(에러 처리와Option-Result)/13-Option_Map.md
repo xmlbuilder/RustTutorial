@@ -4,15 +4,15 @@
 - Option<T>는 Some(value) 또는 None을 가질 수 있는 열거형(enum)
 - map()은 Some(value)일 때만 클로저를 실행해서 값을 변환하고, None이면 그대로 None을 반환
 ### 예시
+```rust
 let maybe_num = Some(10);
 let squared = maybe_num.map(|x| x * x); // Some(100)
-
+```
 
 - maybe_num이 Some(10)이므로 x * x가 실행됨
 - 결과는 Some(100)
 
-✅ 컬렉션이 아닌 타입에서도 map()이 되는 이유
-
+## ✅ 컬렉션이 아닌 타입에서도 map()이 되는 이유
 | 타입         | map() 지원 여부 | 동작 조건 및 설명                              |
 |--------------|------------------|-----------------------------------------------|
 | Option<T>    | ✅ 지원           | `Some(value)`일 때만 클로저 실행, `None`은 그대로 |
@@ -104,4 +104,5 @@ let tangent = segment_tangent(3);
 - 최종 결과: Option<Vector3D> 타입의 단위 벡터
 
 ---
+
 
