@@ -25,8 +25,8 @@ const TARGET: &str = env!("CARGO_TARGET_DIR"); // 설정된 경우에만 사용 
 - 존재하지 않는 환경 변수를 호출하면 컴파일 오류 발생
 
 ## 📁 활용 예시
-- include!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/generated.rs"));
-- std::fs::read_to_string(env!("OUT_DIR").to_owned() + "/config.json")
+- `include!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/generated.rs"));`
+- `std::fs::read_to_string(env!("OUT_DIR").to_owned() + "/config.json")`
 
 이 외에도 CARGO_PKG_NAME, CARGO_PKG_VERSION, CARGO_PKG_AUTHORS 같은 패키지 메타 정보도 env!로 접근 가능해요.
 
@@ -479,5 +479,6 @@ fn read_file(path_buf: PathBuf) -> String {
 }
 ```
 ---
+
 
 
