@@ -8,7 +8,7 @@ const CUBE_TABLES: [[i32;16];256] = include!(concat!(env!("CARGO_MANIFEST_DIR"),
 ```
 
 ### 1. env!("CARGO_MANIFEST_DIR")
-- 이 매크로는 현재 프로젝트의 루트 디렉토리 경로를 문자열로 반환해요.
+- 이 매크로는 현재 프로젝트의 루트 디렉토리 경로를 문자열로 반환.
 - 예: /home/junghwan/my_project
 ### 2. concat!(...)
 - 문자열을 컴파일 타임에 연결해줍니다.
@@ -130,6 +130,7 @@ include!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/mc_tri_table.incl.rs"));
 | 같은 디렉토리의 파일 포함               | `include!("filename.rs")`                          |
 | 상위 또는 다른 디렉토리의 파일 포함     | `include!("../path/to/file.rs")`                   |
 | 프로젝트 루트 기준으로 절대 경로 구성   | `include!(concat!(env!("CARGO_MANIFEST_DIR"), "..."))` |
+
 
 
 
