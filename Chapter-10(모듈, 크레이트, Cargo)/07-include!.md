@@ -1,5 +1,5 @@
 # include!
-Rust의 include! 매크로와 함께 concat!, env!를 사용하는 방식으로 외부 파일의 내용을 컴파일 타임에 코드로 삽입하는 구조. 
+Rust의 include! 매크로와 함께 concat!, env!를 사용하는 방식으로 외부 파일의 내용을 컴파일 타임에 코드로 삽입하는 구조.  
 아래에 이 코드가 어떻게 동작하는지 단계별로 설명.
 
 ## 🔍 코드 분석
@@ -130,5 +130,6 @@ include!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/mc_tri_table.incl.rs"));
 | 같은 디렉토리의 파일 포함               | `include!("filename.rs")`                          |
 | 상위 또는 다른 디렉토리의 파일 포함     | `include!("../path/to/file.rs")`                   |
 | 프로젝트 루트 기준으로 절대 경로 구성   | `include!(concat!(env!("CARGO_MANIFEST_DIR"), "..."))` |
+
 
 
