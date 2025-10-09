@@ -237,7 +237,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [05-Workspace](Chapter-10(모듈%2C%20크레이트%2C%20Cargo)/05-Workspace.md)
 - [06-외부라이브러리](Chapter-10(모듈%2C%20크레이트%2C%20Cargo)/06-외부라이브러리.md)
 - [07-include!](Chapter-10(모듈%2C%20크레이트%2C%20Cargo)/07-include!.md)
-
+- [08-Cargo의_주요_환경_변수_배포](Chapter-10(모듈%2C%20크레이트%2C%20Cargo)/08-Cargo의_주요_환경_변수_배포.md)
 
 🔼 [맨 위로](#-목차)
 
