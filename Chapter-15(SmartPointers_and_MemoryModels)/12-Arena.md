@@ -213,7 +213,7 @@ let data = &arena[id];           // ✅ ID로 접근
 ```
 
 ## ✅ 해결 방법: 별도의 HashMap을 병행 사용
-- 데이터가 고유 ID를 갖고 있고, 그 ID를 통해 빠르게 찾고 싶다면 **HashMap<ID, T> 또는 HashMap<CustomKey, ID>**를 병행해서 사용해야 합니다.
+- 데이터가 고유 ID를 갖고 있고, 그 ID를 통해 빠르게 찾고 싶다면 **HashMap<ID, T> 또는 HashMap<CustomKey, ID>** 를 병행해서 사용해야 합니다.
 ### 예시: 이름으로 ID를 찾기
 ```rust
 use id_arena::{Arena, Id};
