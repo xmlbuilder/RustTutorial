@@ -76,6 +76,9 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [46-PartialEq_Eq_PartialOrd_Ord](./Chapter-02(기본%20문법과%20타입%20시스템)/46-PartialEq_Eq_PartialOrd_Ord.md)
 - [47-접근제어자](./Chapter-02(기본%20문법과%20타입%20시스템)/47-접근제어자.md)
 - [48-String형변환](./Chapter-02(기본%20문법과%20타입%20시스템)/48-String형변환.md)
+- [49-mod(Namespace)](./Chapter-02(기본%20문법과%20타입%20시스템)/49-mod.md)
+
+
 
 
 
