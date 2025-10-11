@@ -346,8 +346,8 @@ fn main() {
 
 | 항목 구분             | 설명                                        | Kotlin 예시 코드                                              | Rust 대응 코드 예시                                                                 |
 |-----------------------|---------------------------------------------------|---------------------------------------------------------------|------------------------------------------------------------------------------|
-| 동일한 순간 변환      | UTC 기준 동일한 순간을 다른 시간대로 변환  | `zdt.withZoneSameInstant(ZoneId.of("Europe/London"))` | `let converted = original.with_timezone(&chrono_tz::Europe::London);`   |
-| 동일한 로컬 시각 유지 | 로컬 시각 유지하며 시간대만 변경 (실제 시각은 달라짐) | `zdt.withZoneSameLocal(ZoneId.of("America/New_York"))` | `let local = NaiveDate::from_ymd(2024, 1, 1).and_hms(9, 0, 0); let changed = chrono_tz::America::New_York.from_local_datetime(&local).unwrap();` |
+| 동일한 순간 변환      | UTC 기준 동일한 순간을 다른 시간대로 변환  | `zdt.withZoneSameInstant `<br>` (ZoneId.of("Europe/London"))` | `let converted = original.with_timezone `<br>` (&chrono_tz::Europe::London);`   |
+| 동일한 로컬 시각 유지 | 로컬 시각 유지하며 시간대만 변경 (실제 시각은 달라짐) | `zdt.withZoneSameLocal `<br>` (ZoneId.of("America/New_York"))` | `let local = NaiveDate::from_ymd(2024, 1, 1) `<br>` .and_hms(9, 0, 0); `<br>`let changed = chrono_tz::America::New_York.from_local_datetime(&local).unwrap();` |
 
 #### 🧪 Rust 샘플 코드
 ```rust
