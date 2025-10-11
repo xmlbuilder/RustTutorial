@@ -1,4 +1,4 @@
-# SpatialTree Onboarding Guide
+# SpatialTree
 
 ## **Goal:** 
 - understand the math, design, and usage of our `SpatialTree` (binary AABB tree) and adopt behavior‑centric Rust patterns safely.
