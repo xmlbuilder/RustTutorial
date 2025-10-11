@@ -209,7 +209,7 @@ dt1 == dt2: false
 | 항목 구분 | 설명                           | Kotlin 예시 코드                                      | Rust 대응 코드 예시                                                   |
 |-----------|--------------------------------|------------------------------------------|------------------------------------------------------------------------|
 | 일자 변경 | `ChronoField.DAY_OF_MONTH` 수정 | `dt.with(ChronoField.DAY_OF_MONTH, 15)` | `let updated = dt.with_day(15).unwrap();`                              |
-| 연월 변경 | 연도 및 월 직접 지정하여 변경   | `dt.withYear(2025)` `dt.withMonth(12)`  | `let updated = NaiveDate::from_ymd(2025, 12, dt.day()).and_hms(dt.hour(), dt.minute(), dt.second());` |
+| 연월 변경 | 연도 및 월 직접 지정하여 변경   | `dt.withYear(2025)` `dt.withMonth(12)`  | `let updated = NaiveDate::from_ymd(2025, 12, dt.day())`<br>`.and_hms(dt.hour(), dt.minute(), dt.second());` |
 
 #### 🧪 Rust 샘플 코드
 ```rust
@@ -245,7 +245,7 @@ fn main() {
 | 항목 구분     | 설명                           | Kotlin 예시 코드     | Rust 대응 코드 예시                                                                 |
 |---------------|--------------------------------|------------------------------|--------------------------------------------------------------------------------------|
 | 일수 더하기/빼기 | 지정된 시간 단위로 더하거나 빼기 | `dt.plus(3, ChronoUnit.DAYS)`     | `let added = dt + Duration::days(3);`<br>`let subtracted = dt - Duration::days(3);` |
-| 연도/일수 더하기 | 연도 또는 일수를 더하기         | `dt.plusYears(1)` `dt.plusDays(10)` | `let added_year = NaiveDate::from_ymd(dt.year() + 1, dt.month(), dt.day()).and_hms(dt.hour(), dt.minute(), dt.second());`<br>`let added_days = dt + Duration::days(10);` |
+| 연도/일수 더하기 | 연도 또는 일수를 더하기         | `dt.plusYears(1)` `dt.plusDays(10)` | `let added_year = NaiveDate::from_ymd(dt.year() + 1, dt.month(), dt.day())`<br>`.and_hms(dt.hour(), dt.minute(), dt.second());`<br>`let added_days = dt + Duration::days(10);` |
 
 #### 🧪 Rust 샘플 코드
 ```rust
@@ -314,8 +314,8 @@ fn main() {
 
 | 항목 구분 | 설명                         | Kotlin 예시 코드                                     | Rust 대응 코드 예시                                                                               |
 |-----------|---------------------------------------|-----------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
-| 현재 시각 | 현재 또는 지정된 시간대 기준 현재 시각 | `ZonedDateTime.now(ZoneId.of("Asia/Seoul"))` | `let now = Utc::now().with_timezone(&FixedOffset::east(9 * 3600));`<br>`let now = chrono_tz::Asia::Seoul::now();` |
-| 지정 생성 | 날짜, 시간, 시간대를 지정하여 생성     | `ZonedDateTime.of(LocalDate.of(2024,1,1), `<br>`LocalTime.of(9,0), `<br>`ZoneId.of("Asia/Seoul"))` | `let naive = NaiveDate::from_ymd(2024, 1, 1).and_hms(9, 0, 0);`<br>`let zoned = chrono_tz::Asia::Seoul.from_local_datetime(&naive).unwrap();` |
+| 현재 시각 | 현재 또는 지정된 시간대 기준 현재 시각 | `ZonedDateTime.now(ZoneId.of("Asia/Seoul"))` | `let now = Utc::now().with_timezone`<br>`(&FixedOffset::east(9 * 3600));`<br>`let now = chrono_tz::Asia::Seoul::now();` |
+| 지정 생성 | 날짜, 시간, 시간대를 지정하여 생성     | `ZonedDateTime.of(LocalDate.of(2024,1,1), `<br>`LocalTime.of(9,0), `<br>`ZoneId.of("Asia/Seoul"))` | `let naive = NaiveDate::from_ymd(2024, 1, 1).and_hms(9, 0, 0);`<br>`let zoned = chrono_tz::Asia::Seoul.from_local_datetime`<br>`(&naive).unwrap();` |
 
 #### 🧪 Rust 샘플 코드
 ```rust
