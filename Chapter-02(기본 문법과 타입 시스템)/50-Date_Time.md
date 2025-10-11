@@ -312,9 +312,9 @@ fn main() {
 
 ### 생성
 
-| 항목 구분 | 설명                                  | Kotlin 예시 코드                                                                 | Rust 대응 코드 예시                                                                 |
+| 항목 구분 | 설명                         | Kotlin 예시 코드                                     | Rust 대응 코드 예시                                                                               |
 |-----------|---------------------------------------|-----------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
-| 현재 시각 | 현재 또는 지정된 시간대 기준 현재 시각 | `ZonedDateTime.now(ZoneId.of("Asia/Seoul"))`    | `let now = Utc::now().with_timezone(&FixedOffset::east(9 * 3600));`<br>`let now = chrono_tz::Asia::Seoul::now();` |
+| 현재 시각 | 현재 또는 지정된 시간대 기준 현재 시각 | `ZonedDateTime.now(ZoneId.of("Asia/Seoul"))` | `let now = Utc::now().with_timezone(&FixedOffset::east(9 * 3600));`<br>`let now = chrono_tz::Asia::Seoul::now();` |
 | 지정 생성 | 날짜, 시간, 시간대를 지정하여 생성     | `ZonedDateTime.of(LocalDate.of(2024,1,1), LocalTime.of(9,0), ZoneId.of("Asia/Seoul"))` | `let naive = NaiveDate::from_ymd(2024, 1, 1).and_hms(9, 0, 0);`<br>`let zoned = chrono_tz::Asia::Seoul.from_local_datetime(&naive).unwrap();` |
 
 #### 🧪 Rust 샘플 코드
