@@ -33,16 +33,16 @@ fn main() {
 ## 🕒 Rust에서 시간 처리 – chrono 크레이트 기반 요약
 | 기능 설명                     | 예시 코드                                                                 |
 |------------------------------|---------------------------------------------------------------------------|
-| 날짜/시간 생성               | `let dt = NaiveDate::from_ymd(2024, 1, 1).and_hms(9, 0, 0);`              |
-| 현재 시각 조회               | `let now = Local::now();`                                                |
-| 날짜 더하기                  | `let future = dt + Duration::days(10);`                                  |
-| 날짜/시간 구성 요소 조회     | `dt.year(), dt.month(), dt.day(), dt.hour(), dt.minute(), dt.second()`   |
-| 반복 날짜 출력               | `for i in 0..5 { println!("{}", dt + Duration::weeks(i * 2)); }`         |
-| 디데이 계산                  | `let days = (target - today).num_days();`                                |
-| 월의 시작/마지막 요일        | `dt.weekday()`, `dt.with_day(1).unwrap()`, `dt.with_day(dt.days_in_month())` |
-| 시간대 변환                  | `let utc = Utc::now(); let seoul = utc.with_timezone(&FixedOffset::east(9*3600));` |
-| 포맷팅                       | `dt.format("%Y-%m-%d %H:%M:%S").to_string()`                              |
-| Instant 및 Epoch 처리        | `let instant = Utc::now(); let epoch = instant.timestamp();`            
+| 날짜/시간 생성 | `let dt = NaiveDate::from_ymd(2024, 1, 1).and_hms(9, 0, 0);`              |
+| 현재 시각 조회 | `let now = Local::now();`                                                |
+| 날짜 더하기 | `let future = dt + Duration::days(10);`                                  |
+| 날짜/시간 구성 요소 조회 | `dt.year(), dt.month(), dt.day(), dt.hour(), dt.minute(), dt.second()`   |
+| 반복 날짜 출력 | `for i in 0..5 { println!("{}", dt + Duration::weeks(i * 2)); }`         |
+| 디데이 계산 | `let days = (target - today).num_days();`                                |
+| 월의 시작/마지막 요일 | `dt.weekday()`, `dt.with_day(1).unwrap()`, `dt.with_day(dt.days_in_month())` |
+| 시간대 변환 | `let utc = Utc::now(); let seoul = utc.with_timezone(&FixedOffset::east(9*3600));` |
+| 포맷팅  | `dt.format("%Y-%m-%d %H:%M:%S").to_string()`                              |
+| Instant 및 Epoch 처리 | `let instant = Utc::now(); let epoch = instant.timestamp();`            
 
 
 ### 🧪 간단 샘플 코드: 날짜 생성 및 더하기
@@ -71,8 +71,8 @@ fn main() {
 ### 생성
 | 메서드 이름 | 설명                           | Kotlin 예시 코드                                | Rust 대응 코드 예시                                         |
 |-------------|--------------------------------|--------------------------------------------------|-------------------------------------------------------------|
-| now()       | 현재 시스템의 날짜와 시간 생성 | `val now = LocalDateTime.now()`                  | `let now = chrono::Local::now().naive_local();`             |
-| of(...)     | 지정한 날짜와 시간으로 생성     | `val dt = LocalDateTime.of(2024, 1, 1, 9, 0)`    | `let dt = NaiveDate::from_ymd(2024, 1, 1).and_hms(9, 0, 0);` |
+| now()  | 현재 시스템의 날짜와 시간 생성 | `val now = LocalDateTime.now()` | `let now = chrono::Local::now().naive_local();`             |
+| of(...) | 지정한 날짜와 시간으로 생성     | `val dt = LocalDateTime.of(2024, 1, 1, 9, 0)` | `let dt = NaiveDate::from_ymd(2024, 1, 1).and_hms(9, 0, 0);` |
 
 #### 🧪 Rust 샘플 코드
 ```rust
@@ -95,11 +95,11 @@ fn main() {
 ```
 
 ### 변환
-| 항목 구분   | 반환 타입   | Kotlin 예시 코드                                 | Rust 대응 코드 예시                                                                 |
-|-------------|--------------|--------------------------------------------------|--------------------------------------------------------------------------------------|
-| LocalDate   | 날짜 추출    | `dt.toLocalDate()`                               | `let date = dt.date();`                                                             |
-| LocalTime   | 시간 추출    | `dt.toLocalTime()`                               | `let time = dt.time();`                                                             |
-| EpochSecond | UTC 기준 초  | `dt.toEpochSecond(ZoneOffset.of("+09:00"))`      | `let epoch = dt.timestamp() - offset.local_minus_utc() as i64;`                     |
+| 항목 구분   | 반환 타입   | Kotlin 예시 코드     | Rust 대응 코드 예시                                                                 |
+|-------------|--------------|-------------------------------------|-------------------------------------------------|
+| LocalDate   | 날짜 추출    | `dt.toLocalDate()` | `let date = dt.date();`                                                             |
+| LocalTime   | 시간 추출    | `dt.toLocalTime()`     | `let time = dt.time();`                                                             |
+| EpochSecond | UTC 기준 초  | `dt.toEpochSecond(ZoneOffset.of("+09:00"))` | `let epoch = dt.timestamp() - offset.local_minus_utc() as i64;`                     |
 
 #### 🧪 Rust 샘플 코드
 ```rust
@@ -132,10 +132,10 @@ Epoch Second (+09:00 기준): 1704067200
 ```
 
 ### 조회
-| 항목 구분     | 설명               | Kotlin 예시 코드                          | Rust 대응 코드 예시                        |
+| 항목 구분     | 설명    | Kotlin 예시 코드    | Rust 대응 코드 예시                        |
 |---------------|--------------------|--------------------------------------------|--------------------------------------------|
-| 날짜 조회     | 연도, 월, 일 조회  | `dt.year`, `dt.month`, `dt.dayOfMonth`     | `dt.year(), dt.month(), dt.day()`          |
-| 시간 조회     | 시, 분, 초 조회    | `dt.hour`, `dt.minute`, `dt.second`        | `dt.hour(), dt.minute(), dt.second()`      |
+| 날짜 조회     | 연도, 월, 일 조회 | `dt.year`, `dt.month`, `dt.dayOfMonth` | `dt.year(), dt.month(), dt.day()`          |
+| 시간 조회     | 시, 분, 초 조회  | `dt.hour`, `dt.minute`, `dt.second` | `dt.hour(), dt.minute(), dt.second()`      |
 
 #### 🧪 Rust 샘플 코드
 ```rust
@@ -170,11 +170,11 @@ fn main() {
 
 
 ### 비교
-| 항목 구분 | 설명               | Kotlin 예시 코드         | Rust 대응 코드 예시 |
-|-----------|--------------------|---------------------------|----------------------|
-| 이전 비교 | dt1이 dt2보다 이전 | `dt1.isBefore(dt2)`       | `dt1 < dt2`          |
-| 이후 비교 | dt1이 dt2보다 이후 | `dt1.isAfter(dt2)`        | `dt1 > dt2`          |
-| 동일 비교 | dt1과 dt2가 동일   | `dt1.isEqual(dt2)`        | `dt1 == dt2`         |
+| 항목 구분 | 설명   | Kotlin 예시 코드  | Rust 대응 코드 예시 |
+|-----------|--------------------|-------------------|----------------------|
+| 이전 비교 | dt1이 dt2보다 이전 | `dt1.isBefore(dt2)` | `dt1 < dt2`  |
+| 이후 비교 | dt1이 dt2보다 이후 | `dt1.isAfter(dt2)` | `dt1 > dt2` |
+| 동일 비교 | dt1과 dt2가 동일   | `dt1.isEqual(dt2)` | `dt1 == dt2` |
 
 
 #### 🧪 Rust 샘플 코드
@@ -207,9 +207,9 @@ dt1 == dt2: false
 
 ### 수정
 | 항목 구분 | 설명                           | Kotlin 예시 코드                                      | Rust 대응 코드 예시                                                   |
-|-----------|--------------------------------|--------------------------------------------------------|------------------------------------------------------------------------|
-| 일자 변경 | `ChronoField.DAY_OF_MONTH` 수정 | `dt.with(ChronoField.DAY_OF_MONTH, 15)`                | `let updated = dt.with_day(15).unwrap();`                              |
-| 연월 변경 | 연도 및 월 직접 지정하여 변경   | `dt.withYear(2025)` `dt.withMonth(12)`                 | `let updated = NaiveDate::from_ymd(2025, 12, dt.day()).and_hms(dt.hour(), dt.minute(), dt.second());` |
+|-----------|--------------------------------|------------------------------------------|------------------------------------------------------------------------|
+| 일자 변경 | `ChronoField.DAY_OF_MONTH` 수정 | `dt.with(ChronoField.DAY_OF_MONTH, 15)` | `let updated = dt.with_day(15).unwrap();`                              |
+| 연월 변경 | 연도 및 월 직접 지정하여 변경   | `dt.withYear(2025)` `dt.withMonth(12)`  | `let updated = NaiveDate::from_ymd(2025, 12, dt.day()).and_hms(dt.hour(), dt.minute(), dt.second());` |
 
 #### 🧪 Rust 샘플 코드
 ```rust
@@ -242,10 +242,10 @@ fn main() {
 
 ### 추가/감소
 
-| 항목 구분     | 설명                           | Kotlin 예시 코드                                | Rust 대응 코드 예시                                                                 |
-|---------------|--------------------------------|--------------------------------------------------|--------------------------------------------------------------------------------------|
-| 일수 더하기/빼기 | 지정된 시간 단위로 더하거나 빼기 | `dt.plus(3, ChronoUnit.DAYS)`                    | `let added = dt + Duration::days(3);`<br>`let subtracted = dt - Duration::days(3);` |
-| 연도/일수 더하기 | 연도 또는 일수를 더하기         | `dt.plusYears(1)` `dt.plusDays(10)`              | `let added_year = NaiveDate::from_ymd(dt.year() + 1, dt.month(), dt.day()).and_hms(dt.hour(), dt.minute(), dt.second());`<br>`let added_days = dt + Duration::days(10);` |
+| 항목 구분     | 설명                           | Kotlin 예시 코드     | Rust 대응 코드 예시                                                                 |
+|---------------|--------------------------------|------------------------------|--------------------------------------------------------------------------------------|
+| 일수 더하기/빼기 | 지정된 시간 단위로 더하거나 빼기 | `dt.plus(3, ChronoUnit.DAYS)`     | `let added = dt + Duration::days(3);`<br>`let subtracted = dt - Duration::days(3);` |
+| 연도/일수 더하기 | 연도 또는 일수를 더하기         | `dt.plusYears(1)` `dt.plusDays(10)` | `let added_year = NaiveDate::from_ymd(dt.year() + 1, dt.month(), dt.day()).and_hms(dt.hour(), dt.minute(), dt.second());`<br>`let added_days = dt + Duration::days(10);` |
 
 #### 🧪 Rust 샘플 코드
 ```rust
@@ -283,9 +283,9 @@ fn main() {
 
 ### 포맷팅
 
-| 항목 구분     | 설명                                  | Kotlin 예시 코드                                           | Rust 대응 코드 예시                                      |
-|---------------|---------------------------------------|-------------------------------------------------------------|----------------------------------------------------------|
-| 문자열 포맷팅 | 지정한 포맷 패턴으로 문자열 변환      | `dt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))` | `dt.format("%Y-%m-%d %H:%M:%S").to_string()`             |
+| 항목 구분     | 설명     | Kotlin 예시 코드         | Rust 대응 코드 예시       |
+|---------------|--------------------------------|--------------------------------|----------------------------------------|
+| 문자열 포맷팅 | 지정한 포맷 패턴으로 문자열 변환 | `dt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))` | `dt.format("%Y-%m-%d %H:%M:%S").to_string()`   |
 
 
 
@@ -314,7 +314,7 @@ fn main() {
 
 | 항목 구분 | 설명                                  | Kotlin 예시 코드                                                                 | Rust 대응 코드 예시                                                                 |
 |-----------|---------------------------------------|-----------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
-| 현재 시각 | 현재 또는 지정된 시간대 기준 현재 시각 | `ZonedDateTime.now(ZoneId.of("Asia/Seoul"))`                                     | `let now = Utc::now().with_timezone(&FixedOffset::east(9 * 3600));`<br>`let now = chrono_tz::Asia::Seoul::now();` |
+| 현재 시각 | 현재 또는 지정된 시간대 기준 현재 시각 | `ZonedDateTime.now(ZoneId.of("Asia/Seoul"))`    | `let now = Utc::now().with_timezone(&FixedOffset::east(9 * 3600));`<br>`let now = chrono_tz::Asia::Seoul::now();` |
 | 지정 생성 | 날짜, 시간, 시간대를 지정하여 생성     | `ZonedDateTime.of(LocalDate.of(2024,1,1), LocalTime.of(9,0), ZoneId.of("Asia/Seoul"))` | `let naive = NaiveDate::from_ymd(2024, 1, 1).and_hms(9, 0, 0);`<br>`let zoned = chrono_tz::Asia::Seoul.from_local_datetime(&naive).unwrap();` |
 
 #### 🧪 Rust 샘플 코드
@@ -346,8 +346,8 @@ fn main() {
 
 | 항목 구분             | 설명                                                   | Kotlin 예시 코드                                                   | Rust 대응 코드 예시                                                                 |
 |-----------------------|--------------------------------------------------------|---------------------------------------------------------------------|--------------------------------------------------------------------------------------|
-| 동일한 순간 변환      | UTC 기준 동일한 순간을 다른 시간대로 변환              | `zdt.withZoneSameInstant(ZoneId.of("Europe/London"))`              | `let converted = original.with_timezone(&chrono_tz::Europe::London);`               |
-| 동일한 로컬 시각 유지 | 로컬 시각 유지하며 시간대만 변경 (실제 시각은 달라짐) | `zdt.withZoneSameLocal(ZoneId.of("America/New_York"))`             | `let local = NaiveDate::from_ymd(2024, 1, 1).and_hms(9, 0, 0);`<br>`let changed = chrono_tz::America::New_York.from_local_datetime(&local).unwrap();` |
+| 동일한 순간 변환      | UTC 기준 동일한 순간을 다른 시간대로 변환    | `zdt.withZoneSameInstant(ZoneId.of("Europe/London"))` | `let converted = original.with_timezone(&chrono_tz::Europe::London);`               |
+| 동일한 로컬 시각 유지 | 로컬 시각 유지하며 시간대만 변경 (실제 시각은 달라짐) | `zdt.withZoneSameLocal(ZoneId.of("America/New_York"))` | `let local = NaiveDate::from_ymd(2024, 1, 1).and_hms(9, 0, 0);`<br>`let changed = chrono_tz::America::New_York.from_local_datetime(&local).unwrap();` |
 
 #### 🧪 Rust 샘플 코드
 ```rust
@@ -378,12 +378,12 @@ fn main() {
 
 ### 조회/변환
 
-| 항목 구분         | 설명                                  | Kotlin 예시 코드                          | Rust 대응 코드 예시                                                   |
-|-------------------|---------------------------------------|--------------------------------------------|------------------------------------------------------------------------|
-| 오프셋/시간대 조회 | 오프셋 및 시간대 정보 조회            | `zdt.offset` `zdt.zone`                    | `zoned.offset()` `zoned.timezone()` `zoned.timezone().name()`         |
-| 로컬 시각 변환     | ZonedDateTime → LocalDateTime         | `zdt.toLocalDateTime()`                    | `let local = zoned.naive_local();`                                    |
-| Instant 변환       | ZonedDateTime → Instant               | `zdt.toInstant()`                          | `let instant = zoned.with_timezone(&Utc);`                            |
-| Epoch 초 반환      | UTC 기준 초 단위 시간 반환            | `zdt.toEpochSecond()`                      | `let epoch = zoned.timestamp();`                                      |
+| 항목 구분         | 설명                                  | Kotlin 예시 코드      | Rust 대응 코드 예시   |
+|-------------------|---------------------------------------|------------------------------|-------------------------------------------|
+| 오프셋/시간대 조회 | 오프셋 및 시간대 정보 조회   | `zdt.offset` `zdt.zone`   | `zoned.offset()` `zoned.timezone()` `zoned.timezone().name()` |
+| 로컬 시각 변환     | ZonedDateTime → LocalDateTime | `zdt.toLocalDateTime()` | `let local = zoned.naive_local();` |
+| Instant 변환       | ZonedDateTime → Instant | `zdt.toInstant()` | `let instant = zoned.with_timezone(&Utc);` |
+| Epoch 초 반환      | UTC 기준 초 단위 시간 반환 | `zdt.toEpochSecond()` | `let epoch = zoned.timestamp();` |
 
 
 
@@ -430,8 +430,8 @@ Epoch Second: 1704067200
 
 | 항목 구분     | 설명                                  | Kotlin 예시 코드                          | Rust 대응 코드 예시                                                                 |
 |---------------|---------------------------------------|--------------------------------------------|--------------------------------------------------------------------------------------|
-| 현재 시각     | 현재 UTC 기준의 시각 생성             | `val now = Instant.now()`                  | `let now = Utc::now();`                                                             |
-| 에포크 기반   | 초 또는 밀리초 기준 Instant 생성      | `Instant.ofEpochSecond(1760156340)`        | `let instant = Utc.timestamp(1760156340, 0);`<br>`let instant_ms = Utc.timestamp_millis(1760156340000);` |
+| 현재 시각     | 현재 UTC 기준의 시각 생성  | `val now = Instant.now()` | `let now = Utc::now();`                                                             |
+| 에포크 기반   | 초 또는 밀리초 기준 Instant 생성 | `Instant.ofEpochSecond(1760156340)` | `let instant = Utc.timestamp(1760156340, 0);`<br>`let instant_ms = Utc.timestamp_millis(1760156340000);` |
 
 #### 🧪 Rust 샘플 코드
 ```rust
@@ -461,10 +461,10 @@ fn main() {
 
 ### 변환
 
-| 항목 구분         | 설명                                  | Kotlin 예시 코드                                      | Rust 대응 코드 예시                                                                 |
-|-------------------|---------------------------------------|--------------------------------------------------------|--------------------------------------------------------------------------------------|
-| Offset 변환       | 지정된 오프셋 기준 OffsetDateTime 생성 | `instant.atOffset(ZoneOffset.of("+09:00"))`            | `let offset_dt = instant.with_timezone(&FixedOffset::east(9 * 3600));`             |
-| Zoned 변환        | 지정된 시간대 기준 ZonedDateTime 생성 | `instant.atZone(ZoneId.of("Asia/Seoul"))`              | `let zoned_dt = instant.with_timezone(&chrono_tz::Asia::Seoul);`                   |
+| 항목 구분         | 설명                                  | Kotlin 예시 코드             | Rust 대응 코드 예시                                                                 |
+|-------------------|---------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| Offset 변환       | 지정된 오프셋 기준 OffsetDateTime 생성 | `instant.atOffset(ZoneOffset.of("+09:00"))` | `let offset_dt = instant.with_timezone(&FixedOffset::east(9 * 3600));` |
+| Zoned 변환        | 지정된 시간대 기준 ZonedDateTime 생성 | `instant.atZone(ZoneId.of("Asia/Seoul"))`  | `let zoned_dt = instant.with_timezone(&chrono_tz::Asia::Seoul);` |
 
 #### 🧪 Rust 샘플 코드
 ```rust
