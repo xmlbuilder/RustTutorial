@@ -1,7 +1,7 @@
 # 비동기 함수 테스트
 
 ## 🚀 비동기 함수 테스트란?
-Rust는 async/await 문법을 통해 비동기 함수를 정의할 수 있습니다.
+Rust는 async/await 문법을 통해 비동기 함수를 정의할 수 있습니다.  
 하지만 Rust 자체에는 비동기 런타임이 없기 때문에, 실제 실행을 위해서는 Tokio 같은 외부 런타임이 필요합니다.
 
 ## ✅ 비동기 함수 정의
@@ -32,11 +32,11 @@ mod tests {
 }
 ```
 
-- #[cfg(test)]: 테스트 시에만 컴파일
-- #[tokio::test]: 비동기 테스트를 위한 Tokio 매크로
-- async fn test_give_order(): 테스트 함수도 비동기
-- await: 비동기 함수 호출 후 결과 기다림
-- assert_eq!: 결과 검증
+- `#[cfg(test)]`: 테스트 시에만 컴파일
+- `#[tokio::test]`: 비동기 테스트를 위한 Tokio 매크로
+- `async fn test_give_order()`: 테스트 함수도 비동기
+- `await`: 비동기 함수 호출 후 결과 기다림
+- `assert_eq!`: 결과 검증
 
 ### ⚙️ #[tokio::test]의 역할
 Tokio는 #[tokio::test] 매크로를 통해
@@ -48,7 +48,6 @@ Tokio는 #[tokio::test] 매크로를 통해
 - 복잡한 설정 없이 간단하게 비동기 테스트 가능
 
 ### 📌 비동기 테스트 시 주의할 점
-
 | 항목               | 설명                                                                 |
 |--------------------|----------------------------------------------------------------------|
 | `#[tokio::test]`   | `async fn` 테스트를 실행하기 위한 Tokio 런타임 매크로                     |
@@ -59,14 +58,14 @@ Tokio는 #[tokio::test] 매크로를 통해
 | `Cargo.toml tokio features = ["full"]` | Tokio의 모든 기능을 사용하기 위한 설정. 테스트에 `time`, `macros` 등이 필요함 |
 
 
-# Cargo.toml 예시
+### Cargo.toml 예시
 ```
 [dependencies]
 tokio = { version = "1", features = ["full"] }
 ```
 
 
-🧩 비동기 테스트 요약
+### 🧩 비동기 테스트 요약
 | 구성 요소         | 설명                                      |
 |------------------|-------------------------------------------|
 | `async fn`       | 비동기 함수 정의                            |
