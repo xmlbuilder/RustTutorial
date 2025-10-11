@@ -36,7 +36,8 @@ fn transform(x: f32, y: f32, z: f32, r: f32, g: f32, b: f32, a: f32) {
 
 
 ## Inner Attribute
-Rust의 속성(attribute) 시스템은 코드에 메타데이터나 컴파일러 지시사항을 부여하는 방식인데, #![...]는 그 중에서도 crate-level 또는 모듈-level에 적용되는 속성이에요.
+Rust의 속성(attribute) 시스템은 코드에 메타데이터나 컴파일러 지시사항을 부여하는 방식인데,  
+#![...]는 그 중에서도 crate-level 또는 모듈-level에 적용되는 속성이에요.
 
 ## 🧠 Rust의 Attribute 종류
 | 형태        | 이름            | 적용 범위                  | 설명                                                                 |
@@ -69,7 +70,7 @@ fn fast_function() { ... }
 ```
 
 ## 요약
-요약하자면, #![...]는 Rust에서 inner attribute라고 부르며,
+요약하면, #![...]는 Rust에서 inner attribute라고 부르며,
 crate 전체나 모듈 전체에 영향을 주는 설정을 지정할 때 사용하는 문법.
 
 ---
@@ -95,16 +96,16 @@ crate 전체나 모듈 전체에 영향을 주는 설정을 지정할 때 사용
 
 ## ✨ Clippy 설정 팁
 - 특정 린트를 경고로 설정:
-#![warn(clippy::unwrap_used)]
+`#![warn(clippy::unwrap_used)]`
 - 특정 린트를 무시:
-#![allow(clippy::too_many_arguments)]
+`#![allow(clippy::too_many_arguments)]`
 - 전체 그룹 활성화:
-#![warn(clippy::pedantic)]
+`#![warn(clippy::pedantic)]`
 
 
 ---
 
-# #![allow(clippy::needless_range_loop)]란?
+# `#![allow(clippy::needless_range_loop)]` 란?
 
 #![allow(clippy::needless_range_loop)]는 Rust의 정적 분석 도구인 Clippy가 특정 경고를 무시하도록 지시하는 속성(attribute)입니다.
 
@@ -117,9 +118,9 @@ for i in 0..vec.len() {
 }
 ```
 
-→ Clippy는 이렇게 말하죠:
-“굳이 인덱스를 사용할 필요 없이 for item in vec.iter()로 순회하세요.”
-즉, 인덱스 기반 루프가 불필요할 때 경고를 띄우는 거예요.
+→ Clippy는 이렇게 말하죠:  
+“굳이 인덱스를 사용할 필요 없이 for item in vec.iter()로 순회하세요.”  
+즉, 인덱스 기반 루프가 불필요할 때 경고를 띄우는 것임.  
 
 ### ✅ #![allow(clippy::needless_range_loop)]의 역할
 이 속성은 해당 경고를 무시하고 컴파일러가 조용히 넘어가도록 합니다.
@@ -142,8 +143,9 @@ fn print_vec(vec: &[i32]) {
     }
 }
 ```
-
 → Clippy는 경고하지 않고 그대로 통과시킵니다.
+
+---
 
 
 
