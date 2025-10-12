@@ -142,13 +142,13 @@ fn main() {
 
 #### ✅ "apple"과 "banana"는 어떤 타입인가?
 - 이 문자열 리터럴은 &'static str 타입입니다.
-- 'static lifetime은 프로그램 전체 생존 기간을 의미하므로, HashSet<&'static str>로 안전하게 들어갈 수 있어요.
+- 'static lifetime은 프로그램 전체 생존 기간을 의미하므로, HashSet<&'static str>로 안전하게 들어갈 수 있음.
 - 즉, lifetime 문제가 발생하지 않습니다.
 
 #### 🧠 왜 String으로 바꾸지 않아도 되는가?
 - String은 힙에 저장되는 가변 문자열이고, &str은 불변 참조입니다.
 - 위 코드에서는 &str 타입을 그대로 HashSet에 넣고 있기 때문에 복사도 없고, 소유권도 문제 없음.
-- 만약 String을 넣고 싶다면 명시적으로 변환해야 해요:
+- 만약 String을 넣고 싶다면 명시적으로 변환해야 함:
 ```rust
 let set: HashSet<String> = ["apple", "banana"]
     .into_iter()
@@ -195,12 +195,10 @@ fn make_set() -> HashSet<String> {
 | `'static`        | 프로그램 전체 생존 기간 → 참조로 넣어도 안전         |
 
 #### 🔍 핵심 포인트
-- HashSet<&T>는 참조를 저장하므로, 원본 데이터가 살아 있는 동안만 유효해야 해요.
+- HashSet<&T>는 참조를 저장하므로, 원본 데이터가 살아 있는 동안만 유효해야 함.
 - 지역 변수의 참조를 넣으면 lifetime 오류 발생 가능.
 - HashSet<T>는 값 자체를 소유하므로, lifetime 문제 없이 안전하게 사용 가능.
 - 'static 참조 (&'static str 등)는 언제나 유효하므로 HashSet<&'static str>도 안전.
-
-
 
 
 ### 6. clear() – 전체 제거
