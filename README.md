@@ -225,6 +225,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [11-Array_접근_Panic](./Chapter-08(에러%20처리와Option-Result)/11-Array_접근_Panic.md)
 - [12-디버깅_출력용_포맷](./Chapter-08(에러%20처리와Option-Result)/12-디버깅_출력용_포맷.md)
 - [13-Option_Map](./Chapter-08(에러%20처리와Option-Result)/13-Option_Map.md)
+- [14-if문_에러_주의사항](./Chapter-08(에러%20처리와Option-Result)/14-if문_에러_주의사항.md)
 
   
 🔼 [맨 위로](#-목차)
