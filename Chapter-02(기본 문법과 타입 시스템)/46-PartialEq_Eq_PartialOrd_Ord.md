@@ -33,8 +33,8 @@ impl PartialEq<u32> for Key {
 }
 ```
 
-- PartialEq<T>는 타입 간 비교 가능
-- Eq는 타입이 같아야만 구현 가능
+- PartialEq<T>는 `타입 간` 비교 가능
+- Eq는 `타입이 같아야만` 구현 가능
 
 ### ✅ PartialOrd & Ord
 | Trait       | 핵심 기능                     |
@@ -73,6 +73,7 @@ impl PartialOrd for Citation {
 
 
 ---
+
 # 반사성
 
 “반사성(reflexivity)”이라는 용어는 수학과 컴퓨터 과학에서 관계의 성질을 설명할 때 자주 등장하지만,  
@@ -96,10 +97,8 @@ struct Point {
     y: i32,
 }
 ```
-
-
-- 여기서 Point는 Eq를 구현했기 때문에
-→ 어떤 p: Point에 대해 p == p는 항상 true여야 함
+- 여기서 Point는 Eq를 구현했기 때문에  
+    → 어떤 p: Point에 대해 p == p는 항상 true여야 함
 
 ### ⚠️ 반사성이 깨질 수 있는 경우
 - NaN (Not a Number) 같은 값은  
