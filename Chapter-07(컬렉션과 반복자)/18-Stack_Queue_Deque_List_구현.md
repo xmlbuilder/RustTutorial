@@ -58,6 +58,7 @@ fn main() {
 ```
 
 ### ✔ List (LinkedList)
+```rust
 use std::collections::LinkedList;
 
 fn main() {
@@ -70,6 +71,7 @@ fn main() {
         println!("Item: {}", item);
     }
 }
+```
 
 ---
 
