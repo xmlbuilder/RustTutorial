@@ -1,6 +1,6 @@
 # 🚀 Rust 비동기 프로그래밍 완전 정리
 
-“Async“는 블럭될(더 이상 진행할 수 없을) 때까지 각 작업을 실행한 다음  
+**Async** 는 블럭될(더 이상 진행할 수 없을) 때까지 각 작업을 실행한 다음  
 진행할 준비가 된 다른 작업으로 전환하여 여러 작업을 동시에 실행하는 동시 실행 모델입니다.  
 이 모델을 사용하면 제한된 수의 스레드에서 더 많은 작업을 실행할 수 있습니다.  
 이는, 한 작업을 유지하고 수행하는데 필요한 오버헤드가 (스레드에 비해) 매우 낮고  
@@ -39,23 +39,20 @@ async fn main() {
 }
 ```
 
-- async fn은 Future를 반환
+- `async` fn은 Future를 반환
 - #[tokio::main]은 Tokio 런타임을 자동으로 시작
 
 ## 4️⃣ Rust의 비동기 실행 방식: Lazy Execution
 - JavaScript/C#: Promise 기반 → 호출 즉시 실행
-- Python/Rust: Lazy → .await 또는 런타임이 실행할 때까지 대기
-- 단순히 .await만 사용하면 동기 실행처럼 보일 수 있음
+- Python/Rust: Lazy → `.await` 또는 런타임이 실행할 때까지 대기
+- 단순히 `.await` 만 사용하면 동기 실행처럼 보일 수 있음
 ```rust
 hello().await;
 bye().await; // 순차 실행
 ```
-
-
 ## 5️⃣ 병렬 실행: tokio::join!
 ```rust
 use tokio;
-
 async fn give_order(order: u64) -> u64 {
     println!("Processing {order}...");
     tokio::time::sleep(std::time::Duration::from_secs(3 - order)).await;
@@ -70,12 +67,12 @@ async fn main() {
 }
 ```
 
-- join!은 여러 Future를 동시에 실행
+- `join!` 은 여러 Future를 동시에 실행
 - 각 태스크는 병렬적으로 진행되며, 결과는 튜플로 반환
 
 ## 6️⃣ 비동기 HTTP 요청: reqwest + serde_json
+### 📦 Cargo.toml 설정
 ```
-📦 Cargo.toml 설정
 [dependencies]
 tokio = { version = "1.25.0", features = ["full"] }
 rand = "0.8.5"
@@ -91,25 +88,20 @@ serde_json = "1.0.95"
 | `serde_json`   | JSON 직렬화 및 역직렬화       |
 
 
-
-
 ## 7️⃣ 동기 vs 비동기 fetch 비교
 ### 🔒 동기 방식 (blocking)
 ```rust
 fn fetch(total: u32) -> Vec<String> {
     let client = reqwest::blocking::Client::new();
     let mut names = vec![];
-
     for _ in 0..total {
         let url = format!("https://pokeapi.co/api/v2/pokemon/{}", rand::thread_rng().gen_range(1..=898));
         let response = client.get(&url).send().unwrap().json::<serde_json::Value>().unwrap();
         names.push(response["name"].as_str().unwrap().to_string());
     }
-
     names
 }
 ```
-
 - 모든 요청이 순차적으로 처리됨
 - 전체 시간이 요청 수 × 응답 시간
 
@@ -118,17 +110,14 @@ fn fetch(total: u32) -> Vec<String> {
 async fn fetch(total: u32) -> Vec<String> {
     let client = reqwest::Client::new();
     let mut names = vec![];
-
     for _ in 0..total {
         let url = format!("https://pokeapi.co/api/v2/pokemon/{}", rand::thread_rng().gen_range(1..=898));
         let response = client.get(&url).send().await.unwrap().json::<serde_json::Value>().await.unwrap();
         names.push(response["name"].as_str().unwrap().to_string());
     }
-
     names
 }
 ```
-
 - .await를 통해 비동기적으로 요청 처리
 - Tokio 런타임이 태스크를 병렬로 스케줄링
 
@@ -163,7 +152,6 @@ async fn main() {
 | `rand`           | 난수 생성 유틸리티             |
 
 ---
-
 
 # fetch 기반 확장 패턴
 
@@ -204,8 +192,6 @@ async fn main() {
         .await;
 }
 ```
-
-
 - buffer_unordered(n): 최대 n개의 Future를 병렬 실행
 - for_each: 스트리밍된 결과를 하나씩 처리
 
@@ -235,6 +221,7 @@ async fn main() {
 ## ⚡ 확장 3: 병렬 fetch 최적화
 tokio::task::JoinSet을 사용하면 수백 개의 비동기 작업을 병렬로 관리할 수 있습니다.
 이 방식은 tokio::join!보다 유연하며, 결과를 순차적으로 수집할 수 있습니다.
+
 ### ✅ 예제: 병렬 fetch + 실행 시간 측정
 ```rust
 use tokio::task::JoinSet;
