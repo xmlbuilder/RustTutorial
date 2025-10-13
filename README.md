@@ -26,7 +26,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [13-사고의_전환_필요](./Chapter-01%28Rust%20소개%20및%20환경%20설정%29/13-사고의_전환_필요.md)
 - [14-설계원칙](./Chapter-01%28Rust%20소개%20및%20환경%20설정%29/14-설계원칙.md)
 - [15-Rust_철학](./Chapter-01%28Rust%20소개%20및%20환경%20설정%29/15-Rust_철학.md)
-
   
 🔼 [맨 위로](#-목차)
 
@@ -189,7 +188,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [26-trait_Iterator](./Chapter-06(트레잇과%20제네릭)/26-trait_Iterator.md)
 - [27-RwLock_RwLockWriteGuard](./Chapter-06(트레잇과%20제네릭)/27-RwLock_RwLockWriteGuard.md)
 
-
 🔼 [맨 위로](#-목차)
 
 ### 📦 [Chapter-07(컬렉션과 반복자)](./Chapter-07(컬렉션과%20반복자))
@@ -210,6 +208,12 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [15-Set_커스텀타입_비교](./Chapter-07(컬렉션과%20반복자)/15-Set_커스텀타입_비교.md)
 - [16-Map_정렬기준_정의](./Chapter-07(컬렉션과%20반복자)/16-Map_정렬기준_정의.md)
 - [17-Tuple을_Map키로_사용](./Chapter-07(컬렉션과%20반복자)/17-Tuple을_Map키로_사용.md)
+- [18-Stack_Queue_Deque_List_구현](./Chapter-07(컬렉션과%20반복자)/18-Stack_Queue_Deque_List_구현.md)
+- [19-클로저가_받는_인자의_타입](./Chapter-07(컬렉션과%20반복자)/19-클로저가_받는_인자의_타입.md)
+- [20-BinaryHeap](./Chapter-07(컬렉션과%20반복자)/20-BinaryHeap.md)
+- [21-Reverse](./Chapter-07(컬렉션과%20반복자)/21-Reverse.md)
+- [22-역순_순회](./Chapter-07(컬렉션과%20반복자)/22-역순_순회.md)
+- [23-중복제거](./Chapter-07(컬렉션과%20반복자)/23-중복제거.md)
 
 🔼 [맨 위로](#-목차)
 
@@ -229,7 +233,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [12-디버깅_출력용_포맷](./Chapter-08(에러%20처리와Option-Result)/12-디버깅_출력용_포맷.md)
 - [13-Option_Map](./Chapter-08(에러%20처리와Option-Result)/13-Option_Map.md)
 - [14-if문_에러_주의사항](./Chapter-08(에러%20처리와Option-Result)/14-if문_에러_주의사항.md)
-
   
 🔼 [맨 위로](#-목차)
 
@@ -245,7 +248,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [09-InnerAttriubte_repr](./Chapter-09(테스트와%20디버깅)/09-InnerAttriubte_repr.md)
 - [10-커버리지측정](./Chapter-09(테스트와%20디버깅)/10-커버리지측정.md)
 - [11-Debugging시_도움](./Chapter-09(테스트와%20디버깅)/11-Debugging시_도움.md)
-
 
 🔼 [맨 위로](#-목차)
 
@@ -292,7 +294,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [04-FFI_C호출](./Chapter-12(Unsafe와%20FFI)/04-FFI_C호출.md)
 - [05-repr](./Chapter-12(Unsafe와%20FFI)/05-repr.md)
 - [06-Union_처리](./Chapter-12(Unsafe와%20FFI)/06-Union_처리.md)
-
 
 🔼 [맨 위로](#-목차)
 
@@ -357,7 +358,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [04-출력진법](./Chapter-16(문자열처리)/04-출력진법.md)
 - [05-문자열_직렬화_역직렬화](./Chapter-16(문자열처리)/05-문자열_직렬화_역직렬화.md)
 
-
 🔼 [맨 위로](#-목차)
 
 ### 🧪 [Chapter-17(실전 예제와 프로젝트)](./Chapter-17(실전%20예제와%20프로젝트))
@@ -393,7 +393,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [27-웹_스크래핑](./Chapter-17(실전%20예제와%20프로젝트)/27-웹_스크래핑.md)
 - [28-소유권_Closure_lifetime이_동시에_얽힌문제](./Chapter-17(실전%20예제와%20프로젝트)/28-소유권_Closure_lifetime이_동시에_얽힌문제.md)
 
-
 🔼 [맨 위로](#-목차)
   
 ### 🧪 [Chapter-18(기타 및 실험적 항목)](./Chapter-18(기타%20및%20실험적%20항목))
@@ -412,7 +411,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [13-ndarray](./Chapter-18(기타%20및%20실험적%20항목)/13-ndarray.md)
 - [14-bumpalo_실모델에적용_절차구성](./Chapter-18(기타%20및%20실험적%20항목)/14-bumpalo_실모델에적용_절차구성.md)
 - [15-DataSeriesLike(Adapter_Bridge)](./Chapter-18(기타%20및%20실험적%20항목)/15-DataSeriesLike(Adapter_Bridge).md)
-
 
 🔼 [맨 위로](#-목차)
 
