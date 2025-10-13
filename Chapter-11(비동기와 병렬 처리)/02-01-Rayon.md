@@ -8,12 +8,13 @@ Rust에서 Rayon을 활용한 병렬 처리에 대한 완전 정리.
 - 내부적으로 워크 스틸링 기반 스레드 풀을 사용하여 효율적인 병렬 실행을 지원합니다.
 
 ### 2️⃣ 설치 및 선언
+```            
 cargo add rayon
+```
 
-
+```rust
 use rayon::prelude::*;
-
-
+```
 - prelude::*를 통해 par_iter, par_sort, par_iter_mut 등 병렬 API를 사용할 수 있습니다.
 
 ### 3️⃣ 핵심 기능 요약
@@ -24,8 +25,6 @@ use rayon::prelude::*;
 | `par_sort()`       | 병합 정렬 기반의 병렬 정렬. 대규모 데이터에 효과적 |
 | `for_each()`       | 병렬 반복 처리. 각 작업을 병렬로 실행 |
 | `.map().sum()`     | 병렬 매핑 후 집계. 계산 집약적인 작업에 적합 |
-
-
 
 ### 4️⃣ 예제: 병렬 vs 순차 계산 비교
 ```rust
@@ -51,7 +50,6 @@ fn sum_of_squares_seq(input : &Vec<i32>) -> i32 {
 }
 
 fn main() {
-
     let start = SystemTime::now();
     sum_of_squares(&(1..100).collect());
     println!("{}ms", start.elapsed().unwrap().as_millis()); //93ms
@@ -86,7 +84,7 @@ fn sum_of_squares_seq(input: &Vec<i32>) -> i32 {
 
 - 병렬 실행: 약 90ms
 - 순차 실행: 약 1000ms
-- 단순히 iter() → par_iter()로 바꾸는 것만으로 병렬화 가능
+- 단순히 `iter() → par_iter()` 로 바꾸는 것만으로 병렬화 가능
 
 ### 5️⃣ 예제: 병렬 가변 처리 (par_iter_mut)
 ```rust
@@ -179,13 +177,11 @@ data2.sort();     // 순차 정렬: 약 780ms
 | Tokio      | 비동기 네트워크 및 IO 처리       | IO 중심 작업             | Future 기반 비동기 실행, 런타임 필요     |
 
 
-
 ### ✅ 언제 Rayon을 써야 할까?
 - 대량의 데이터를 반복 처리할 때
 - 계산 중심의 작업을 병렬화하고 싶을 때
 - 기존 순차 이터레이터를 병렬로 바꾸고 싶을 때
 - 정렬, 필터링, 집계 등 고성능 데이터 처리에 적합
-
 ---
 
 
@@ -245,7 +241,7 @@ fn main() {
 - filter_map으로 유효한 숫자만 집계
 
 ## 🧪 3. 멀티코어 벤치마크: 병렬 계산 성능 측정
-Rayon은 CPU 코어를 자동으로 활용하므로, 병렬 계산의 성능을 측정하기에 적합합니다.
+Rayon은 CPU 코어를 자동으로 활용하므로, 병렬 계산의 성능을 측정하기에 적합 합니다.
 ### ✅ 예제: 병렬 vs 순차 벤치마크
 ```rust
 use rayon::prelude::*;
@@ -277,6 +273,22 @@ fn main() {
 | 이미지 처리     | `par_chunks_mut` + `image`     | 픽셀 단위 병렬 수정            | 밝기 조절, 필터 적용              |
 | 파일 파싱       | `par_iter` + `filter_map`      | 행 단위 병렬 파싱 및 집계      | CSV 분석, 로그 처리               |
 | 멀티코어 벤치마크 | `Instant` + `par_iter`         | 병렬 계산 성능 측정            | 알고리즘 비교, 최적화 테스트       |
+
+---
+
+## 🔍 코드 분석
+```rust
+let mut data1: Vec<i32> = (0..1_000_000)
+    .map(|_| rand::thread_rng().gen_range(0..=100))
+    .collect();
+```
+- (0..1_000_000) → 0부터 999,999까지 총 1,000,000번 반복
+- .map(|_| rand::thread_rng().gen_range(0..=100)) → 각 반복마다 0~100 사이의 난수 생성
+- .collect() → 결과를 Vec<i32>로 수집
+
+## ✅ 결과
+- data1에는 1,000,000개의 난수 값이 들어갑니다
+- 각 값은 0 이상 100 이하의 i32 타입 정수입니다
 
 ---
 
