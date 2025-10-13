@@ -70,7 +70,7 @@ Workspace 내부라면 별도 설정 없이도 잘 작동합니다.
 ---
 
 # Package를 묶어서 관리
-Rust의 workspace는 여러 개의 package를 하나의 프로젝트처럼 묶어서 관리할 수 있습니다.
+Rust의 workspace는 여러 개의 package를 하나의 프로젝트처럼 묶어서 관리할 수 있습니다.  
 즉, 하나의 workspace 안에 여러 개의 독립적인 Cargo 패키지를 포함할 수 있음.
 
 
@@ -117,7 +117,7 @@ members = [
 
 # 여러개의 exe를 가짐
 
-workspace 구조를 활용하면 **여러 개의 독립적인 실행 파일(.exe)** 을 가질 수 있습니다.
+workspace 구조를 활용하면 **여러 개의 독립적인 실행 파일(.exe)** 을 가질 수 있습니다.  
 각 실행 파일은 자기만의 package로 구성되며, 서로 다른 기능이나 목적을 가진 프로그램으로 동작할 수 있음.
 
 ## 🧱 구조 예시: 여러 실행 파일을 가진 workspace
@@ -177,6 +177,7 @@ target/release/cli_helper.exe
 - client: CLI 도구
 - admin_tool: 관리자 전용 유틸리티
 이렇게 나누면 유지보수도 쉬워지고, 각 기능을 독립적으로 개발할 수 있음.
+
 
 
 
