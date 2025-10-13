@@ -1,6 +1,6 @@
 # 📦 Rust의 Crate란?
-Crate는 Rust에서 컴파일 가능한 코드의 최소 단위입니다. 크게 두 가지 종류가 있음:
-
+Crate는 Rust에서 컴파일 가능한 코드의 최소 단위입니다.  
+크게 두 가지 종류가 있음:
 | 구분             | 설명                                                                 |
 |------------------|----------------------------------------------------------------------|
 | Crate 정의        | Rust에서 컴파일 가능한 **최소 단위**의 패키지                         |
@@ -14,10 +14,10 @@ Crate는 Rust에서 컴파일 가능한 코드의 최소 단위입니다. 크게
 | C++ 대응 개념     | - Binary: 실행 파일 (`main.cpp`) <br> - Library: 정적/동적 라이브러리 (`.lib`, `.dll`, `.so`) |
 
 ## 🔧 생성 방법
-- Binary Crate: cargo new my_project
-- Library Crate: cargo new --lib my_library
+- Binary Crate: `cargo new my_project`
+- Library Crate: `cargo new --lib my_library`
 각 Crate는 Cargo.toml 설정 파일과 src 디렉토리를 포함하며, Cargo가 빌드와 의존성 관리를 자동으로 처리해줍니다.  
-Crate는 하나의 프로젝트 단위이며, 여러 모듈을 포함할 수 있음.
+Crate는 하나의 프로젝트 단위이며, 여러 모듈을 포함할 수 있음.  
 모듈은 Crate 내부의 코드 조직 구조입니다.  
 
 
@@ -47,8 +47,8 @@ C++에는 Rust의 Crate와 정확히 일치하는 개념은 없지만, 몇 가�
 ---
 
 ## C++ 비교 하기 (추가)
-Rust의 crate는 C++의 **static/dynamic library(.lib/.dll/.so)**처럼 독립적인 모듈 단위.
-둘 다 “기능을 묶어서 재사용 가능한 단위로 만든다”는 철학은 같지만, Rust의 crate는 더 구조적이고 안전하게 설계.
+Rust의 crate는 C++의 **static/dynamic library(.lib/.dll/.so)** 처럼 독립적인 모듈 단위.
+둘 다 **기능을 묶어서 재사용 가능한 단위로 만든다** 는 철학은 같지만, Rust의 crate는 더 구조적이고 안전하게 설계.
 
 ## 🧱 비교 요약: C++ 라이브러리 vs Rust 크레이트
 | 비교 항목 | C++ 라이브러리 (.lib/.dll/.so) | Rust 크레이트 (`crate`)                     |
@@ -62,7 +62,7 @@ Rust의 crate는 C++의 **static/dynamic library(.lib/.dll/.so)**처럼 독립�
 
 ## 🧠 크레이트를 독립 모듈로 보는 이유
 - 기능 단위로 캡슐화: 예를 들어 matrix, vector, geometry 등을 각각 crate로 분리 가능
-- 재사용 가능: 다른 프로젝트에서 matrix = "0.1"처럼 바로 가져다 쓸 수 있음
+- 재사용 가능: 다른 프로젝트에서 matrix = "0.1" 처럼 바로 가져다 쓸 수 있음
 - 버전 관리와 의존성 추적이 자동: C++보다 훨씬 덜 번거롭고 안정적
 
 ### ✅ 예시: Matrix 크레이트 만들기
@@ -87,7 +87,7 @@ pub mod matrix3;
 pub mod matrix4;
 ```
 
-이렇게 하면 matrix는 완전히 독립적인 모듈이 되고,
+이렇게 하면 matrix는 완전히 독립적인 모듈이 되고,  
 다른 프로젝트에서 
 ```rust
 use matrix::matrix3::determinant3;
