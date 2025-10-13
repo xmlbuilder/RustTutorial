@@ -47,7 +47,7 @@ C++에는 Rust의 Crate와 정확히 일치하는 개념은 없지만, 몇 가�
 ---
 
 ## C++ 비교 하기 (추가)
-Rust의 crate는 C++의 **static/dynamic library(.lib/.dll/.so)** 처럼 독립적인 모듈 단위.
+Rust의 crate는 C++의 **static/dynamic library(.lib/.dll/.so)** 처럼 독립적인 모듈 단위.  
 둘 다 **기능을 묶어서 재사용 가능한 단위로 만든다** 는 철학은 같지만, Rust의 crate는 더 구조적이고 안전하게 설계.
 
 ## 🧱 비교 요약: C++ 라이브러리 vs Rust 크레이트
