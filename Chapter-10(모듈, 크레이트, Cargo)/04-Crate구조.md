@@ -61,7 +61,7 @@ pub mod network;
 | **워크스페이스 (Workspace)** | 여러 crate를 하나의 프로젝트로 묶어 관리. 대규모 시스템에 적합         |
 
 ## 요약하자면:
-Crate는 Rust의 컴파일 단위이며, cargo new로 생성하고 Cargo.toml과 src/ 구조로 관리 됩니다.
+Crate는 Rust의 컴파일 단위이며, cargo new로 생성하고 Cargo.toml과 src/ 구조로 관리 됩니다.  
 바이너리와 라이브러리 크레이트를 함께 만들 수도 있고, 모듈로 확장해서 대규모 시스템도 구성할 수 있음.
 
 ---
