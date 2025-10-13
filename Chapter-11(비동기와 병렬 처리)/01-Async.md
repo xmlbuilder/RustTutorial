@@ -196,7 +196,8 @@ async fn main() {
 - for_each: 스트리밍된 결과를 하나씩 처리
 
 ## 🛡️ 확장 2: 에러 핸들링 개선
-비동기 코드에서 unwrap()은 위험합니다. 대신 Result를 활용해 에러를 안전하게 처리하는 방식으로 개선할 수 있습니다.
+비동기 코드에서 unwrap()은 위험합니다.  
+대신 Result를 활용해 에러를 안전하게 처리하는 방식으로 개선할 수 있습니다.
 ### ✅ 예제: 에러를 반환하는 fetch 함수
 ```rust
 async fn fetch_name(id: u32) -> Result<String, reqwest::Error> {
@@ -219,7 +220,7 @@ async fn main() {
 - unwrap_or("unknown")으로 JSON 파싱 실패 대비
 
 ## ⚡ 확장 3: 병렬 fetch 최적화
-tokio::task::JoinSet을 사용하면 수백 개의 비동기 작업을 병렬로 관리할 수 있습니다.
+tokio::task::JoinSet을 사용하면 수백 개의 비동기 작업을 병렬로 관리할 수 있습니다.  
 이 방식은 tokio::join!보다 유연하며, 결과를 순차적으로 수집할 수 있습니다.
 
 ### ✅ 예제: 병렬 fetch + 실행 시간 측정
