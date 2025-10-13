@@ -18,7 +18,7 @@ x = 7; // ✅ 가능
 - mut는 변수 자체가 가변이라는 뜻이지, 그 안의 데이터 구조가 가변이라는 뜻은 아닙니다.
 
 ## 🧠 왜 불변이 기본일까?
-Rust는 **병행성(concurrency)**과 **메모리 안전성(memory safety)**을 중요하게 생각합니다.
+Rust는 **병행성(concurrency)** 과 **메모리 안전성(memory safety)** 을 중요하게 생각합니다.
 불변성을 기본으로 하면 다음과 같은 장점이 있음:
 - 데이터 경쟁(race condition)을 줄임
 - 코드의 의도를 명확하게 표현
@@ -36,7 +36,7 @@ Rust는 **병행성(concurrency)**과 **메모리 안전성(memory safety)**을 
 | 참조의 불변/가변 구분    | `&T` (불변 참조), `&mut T` (가변 참조)    | 참조 자체는 불변/가변 구분이 덜 명확         |
 | 병행성에 대한 영향       | 데이터 경쟁 방지에 유리                   | 병행성 제어는 개발자 책임                   |
 
-## 💡 C++의 mutable 예시
+## 💡 C++의 `mutable` 예시
 ```cpp
 class Example {
     mutable int counter;
