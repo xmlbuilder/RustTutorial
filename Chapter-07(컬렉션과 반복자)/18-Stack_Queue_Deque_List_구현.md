@@ -6,10 +6,10 @@ Rust에서는 Stack, Queue, Deque, List를 직접 제공하지 않지만,
 ## 🧠 Rust에서 주요 자료구조 처리 방식
 | 자료구조   | 타입            | 주요 메서드                          |
 |------------|------------------|--------------------------------------|
-| Stack      | Vec<T>           | push(), pop(), last()                |
-| Queue      | VecDeque<T>      | push_back(), pop_front()             |
-| Deque      | VecDeque<T>      | push_front(), pop_back()             |
-| List       | LinkedList<T>    | push_back(), pop_front()             |
+| Stack      | `Vec<T>`           | push(), pop(), last()                |
+| Queue      | `VecDeque<T>`      | push_back(), pop_front()             |
+| Deque      | `VecDeque<T>`      | push_front(), pop_back()             |
+| List       | `LinkedList<T>`    | push_back(), pop_front()             |
 
 ## 🧪 예제 코드
 ### ✔ Stack (LIFO)
@@ -77,14 +77,14 @@ fn main() {
 
 # 값만 확인 / 제거하면서 확인
 
-VecDeque에서 pop_front()와 pop_back()은 값을 꺼내면서 제거하지만,  
+VecDeque에서 `pop_front()` 와 `pop_back()` 은 값을 꺼내면서 제거하지만,  
 제거하지 않고 값만 확인하는 함수도 있습니다.
 
 ## ✅ 값만 확인하는 함수
 | 메서드   | 반환 타입     | 설명                         |
 |----------|----------------|------------------------------|
-| front()  | Option<&T>     | 맨 앞 요소를 참조로 반환       |
-| back()   | Option<&T>     | 맨 뒤 요소를 참조로 반환       |
+| `front()`  | `Option<&T>`     | 맨 앞 요소를 참조로 반환       |
+| `back()`   | `Option<&T>`     | 맨 뒤 요소를 참조로 반환       |
 
 이 함수들은 값을 제거하지 않고 Some(&value) 또는 None을 반환합니다.
 
@@ -104,17 +104,17 @@ fn main() {
 ## ✅ 요약
 | 목적           | 메서드                    | 값 제거 여부 | 반환 타입       |
 |----------------|----------------------------|--------------|-----------------|
-| 값 꺼내기      | pop_front(), pop_back()    | ✅ 제거됨     | Option<T>       |
-| 값 확인        | front(), back()            | ❌ 유지됨     | Option<&T>      |
+| 값 꺼내기      | `pop_front()`, `pop_back() `   | ✅ 제거됨     | Option<T>       |
+| 값 확인        | `front()`, `back()`            | ❌ 유지됨     | Option<&T>      |
 
 ---
 
 # 사용 방법
 
 ## ✅ 언제 어떤 걸 써야 할까?
-- Vec<T>: 가장 빠르고 일반적인 선택. Stack에 적합.
-- VecDeque<T>: 양방향 큐가 필요할 때. Queue/Deque에 적합.
-- LinkedList<T>: 삽입/삭제가 빈번하고 중간 조작이 많을 때. 하지만 성능은 낮음.
+- `Vec<T>`: 가장 빠르고 일반적인 선택. Stack에 적합.
+- `VecDeque<T>`: 양방향 큐가 필요할 때. Queue/Deque에 적합.
+- `LinkedList<T>`: 삽입/삭제가 빈번하고 중간 조작이 많을 때. 하지만 성능은 낮음.
 
 
 ##  소유권, 참조, 이터레이터 연동
@@ -124,10 +124,10 @@ Rust에서 Stack, Queue, Deque, List 자료구조를 다룰 때
 ## 🧠 자료구조별 소유권과 이터레이터 연결 요약
 | 자료구조   | 타입            | 소유권 이동 여부       | 참조 유지 여부       | map/filter 연결 방식                      |
 |------------|------------------|-------------------------|-----------------------|-------------------------------------------|
-| Stack      | Vec<T>           | `into_iter()`로 이동    | `iter()`로 참조 유지  | `map(|x| ...)`, `filter(|x| ...)` 가능     |
-| Queue      | VecDeque<T>      | 동일                    | 동일                  | `iter()`로 순차 처리 가능                  |
-| Deque      | VecDeque<T>      | 동일                    | 동일                  | 앞뒤 모두 처리 가능                        |
-| List       | LinkedList<T>    | `into_iter()`로 이동    | `iter()`로 참조 유지  | 느리지만 `map`, `filter` 가능              |
+| Stack      | `Vec<T>`           | `into_iter()`로 이동    | `iter()`로 참조 유지  | `map(|x| ...)`, `filter(|x| ...)` 가능     |
+| Queue      | `VecDeque<T>`      | 동일                    | 동일                  | `iter()`로 순차 처리 가능                  |
+| Deque      | `VecDeque<T>`      | 동일                    | 동일                  | 앞뒤 모두 처리 가능                        |
+| List       | `LinkedList<T>`    | `into_iter()`로 이동    | `iter()`로 참조 유지  | 느리지만 `map`, `filter` 가능              |
 
 
 ## 🧪 Stack 예제: 소유권 vs 참조 + map 연결
