@@ -10,7 +10,7 @@
 ## 1️⃣ 비동기 모델이란?
 - 동기 함수는 작업이 끝날 때까지 기다림 → 실행 흐름이 차단됨
 - 비동기 함수는 작업이 끝나길 기다리는 동안 다른 작업을 수행 가능
-- Rust에서는 **비동기 함수(async fn)**가 Future 객체를 반환하며, 이를 .await로 기다림
+- Rust에서는 **비동기 함수(async fn)** 가 Future 객체를 반환하며, 이를 .await로 기다림
 
 ### 비동기 flow
 ![async_flow](/image/async_flow.png)
