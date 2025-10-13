@@ -489,7 +489,7 @@ pub fn hello() {
 
 ### 해설
 
-static: 프로그램 수명 전체에 존재하는 전역 불변 참조를 선언합니다.
+static: 프로그램 수명 전체에 존재하는 전역 불변 참조를 선언합니다.  
 pub: 붙였기 때문에 다른 모듈에서 crate::bots::hello_bot::BOT_NAME으로 접근 가능합니다.
 
 
@@ -505,7 +505,7 @@ pub fn greet() {
 
 ### 해설
 
-crate:: 접두사: 현재 크레이트의 루트에서부터 경로를 해석합니다.
+crate:: 접두사: 현재 크레이트의 루트에서부터 경로를 해석합니다.  
 이 예시에서는 bots가 크레이트 루트(src/main.rs)에서 선언되므로 crate::bots::... 경로가 유효합니다.
 
 
@@ -530,14 +530,14 @@ fn main() {
 
 ### 자주 하는 실수와 팁
 
-파일 경로와 모듈 선언 불일치:
-mod my_module; 선언을 했는데 src/my_module.rs가 없으면 에러.
-공개 범위 누락:
-외부에서 쓰려는 함수/구조체/상수에 pub 미지정.
-경로 접두사 헷갈림:
-크레이트 루트 기준은 crate::, 부모 모듈은 super::, 현재 모듈은 self::.
-폴더 모듈에서 mod.rs 누락:
-src/bots/mod.rs가 없으면 src/bots/hello_bot.rs를 모듈로 찾지 못함.
+파일 경로와 모듈 선언 불일치:  
+mod my_module; 선언을 했는데 src/my_module.rs가 없으면 에러.  
+공개 범위 누락:  
+외부에서 쓰려는 함수/구조체/상수에 pub 미지정.  
+경로 접두사 헷갈림:  
+크레이트 루트 기준은 crate::, 부모 모듈은 super::, 현재 모듈은 self::.  
+폴더 모듈에서 mod.rs 누락:  
+src/bots/mod.rs가 없으면 src/bots/hello_bot.rs를 모듈로 찾지 못함.  
 
 ### 빌드/실행 빠른 레퍼런스
 ```
