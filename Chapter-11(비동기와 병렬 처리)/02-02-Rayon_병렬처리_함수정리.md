@@ -53,8 +53,8 @@ Rayon은 Rust의 iterator 문법을 그대로 유지하면서
 ### ✅ Rayon 병렬 반복자 핵심 기능
 | 기능              | 반환 타입         | 예시 코드                                  |
 |-------------------|-------------------|--------------------------------------------|
-| `par_iter()`      | `ParallelIterator`| `vec.par_iter().for_each(|x| ...)`         |
-| `par_iter_mut()`  | `ParallelIterator`| `vec.par_iter_mut().for_each(|x| *x += 1)` |
+| `par_iter()`      | `ParallelIterator`| `vec.par_iter().for_each(\|x\| ...)`         |
+| `par_iter_mut()`  | `ParallelIterator`| `vec.par_iter_mut().for_each(\|x\| *x += 1)` |
 | `into_par_iter()` | `ParallelIterator`| `vec.into_par_iter().for_each(...)`        |
 
 
@@ -69,9 +69,9 @@ Rayon은 Rust의 iterator 문법을 그대로 유지하면서
 ### ✅ 병렬 map/reduce/filter
 | 기능      | 반환 타입         | 예시 코드                                         |
 |-----------|-------------------|--------------------------------------------------|
-| `map()`   | `ParallelIterator`| `vec.par_iter().map(|x| x * 2)`                  |
-| `filter()`| `ParallelIterator`| `vec.par_iter().filter(|x| x % 2 == 0)`          |
-| `reduce()`| 값                | `vec.par_iter().reduce(|| 0, |a, b| a + b)`      |
+| `map()`   | `ParallelIterator`| `vec.par_iter().map(\|x\| x * 2)`                  |
+| `filter()`| `ParallelIterator`| `vec.par_iter().filter(\|x\| x % 2 == 0)`          |
+| `reduce()`| 값                | `vec.par_iter().reduce(\|\| 0, \|a, b\| a + b)`      |
 
 
 ### ✅ 인덱스 기반 병렬 처리
@@ -84,12 +84,12 @@ Rayon은 Rust의 iterator 문법을 그대로 유지하면서
 | 기능            | 비교 방식       | 예시 코드                                      |
 |-----------------|------------------|------------------------------------------------|
 | `par_sort()`     | 기본 정렬        | `vec.par_sort()`                               |
-| `par_sort_by()`  | 커스텀 비교 함수 | `vec.par_sort_by(|a, b| a.cmp(b))`             |
+| `par_sort_by()`  | 커스텀 비교 함수 | `vec.par_sort_by(\|a, b\| a.cmp(b))`             |
 
 ### ✅ 병렬 collect
 | 기능        | 반환 타입         | 예시 코드                                                           |
 |-------------|-------------------|----------------------------------------------------------------------|
-| `collect()` | 컬렉션 (예: Vec)  | `let doubled: Vec<_> = vec.par_iter().map(|x| x * 2).collect();`     |
+| `collect()` | 컬렉션 (예: Vec)  | `let doubled: Vec<_> = vec.par_iter().map(\|x\| x * 2).collect();`     |
 
 
 
