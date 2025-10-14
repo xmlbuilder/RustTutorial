@@ -37,7 +37,7 @@
 struct Book { ... }
 ```
 
-- Eq, Hash, PartialEq 트레잇이 필요함
+- `Eq`, `Hash`, `PartialEq` 트레잇이 필요함
 - 이유: HashMap은 내부적으로 키를 해시하고 비교해야 하기 때문
 ### 2. 키로 구조체를 쓰면 소유권이 이동됨
 ```rust
@@ -92,13 +92,13 @@ library.insert(book1, "Rust".to_string());
 # Find & Remove
 
 Rust에서는 HashMap에서 값을 찾거나 제거할 때 아래 메서드를 사용합니다:
-## 🔍 HashMap에서 값 찾기와 제거 (Rust 기준)
+## 🔍 HashMap에서 값 찾기와 제거
 | 동작 유형 | 메서드                     | 반환값 및 설명                                      |
 |-----------|----------------------------|-----------------------------------------------------|
 | 찾기      | `get(&key)`                | `Option<&V>` → `Some(value)` 또는 `None`            |
 | 수정용 찾기 | `get_mut(&key)`           | `Option<&mut V>` → 값에 대한 가변 참조               |
 | 제거      | `remove(&key)`             | `Option<V>` → 제거된 값 반환 또는 `None`            |
-| 조건 제거 | `retain(|k, v| 조건)`      | 조건을 만족하지 않는 항목 제거 (`filter`처럼 작동) |
+| 조건 제거 | `retain(\|k, v\| 조건)`      | 조건을 만족하지 않는 항목 제거 (`filter`처럼 작동) |
 
 
 ## ✅ 예시 코드
@@ -123,7 +123,7 @@ if let Some(removed) = map.remove("banana") {
 
 ## 🧬 구조체 내부에 HashMap이 있을 때 생명 주기와 주의사항
 
-Rust에서는 구조체 안에 HashMap을 넣을 때 **값의 생명 주기(lifetime)**와 **소유권(ownership)**을 잘 관리해야 합니다.
+Rust에서는 구조체 안에 HashMap을 넣을 때 **값의 생명 주기(lifetime)** 와 **소유권(ownership)** 을 잘 관리해야 합니다.
 ### 1. 🔗 참조를 저장할 경우 → 생명 주기 명시 필요
 ```rust
 use std::collections::HashMap;
@@ -155,13 +155,11 @@ struct Book {
 | 멀티스레드  | `HashMap`은 `Send`/`Sync`가 아님 → `Mutex<HashMap<...>>`로 감싸야 안전. |
 
 
-
 ## 🧠 실전 팁
-- 구조체 안에 HashMap<&str, &str>처럼 참조를 넣는 건 위험할 수 있어요.
-→ 가능하면 String을 사용해 소유권을 명확히 하는 게 안전합니다.
+- 구조체 안에 `HashMap<&str, &str>` 처럼 참조를 넣는 건 위험할 수 있음.  
+    → 가능하면 String을 사용해 소유권을 명확히 하는 게 안전합니다.
 - remove()는 반환값을 활용해 로그를 남기거나 조건 분기할 수 있어요.
 - get_mut()으로 직접 값을 수정할 수 있으니, insert() 반복보다 효율적일 수 있습니다.
-
 
 ----
 
