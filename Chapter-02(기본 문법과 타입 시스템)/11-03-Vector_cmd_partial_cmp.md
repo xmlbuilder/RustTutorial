@@ -336,12 +336,15 @@ impl Compare<f64> for AbsCompare {
 - 간단한 정렬 기준이 필요한 경우
 - 한 번만 쓰는 비교 로직일 때
 - 외부 환경을 캡처해야 할 때
+
+```rust
 let weight = vec![1.0, 0.5, 2.0];
 data.sort_by(|a, b| {
     let wa = weight[*a as usize];
     let wb = weight[*b as usize];
     wa.partial_cmp(&wb).unwrap()
 });
+```
 
 ---
 
