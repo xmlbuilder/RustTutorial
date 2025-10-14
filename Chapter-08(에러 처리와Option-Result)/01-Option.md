@@ -2,13 +2,14 @@
 Rust에서 가장 중요한 개념 중 하나인 Option<T> 타입을 보여주는 예제들
 
 ## 🧠 Option<T>란?
-Rust에서는 null 값이 존재하지 않습니다. 대신 Option<T>이라는 열거형(enum)을 사용해 값이 있을 수도 있고 없을 수도 있는 상황을 안전하게 표현합니다.
-
+Rust에서는 null 값이 존재하지 않습니다.  
+대신 Option<T>이라는 열거형(enum)을 사용해 값이 있을 수도 있고 없을 수도 있는 상황을 안전하게 표현합니다.
+```rust
 enum Option<T> {
     Some(T),
     None,
 }
-
+```
 
 ## 📌 의미 요약
 | Variant   | 값 존재 여부 | 포함된 값 | 설명                     |
@@ -22,10 +23,10 @@ enum Option<T> {
 let x: Option<i32> = Some(5);
 let y: Option<i32> = None;
 ```
-
 - Some(5)은 값이 있는 상태
 - None은 값이 없는 상태
-### match를 통한 패턴 매칭
+  
+### `match` 를 통한 패턴 매칭
 ```rust
 match x {
     Some(n) => println!("x is {}", n),
@@ -33,8 +34,7 @@ match x {
 }
 ```
 
-
-## ✨ if let을 통한 간결한 매칭
+## ✨ `if let` 을 통한 간결한 매칭
 ```rust
 if let Some(n) = x {
     println!("x is {}", n);
@@ -57,7 +57,7 @@ println!("{}", y.unwrap()); // ❌ panic 발생
 
 ## 🛡️ 안전한 대안들
 
-### unwrap_or
+### `unwrap_or`
 ```rust
 let x = Some(5);
 let y: Option<i32> = None;
@@ -66,7 +66,7 @@ println!("{}", x.unwrap_or(-1)); // 5
 println!("{}", y.unwrap_or(-1)); // -1
 ```
 
-### unwrap_or_default
+### `unwrap_or_default`
 ```rust
 let x: Option<u32> = None;
 let y: Option<u32> = Some(12);
@@ -74,11 +74,9 @@ let y: Option<u32> = Some(12);
 assert_eq!(x.unwrap_or_default(), 0);
 assert_eq!(y.unwrap_or_default(), 12);
 ```
-
-
-- 이미지에서는 "포함된 Some 값 또는 기본값을 반환"이라는 설명이 있었고,
 - None일 경우 해당 타입의 기본값을 반환합니다 (u32의 기본값은 0)
-### unwrap_or_else
+
+### `unwrap_or_else`
 ```rust
 let content = get_content().unwrap_or_else(|_| panic!("{}", FileNotDownload));
 ```
@@ -86,11 +84,10 @@ let content = get_content().unwrap_or_else(|_| panic!("{}", FileNotDownload));
 - 클로저를 통해 조건부 처리 가능
 - 이미지에서는 "환경 캡처가 가능한 클로저를 통해 새 값을 계산"이라는 설명이 있었어요
 
-### 💥 expect()의 권장 사용
+### 💥 `expect()` 의 권장 사용
 ```rust
 let item = y.expect("slice should not be empty");
 ```
-
 - unwrap()과 유사하지만, 사용자 정의 에러 메시지를 출력할 수 있음
 - 디버깅 시 매우 유용하며, 실무에서 가장 많이 권장되는 방식입니다
 
@@ -107,7 +104,6 @@ fn get_content() -> Result<String, Error> {
     File::open(filePath)?.read_to_string(&mut content)?;
     Ok(content)
 }
-
 
 #[derive(Debug, Clone)]
 struct FileNotDownload;
@@ -148,7 +144,6 @@ note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose bac
 error: process didn't exit successfully: `target\debug\sample2.exe` (exit code: 101)
  */
 ```
-
 
 ## 🧠 핵심 요약
 | 메서드               | 설명                                                                 |
