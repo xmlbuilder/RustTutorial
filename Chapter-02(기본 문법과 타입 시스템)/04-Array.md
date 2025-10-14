@@ -480,7 +480,6 @@ Rust에서는 [T; N]으로는 jagged array를 직접 표현할 수 없지만,
 Vec<Vec<T>> 또는 전용 라이브러리를 통해 동적이고 유연한 jagged 구조를 안전하게 구현할 수 있습니다.
 CAD 시스템에서 곡선 리스트나 UI 요소처럼 길이가 가변적인 데이터를 다룰 때 jagged 구조가 필요할 수 있어요.
 
-
 ----
 
 # 실전 예제
@@ -531,8 +530,6 @@ pub fn inverse3(m: &Matrix3x3) -> Option<Matrix4x4> {
 
     Some(inv)
 }
-
-
 
 pub fn build_minor3x3(source: &Matrix4x4, skip_row: usize, skip_col: usize) -> Matrix3x3 {
     let mut minor = [[0.0; 3]; 3];
@@ -635,5 +632,6 @@ fn main() {
     println!("전치행렬: {:#?}", transposed);
 }
 ```
+
 
 
