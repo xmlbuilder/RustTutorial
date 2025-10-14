@@ -49,7 +49,7 @@ for p in points.iter_mut() {
 - 반복 중에 슬라이스를 변경하거나 재할당하면 불안정한 상태가 될 수 있음
 
 ---
-## Tuple 구조체와 결함
+## Tuple 구조체와 결합 하면
 KnotVector가 Vec<T>를 튜플 구조체로 감싼 다음 std::slice::IterMut를 재정의하면,  
 그건 단순한 반복 이상의 도메인 제어, API 안정성, 타입 안전성을 의도한 구조적 설계를 할 수 있음.
 
