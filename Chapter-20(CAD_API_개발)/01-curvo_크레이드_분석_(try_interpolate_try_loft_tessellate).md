@@ -128,35 +128,41 @@ pub fn generate_interpolation(n: usize, degree: usize) -> Result<KnotVector<T>, 
 - n: 제어점 개수
 - degree: 곡선 차수 (예: 3차 → cubic)
 #### 🔹 Step 1: 총 노트 개수 계산
+```rust
 let m = n + degree + 1;
-
+```
 
 - NURBS에서 노트 벡터 길이는 n + p + 1
 #### 🔹 Step 2: 노트 벡터 초기화
+```rust
 let mut knots = vec![T::zero(); m];
-
+```
 
 - T는 Float trait을 만족하는 제네릭 타입 (f64, f32 등)
 #### 🔹 Step 3: 시작과 끝 노트 고정
+```rust
 for i in 0..=degree {
     knots[i] = T::zero();
     knots[m - 1 - i] = T::one();
 }
-
+```
 - 시작과 끝은 각각 0과 1로 고정 → open uniform 구조
 #### 🔹 Step 4: 내부 노트 균등 분포
+```rust
 let step = T::one() / T::from_usize(n - degree).unwrap();
 for i in (degree + 1)..(m - degree - 1) {
     knots[i] = T::from_usize(i - degree).unwrap() * step;
 }
-
+```
 - 내부 노트는 균등하게 분포됨 → 보간 안정성 확보
 
 ## 2️⃣ LinearSystem::solve(): 제어점 계산
 ### 📌 목적
 보간 조건을 만족하는 제어점을 계산하기 위해 선형 시스템을 풀어냅니다.
 ### 🧩 단계별 흐름
+```rust
 pub fn solve(&self) -> Result<Vec<Point3<T>>, Error>
+```
 
 #### 🔹 Step 1: 시스템 행렬 구성
 - A 행렬: basis function 값으로 구성 (A[i][j] = N_j(t_i))
