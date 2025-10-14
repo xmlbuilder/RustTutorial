@@ -179,19 +179,19 @@ impl Ord for Point {
 
 ----
 # float 정렬
-float 값은 정렬할 때 항상 까다로움.
-특히 NaN, -0.0, +0.0, 정밀도 문제 때문에 기본 비교 연산자만으로는 원하는 결과를 얻기 어려울 때가 많습니다.
-그래서 외부 비교 함수를 넣어서 정렬 기준을 직접 정의하는 게 핵심 전략입니다.
+float 값은 정렬할 때 항상 까다로움.  
+특히 NaN, -0.0, +0.0, 정밀도 문제 때문에 기본 비교 연산자만으로는 원하는 결과를 얻기 어려울 때가 많습니다.  
+그래서 외부 비교 함수를 넣어서 정렬 기준을 직접 정의하는 게 핵심 전략입니다.  
 
 ## 🧠 Rust에서 float 정렬 시 외부 비교 함수 넣는 샘플
-### 🔹 기본 정렬은 partial_cmp() 사용
+### 🔹 기본 정렬은 `partial_cmp()` 사용
 ```rust
 let mut data = vec![3.2, f64::NAN, 1.5, 2.8];
 data.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Greater));
 println!("{:?}", data); // NaN은 맨 뒤로
 ```
 
-- partial_cmp()는 Option<Ordering>을 반환하므로 unwrap_or()로 처리
+- `partial_cmp()` 는 `Option<Ordering>` 을 반환하므로 `unwrap_or()` 로 처리
 - NaN은 비교 불가 → 기본적으로 맨 뒤로 보내는 전략
 
 ### 🔹 사용자 정의 기준: 절댓값 기준 정렬
@@ -251,8 +251,8 @@ data.sort_by(|a, b| {
 
 # closure 사용
 
-Rust에서는 **클로저(closure)**를 아주 강력하게 지원하고,
-특히 Vec<T>의 정렬이나 필터링, 매핑 같은 고차 함수에서
+Rust에서는 **클로저(closure)** 를 아주 강력하게 지원하고,  
+특히 Vec<T>의 정렬이나 필터링, 매핑 같은 고차 함수에서  
 외부 비교 함수로 클로저를 직접 인자로 넣는 방식이 자주 쓰입니다.
 
 
@@ -267,7 +267,7 @@ data.sort_by(|a, b| {
 ```
 
 - 여기서 |a, b| ...가 바로 클로저
-- partial_cmp()는 Option<Ordering>을 반환하므로 unwrap_or()로 처리
+- `partial_cmp()` 는 `Option<Ordering>` 을 반환하므로 `unwrap_or()` 로 처리
 
 ### 🔹 절댓값 기준 정렬
 ```rust
@@ -275,7 +275,6 @@ let mut data = vec![-3.2, 1.5, -2.8, 0.0];
 
 data.sort_by(|a, b| a.abs().partial_cmp(&b.abs()).unwrap());
 ```
-
 - a.abs()와 b.abs()를 비교하는 클로저
 
 ### 🔹 filter()나 map()에도 클로저 사용
@@ -283,11 +282,9 @@ data.sort_by(|a, b| a.abs().partial_cmp(&b.abs()).unwrap());
 let data = vec![1, 2, 3, 4, 5];
 let even: Vec<_> = data.into_iter().filter(|x| x % 2 == 0).collect();
 ```
-
 - |x| x % 2 == 0 → 짝수만 필터링
 
 ## 🔍 클로저의 특징 요약
-
 | 항목             | 설명 또는 역할                          |
 |------------------|------------------------------------------|
 | 환경 캡처        | 외부 변수 참조 가능 (`move` 키워드로 소유권 이동 가능) |
@@ -297,14 +294,14 @@ let even: Vec<_> = data.into_iter().filter(|x| x % 2 == 0).collect();
 
 
 ---
+
 # trait 사용
 
-비교 로직을 일반화하거나 재사용하려면 trait가 훨씬 낫습니다.
-클로저는 강력하지만, 일회성, 지역성, 타입 추론 의존성 때문에
-복잡한 비교 로직이나 여러 곳에서 쓰이는 비교 기준에는 trait 기반 설계가 더 안정적이고 확장성도 좋습니다.
+비교 로직을 일반화하거나 재사용하려면 trait가 훨씬 낫습니다.  
+클로저는 강력하지만, 일회성, 지역성, 타입 추론 의존성 때문에  
+복잡한 비교 로직이나 여러 곳에서 쓰이는 비교 기준에는 trait 기반 설계가 더 안정적이고 확장성도 좋습니다.  
 
 ## 🔍 클로저 vs Trait 비교 요약
-
 | 항목             | 클로저                                      | Trait                                       |
 |------------------|----------------------------------------------|---------------------------------------------|
 | 사용 편의성       | 간단하고 빠르게 작성 가능 (`|a, b| ...`)         | 초기 설정은 복잡하지만 구조화된 설계 가능       |
@@ -346,10 +343,11 @@ data.sort_by(|a, b| {
     wa.partial_cmp(&wb).unwrap()
 });
 
---- 
-# partial_cmp / cmp
+---
 
-partial_cmp와 cmp는 둘 다 비교를 위한 메서드지만, 동작 방식과 적용 대상이 다릅니다.  
+# `partial_cmp` / `cmp`
+
+`partial_cmp`와 `cmp` 는 둘 다 비교를 위한 메서드지만, 동작 방식과 적용 대상이 다릅니다.  
 특히 float 같은 값에서 차이가 확실히 드러나죠.
 
 ## 🔍 핵심 차이 요약
@@ -450,18 +448,17 @@ let result = a.cmp(&b); // Ordering::Less
 - 디버깅 시 주의: “왜 이 벡터가 작다고 나왔지?” → 앞 요소 먼저 확인해야 함
 
 ---
-
 # cmp None이 들어 오면
 
 핵심부터 말씀드리면: cmp()는 Ord trait 기반이기 때문에, 비교할 수 없는 값(None)이 들어가 있으면 컴파일 자체가 안 됩니다.
 
 ## 🔍 상황 정리
-예: Vec<Option<i32>>를 cmp()로 비교하려고 하면?
+예: `Vec<Option<i32>>` 를 cmp()로 비교하려고 하면?
 ```rust
 let a = vec![Some(1), None];
 let b = vec![Some(1), Some(2)];
 
-let result = a.cmp(&b); // ❌ 컴파일 에러!
+let result = a.cmp(&b); // ✅ 컴파일 에러 아님!
 ```
 
 - 이유: Option<i32>는 Ord를 구현하지만,
@@ -506,6 +503,9 @@ let result = a.partial_cmp(&b); // → Option<Ordering>
 
 
 Option<T>와 float을 함께 다루려면 단순히 “비교된다”가 아니라  
-**“타입 조합에 따라 비교 가능 여부가 어떻게 달라지는가”** 를 정확히 알고 있어야 함.
+**타입 조합에 따라 비교 가능 여부가 어떻게 달라지는가** 를 정확히 알고 있어야 함.
+
+---
+
 
 
