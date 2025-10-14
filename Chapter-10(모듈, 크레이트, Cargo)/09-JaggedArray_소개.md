@@ -6,7 +6,7 @@ Cargo.toml 설정과 사용법은 간단하며, 장단점도 명확하게 구분
 ```
 [dependencies]
 jagged_array = "0.2"
-``
+```
 
 - crates.io에 등록된 버전 "0.2"를 사용
 - 최신 버전은 JaggedArray on crates.io에서 확인 가능
