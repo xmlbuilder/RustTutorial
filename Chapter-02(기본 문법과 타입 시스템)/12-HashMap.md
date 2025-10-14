@@ -85,9 +85,7 @@ library.insert(book1, "Rust".to_string());
 | 값 수정 시               | `.entry(key).and_modify(...)` 사용 |
 | 값이 없을 경우 처리      | `.unwrap_or(...)`, `.is_none()` 등으로 안전하게 처리 |
 
-
 ----
-
 
 # Find & Remove
 
@@ -194,13 +192,13 @@ struct Book<'a> {
 }
 ```
 
-- 여기서는 Book이 외부의 &str을 참조하고 있으므로 'a 생명 주기를 명시해야 합니다.
-- 이 경우 Book이 참조하는 데이터가 먼저 drop되면 문제가 생기므로,
+- 여기서는 Book이 외부의 `&str` 을 참조하고 있으므로 `'a` 생명 주기를 명시해야 합니다.  
+- 이 경우 Book이 참조하는 데이터가 먼저 drop되면 문제가 생기므로,  
 Rust가 컴파일 타임에 생명 주기를 체크합니다.
 
 ## ✅ 결론
 HashMap<String, String>에서 String은 heap에 있지만,
-생명 주기 명시가 필요하지 않으며,
+생명 주기 명시가 필요하지 않으며,  
 HashMap이 drop될 때 함께 안전하게 drop됩니다.
 
 
