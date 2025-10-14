@@ -23,10 +23,10 @@
 | 삽입                       | `.insert(key, value)`                                              |
 | 삭제                       | `.remove(key)`                                                     |
 | 조회                       | `.get(&key)` → `Option<&V>`                                        |
-| 수정                       | `.entry(key).and_modify(|v| ...)`                                  |
+| 수정                       | `.entry(key).and_modify(\|v\| ...)`                                  |
 | 반복                       | `for (k, v) in &map`                                               |
 | 키 존재 확인               | `.contains_key(&key)`                                              |
-| 값 조건 검색               | `.values().any(|v| ...)`                                           |
+| 값 조건 검색               | `.values().any(\|v\| ...)`                                           |
 
 
 
