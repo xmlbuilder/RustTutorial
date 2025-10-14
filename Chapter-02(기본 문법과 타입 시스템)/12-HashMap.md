@@ -156,7 +156,7 @@ struct Book {
 ## 🧠 실전 팁
 - 구조체 안에 `HashMap<&str, &str>` 처럼 참조를 넣는 건 위험할 수 있음.  
     → 가능하면 String을 사용해 소유권을 명확히 하는 게 안전합니다.
-- remove()는 반환값을 활용해 로그를 남기거나 조건 분기할 수 있어요.
+- remove()는 반환값을 활용해 로그를 남기거나 조건 분기할 수 있음.
 - get_mut()으로 직접 값을 수정할 수 있으니, insert() 반복보다 효율적일 수 있습니다.
 
 ----
@@ -180,9 +180,9 @@ struct Book {
 ```
 - 이 구조체가 drop되면 → 내부 HashMap도 drop됨
 - HashMap이 drop되면 → 내부의 String 값들도 함께 drop됨
-- 즉, String이 HashMap보다 오래 살아야 할 필요는 없습니다.
-오히려 HashMap이 String을 소유하고 관리하기 때문에,
-String의 생명 주기는 HashMap의 생명 주기에 종속됩니다.
+- 즉, String이 HashMap보다 오래 살아야 할 필요는 없습니다.  
+오히려 HashMap이 String을 소유하고 관리하기 때문에,  
+`String` 의 생명 주기는 `HashMap` 의 생명 주기에 종속됩니다.
 
 ### ⚠️ 생명 주기가 문제가 되는 경우는?
 다음과 같은 경우에는 생명 주기 명시가 필요합니다:
