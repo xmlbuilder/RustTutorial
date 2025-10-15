@@ -349,13 +349,16 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [04-Box](./Chapter-15%28SmartPointers_and_MemoryModels%29/04-Box.md)
 - [05-Rc](./Chapter-15%28SmartPointers_and_MemoryModels%29/05-Rc.md)
 - [06-Arc](./Chapter-15%28SmartPointers_and_MemoryModels%29/06-Arc.md)
-- [07-Box&Rc&RcCell&Arc&Mutex요약](./Chapter-15%28SmartPointers_and_MemoryModels%29/07-Box&Rc&RcCell&Arc&Mutex요약.md)
+- [07-RefCell](./Chapter-15%28SmartPointers_and_MemoryModels%29/07-RefCell.md)
 - [08-static_for_box_rc](./Chapter-15%28SmartPointers_and_MemoryModels%29/08-static_for_box_rc.md)
 - [09-null_pointer_optimization](./Chapter-15%28SmartPointers_and_MemoryModels%29/09-null_pointer_optimization.md)
 - [10-Box_trait_메모리_레이아웃](./Chapter-15%28SmartPointers_and_MemoryModels%29/10-Box_trait_메모리_레이아웃.md)
 - [11-RefCell을_이용한_구조](./Chapter-15%28SmartPointers_and_MemoryModels%29/11-RefCell을_이용한_구조.md)
 - [12-Arena](./Chapter-15%28SmartPointers_and_MemoryModels%29/12-Arena.md)
 - [13-Pool_Slab_Segregator](./Chapter-15%28SmartPointers_and_MemoryModels%29/13-Pool_Slab_Segregator.md)
+- [14-Weak](./Chapter-15%28SmartPointers_and_MemoryModels%29/14-Weak.md)
+- [15-RefCell과RC+RefCell의차이](./Chapter-15%28SmartPointers_and_MemoryModels%29/15-RefCell과RC+RefCell의차이)
+- [16-Box&Rc&RcCell&Arc&Mutex요약](./Chapter-15%28SmartPointers_and_MemoryModels%29/16-Box&Rc&RcCell&Arc&Mutex요약.md)
 
 
 🔼 [맨 위로](#-목차)
