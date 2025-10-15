@@ -1,6 +1,6 @@
 # iter().map(|(k, _)| k).collect::<Vec<_>>() 패턴 활용
 
-`iter().map(|(k, _)| k).collect::<Vec<_>>()` 같은 패턴은 Vec나 배열에서도 충분히 활용 가능. 
+`iter().map(|(k, _)| k).collect::<Vec<_>>()` 같은 패턴은 Vec나 배열에서도 충분히 활용 가능.  
 다만 Vec과 배열은 (key, value) 쌍이 아니라 값만 있는 순차 컬렉션이기 때문에, map()의 대상이 달라질 뿐.
 
 ## ✅ Vec에서 map + collect 예제
