@@ -70,14 +70,11 @@ fn main() {
     let language = Language::Rust;
     language.echo();
     //Rust
-
     match language {
         Language::Rust => println!("I love Rust"),
         Language::JavaScript => println!("I love JavaScript"),
         Language::Go => println!("I love Go"),
         Language::Python => println!("I love Python"),
-
-
 }
 ```
 
@@ -120,7 +117,6 @@ fn main() {
     println!("red == green => {}", red == green); //red == green => false
 }
 ```
-
 
 ### 3. 데이터 포함하는 enum
 ```rust
@@ -193,8 +189,6 @@ fn main() {
     println!("m3 = {:?}", m3); //m3 = ChangePlayerName("Model")
     
 }
-
-
 ```
 
 ### 5. Option enum 활용
@@ -227,6 +221,7 @@ fn main() {
 | 비교 가능              | `PartialEq` 트레이트로 `==` 비교 가능                                |
 | Option 활용            | `Some`, `None`으로 null-safe한 값 표현 가능                          |
 
+---
 
 
 
