@@ -123,7 +123,9 @@ Ok(NurbsCurve3D {
 ### 📌 목적
 주어진 점 개수와 곡선 차수에 맞는 open uniform knot vector를 생성합니다.
 ### 🧩 단계별 흐름
+```rust
 pub fn generate_interpolation(n: usize, degree: usize) -> Result<KnotVector<T>, Error>
+```
 
 - n: 제어점 개수
 - degree: 곡선 차수 (예: 3차 → cubic)
