@@ -12,18 +12,18 @@ enum Direction {
 }
 ```
 
-하지만 Rust의 enum은 단순한 값 나열을 넘어서 각 variant에 데이터를 포함할 수 있고, **패턴 매칭(match)**과 함께 사용하면 매우 강력한 표현력을 가집니다.
+하지만 Rust의 enum은 단순한 값 나열을 넘어서 각 variant에 데이터를 포함할 수 있고, **패턴 매칭(match)** 과 함께 사용하면 매우 강력한 표현력을 가집니다.
 
 ## 🔍 다른 언어와의 차이점
-| 비교 항목                          | Rust                             | C/C++                           | Java                            | TypeScript                     |
-|-----------------------------------|----------------------------------|---------------------------------|----------------------------------|--------------------------------|
-| 기본 선언                         | `enum Language { Rust, Go }`     | `enum Language { Rust, Go }`    | `enum Language { RUST, GO }`    | `enum Language { Rust, Go }`   |
-| 데이터 포함                       | ✅ `enum Message { Text(String) }` | ❌ 불가능                        | ✅ 필드와 생성자 가능             | ❌ 불가능                      |
-| 패턴 매칭                         | ✅ `match message { ... }`        | ❌ `switch`만 가능               | ❌ `switch` 사용 가능             | ❌ `switch` 사용 가능           |
-| 타입 안전성                       | ✅ 컴파일 시 타입 체크            | ❌ 정수 기반, 타입 안전성 낮음   | ✅ 클래스 기반으로 타입 안전함     | ❌ 런타임 오류 가능             |
-| 트레이트 및 기능 확장             | ✅ `#[derive(Debug, PartialEq)]` | ❌ 불가능                        | ✅ 메서드 정의 가능               | ❌ 제한적                      |
-| 구조체 형태의 variant             | ✅ `enum Msg { Win { who: String } }` | ❌ 불가능                    | ❌ 불가능                        | ❌ 불가능                      |
-| null-safe 표현 (`Option`)         | ✅ `Option<T>`                    | ❌ `NULL` 사용                   | ❌ `null` 사용                    | ❌ `null` 사용                  |
+| 비교 항목         | Rust      | C/C++         | Java        | TypeScript   |
+|------------------|----------------|------------------|----------------------------------|--------------------------------|
+| 기본 선언 | `enum Language { Rust, Go }`     | `enum Language { Rust, Go }`    | `enum Language { RUST, GO }` | `enum Language { Rust, Go }` |
+| 데이터 포함  | ✅ `enum Message { Text(String) }` | ❌ 불가능                        | ✅ 필드와 생성자 가능 | ❌ 불가능 |
+| 패턴 매칭   | ✅ `match message { ... }`        | ❌ `switch`만 가능               | ❌ `switch` 사용 가능 | ❌ `switch` 사용 가능 |
+| 타입 안전성         | ✅ 컴파일 시 타입 체크            | ❌ 정수 기반, 타입 안전성 낮음 | ✅ 클래스 기반으로 타입 안전함 | ❌ 런타임 오류 가능 |
+| 트레이트 및 기능 확장 | ✅ `#[derive(Debug, PartialEq)]` | ❌ 불가능                        | ✅ 메서드 정의 가능 | ❌ 제한적 |
+| 구조체 형태의 variant | ✅ `enum Msg { Win { who: String } }` | ❌ 불가능                    | ❌ 불가능 | ❌ 불가능 |
+| null-safe 표현 (`Option`) | ✅ `Option<T>`                    | ❌ `NULL` 사용                   | ❌ `null` 사용 | ❌ `null` 사용 |
 
 
 Rust의 enum은 Algebraic Data Type(ADT) 개념을 구현하며, Option, Result 같은 표준 라이브러리의 핵심 타입도 모두 enum으로 구현되어 있습니다.
