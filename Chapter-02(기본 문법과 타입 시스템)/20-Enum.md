@@ -30,7 +30,7 @@ Rust의 enum은 Algebraic Data Type(ADT) 개념을 구현하며,
 `Option`, `Result` 같은 표준 라이브러리의 핵심 타입도 모두 `enum` 으로 구현되어 있습니다.
 
 - `#[derive(Debug)]`
-→ Debug 트레이트를 자동으로 구현해줘서 println!("{:?}", ...)로 출력 가능.
+→ Debug 트레이트를 자동으로 구현해줘서 `println!("{:?}", ...)` 로 출력 가능.
 
 - `#[allow(dead_code)]`
 → 사용되지 않는 코드라도 컴파일 에러 없이 허용해주는 속성.
@@ -98,11 +98,11 @@ enum Color {
 }
 
 fn main() {
-
     let red = Color::Red;
     let green = Color::Green;
     println!("red = {:?} green = {:?}", red, green); //red = Red green = Green
 }
+
 //PartialEq를 쓰면 enum 끼리 비교가 가능하다.
 #[derive(Debug, PartialEq)]
 enum Color {
@@ -187,7 +187,6 @@ fn main() {
     println!("m1 = {:?}", m1); //m1 = StartGame
     println!("m2 = {:?}", m2); //m2 = WinPoint { who: "Jhjeong" }
     println!("m3 = {:?}", m3); //m3 = ChangePlayerName("Model")
-    
 }
 ```
 
@@ -195,7 +194,6 @@ fn main() {
 ```rust
 let some_number = Some(2);
 let absent_number: Option<i32> = None;
-
 ```
 - Option<T>는 Some(T) 또는 None을 표현
 - 안전한 null 대체 방식
