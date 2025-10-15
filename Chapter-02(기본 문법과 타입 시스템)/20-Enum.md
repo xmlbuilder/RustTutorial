@@ -26,12 +26,13 @@ enum Direction {
 | null-safe 표현 (`Option`) | ✅ `Option<T>`                    | ❌ `NULL` 사용                   | ❌ `null` 사용 | ❌ `null` 사용 |
 
 
-Rust의 enum은 Algebraic Data Type(ADT) 개념을 구현하며, Option, Result 같은 표준 라이브러리의 핵심 타입도 모두 enum으로 구현되어 있습니다.
+Rust의 enum은 Algebraic Data Type(ADT) 개념을 구현하며,  
+`Option`, `Result` 같은 표준 라이브러리의 핵심 타입도 모두 `enum` 으로 구현되어 있습니다.
 
-- #[derive(Debug)]
+- `#[derive(Debug)]`
 → Debug 트레이트를 자동으로 구현해줘서 println!("{:?}", ...)로 출력 가능.
 
-- #[allow(dead_code)]
+- `#[allow(dead_code)]`
 → 사용되지 않는 코드라도 컴파일 에러 없이 허용해주는 속성.
 
 
