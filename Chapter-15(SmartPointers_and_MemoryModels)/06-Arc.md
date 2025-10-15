@@ -9,8 +9,8 @@ Arc는 참조 카운트를 원자적으로 증가/감소해, 여러 스레드가
 - `Rc`: 단일 스레드 전용. `Send/Sync` 가 아니므로 다른 스레드로 이동 불가.
 - `Arc`: 멀티스레드 안전. 참조 카운트 연산이 원자적이어서 여러 스레드에서 안전하게 공유 가능.
 - 오해 방지: Arc는 **참조 카운트 변경** 만 원자적입니다.
-- 데이터 변경 보장 아님: `Arc` 는 내부 데이터 변경을 보호하지 않습니다. 변경하려면 `Arc<Mutex<T>>`, `Arc<RwLock<T>>`, 또는 `Arc<Atomic*>` 를 사용하세요.
-- 수명 규칙:
+- 데이터 변경 보장 아님: `Arc` 는 내부 데이터 변경을 보호하지 않습니다.
+- 변경하려면 `Arc<Mutex<T>>`, `Arc<RwLock<T>>`, 또는 `Arc<Atomic*>` 를 사용하세요.
 - 값의 수명: 공유되는 값은 스레드보다 오래 살아야 합니다. `Arc` 는 이 수명을 참조 카운팅으로 보장합니다.
 
 ## 샘플 코드와 해설
@@ -57,10 +57,10 @@ fn main() {
 }
 ```
 
-- 관찰 포인트: 각 시점에서 strong_count는 3을 가리킬 수 있으나, 두 스레드의 출력 순서는 스케줄링에 따라 달라집니다(비결정적).
+- 관찰 포인트: 각 시점에서 strong_count는 3을 가리킬 수 있으나, 두 스레드의 출력 순서는 스케줄링에 따라 달라집니다 (비결정적).
 - 요점: Arc의 복제(clone)는 참조 카운트를 원자적으로 증가시키며, 드롭 시 원자적으로 감소합니다.
 
-### 3) Arc만으로 가변 접근을 시도 → 불가
+### 3) `Arc` 만으로 가변 접근을 시도 → 불가
 ```rust
 use std::sync::Arc;
 use std::thread;
@@ -93,8 +93,8 @@ fn main() {
 
 - 문제: `Arc<i32>` 는 내부 값에 대한 동시 가변 접근을 보장하지 않습니다. `&mut` 대여 자체가 성립하지 않으며, 설령 되더라도 데이터 경합 위험.
 - 해법: `Arc<Mutex<i32>>` 또는 `Arc<AtomicI32>` 등 동기화 원시를 사용해야 합니다.
-- 
-### 4) 올바른 수정: Arc<Mutex<T>>로 보호
+
+### 4) 올바른 수정: `Arc<Mutex<T>>` 로 보호
 ```rust
 use std::sync::{Arc, Mutex};
 use std::thread;
@@ -115,8 +115,8 @@ fn withdraw(balance: &Arc<Mutex<i32>>, amount: i32) {
 
 fn main() {
     let balance = Arc::new(Mutex::new(100));
-
     let b1 = Arc::clone(&balance);
+
     let t1 = thread::spawn(move || {
         withdraw(&b1, 50);
     });
