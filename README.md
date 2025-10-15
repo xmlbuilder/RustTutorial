@@ -353,6 +353,9 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [09-null_pointer_optimization](./Chapter-15%28SmartPointers_and_MemoryModels%29/09-null_pointer_optimization.md)
 - [10-Box_trait_메모리_레이아웃](./Chapter-15%28SmartPointers_and_MemoryModels%29/10-Box_trait_메모리_레이아웃.md)
 - [11-RefCell을_이용한_구조](./Chapter-15%28SmartPointers_and_MemoryModels%29/11-RefCell을_이용한_구조.md)
+- [12-Arena](./Chapter-15%28SmartPointers_and_MemoryModels%29/12-Arena.md)
+- [13-Pool_Slab_Segregator](./Chapter-15%28SmartPointers_and_MemoryModels%29/13-Pool_Slab_Segregator.md)
+
 
 🔼 [맨 위로](#-목차)
 
