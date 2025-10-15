@@ -25,7 +25,7 @@ fn main() {
 
 
 ### 🔁 재귀 타입과 Box의 필요성
-Rust는 크기를 알 수 없는 재귀 타입을 직접 정의할 수 없습니다.
+Rust는 크기를 알 수 없는 재귀 타입을 직접 정의할 수 없습니다.  
 예를 들어 아래와 같은 List는 컴파일 에러가 발생합니다:
 ```rust
 enum List {
@@ -34,9 +34,10 @@ enum List {
 }
 ```
 
-❗ 에러 메시지
+#### ❗ 에러 메시지
+```rust
 error[E0072]: recursive type `List` has infinite size
-
+```
 
 ### ✅ 해결 방법: Box로 간접 참조 (Niche Optimization)
 ```rust
@@ -46,10 +47,11 @@ enum List {
     Nil,
 }
 ```
+
 #### 코드
 ```rust
 enum List {
-    Cons(i32, List),
+    Cons(i32, Box<List>),
     Nil,
 }
 use List::{Cons, Nil};
@@ -59,6 +61,7 @@ fn main() {
 }
 ```
 
+### 에러 유발 코드
 ```rust
 struct Node {
     val: i32,
@@ -66,7 +69,6 @@ struct Node {
 }
 
 fn main() {
-
     let mut head = Node {
         val: 1,
         next: None
@@ -96,27 +98,26 @@ help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to break the cycle
     
  */
 }
+```
 
-
+### 수정된 코드
+```rust
 struct Node {
     val: i32,
     next: Option<Box<Node>>
 }
 
 fn main() {
-
     let mut head = Node {
         val: 1,
         next: None
     };
-
     head.next = Some(Box::new(Node{val: 2, next: None}));
     println!("{}", head.val);
-
 }
 ```
 
-이제 Box<List>는 고정된 크기의 포인터이므로 컴파일러가 처리할 수 있습니다.
+이제 Box<List>는 고정된 크기의 포인터이므로 컴파일러가 처리할 수 있습니다.  
 Box는 비어있을 수 없습니다.  
 따라서 포인터는 항상 유효하며 null이 아닙니다.  
 이는 컴파일러가 메모리 레이아웃을 최적화 할 수 있게 해줍니다.  
@@ -136,9 +137,10 @@ graph TD
 - Box는 힙에 저장된 다음 노드를 참조합니다
 
 ### 🐾 Trait Object와 Box<dyn Trait>
-Trait Object는 런타임에 다양한 타입을 하나의 인터페이스로 다루는 방식입니다.
-impl Trait은 리턴 타입이 하나의 구체 타입일 때만 사용 가능하지만,
-서로 다른 타입을 리턴하려면 Box<dyn Trait>이 필요합니다.
+Trait Object는 런타임에 다양한 타입을 하나의 인터페이스로 다루는 방식입니다.  
+impl Trait은 리턴 타입이 하나의 구체 타입일 때만 사용 가능하지만,  
+서로 다른 타입을 리턴하려면 Box<dyn Trait>이 필요합니다.  
+
 #### ❌ 오류 예시
 ```rust
 fn random_animal() -> impl Animal {
@@ -161,12 +163,12 @@ fn random_animal() -> Box<dyn Animal> {
 }
 ```
 
-
 - Box<dyn Trait>은 동적 디스패치를 통해 다양한 타입을 처리
 - 컴파일러는 vtable을 생성하여 런타임에 메서드를 호출
 
 
 ### 소스
+#### 에러 소스
 ```rust
 struct Dog{}
 struct Cat{}
@@ -180,6 +182,7 @@ impl Animal for Dog {
         "baaaa"
     }
 }
+
 impl Animal for Cat {
     fn noise(&self) -> &'static str {
         "meow"
@@ -223,7 +226,9 @@ help: if you change the return type to expect trait objects, box the returned ex
     
  */
 }
-
+```
+#### 수정된 코드
+```rust
 struct Dog{}
 struct Cat{}
 
@@ -256,7 +261,6 @@ fn main() {
     //meow
 
 }
-
 ```
 
 ## 📦 Box 요약표
@@ -268,7 +272,6 @@ fn main() {
 | 성능 오버헤드 없음    | 단순한 간접 참조만 제공하므로 다른 스마트 포인터보다 가볍고 빠름 |
 
 ---
-
 
 # 🧠 핵심 질문
 왜 impl Trait은 함수 인자에서는 가능하지만, 반환 타입에서는 제한이 있을까?
@@ -306,7 +309,7 @@ fn random_animal() -> impl Animal {
 }
 ```
 
-- Dog와 Cat은 서로 다른 타입이므로 impl Trait로는 반환 불가
+- Dog와 Cat은 `서로 다른 타입` 이므로 `impl Trait` 로는 반환 불가
 - 컴파일러는 하나의 고정된 타입만 반환할 수 있어야 함
 
 ### ✅ 해결: Box<dyn Trait>로 trait object 반환
@@ -326,9 +329,9 @@ fn random_animal() -> Box<dyn Animal> {
 ## 🧭 요약 정리
 | 개념               | 설명                                                                 |
 |--------------------|----------------------------------------------------------------------|
-| `impl Trait` 인자  | 컴파일 타임에 타입 결정, monomorphization 가능                       |
-| `impl Trait` 반환  | 하나의 고정 타입만 반환 가능, 서로 다른 타입이면 에러 발생            |
-| `Box<dyn Trait>`   | 힙에 저장된 trait object 반환, 런타임에 타입 결정, 동적 디스패치 사용 |
+| `impl Trait` 인자  | `컴파일 타임에 타입 결정`, monomorphization 가능                       |
+| `impl Trait` 반환  | `하나의 고정 타입만 반환 가능`, 서로 다른 타입이면 에러 발생            |
+| `Box<dyn Trait>`   | 힙에 저장된 trait object 반환, `런타임에 타입 결정`, 동적 디스패치 사용 |
 
 ---
 
