@@ -413,7 +413,7 @@ fn main() {
 - 단일 스레드 환경에서
 - 여러 Observer가 등록되고, 각 Observer가 상태를 바꿀 수 있어야 할 때
 - GUI, 게임 엔진, 이벤트 시스템 등에서 자주 사용
-- 
+
 ### 💡 예시
 ```rust
 let observers: Vec<Rc<RefCell<dyn Observer>>> = vec![];
@@ -436,9 +436,7 @@ let observers: Vec<Rc<RefCell<dyn Observer>>> = vec![];
 ```rust
 let observers: Arc<Mutex<Vec<Box<dyn Observer + Send + Sync>>>> = Arc::new(Mutex::new(vec![]));
 ```
-
 여기서 Send + Sync는 Observer가 스레드 간 안전하게 이동되고 공유될 수 있도록 보장.
-
 
 ## 🔁 비교 요약: Observer 패턴에서의 포인터 조합
 
