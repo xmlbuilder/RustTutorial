@@ -357,7 +357,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [12-Arena](./Chapter-15%28SmartPointers_and_MemoryModels%29/12-Arena.md)
 - [13-Pool_Slab_Segregator](./Chapter-15%28SmartPointers_and_MemoryModels%29/13-Pool_Slab_Segregator.md)
 - [14-Weak](./Chapter-15%28SmartPointers_and_MemoryModels%29/14-Weak.md)
-- [15-RefCell과RC+RefCell의차이](./Chapter-15%28SmartPointers_and_MemoryModels%29/15-RefCell과RC+RefCell의차이)
+- [15-RefCell과RC+RefCell의차이](./Chapter-15%28SmartPointers_and_MemoryModels%29/15-RefCell과RC%2BRefCell의차이.md)
 - [16-Box&Rc&RcCell&Arc&Mutex요약](./Chapter-15%28SmartPointers_and_MemoryModels%29/16-Box&Rc&RcCell&Arc&Mutex요약.md)
 
 
