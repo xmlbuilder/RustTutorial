@@ -189,7 +189,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [26-trait_Iterator](./Chapter-06(트레잇과%20제네릭)/26-trait_Iterator.md)
 - [27-RwLock_RwLockWriteGuard](./Chapter-06(트레잇과%20제네릭)/27-RwLock_RwLockWriteGuard.md)
 - [28-제네릭_제약조건](./Chapter-06(트레잇과%20제네릭)/28-제네릭_제약조건.md)
-
+- [29-Sized_trait](./Chapter-06(트레잇과%20제네릭)/29-Sized_trait.md)
 
 🔼 [맨 위로](#-목차)
 
