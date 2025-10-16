@@ -41,7 +41,6 @@ if let Some(n) = x {
 }
 ```
 - match보다 간결하게 특정 값만 처리할 수 있음
-- 이미지에서는 Some(3)일 때 if let을 사용해 "three"를 출력하는 예시가 있었어요
 
 ## ⚠️ unwrap()의 위험
 ```rust
@@ -82,7 +81,7 @@ let content = get_content().unwrap_or_else(|_| panic!("{}", FileNotDownload));
 ```
 
 - 클로저를 통해 조건부 처리 가능
-- 이미지에서는 "환경 캡처가 가능한 클로저를 통해 새 값을 계산"이라는 설명이 있었어요
+- 환경 갭쳐가 가능
 
 ### 💥 `expect()` 의 권장 사용
 ```rust
@@ -158,4 +157,28 @@ error: process didn't exit successfully: `target\debug\sample2.exe` (exit code: 
 
 ---
 
+# 함수 인자로 받는 경우
+
+## ✅ 인자를 받을 수도 있고 안 받을 수도 있다는 뜻
+- Some(value) → 특정 기준이나 조건을 주고 나누기
+- None → 기본 방식으로 나누기
+### 예시:
+```rust
+impl Split for MyType {
+    type Option = Option<usize>; // 예: 인덱스를 기준으로 나누기
+
+    fn try_split(&self, option: Option<usize>) -> anyhow::Result<(Self, Self)> {
+        match option {
+            Some(index) => {
+                // index 기준으로 나누기
+            }
+            None => {
+                // 기본 방식으로 나누기
+            }
+        }
+    }
+}
+```
+
+---
 
