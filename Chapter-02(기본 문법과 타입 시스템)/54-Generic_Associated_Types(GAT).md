@@ -1,5 +1,5 @@
 # Generic Associated Types
-코드는 Rust의 **GAT (Generic Associated Types)**를 활용한 트레이트 설계.
+코드는 Rust의 **GAT (Generic Associated Types)** 를 활용한 트레이트 설계.
 아래에 하나씩 풀어서 설명.
 
 ## 🧠 전체 구조 요약
