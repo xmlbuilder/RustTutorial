@@ -159,7 +159,7 @@ struct Context {
 fn log(ctx: &mut Context, msg: &str) {
     ctx.logs.push(msg.to_string());
 }
-``
+```
 
 - ✅ 전역 대신 명시적 주입
 - ✅ 테스트 가능성, 추적 가능성 향상
