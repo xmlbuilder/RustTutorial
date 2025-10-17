@@ -43,6 +43,10 @@ impl Scene for MyScene {
 - MyScene은 내부에 Vec<Node>를 가지고 있고
 - nodes()를 호출하면 &self.nodes를 빌려서 slice::Iter<'a, Node>를 반환함
 - 이때 'a는 &self의 수명과 동일하게 '_'로 추론됨
+- Iter<'a, T>는 두 개의 제네릭 인자를 받는 타입
+    - 'a: 이터레이터가 참조할 데이터의 수명
+    - T: 이터레이터가 참조할 데이터 타입
+
 
 ### ✨ 왜 이렇게 쓰는가?
 | 항목              | 설명                                                                 |
