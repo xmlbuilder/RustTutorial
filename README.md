@@ -147,7 +147,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [36-lifetime_우회하는_방법](./Chapter-04(소유권과%20참조)/36-lifetime_우회하는_방법.md)
 - [37-함수인자의_lifetime](./Chapter-04(소유권과%20참조)/37-함수인자의_lifetime.md)
 - [38-Arc::ptr_eq](./Chapter-04(소유권과%20참조)/38-Arc::ptr_eq.md)
-
+- [39-어댑터 타입으로_객체를_trait에넣기](./Chapter-04(소유권과%20참조)/39-어댑터 타입으로_객체를_trait에넣기.md)
 
 🔼 [맨 위로](#-목차)
 
