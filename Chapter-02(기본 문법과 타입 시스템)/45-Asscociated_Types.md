@@ -25,7 +25,7 @@ trait Multiply {
 
 - Multiply trait은 multiply() 메서드를 정의하면서 결과 타입을 Self::Output으로 추상화
 - Output은 구현체가 결정하는 타입
-- 
+
 ```rust
 impl Multiply for Meters {
     type Output = MetersSquared;
@@ -97,8 +97,6 @@ trait Multiply {
 | 타입 추론 명확화      | 컴파일러가 정확한 타입을 추론할 수 있어 오류 감소            |
 | 유지보수 용이         | 타입 관계가 trait에 고정되어 있어 변경 시 영향 범위가 명확함 |
 | 테스트 신뢰성         | 반환 타입이 예측 가능하므로 테스트 코드가 안정적으로 동작함  |
-
-
 
 ## 🧠 비교: 제네릭 방식과의 차이
 ```rust
