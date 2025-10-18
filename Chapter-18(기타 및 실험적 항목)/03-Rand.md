@@ -1,6 +1,6 @@
 # Rand
 Rust에서 rand 크레이트를 활용해 숫자 맞추기 게임을 만드는 예제.  
-아래에 rand 사용법과 함께 dependencies 설정, 코드 설명, 그리고 확장 팁까지 정리.
+아래에 rand 사용법과 함께 dependencies 설정, 코드 설명, 그리고 확장 팁까지 정리.  
 
 ## 📦 1. rand 크레이트 설정 방법
 Rust에서 외부 라이브러리를 사용하려면 Cargo.toml 파일에 dependencies를 추가해야 함.
