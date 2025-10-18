@@ -179,7 +179,6 @@ fn main() {
 ```
 Random u8: 17
 Random bool: true
-
 ```
 
 
