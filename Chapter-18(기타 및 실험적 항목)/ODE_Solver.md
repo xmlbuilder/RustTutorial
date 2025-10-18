@@ -184,7 +184,7 @@ mod tests {
 - 구현이 복잡함
 - 계산량이 RK4보다 많을 수 있음
 
-### 📐 RK45의 slope 계산식 (Unicode 표현)
+### 📐 RK45의 slope 계산식
 ```
 k₁ = f(tₙ, yₙ)
 k₂ = f(tₙ + a₂·h, yₙ + b₂₁·k₁·h)
@@ -205,7 +205,7 @@ yₙ₊₁⁽⁵⁾ = yₙ + h·(ĉ₁·k₁ + ĉ₂·k₂ + ĉ₃·k₃ + ĉ₄
 - 여기서 `yₙ₊₁⁽⁴⁾` 는 4차 근사값, `yₙ₊₁⁽⁵⁾` 는 5차 근사값입니다.
 - 두 값의 차이를 통해 오차를 추정하고, 다음 스텝 크기 h를 조절합니다.
 
-### 🔄 RK45 계산 흐름도 (Unicode 표현)
+### 🔄 RK45 계산 흐름도
 ```
 t_n ──► k1 ──┐
              ├─► k2 ──┐
@@ -282,4 +282,73 @@ mod tests {
 - RK4: 단순한 물리 시뮬레이션, 진자 운동 등
 - RK45: 천체 궤도 계산, 화학 반응 속도, stiff 문제 등
 
+
+---
+
+## 8차 Runge-Kutta
+
+DOP853은 고차 정확도를 갖는 8차 Runge-Kutta 방법으로, 특히 비강성(Non-stiff) ODE를 빠르고 정확하게 풀기 위해 설계된 알고리즘입니다.
+
+### 🚀 DOP853이란?
+- DOP는 Dormand-Prince 계열을 의미하고, 853은 8차 정확도와 5차 오차 추정, 3차 보간을 뜻합니다.
+- Dormand & Prince가 개발한 고차 Runge-Kutta 방식 중 하나
+- 적응형 스텝 크기 조절을 통해 오차를 제어하면서 효율적으로 적분
+
+### 📐 핵심 특징
+| 항목         | 설명                                   | 비고                                 |
+|--------------|----------------------------------------|--------------------------------------|
+| 정확도       | 8차 정확도                             | 매우 높은 정밀도                     |
+| 오차 추정    | 5차 근사값과 비교하여 오차 계산        | 적응형 스텝 크기 조절에 사용         |
+| 보간         | 3차 보간 함수 내장                     | 중간 시간점의 값 계산 가능           |
+| 스텝 조절    | 자동 조절 (adaptive step size)         | 안정성과 효율성 향상                 |
+| 사용 용도    | 비강성 ODE에 적합                      | 천체 궤도, 생물 모델, 기체 역학 등   |
+| 계산량       | slope 12개 계산                        | RK4보다 많지만 효율적                |
+
+
+### 🧮 계산 방식 요약
+DOP853은 다음을 수행합니다:
+- 12개의 slope k_1 ~ k_{12} 계산
+- 8차 근사값과 5차 근사값을 비교하여 오차 추정
+- 오차가 허용 범위 내면 다음 스텝으로 진행, 아니면 스텝 크기 조절
+- 필요 시 3차 보간으로 중간 값 계산
+
+
+### 테스트 코드
+```rust
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{OVector, System, Vector1};
+    use nalgebra::{allocator::Allocator, DefaultAllocator, Dim};
+
+    // Same as Test3 from rk4.rs, but aborts after x is greater/equal than 0.5
+    struct Test1 {}
+    impl<D: Dim> System<f64, OVector<f64, D>> for Test1
+    where
+        DefaultAllocator: Allocator<f64, D>,
+    {
+        fn system(&self, x: f64, y: &OVector<f64, D>, dy: &mut OVector<f64, D>) {
+            dy[0] = (5. * x * x - y[0]) / (x + y[0]).exp();
+        }
+
+        fn solout(&mut self, x: f64, _y: &OVector<f64, D>, _dy: &OVector<f64, D>) -> bool {
+            return x >= 0.5;
+        }
+    }
+
+    #[test]
+    fn test_integrate_test1_svector() {
+        let system = Test1 {};
+        let mut stepper = Dop853::new(system, 0., 1., 0.1, Vector1::new(1.), 1e-12, 1e-6);
+        let _ = stepper.integrate();
+
+        let x = stepper.x_out();
+        assert!((*x.last().unwrap() - 0.5).abs() < 1.0E-9); //
+
+        let out = stepper.y_out();
+        assert!((&out[5][0] - 0.912968195).abs() < 1.0E-9);
+    }
+}
+
+```
 
