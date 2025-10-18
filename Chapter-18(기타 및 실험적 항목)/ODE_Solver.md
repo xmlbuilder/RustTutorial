@@ -32,6 +32,147 @@ tₙ ──► k₁ ──┐
              └─────────────────────────────────────────────────────────────────► tₙ₊₁
 ```
 
+### 테스트 코드
+```rust
+#[cfg(test)]
+mod tests {
+    use crate::rk4::Rk4;
+    use crate::{DVector, OVector, System, Vector1};
+    use nalgebra::{allocator::Allocator, DefaultAllocator, Dim};
+
+    struct Test1 {}
+    impl<D: Dim> System<f64, OVector<f64, D>> for Test1
+    where
+        DefaultAllocator: Allocator<f64, D>,
+    {
+        fn system(&self, x: f64, y: &OVector<f64, D>, dy: &mut OVector<f64, D>) {
+            dy[0] = (x - y[0]) / 2.;
+        }
+    }
+
+    struct Test2 {}
+    impl<D: Dim> System<f64, OVector<f64, D>> for Test2
+    where
+        DefaultAllocator: Allocator<f64, D>,
+    {
+        fn system(&self, x: f64, y: &OVector<f64, D>, dy: &mut OVector<f64, D>) {
+            dy[0] = -2. * x - y[0];
+        }
+    }
+
+    struct Test3 {}
+    impl<D: Dim> System<f64, OVector<f64, D>> for Test3
+    where
+        DefaultAllocator: Allocator<f64, D>,
+    {
+        fn system(&self, x: f64, y: &OVector<f64, D>, dy: &mut OVector<f64, D>) {
+            dy[0] = (5. * x * x - y[0]) / (x + y[0]).exp();
+        }
+    }
+
+    // Same as Test3, but aborts after x is greater/equal than 0.5
+    struct Test4 {}
+    impl<D: Dim> System<f64, OVector<f64, D>> for Test4
+    where
+        DefaultAllocator: Allocator<f64, D>,
+    {
+        fn system(&self, x: f64, y: &OVector<f64, D>, dy: &mut OVector<f64, D>) {
+            dy[0] = (5. * x * x - y[0]) / (x + y[0]).exp();
+        }
+
+        fn solout(&mut self, x: f64, _y: &OVector<f64, D>, _dy: &OVector<f64, D>) -> bool {
+            return x >= 0.5;
+        }
+    }
+
+    #[test]
+    fn test_integrate_test1_svector() {
+        let system = Test1 {};
+        let mut stepper = Rk4::new(system, 0., Vector1::new(1.), 0.2, 0.1);
+        let _ = stepper.integrate();
+        let x_out = stepper.x_out();
+        let y_out = stepper.y_out();
+        assert!((*x_out.last().unwrap() - 0.2).abs() < 1.0E-8);
+        assert!((&y_out[1][0] - 0.95369).abs() < 1.0E-5);
+        assert!((&y_out[2][0] - 0.91451).abs() < 1.0E-5);
+    }
+
+    #[test]
+    fn test_integrate_test2_svector() {
+        let system = Test2 {};
+        let mut stepper = Rk4::new(system, 0., Vector1::new(-1.), 0.5, 0.1);
+        let _ = stepper.integrate();
+        let x_out = stepper.x_out();
+        let y_out = stepper.y_out();
+        assert!((*x_out.last().unwrap() - 0.5).abs() < 1.0E-8);
+        assert!((&y_out[3][0] + 0.82246).abs() < 1.0E-5);
+        assert!((&y_out[5][0] + 0.81959).abs() < 1.0E-5);
+    }
+
+    #[test]
+    fn test_integrate_test3_svector() {
+        let system = Test3 {};
+        let mut stepper = Rk4::new(system, 0., Vector1::new(1.), 1., 0.1);
+        let _ = stepper.integrate();
+        let out = stepper.y_out();
+        assert!((&out[5][0] - 0.913059839).abs() < 1.0E-9);
+        assert!((&out[8][0] - 0.9838057659).abs() < 1.0E-9);
+        assert!((&out[10][0] - 1.0715783953).abs() < 1.0E-9);
+        assert_eq!(out.len(), 11);
+    }
+
+    #[test]
+    fn test_integrate_test4_svector() {
+        let system = Test4 {};
+        let mut stepper = Rk4::new(system, 0., Vector1::new(1.), 1., 0.1);
+        let _ = stepper.integrate();
+
+        let x = stepper.x_out();
+        assert!((*x.last().unwrap() - 0.5).abs() < 1.0E-9);
+
+        let out = stepper.y_out();
+        assert!((&out[5][0] - 0.913059839).abs() < 1.0E-9);
+        assert_eq!(out.len(), 6);
+    }
+
+    #[test]
+    fn test_integrate_test1_dvector() {
+        let system = Test1 {};
+        let mut stepper = Rk4::new(system, 0., DVector::from(vec![1.]), 0.2, 0.1);
+        let _ = stepper.integrate();
+        let x_out = stepper.x_out();
+        let y_out = stepper.y_out();
+        assert!((*x_out.last().unwrap() - 0.2).abs() < 1.0E-8);
+        assert!((&y_out[1][0] - 0.95369).abs() < 1.0E-5);
+        assert!((&y_out[2][0] - 0.91451).abs() < 1.0E-5);
+    }
+
+    #[test]
+    fn test_integrate_test2_dvector() {
+        let system = Test2 {};
+        let mut stepper = Rk4::new(system, 0., DVector::from(vec![-1.]), 0.5, 0.1);
+        let _ = stepper.integrate();
+        let x_out = stepper.x_out();
+        let y_out = stepper.y_out();
+        assert!((*x_out.last().unwrap() - 0.5).abs() < 1.0E-8);
+        assert!((&y_out[3][0] + 0.82246).abs() < 1.0E-5);
+        assert!((&y_out[5][0] + 0.81959).abs() < 1.0E-5);
+    }
+
+    #[test]
+    fn test_integrate_test3_dvector() {
+        let system = Test3 {};
+        let mut stepper = Rk4::new(system, 0., DVector::from(vec![1.]), 1., 0.1);
+        let _ = stepper.integrate();
+        let out = stepper.y_out();
+        assert!((&out[5][0] - 0.913059839).abs() < 1.0E-9);
+        assert!((&out[8][0] - 0.9838057659).abs() < 1.0E-9);
+        assert!((&out[10][0] - 1.0715783953).abs() < 1.0E-9);
+    }
+}
+```
+
+
 
 ## 🚀 RK45 (Runge-Kutta-Fehlberg 또는 Dormand-Prince)
 - 적응형 스텝 방식: 오차 추정값을 기반으로 스텝 크기를 자동 조절
@@ -86,6 +227,46 @@ t_n ──► k1 ──┐
              └────────────────────────────────────────────► t_{n+1}
 
 ```
+
+### 테스트 코드
+```rust
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{OVector, System, Vector1};
+    use nalgebra::{allocator::Allocator, DefaultAllocator, Dim};
+
+    // Same as Test3 from rk4.rs, but aborts after x is greater/equal than 0.5
+    struct Test1 {}
+    impl<D: Dim> System<f64, OVector<f64, D>> for Test1
+    where
+        DefaultAllocator: Allocator<f64, D>,
+    {
+        fn system(&self, x: f64, y: &OVector<f64, D>, dy: &mut OVector<f64, D>) {
+            dy[0] = (5. * x * x - y[0]) / (x + y[0]).exp();
+        }
+
+        fn solout(&mut self, x: f64, _y: &OVector<f64, D>, _dy: &OVector<f64, D>) -> bool {
+            return x >= 0.5;
+        }
+    }
+
+    #[test]
+    fn test_integrate_test1_svector() {
+        let system = Test1 {};
+        let mut stepper = Dopri5::new(system, 0., 1., 0.1, Vector1::new(1.), 1e-12, 1e-6);
+        let _ = stepper.integrate();
+
+        let x = stepper.x_out();
+        assert!((*x.last().unwrap() - 0.5).abs() < 1.0E-9); //
+
+        let out = stepper.y_out();
+        assert!((&out[5][0] - 0.913059243).abs() < 1.0E-9);
+    }
+}
+```
+
+
 ## ⚔️ RK4 vs RK45 비교표
 | 항목         | RK4 (고전적 Runge-Kutta 4차) | RK45 (Runge-Kutta-Fehlberg 또는 Dormand-Prince) |
 |--------------|-------------------------------|--------------------------------------------------|
