@@ -1,9 +1,9 @@
 # Rand
-Rust에서 rand 크레이트를 활용해 숫자 맞추기 게임을 만드는 예제. 
+Rust에서 rand 크레이트를 활용해 숫자 맞추기 게임을 만드는 예제.  
 아래에 rand 사용법과 함께 dependencies 설정, 코드 설명, 그리고 확장 팁까지 정리.
 
 ## 📦 1. rand 크레이트 설정 방법
-Rust에서 외부 라이브러리를 사용하려면 Cargo.toml 파일에 dependencies를 추가해야 해요.
+Rust에서 외부 라이브러리를 사용하려면 Cargo.toml 파일에 dependencies를 추가해야 함.
 ```
 # Cargo.toml
 [dependencies]
@@ -14,6 +14,7 @@ rand = "0.8"
 - 추가 후 cargo build를 실행하면 자동으로 다운로드되고 프로젝트에 포함됩니다.
 
 ## 🎮 2. 숫자 맞추기 게임 코드 설명
+- 사용하는 함수 `rand::thread_rng().gen_range`
 ```rust
 use std::cmp::Ordering;
 use rand::prelude::*; // Rng trait 포함
@@ -49,8 +50,8 @@ fn main() {
 ```
 
 ### 🔍 주요 포인트
-- rand::thread_rng()는 스레드 로컬 난수 생성기를 반환
-- .gen_range(1..101)은 1 이상 101 미만의 난수를 생성
+- `rand::thread_rng()` 는 스레드 로컬 난수 생성기를 반환
+- `.gen_range(1..101)` 은 1 이상 101 미만의 난수를 생성
 - Ordering을 사용해 비교 결과를 처리
 
 
@@ -83,7 +84,7 @@ fn main() {
 ```
 
 ### 🔍 설명
-- 사용자에게 **최솟값(min)**과 **최댓값(max)**을 입력받음
+- 사용자에게 **최솟값(min)** 과 **최댓값(max)** 을 입력받음
 - gen_range(min..=max)를 사용해 포함 범위에서 난수 생성
 - 입력값이 유효한지 확인 (min < max)
 - 결과를 출력
@@ -91,7 +92,6 @@ fn main() {
 
 
 ## 🧪 3. rand의 주요 기능들
-
 | 함수 이름               | 설명                            | 예시 코드                      |
 |------------------------|----------------------------------|--------------------------------|
 | `gen()`                | 지정된 타입의 랜덤 값 생성       | `rng.gen::<u8>()`              |
@@ -99,9 +99,6 @@ fn main() {
 | `sample()`             | 분포 기반 샘플링                 | `rng.sample(Alphanumeric)`     |
 | `shuffle()`            | 컬렉션의 요소들을 무작위로 섞기  | `vec.shuffle(&mut rng)`        |
 | `choose()`             | 컬렉션에서 랜덤 요소 선택        | `vec.choose(&mut rng)`         |
-
-
-자세한 내용은 rand 공식 문서에서 확인할 수 있어요.
 
 ## ✅ 확장 아이디어
 - 난수 생성 범위를 사용자 입력으로 바꾸기
@@ -115,7 +112,7 @@ fn main() {
 Rust에서 rand_distr 크레이트를 사용하면 정규분포(Gaussian distribution) 기반의 난수를 쉽게 생성.  
 이건 단순한 난수보다 훨씬 더 현실적인 시뮬레이션이나 통계적 모델링에 적합.
 
-📦 1. rand_distr 크레이트 설정
+### 📦 1. rand_distr 크레이트 설정
 먼저 Cargo.toml에 다음과 같이 dependencies를 추가해야 합니다:
 ```
 [dependencies]
@@ -166,6 +163,98 @@ fn main() {
 | `rand_distr`     | 다양한 확률 분포를 지원하는 크레이트 (정규분포 포함) |
 | `Normal::new()`  | 평균과 표준편차를 지정해 정규분포 객체 생성 |
 | `.sample()`      | 해당 분포에서 난수를 추출하는 메서드 |
-|                  |                                      |
+
+---
+
+# rand 주요 함수별 샘플
+## 1. gen() – 지정된 타입의 랜덤 값 생성
+```rust
+use rand::Rng;
+fn main() {
+    let mut rng = rand::thread_rng();
+    let random_u8: u8 = rng.r#gen(); // 0~255 사이의 랜덤 u8
+    let random_bool: bool = rng.r#gen(); // true 또는 false
+    println!("Random u8: {}", random_u8);
+    println!("Random bool: {}", random_bool);
+}
+```
+### 출력 결과
+```
+Random u8: 17
+Random bool: true
+
+```
+
+
+## 2. gen_range(start..end) – 범위 내 랜덤 값 생성
+```rust
+use rand::Rng;
+
+fn main() {
+    let mut rng = rand::thread_rng();
+    let number = rng.gen_range(1..10); // 1 이상 10 미만
+    println!("Random number in range 1..10: {}", number);
+}
+```
+## 출력 결과
+```
+Random number in range 1..10: 4
+```
+
+## 3. sample() – 분포 기반 샘플링
+```rust
+use rand::{distributions::Alphanumeric, Rng};
+
+fn main() {
+    let mut rng = rand::thread_rng();
+    let c: u8 = rng.sample(Alphanumeric);
+    println!("Random alphanumeric character: {}", c);
+}
+```
+
+### 출력 결과
+```
+Random alphanumeric character: 75
+```
+
+## 4. shuffle() – 컬렉션 무작위 섞기
+```rust
+use rand::seq::SliceRandom;
+
+fn main() {
+    let mut rng = rand::thread_rng();
+    let mut items = vec![1, 2, 3, 4, 5];
+    items.shuffle(&mut rng);
+    println!("Shuffled items: {:?}", items);
+}
+```
+### 출력 결과
+```
+Shuffled items: [4, 3, 2, 1, 5]
+```
+
+## 5. choose() – 컬렉션에서 랜덤 요소 선택
+```rust
+use rand::seq::SliceRandom;
+
+fn main() {
+    let mut rng = rand::thread_rng();
+    let items = vec!["apple", "banana", "cherry"];
+    if let Some(choice) = items.choose(&mut rng) {
+        println!("Random choice: {}", choice);
+    }
+}
+```
+
+### 출력 결과
+```
+Random choice: apple
+```
+
+## ✅ 참고 사항
+- rand::thread_rng()는 스레드 로컬 RNG를 생성합니다.
+- gen()과 gen_range()는 Rng 트레이트를 통해 제공됩니다.
+- shuffle()과 choose()는 SliceRandom 트레이트를 import해야 사용 가능합니다.
+- sample()은 distributions 모듈에서 제공하는 분포 기반 샘플링입니다.
 
 ---
