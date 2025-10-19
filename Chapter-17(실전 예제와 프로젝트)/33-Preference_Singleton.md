@@ -174,8 +174,8 @@ fn prefs_lock() -> &'static RwLock<Preferences> {
 
 # once_cell / parking_lot 을 이용
 
-once_cell의 sync::Lazy를 써서 초기화/락을 전부 내부로 숨긴 전역 싱글톤을 만듬.
-호출자는 get_*/set_* 같은 함수만 쓰면 되고, 직접 lock/unlock 할 일 없음.
+`once_cell` 의 `sync::Lazy` 를 써서 초기화/락을 전부 내부로 숨긴 전역 싱글톤을 만듬.  
+호출자는 `get_*`/`set_*` 같은 함수만 쓰면 되고, 직접 `lock`/`unlock` 할 일 없음.
 
 ## Cargo.toml
 ```
@@ -279,17 +279,18 @@ pub fn init_if_unset(global_mesh: f64, locals: Vec<f64>) {
 ```rust
 static PREFS: Lazy<RwLock<Preferences>> = Lazy::new(|| RwLock::new(Preferences::default()));
 ```
-
 - Lazy는 최초 접근 시 자동 초기화
 - prefs().read().unwrap() / prefs().write().unwrap()으로 접근
+- 
 ### 장점
 - 락을 숨긴 API 설계 가능 → 호출자는 get_*, set_*만 사용
 - 초기화가 더 간단하고 직관적
+
 ### 단점
 - unwrap() 사용으로 락 poison 처리에 대한 방어가 약함
 - 여전히 std::sync::RwLock은 성능이 다소 낮고 panic 시 poison 발생
 
-
+---
 
 ## ⚡ 고급형: once_cell::Lazy + parking_lot::RwLock
 고성능 락 구현체로, std::sync::RwLock보다 빠르고 poison-free입니다.  
@@ -378,6 +379,7 @@ static PREFS: Lazy<RwLock<Preferences>> = Lazy::new(|| RwLock::new(Preferences::
 - panic-safe (poison 없음)
 - 코드가 더 간결함
 
+---
 
 ### 🧭 결론: 어떤 방식이 가장 좋을까?
 | 방식                        | 특징                                      | 장점                                  | 추천 상황                          |
