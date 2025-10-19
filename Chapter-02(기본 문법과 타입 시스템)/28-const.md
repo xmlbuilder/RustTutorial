@@ -6,10 +6,10 @@ const PI: f64 = 3.141592;
 ```
 
 ## ✅ 특징
-- 컴파일 타임 상수: 반드시 컴파일 시점에 값이 결정되어야 함
-- 타입 명시 필수: const는 타입을 생략할 수 없음
-- 전역/지역 모두 가능: 함수 안에서도 선언 가능
-- 불변이며 재할당 불가: let과 달리 절대 변경 불가
+- `컴파일 타임 상수`: 반드시 컴파일 시점에 값이 결정되어야 함
+- `타입 명시 필수`: const는 타입을 생략할 수 없음
+- `전역/지역 모두 가능`: 함수 안에서도 선언 가능
+- `불변이며 재할당 불가`: let과 달리 절대 변경 불가
 
 ## 🔒 Rust의 static과의 차이
 ```rust
@@ -22,7 +22,6 @@ static GREETING: &str = "Hello";
 
 static은 전역 메모리에 저장되며, mut와 함께 쓰면 가변 전역 변수도 가능하지만 unsafe가 필요.
 
-
 ## 🧪 C#의 const vs readonly 비교
 | 키워드     | 특징 및 설명                                      |
 |------------|--------------------------------------------------|
@@ -33,7 +32,7 @@ static은 전역 메모리에 저장되며, mut와 함께 쓰면 가변 전역 �
 ### C# 예시
 ```csharp
 public const double Pi = 3.14;           // 컴파일 타임 상수
-public readonly int Id;                 // 생성자에서 초기화 가능
+public readonly int Id;                  // 생성자에서 초기화 가능
 
 public MyClass(int id) {
     this.Id = id;                       // 여기서 값 설정 가능
@@ -66,9 +65,9 @@ Rust는 기본적으로 불변을 우선시하는 철학을 갖고 있어서, C#
 # Static 변수
 
 Rust에서 static 변수는 전역 상수처럼 동작하지만, mut로 선언하면 전역 가변 변수가 됩니다.  
-다만 Rust는 안전성을 최우선으로 하기 때문에 static mut을 사용할 때는 반드시 unsafe 블록이 필요.
+다만 Rust는 안전성을 최우선으로 하기 때문에 `static mut` 을 사용할 때는 반드시 `unsafe` 블록이 필요.
 
-## 🧪 기본 예제: static mut로 문자열 변경하기
+## 🧪 기본 예제: `static mut` 로 문자열 변경하기
 ```rust
 static mut GREETING: &str = "Hello";
 
@@ -87,7 +86,8 @@ fn main() {
 
 ## ⚠️ 권장 방식: `Mutex` 또는` RwLock` 사용
 Rust에서는 static mut보다 아래를 사용하는 것이 훨씬 안전하고 일반적.
-### ✅ 예제: Mutex<String>로 안전한 전역 문자열
+
+### ✅ 예제: `Mutex<String>` 로 안전한 전역 문자열
 ```rust
 use std::sync::Mutex;
 
