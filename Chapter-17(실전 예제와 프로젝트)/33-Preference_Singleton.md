@@ -281,7 +281,7 @@ static PREFS: Lazy<RwLock<Preferences>> = Lazy::new(|| RwLock::new(Preferences::
 ```
 - Lazy는 최초 접근 시 자동 초기화
 - prefs().read().unwrap() / prefs().write().unwrap()으로 접근
-- 
+
 ### 장점
 - 락을 숨긴 API 설계 가능 → 호출자는 get_*, set_*만 사용
 - 초기화가 더 간단하고 직관적
