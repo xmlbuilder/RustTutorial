@@ -1,11 +1,11 @@
-# struct 안에 static ?
+# struct 안에 static?
 
 ## 🧠 왜 struct 안에 static 필드를 못 넣는가?
 - Rust는 구조체 필드를 인스턴스마다 고유한 값으로 간주
 - static은 프로그램 전체에서 공유되는 전역 값
 - 따라서 구조체 안에 static 필드를 넣는 건 개념적으로 충돌
 
-## ✅ 대안: impl 블록에 associated constant 또는 static 선언
+## ✅ 대안: impl 블록에 `associated constant` 또는 `static` 선언
 
 ### 1. Associated constant (const)
 ```rust
@@ -17,7 +17,7 @@ impl MyStruct {
     pub const MY_CONST: f64 = 3.1415;
 }
 ```
-사용 예: `MyStruct::MY_CONST`
+#### 사용 예: `MyStruct::MY_CONST`
 
 ### 2. Module-level static
 ```rust
@@ -47,7 +47,7 @@ impl MyStruct {
 | `static`     | 프로그램 전체에서 공유되는 전역 변수. 런타임 초기화 가능.             | `pub static CONFIG: Config = Config::new();`   |
 
 
-Rust는 전역 상태를 최소화하고, 명확한 ownership을 강조하는 언어라서  
+Rust는 전역 상태를 최소화하고, 명확한 `ownership` 을 강조하는 언어라서  
 static을 구조체 내부에 넣는 대신 모듈 또는 impl 블록에서 관리하는 방식이 일반적.
 
 ----
