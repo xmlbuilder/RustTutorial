@@ -50,7 +50,7 @@ fn main() {
 - `&vec![1, 2, 4]: Vec<i32>` → 제네릭 컨테이너 타입
 
 ### ⚠️ 주의사항
-- `type_name::<T>()` 은 디버깅용이지, 타입 비교나 로직 분기에는 사용하지 마세요
+- `type_name::<T>()` 은 `디버깅용` 이지, `타입 비교` 나 `로직 분기` 에는 사용하지 마세요
 - 타입 이름은 컴파일러 버전이나 최적화 수준에 따라 달라질 수 있음
 - 라이프타임, 트레잇 바운드, const generics 등은 출력에 포함되지 않음
 
@@ -65,3 +65,73 @@ fn log_type<T>(value: &T) {
 - 매크로 내부에서 타입 기반 로깅
 
 ---
+
+
+## ✅ 실전에서는 어떻게 해야 할까?
+Rust에서는 실전 로직에서 타입을 구분하거나 다르게 처리하고 싶을 때 다음과 같은 방식을 사용합니다:
+### 1. `Trait` 기반 분기
+```kotlin
+trait Animal {
+    fn sound(&self);
+}
+
+struct Dog;
+struct Cat;
+
+impl Animal for Dog {
+    fn sound(&self) {
+        println!("멍멍");
+    }
+}
+
+impl Animal for Cat {
+    fn sound(&self) {
+        println!("야옹");
+    }
+}
+
+fn make_sound<T: Animal>(animal: T) {
+    animal.sound();
+}
+```
+
+- 타입 이름 대신 trait 구현 여부로 기능을 분리
+- type_name 없이도 타입별 동작을 안전하게 처리 가능
+
+### 2. `enum` 으로 타입 구분
+```kotlin
+enum Pet {
+    Dog,
+    Cat,
+}
+
+fn make_sound(pet: Pet) {
+    match pet {
+        Pet::Dog => println!("멍멍"),
+        Pet::Cat => println!("야옹"),
+    }
+}
+```
+- 여러 타입을 하나의 enum으로 묶고 match로 분기
+- 실전에서 가장 흔히 쓰이는 방식
+
+### 3. `where` 특정 타입에만 동작하도록 구현
+```rust
+fn do_something<T>(value: T)
+where
+    T: SpecificTrait,
+{
+    // T가 SpecificTrait을 구현한 경우에만 호출 가능
+}
+```
+
+- 타입 이름이 아니라 `trait 제약으로 타입을 제한`
+
+## 🔍 type_name::<T>()은 언제 쓰나?
+- 디버깅 로그
+- 테스트 중 타입 확인
+- panic 메시지에 타입 정보 포함
+- 개발 중 "이게 무슨 타입이지?" 확인용
+
+---
+
