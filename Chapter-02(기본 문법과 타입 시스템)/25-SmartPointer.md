@@ -71,5 +71,47 @@ enum List {
 | Deref 트레잇       | 스마트 포인터를 참조자처럼 사용할 수 있게 해줌                   |
 | Drop 트레잇        | 스코프 종료 시 자동 정리 로직을 커스터마이징 가능                |
 | 주요 타입          | `Box<T>`, `Rc<T>`, `RefCell<T>`, `Arc<T>`                     |
+
 ---
+
+## 🔍 왜 *x가 작동하려면 Deref가 필요할까?
+Rust에서 *x는 역참조(dereference) 연산입니다.  
+이 연산은 Deref 트레이트를 통해 커스터마이징할 수 있음.
+
+## ✅ 작동 가능한 예시
+```rust
+use std::ops::Deref;
+
+struct DerefExample<T> {
+    _value: T,
+}
+
+impl<T> Deref for DerefExample<T> {
+    type Target = T;
+
+    fn deref(&self) -> &Self::Target {
+        &self._value
+    }
+}
+
+fn main() {
+    let x = DerefExample { _value: 5 };
+    assert_eq!(*x, 5); // 이제 작동함!
+}
+```
+
+## 🔧 설명
+- Deref 트레이트는 fn deref(&self) -> &Self::Target 메서드를 요구합니다.
+- *x는 내부적으로 x.deref()를 호출하고, 그 결과를 다시 역참조합니다.
+- 따라서 *x는 *_value와 동일한 효과를 가지게 됩니다.
+
+## ✅ 요약
+| 표현     | 내부 동작                    | 필요 조건     |
+|----------|-----------------------------|----------------|
+| `*x`     | `x.deref()` → `&T` → `T`     | `Deref` 트레이트 구현 |
+| `x._value` | 직접 필드 접근               | 항상 가능       |
+
+---
+
+
 
