@@ -322,6 +322,30 @@ pub fn with_write<F, R>(f: F) -> R where F: FnOnce(&mut Preferences)->R { f(&mut
 
 pub fn reset_to_default() { *prefs().write() = Preferences::default(); }
 ```
+### 사용 예
+```rust
+use your_crate::prefs::*;
+
+fn main() {
+    set_global_mesh(5.0);
+    push_local_mesh_size(0.5);
+    push_local_mesh_size(1.0);
+
+    with_write(|p| {
+        // 여전히 락은 내부에서만 사용됨
+        p.local_mesh_sizes.retain(|&x| x >= 0.8);
+    });
+
+    println!("gm = {}", get_global_mesh());
+    println!("locals = {:?}", get_local_mesh_sizes());
+}
+```
+
+### 출력 예시
+```
+gm = 5
+locals = [1.0]
+```
 
 ### (옵션) 더 편한 쓰기: global_mesh만 원자형으로
 global_mesh는 잦은 갱신이 예상되면 AtomicF64(안전한 사용을 위해 load/store에 Ordering)로 바꾸면 RwLock 없이도 빠르게 업데이트 가능.  
@@ -350,24 +374,6 @@ pub fn push_local_mesh_size(x: f64) { PREFS.write().local_mesh_sizes.push(x); }
 원자형은 락 프리라 편하지만, fetch_add 같은 연산에서 일관성 수준(Ordering)을 선택해야 함.  
 대부분 Relaxed로 충분하고, 교차 스레드 가시성이 중요하면 SeqCst를 쓰면 돼.
 
-### 사용 예
-```rust
-use your_crate::prefs::*;
-
-fn main() {
-    set_global_mesh(5.0);
-    push_local_mesh_size(0.5);
-    push_local_mesh_size(1.0);
-
-    with_write(|p| {
-        // 여전히 락은 내부에서만 사용됨
-        p.local_mesh_sizes.retain(|&x| x >= 0.8);
-    });
-
-    println!("gm = {}", get_global_mesh());
-    println!("locals = {:?}", get_local_mesh_sizes());
-}
-```
 ### 구현 예시
 ```rust
 static PREFS: Lazy<RwLock<Preferences>> = Lazy::new(|| RwLock::new(Preferences::default()));
