@@ -283,6 +283,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [07-include!](Chapter-10(모듈%2C%20크레이트%2C%20Cargo)/07-include!.md)
 - [08-Cargo의_주요_환경_변수_배포](Chapter-10(모듈%2C%20크레이트%2C%20Cargo)/08-Cargo의_주요_환경_변수_배포.md)
 - [09-JaggedArray_소개](Chapter-10(모듈%2C%20크레이트%2C%20Cargo)/09-JaggedArray_소개.md)
+- [10-인기있는_크레이트_정리](Chapter-10(모듈%2C%20크레이트%2C%20Cargo)/10-인기있는_크레이트_정리.md)
+
 
 🔼 [맨 위로](#-목차)
 
