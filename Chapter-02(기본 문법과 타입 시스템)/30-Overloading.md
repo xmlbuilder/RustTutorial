@@ -29,7 +29,7 @@ impl Vector3D {
 
 - 함수 이름을 명시적으로 구분해서 의도도 명확하게 표현
 
-### ✅ 해결 방법 2: Trait으로 추상화
+### ✅ 해결 방법 2: `Trait으로 추상화`
 ```rust
 trait DotProduct<Rhs> {
     fn dot(&self, rhs: &Rhs) -> f64;
@@ -65,9 +65,9 @@ impl DotProduct<Point3D> for Vector3D {
 
 
 # Rust의 연산자 오버로딩 철학
-Rust는 연산자 오버로딩을 trait 기반으로 명시적으로 구현합니다.
-즉, +, -, *, /, +=, -=, *= 등은 각각 대응되는 trait이 있고,
-그 trait을 impl 하면 해당 타입에 대해 연산자가 동작하게 됩니다.
+Rust는 연산자 오버로딩을 trait 기반으로 명시적으로 구현합니다.  
+즉, `+`, `-`,`*`, `/`, `+=`, `-=`, `*=` 등은 각각 대응되는 trait이 있고,  
+그 trait을 impl 하면 해당 타입에 대해 연산자가 동작하게 됩니다.  
 
 ## 🔧 주요 연산자 Trait 매핑
 |  연산자 | Trait 이름   | 메서드 시그니처               | 사용 예시     |
@@ -81,7 +81,6 @@ Rust는 연산자 오버로딩을 trait 기반으로 명시적으로 구현합�
 | `*=`      | `MulAssign`  | `mul_assign(&mut self, rhs)`  | `a *= scalar` |
 | `/=`      | `DivAssign`  | `div_assign(&mut self, rhs)`  | `a /= scalar` |
 | `-a`      | `Neg`        | `neg(self)`                   | `-a`          |
-
 
 
 ## ✅ Vector3D에 적용된 예시 설명
@@ -120,7 +119,7 @@ impl Neg for Vector3D {
     }
 }
 ```
-- -a가 가능해짐
+- `-a` 가 가능해짐
 
 ## 🧠 Rust의 장점
 - 명시적이고 안전함: 어떤 타입에 어떤 연산이 가능한지 명확하게 정의됨
@@ -128,7 +127,7 @@ impl Neg for Vector3D {
 - IDE 지원이 뛰어남: trait 기반이라 자동 완성, 문서화가 잘 됨
 
 ## 🔍 확장 아이디어
-- impl Mul<Vector3D> for f64도 구현하면 2.0 * v도 가능
+- `impl Mul<Vector3D> for f64` 도 구현하면 2.0 * v 도 가능
 - PartialEq, PartialOrd로 비교 연산자도 구현 가능
 - Display로 println!("{:?}", v) 출력 형식도 커스터마이징 가능
 
