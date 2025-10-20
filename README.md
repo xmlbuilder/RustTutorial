@@ -360,6 +360,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 🔼 [맨 위로](#-목차)
 
 ### 🧑‍🎓 [Chapter-15(SmartPointers_and_MemoryModels)](./Chapter-15%28SmartPointers_and_MemoryModels%29)
+- [00-C_메모리_대체_함수_소개](./Chapter-15%28SmartPointers_and_MemoryModels%29/00-C_메모리_대체_함수_소개.md)
 - [01-메모리관리](./Chapter-15%28SmartPointers_and_MemoryModels%29/01-메모리관리.md)
 - [02-메모리해제](./Chapter-15%28SmartPointers_and_MemoryModels%29/02-메모리해제.md)
 - [03-메모리주소출력](./Chapter-15%28SmartPointers_and_MemoryModels%29/03-메모리주소출력.md)
