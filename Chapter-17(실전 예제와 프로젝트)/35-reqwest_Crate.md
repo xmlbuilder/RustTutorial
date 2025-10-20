@@ -544,9 +544,9 @@ String[] protectedPaths = { "/upload", "/profile", "/admin", "/settings" };
 - 예: /api/upload, /api/user, /api/settings 등
 
 ## ✅ 결론
-.requestMatchers(...).authenticated()는 인증이 필요한 경로를 지정하는 곳이고,
-여러 개의 경로를 계속 추가하거나 배열로 묶어서 관리할 수 있습니다.
-보안 감사에서도 이 부분은 명확하게 경로별 인증 정책이 적용되어야 하는 핵심 항목.
+.requestMatchers(...).authenticated()는 인증이 필요한 경로를 지정하는 곳이고,  
+여러 개의 경로를 계속 추가하거나 배열로 묶어서 관리할 수 있습니다.  
+보안 감사에서도 이 부분은 명확하게 경로별 인증 정책이 적용되어야 하는 핵심 항목.  
 
 ---
 
