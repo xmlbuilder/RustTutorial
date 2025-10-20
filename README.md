@@ -425,6 +425,12 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [26-solve_svdcmp](./Chapter-17(실전%20예제와%20프로젝트)/26-solve_svdcmp.md)
 - [27-웹_스크래핑](./Chapter-17(실전%20예제와%20프로젝트)/27-웹_스크래핑.md)
 - [28-소유권_Closure_lifetime이_동시에_얽힌문제](./Chapter-17(실전%20예제와%20프로젝트)/28-소유권_Closure_lifetime이_동시에_얽힌문제.md)
+- [29-baryCentric_퇴화](./Chapter-17(실전%20예제와%20프로젝트)/29-baryCentric_퇴화.md)
+- [30-coons_patch_builder](./Chapter-17(실전%20예제와%20프로젝트)/30-coons_patch_builder.md)
+- [31-SpatialTree](./Chapter-17(실전%20예제와%20프로젝트)/31-SpatialTree.md)
+- [32-BDFWriter](./Chapter-17(실전%20예제와%20프로젝트)/32-BDFWriter.md)
+- [33-Preference_Singleton](./Chapter-17(실전%20예제와%20프로젝트)/33-Preference_Singleton.md)
+- [34-Actix-web](./Chapter-17(실전%20예제와%20프로젝트)/34-Actix-web.md)
 
 🔼 [맨 위로](#-목차)
   
