@@ -217,7 +217,7 @@ impl MyTrait for f64 {
 - 이건 내 crate에서 만든 trait이기 때문에  
     → 표준 타입 f64에 자유롭게 impl 가능
 
-### ⚠️ 내 triat가 둘 다 아니면 불가능
+### ⚠️ 두개 다 내 triat가 아니면 불가능
 ```rust
 // ❌ 불가능: 표준 trait + 표준 타입
 impl PartialEq for f64 { ... } // 컴파일 에러
