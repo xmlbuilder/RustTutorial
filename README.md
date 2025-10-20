@@ -385,6 +385,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [03-문자열ASCII출력](./Chapter-16(문자열처리)/03-문자열ASCII출력.md)
 - [04-출력진법](./Chapter-16(문자열처리)/04-출력진법.md)
 - [05-문자열_직렬화_역직렬화](./Chapter-16(문자열처리)/05-문자열_직렬화_역직렬화.md)
+- [06-BinaryReadWrite](./Chapter-16(문자열처리)/06-BinaryReadWrite.md)
 - [07-문자열_Split](./Chapter-16(문자열처리)/07-문자열_Split.md)
 
 
