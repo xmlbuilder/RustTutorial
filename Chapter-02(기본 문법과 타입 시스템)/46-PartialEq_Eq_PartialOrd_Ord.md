@@ -76,7 +76,7 @@ impl PartialOrd for Citation {
 
 # 반사성
 
-“반사성(reflexivity)”이라는 용어는 수학과 컴퓨터 과학에서 관계의 성질을 설명할 때 자주 등장하지만,  
+**반사성(reflexivity)** 이라는 용어는 수학과 컴퓨터 과학에서 관계의 성질을 설명할 때 자주 등장하지만,  
 Rust나 일반 프로그래밍에서는 처음 들으면 낯설 수 있음.
 
 ## 🔍 반사성(reflexivity)이란?
@@ -111,13 +111,13 @@ struct Point {
 | Eq          | `a == a` 항상 참   |
 | PartialEq   | `NaN == NaN`은 거짓 |
 
-
 ---
 
 # PartialEq fro f64
 
-아래는 f64 타입에 대해 **허용 오차(tolerance)**를 적용한 PartialEq 구현 예시입니다.  
+아래는 f64 타입에 대해 **허용 오차(tolerance)** 를 적용한 PartialEq 구현 예시입니다.  
 두 값이 10e-5 이내로 차이가 나면 같다고 판단하는 방식:
+
 ```rust
 const TOLERANCE: f64 = 1e-5;
 
@@ -167,8 +167,8 @@ impl PartialEq for Approximate {
 ```
 
 - f64에 직접 impl은 불가능하지만  
-    → Approximate(f64)처럼 newtype 패턴을 쓰면 가능
-- 이 방식은 타입 안전성과 커스터마이징을 동시에 확보할 수 있어요
+    → `Approximate(f64)` 처럼 `newtype` 패턴을 쓰면 가능
+- 이 방식은 타입 안전성과 커스터마이징을 동시에 확보할 수 있음
 
 ## 🧠 Orphan Rule 요약
 | 조건                          | impl 가능 여부 |
@@ -189,7 +189,7 @@ impl PartialEq for Approximate {
 
 # impl MyTrait for f64 허용 이유
 
-impl MyTrait for f64가 가능한 이유는 From, Into 같은 trait을 사용자 정의 타입에 적용하기 위한 확장성도 있지만,  
+`impl MyTrait for f64` 가 가능한 이유는 From, Into 같은 trait을 사용자 정의 타입에 적용하기 위한 확장성도 있지만,  
 핵심은 Rust의 Orphan Rule이 허용하는 범위 내에서 표준 타입에 대해 내가 만든 trait은 자유롭게 구현할 수 있도록 설계되어 있기 때문.
 
 ## 🔍 왜 impl MyTrait for f64는 허용될까?
@@ -217,7 +217,7 @@ impl MyTrait for f64 {
 - 이건 내 crate에서 만든 trait이기 때문에  
     → 표준 타입 f64에 자유롭게 impl 가능
 
-### ⚠️ 반대로는 불가능
+### ⚠️ 내 triat가 둘 다 아니면 불가능
 ```rust
 // ❌ 불가능: 표준 trait + 표준 타입
 impl PartialEq for f64 { ... } // 컴파일 에러
@@ -244,8 +244,9 @@ impl PartialEq for Approximate {
 }
 ```
 
-- Approximate는 내가 만든 타입이므로  
+- `Approximate` 는 내가 만든 타입이므로  
     → 표준 trait PartialEq, Ord, Hash 등을 자유롭게 구현 가능
+  
 ### 2. 내 trait을 f64에 붙이기
 ```rust
 trait MyFloatOps {
@@ -259,8 +260,8 @@ impl MyFloatOps for f64 {
 }
 ```
 
-- 내가 만든 trait이므로
-→ 표준 타입 f64에 붙이는 건 허용됨
+- 내가 만든 trait이므로  
+    → 표준 타입 f64에 붙이는 건 허용됨
 
 ## 🔍 Rust vs C# 확장성 비교
 | 언어   | 확장 방식               | 적용 대상      | 구현 방식 예시               |
@@ -292,9 +293,9 @@ impl ApproxEq for f64 {
     }
 }
 ```
-- a.approx_eq(b, 1e-5)처럼 호출 가능
+- `a.approx_eq(b, 1e-5)` 처럼 호출 가능
 
 ## 🧠 Rust의 철학적 차이
-- Rust는 trait 기반 확장이므로
+- Rust는 trait 기반 확장이므로  
     → 명시적 trait import (use)가 필요할 수 있음
 - C#은 global scope에서 자동 확장됨
