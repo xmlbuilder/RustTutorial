@@ -9,7 +9,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 ---
 
 ## 📚 목차(바로가기)
-- [Chapter-01 (Rust 소개 및 환경 설정)](#chapter-01rust-소개-및-환경-설정)
+- [Chapter-01 (Rust 소개 및 환경 설정)](#chapter-01-rust-소개-및-환경-설정)
 - [Chapter-02 (기본 문법과 타입 시스템)](#chapter-02-기본-문법과-타입-시스템)
 - [Chapter-03 (제어 흐름과 함수)](#chapter-03-제어-흐름과-함수)
 - [Chapter-04 (소유권과 참조)](#chapter-04-소유권과-참조)
