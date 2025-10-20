@@ -9,8 +9,8 @@ let num: i32 = s.parse().unwrap(); // "42" → 42
 let s2 = "3.14";
 let num2: f64 = s2.parse().unwrap(); // "3.14" → 3.14
 ```
-- parse()는 제네릭 함수로, 원하는 타입을 명시해야 함 (`::<i32>`, `::<f64>`)
-- unwrap()은 실패 시 panic 발생 → 실무에서는 match나 if let으로 안전하게 처리
+- `parse()` 는 제네릭 함수로, 원하는 타입을 명시해야 함 (`::<i32>`, `::<f64>`)
+- `unwrap()` 은 실패 시 panic 발생 → 실무에서는 match나 if let으로 안전하게 처리
 
 ### 안전한 방식: parse() + Result
 ```rust
@@ -24,7 +24,7 @@ match result {
 
 
 ## ✅ 2. i32 / f64 → String
-### 기본 방식: to_string()
+### 기본 방식: `to_string()`
 ```rust
 let num = 42;
 let s = num.to_string(); // 42 → "42"
@@ -32,7 +32,7 @@ let s = num.to_string(); // 42 → "42"
 let num2 = 3.14;
 let s2 = num2.to_string(); // 3.14 → "3.14"
 ```
-- to_string()은 모든 기본 타입에서 사용 가능
+- `to_string()` 은 모든 기본 타입에서 사용 가능
 - 포맷팅이 필요할 경우 format!() 매크로 사용
 
 ```rust
