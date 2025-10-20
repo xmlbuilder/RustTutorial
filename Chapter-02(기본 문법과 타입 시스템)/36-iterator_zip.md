@@ -1,8 +1,8 @@
 # zip
-Rust의 .zip()은 두 개의 반복자(iterator)를 **쌍(pair)**으로 묶어서 동시에 순회할 수 있게 해주는 아주 유용한 메서드입니다. 
+Rust의 .zip()은 두 개의 반복자(iterator)를 **쌍(pair)** 으로 묶어서 동시에 순회할 수 있게 해주는 아주 유용한 메서드입니다. 
 
 ## 🔗 .zip()이란?
-.zip()은 두 개의 반복자를 묶어서 튜플 (a, b) 형태로 반환하는 반복자를 생성합니다.
+`.zip()` 은 두 개의 반복자를 묶어서 튜플 (a, b) 형태로 반환하는 반복자를 생성합니다.
 ```rust
 let xs = vec![1, 2, 3];
 let ys = vec!['a', 'b', 'c'];
@@ -96,6 +96,7 @@ for (num, ch) in a.iter().zip(b.iter()) {
 
 
 ## 🧪 다른 메서드들과 조합 예시
+
 ### 1️⃣ .zip().map()
 ```rust
 let a = [1, 2, 3];
@@ -183,8 +184,6 @@ println!("Dot product: {}", dot_product); // 1*4 + 2*5 + 3*6 = 32
 Rust의 이터레이터는 lazy evaluation을 기반으로 하며, .zip()은 그 중에서도 병렬 처리를 위한 핵심 도구입니다.  
 다른 메서드들과 조합하면 데이터 흐름을 함수형 스타일로 표현할 수 있어요.
 
-
-
 ## 🔍 .into_iter()의 소유권 이전 여부
 | 표현        | 반복되는 타입 | 소유권 이전 여부 | 설명                                |
 |-------------|----------------|------------------|-------------------------------------|
@@ -239,12 +238,12 @@ for s in (&v).into_iter() {
 
 
 ---
-# let filtered: Vec<_> 의미
+# let filtered: `Vec<_>` 의미
 
-let filtered: Vec<_>는 Rust에서 **타입 추론(type inference)**을 활용한 변수 선언 방식입니다. 
+let filtered: `Vec<_>` 는 Rust에서 **타입 추론(type inference)** 을 활용한 변수 선언 방식입니다. 
 
-## 🧠 Vec<_>란?
-- Vec<_>에서 _는 타입을 자동으로 추론해달라는 뜻입니다.
+## 🧠 `Vec<_>` 란?
+- `Vec<_>` 에서 _는 타입을 자동으로 추론해달라는 뜻입니다.
 - Rust 컴파일러가 오른쪽 값을 보고 Vec<T>의 T가 무엇인지 자동으로 결정합니다.
 
 ## 🔍 예시로 보면
@@ -256,9 +255,9 @@ let filtered: Vec<_> = vec![1, 2, 3, 4, 5]
 ```
 
 
-- filter는 Iterator<Item = i32>를 반환하고,
-- collect()는 Vec<i32>를 생성합니다.
-- 따라서 Vec<_>는 자동으로 Vec<i32>로 추론됩니다.
+- filter는 `Iterator<Item = i32>` 를 반환하고,
+- `collect()` 는 `Vec<i32>` 를 생성합니다.
+- 따라서 `Vec<_>` 는 자동으로 `Vec<i32>` 로 추론됩니다.
 
 ## ✅ 왜 쓰는가?
 | 항목           | 설명                                         |
@@ -272,11 +271,13 @@ let filtered: Vec<_> = vec![1, 2, 3, 4, 5]
 ## ⚠️ 주의할 점
 - 타입이 불명확하거나 ambiguous할 경우 컴파일 에러가 날 수 있어요.
 - 예: collect()가 Vec<_>인지 HashSet<_>인지 모호할 경우
+```rust
 let result = some_iter.collect(); // 타입 명시 없으면 에러 가능
+```
 
-
-→ 이런 경우엔 Vec<_> 또는 HashSet<_>처럼 타입을 일부라도 명시해줘야 해요.
+→ 이런 경우엔 Vec<_> 또는 HashSet<_>처럼 타입을 일부라도 명시해줘야 함.
 
 ## ✨ 실전 팁
 - Vec<_>는 map, filter, zip, enumerate, flat_map 등과 함께 자주 쓰입니다.
 - let x: Vec<_>는 let x = vec![...]보다 더 유연한 추론을 허용합니다.
+
