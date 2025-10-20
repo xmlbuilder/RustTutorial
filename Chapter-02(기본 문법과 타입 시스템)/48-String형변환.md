@@ -9,7 +9,7 @@ let num: i32 = s.parse().unwrap(); // "42" → 42
 let s2 = "3.14";
 let num2: f64 = s2.parse().unwrap(); // "3.14" → 3.14
 ```
-- parse()는 제네릭 함수로, 원하는 타입을 명시해야 함 (::<i32>, ::<f64>)
+- parse()는 제네릭 함수로, 원하는 타입을 명시해야 함 (`::<i32>`, `::<f64>`)
 - unwrap()은 실패 시 panic 발생 → 실무에서는 match나 if let으로 안전하게 처리
 
 ### 안전한 방식: parse() + Result
