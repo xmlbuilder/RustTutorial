@@ -92,6 +92,9 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [49-mod(Namespace)](./Chapter-02(기본%20문법과%20타입%20시스템)/49-mod.md)
 - [50-Date_Time](./Chapter-02(기본%20문법과%20타입%20시스템)/50-Date_Time.md)
 - [51-중첩구조_표현](./Chapter-02(기본%20문법과%20타입%20시스템)/51-중첩구조_표현.md)
+- [52-Const_Array_Function](./Chapter-02(기본%20문법과%20타입%20시스템)/52-Const_Array_Function.md)
+- [53-std::slice::IterMut](./Chapter-02(기본%20문법과%20타입%20시스템)/53-std::slice::IterMut.md)
+- [54-Generic_Associated_Types(GAT)](./Chapter-02(기본%20문법과%20타입%20시스템)/54-Generic_Associated_Types(GAT).md)
 - [55-Binary_file로_읽고_쓰기](./Chapter-02(기본%20문법과%20타입%20시스템)/55-Binary_file로_읽고_쓰기.md)
 
 
