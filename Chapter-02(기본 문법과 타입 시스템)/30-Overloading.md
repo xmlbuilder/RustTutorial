@@ -1,4 +1,4 @@
-# Overloading
+# Overloading 정책
 
 ## 🧠 function Overloading 왜 안 되는가?
 Rust는 함수 이름만으로는 구분이 불가능하기 때문에,
