@@ -2,7 +2,7 @@
 
 ### ✅ 기본 구조
 - String은 내부적으로 Vec<u8>로 구현되어 있음
-- Vec은 **capacity(용량)**을 초과하면 새로운 메모리 블록을 할당하고 기존 데이터를 복사함
+- Vec은 **capacity(용량)** 을 초과하면 새로운 메모리 블록을 할당하고 기존 데이터를 복사함
 
 ### ✅ push_str 동작
 - push_str은 기존 String의 capacity가 충분하면 주소 그대로 유지
@@ -30,7 +30,7 @@ fn main() {
 ```
 
 ## 💡 결론
-Rust의 String은 capacity를 초과하지 않는 한 메모리 주소가 유지되지만,
+Rust의 String은 capacity를 초과하지 않는 한 메모리 주소가 유지되지만,  
 초과하면 새로운 메모리 블록으로 이동하면서 주소가 바뀝니다.
 
 
@@ -68,7 +68,6 @@ cannot borrow `s` as mutable because it is also borrowed as immutable
 ```rust
 fn main() {
     let mut s = String::from("hello");
-
     {
         let r1 = &s;
         println!("{}", r1); // r1의 생명주기 종료
