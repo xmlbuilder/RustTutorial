@@ -1,6 +1,6 @@
 # dereference (Defer)
 
-Rust에서 `&` 와 `*` 는 참조(reference)와 역참조(dereference)를 나타내는 핵심 기호인데,  
+Rust에서 `&` 와 `*` 는 `참조(reference)` 와 `역참조(dereference)` 를 나타내는 핵심 기호인데,  
 이걸 정확히 이해하면 Rust의 메모리 모델과 안전성 철학이 훨씬 명확해짐.
 
 ## 🧭 *를 붙이는 기준: 언제 역참조가 필요한가?
@@ -505,6 +505,7 @@ maybe_point.unwrap().x // ✅ 가능 (unwrap()의 결과는 &Point)
 - Deref 트레이트가 핵심이며, 스마트 포인터에서도 동일하게 작동
 
 ---
+
 
 
 
