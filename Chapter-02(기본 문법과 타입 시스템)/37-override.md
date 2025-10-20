@@ -1,6 +1,6 @@
 # override
-
-Box<dyn Action>으로 가지고 있으면, 그 안에 어떤 타입이 들어있든 해당 타입이 구현한 run() 메서드가 자동으로 실행. 
+trait를 통해서 구현함.  
+Box<dyn Action>으로 가지고 있으면, 그 안에 어떤 타입이 들어있든 해당 타입이 구현한 run() 메서드가 자동으로 실행.  
 이게 바로 Rust의 동적 디스패치(dynamic dispatch) 기능이에요.
 
 ## 🔍 작동 방법
@@ -33,8 +33,8 @@ fn main() {
 }
 ```
 
-- Box<dyn Action>은 heap에 저장된 trait 객체
-- .run()을 호출하면 실제 타입에 맞는 구현이 자동으로 실행
+- `Box<dyn Action>` 은 heap에 저장된 `trait` 객체
+- `.run()` 을 호출하면 실제 타입에 맞는 구현이 자동으로 실행
 - 이건 C++의 virtual function이나 Java의 override와 거의 같은 개념
 
 ## ✅ 요약
@@ -52,7 +52,7 @@ Rust에서도 OOP 스타일의 다형성을 안전하고 성능 좋게 구현할
 let a: Box<dyn Action> = Box::new(A);
 a.run(); // 바로 실행됨!
 
-- Box<dyn Action>는 내부적으로 **vtable(가상 메서드 테이블)**을 가지고 있음
+- Box<dyn Action>는 내부적으로 **vtable(가상 메서드 테이블)** 을 가지고 있음
 - .run()을 호출하면 Rust는 vtable을 통해 실제 타입(A)의 run 구현을 찾아서 실행
 - 이건 C++의 virtual function, Java의 override와 거의 같은 방식
 
@@ -72,3 +72,4 @@ a.run(); // 바로 실행됨!
 | 안전한 추상화       | 타입을 몰라도 trait만 알면 행동을 호출할 수 있음   |
 
 ---
+
