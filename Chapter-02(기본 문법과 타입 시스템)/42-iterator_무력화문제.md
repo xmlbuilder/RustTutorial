@@ -1,5 +1,5 @@
 # iterator 무력화 문제
-C++의 std::vector나 std::map에서 순회 중에 요소를 삭제하면 iterator가 무력화되거나 undefined behavior가 발생하는 문제,
+C++의 std::vector나 std::map에서 순회 중에 요소를 삭제하면 iterator가 무력화되거나 undefined behavior가 발생하는 문제,  
 Rust는 이걸 언어 구조와 안전성 모델로 원천적으로 차단.
 
 ## 🔥 C++ STL의 문제점
