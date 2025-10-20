@@ -433,6 +433,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [32-BDFWriter](./Chapter-17(실전%20예제와%20프로젝트)/32-BDFWriter.md)
 - [33-Preference_Singleton](./Chapter-17(실전%20예제와%20프로젝트)/33-Preference_Singleton.md)
 - [34-Actix-web](./Chapter-17(실전%20예제와%20프로젝트)/34-Actix-web.md)
+- [35-reqwest_Crate](./Chapter-17(실전%20예제와%20프로젝트)/35-reqwest_Crate.md)
+
 
 🔼 [맨 위로](#-목차)
   
