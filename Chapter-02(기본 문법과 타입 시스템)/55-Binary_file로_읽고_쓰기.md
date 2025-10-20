@@ -1,10 +1,8 @@
----
-
 # Binary
 
 ## 🖨️ 바이너리 출력 (쓰기)
 
-Rust에서는 std::fs::File과 std::io::Write를 사용해 바이너리 데이터를 파일에 저장할 수 있습니다.
+Rust에서는 `std::fs::File` 과 `std::io::Write` 를 사용해 바이너리 데이터를 파일에 저장할 수 있습니다.
 
 ```rust
 use std::fs::File;
@@ -92,16 +90,15 @@ fn write_struct(file: &mut File, header: &Header) -> std::io::Result<()> {
     file.write_all(bytes)
 }
 ```
-
-이 방식은 unsafe를 사용하므로 구조체는 반드시 #[repr(C)]로 메모리 정렬을 보장해야 합니다.
+이 방식은 unsafe를 사용하므로 구조체는 반드시 `#[repr(C)]` 로 메모리 정렬을 보장해야 합니다.
 
 ---
 
 # float 값 읽고 쓰기
-Rust에서 int, float 값을 순서대로 바이너리 파일에 쓰고, 다시 순서대로 읽는 샘플 코드. 
-이 예제는 byteorder 크레이트를 사용해서 엔디안 제어까지 포함한 안전한 방식으로 구현되어 있어요.
+Rust에서 int, float 값을 순서대로 바이너리 파일에 쓰고, 다시 순서대로 읽는 샘플 코드.   
+이 예제는 byteorder 크레이트를 사용해서 엔디안 제어까지 포함한 안전한 방식으로 구현되어 있음.
 
-📦 1. Cargo.toml 설정
+## 📦 1. Cargo.toml 설정
 ```
 [dependencies]
 byteorder = "1.4"
@@ -155,7 +152,7 @@ fn main() -> std::io::Result<()> {
 - byteorder 크레이트는 엔디안 변환을 자동으로 처리해줍니다.
 
 ## 🧠 확장 아이디어
-- #[repr(C)] 구조체를 만들어서 여러 필드를 한 번에 저장
+- `#[repr(C)]` 구조체를 만들어서 여러 필드를 한 번에 저장
 - CAD 시스템에서 좌표, 행렬, 커브 데이터를 바이너리로 저장할 때 활용 가능
 
 ---
@@ -192,7 +189,6 @@ fn main() -> std::io::Result<()> {
 }
 ```
 
-
 ## 🔍 다른 타입 배열도 가능
 | 타입   | 쓰기 메서드                          | 읽기 메서드                          |
 |--------|--------------------------------------|--------------------------------------|
@@ -215,7 +211,7 @@ struct Matrix4x4 {
 }
 ```
 
-이런 구조체도 unsafe를 통해 메모리 슬라이스로 변환해 저장할 수 있어요.
+이런 구조체도 unsafe를 통해 메모리 슬라이스로 변환해 저장할 수 있음.
 
 ---
 
@@ -372,10 +368,9 @@ fn main() -> std::io::Result<()> {
 
 --- 
 # Block 단위로 건너 띄면서 읽기
-
-Fortran의 바이너리 파일은 종종 **레코드 기반 포맷(record-based format)**을 사용해서,  
+Fortran의 바이너리 파일은 종종 **레코드 기반 포맷(record-based format)** 을 사용해서,  
 각 데이터 블록 앞뒤에 레코드 길이를 나타내는 바이트가 삽입됩니다.  
-이 때문에 Rust에서 읽을 때는 정확한 바이트 크기 단위로 읽고 건너뛰는 로직이 필요합니다.
+이 때문에 Rust에서 읽을 때는 정확한 바이트 크기 단위로 읽고 건너뛰는 로직이 필요합니다.  
 
 ## 🧠 핵심 개념: Fortran 바이너리 구조
 Fortran의 unformatted 파일은 다음과 같은 구조를 가질 수 있습니다:
@@ -512,8 +507,8 @@ while offset + 12 <= buffer.len() {
 
 ---
 # Big Endian 처리
-Unix 시스템(특히 오래된 SPARC, PowerPC, 일부 IBM 메인프레임 등)은 **빅 엔디안(Big Endian)**을 사용하는 경우가 많습니다.  
-그래서 그런 환경에서 생성된 바이너리 파일을 Rust에서 읽을 때는 리틀 엔디안 처리(from_le_bytes)를 하면 안 되고,  
+Unix 시스템(특히 오래된 SPARC, PowerPC, 일부 IBM 메인프레임 등)은 **빅 엔디안(Big Endian)** 을 사용하는 경우가 많습니다.  
+그래서 그런 환경에서 생성된 바이너리 파일을 Rust에서 읽을 때는 **리틀 엔디안 처리(from_le_bytes)** 를 하면 안 되고,  
 빅 엔디안 처리(from_be_bytes)를 해야 정확하게 해석됩니다.
 
 ## 🧠 핵심 요약
@@ -544,6 +539,7 @@ fn main() -> std::io::Result<()> {
 - 네트워크 프로토콜도 대부분 빅 엔디안을 사용하므로, from_be_bytes()가 기본입니다.
 
 ---
+
 # Byte Swap
 
 ## 🧩 전체 코드: 엔디안 변환 함수들
@@ -580,7 +576,6 @@ fn main() {
 }
 ```
 
-
 ## 🔍 설명
 
 | 기능 또는 메서드        | 설명                                               |
@@ -614,7 +609,6 @@ fn parse_f64_be(bytes: &[u8], offset: usize) -> f64 {
     f64::from_be_bytes(slice.try_into().unwrap())
 }
 ```
-
 
 ## ✅ 사용 예시
 ```rust
