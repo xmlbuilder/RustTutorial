@@ -61,10 +61,10 @@ struct Point {
     x: f64,
     y: f64,
 }
-```
+
 // 에러! Debug가 구현되지 않음
 // let s = format!("{:?}", Point { x: 1.0, y: 2.0 });
-
+```
 
 ## ✅ 해결 방법: #[derive(Debug)] 추가
 ```rust
