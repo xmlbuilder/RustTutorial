@@ -252,5 +252,81 @@ CSC to Dense Matrix:
 
 ---
 
+## 테스트 코드
+```rust
+
+#[cfg(test)]
+mod tests_csr {
+    use geometry::geom::utils::math::{
+        on_csr_from_dense, 
+        on_csr_from_triplets, 
+        on_csr_row_dot, 
+        on_print_dense_from_csr, 
+        on_print_from_csc};
+
+    #[test]
+    fn test_csr_row_dot() {
+        let i = vec![0usize, 2, 4, 7];
+        let j = vec![0usize, 3, 0, 1, 1, 2, 3];
+        let a = vec![10.0, 2.0, 3.0, 9.0, 7.0, 8.0, 7.0];
+        let x = vec![1.0, 2.0, 3.0, 4.0];
+
+        assert_eq!(on_csr_row_dot(0, &i, &j, &a, &x), 18.0);
+        assert_eq!(on_csr_row_dot(1, &i, &j, &a, &x), 21.0);
+        assert_eq!(on_csr_row_dot(2, &i, &j, &a, &x), 66.0);
+    }
+
+    #[test]
+    fn test_csr_from_dense() {
+        let dense = vec![
+            vec![10.0, 0.0, 0.0, 2.0],
+            vec![ 3.0, 9.0, 0.0, 0.0],
+            vec![ 0.0, 7.0, 8.0, 7.0],
+        ];
+        let (i, j, a) = on_csr_from_dense(&dense);
+        println!("i = {:?}", i);
+        println!("j = {:?}", j);
+        println!("a = {:?}", a);
+    }
+
+    #[test]
+    fn test_csr_from_triplets() {
+        // 목표 A의 triplet
+        let n_rows = 3;
+        let n_cols = 4;
+        let trips = vec![
+            (0, 0, 10.0), (0, 3, 2.0),
+            (1, 0, 3.0),  (1, 1, 9.0),
+            (2, 1, 7.0),  (2, 2, 8.0), (2, 3, 7.0),
+        ];
+
+        let (i, j, a) = on_csr_from_triplets(n_rows, n_cols, trips);
+
+        // 확인 출력
+        println!("i = {:?}", i); // [0, 2, 4, 7]
+        println!("j = {:?}", j); // [0, 3, 0, 1, 1, 2, 3]
+        println!("a = {:?}", a); // [10.0, 2.0, 3.0, 9.0, 7.0, 8.0, 7.0]
+    }
+
+    #[test]
+    fn test_print_dense_from_csr() {
+        // 예제 CSR (3x4)
+        let i = vec![0usize, 2, 4, 7];                    // row pointer
+        let j = vec![0usize, 3, 0, 1, 1, 2, 3];           // col indices
+        let a = vec![10.0, 2.0, 3.0, 9.0, 7.0, 8.0, 7.0]; // values
+
+        on_print_dense_from_csr(3, 4, &i, &j, &a);
+    }
+
+    #[test]
+    fn test_print_from_csc() {
+        let j = vec![0, 2, 4, 5, 7]; // 열 시작 위치
+        let i = vec![0, 1, 1, 2, 2, 0, 2]; // 행 인덱스
+        let a = vec![10.0, 3.0, 9.0, 7.0, 8.0, 2.0, 7.0]; // 값
+
+        on_print_from_csc(&j, &i, &a, 3, 4);
+    }
+}
+```
 
 
