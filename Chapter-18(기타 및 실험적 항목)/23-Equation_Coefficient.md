@@ -142,3 +142,296 @@ graph TD
 
 ---
 
+## 소스
+```rust
+#[derive(Debug, Clone, Copy)]
+pub struct Coefficient {
+    pub pos: usize,
+    pub val: f64,
+}
+
+// Note: If you only want to compare "same column" semantically, use PartialEq based on pos.
+// (Use only in sort/merge, and manage it in the public API to avoid confusion.)
+impl PartialEq for Coefficient {
+    fn eq(&self, other: &Self) -> bool { self.pos == other.pos }
+}
+impl Eq for Coefficient {}
+
+#[derive(Debug, Default, Clone)]
+pub struct Equation {
+    terms: Vec<Coefficient>, // Always keep pos in ascending order
+}
+
+impl Equation {
+    pub fn new() -> Self {
+        Self { terms: Vec::new() }
+    }
+
+    pub fn with_capacity(n: usize) -> Self {
+        Self { terms: Vec::with_capacity(n) }
+    }
+
+    /// Maintain sorting + merge same pos
+    pub fn add(&mut self, pos: usize, val: f64) {
+        match self.terms.binary_search_by_key(&pos, |c| c.pos) {
+            Ok(i) => {
+                self.terms[i].val += val;
+                // Optionally remove very small values to 0 if necessary
+                // if self.terms[i].val.abs() < 1e-20 { self.terms.remove(i); }
+            }
+            Err(i) => self.terms.insert(i, Coefficient { pos, val }),
+        }
+    }
+
+    /// Remove the column (pos) and increment all indices of columns greater than it by 1.
+    /// (Preserves the original C# RemoveAt intent + off-by-one/fixes omissions)
+    pub fn remove_at_shift(&mut self, pos: usize) {
+        match self.terms.binary_search_by_key(&pos, |c| c.pos) {
+            Ok(i) => {
+                // Remove the term corresponding to pos
+                self.terms.remove(i);
+                // All pos in the back row are -1
+                for t in &mut self.terms[i..] {
+                    t.pos -= 1;
+                }
+            }
+            Err(_insertion_point) => {
+                // Even if the column doesn't exist, all larger columns are -1 (renumber columns by deleting variables)
+                for t in &mut self.terms {
+                    if t.pos > pos {
+                        t.pos -= 1;
+                    }
+                }
+                // Sort is maintained
+            }
+        }
+    }
+
+    /// Get the item corresponding to pos as a reference.
+    pub fn get(&self, pos: usize) -> Option<&Coefficient> {
+        self.terms
+            .binary_search_by_key(&pos, |c| c.pos)
+            .ok()
+            .map(|i| &self.terms[i])
+    }
+
+    /// Expose the current items as a (pos,val) slice (read-only)
+    pub fn terms(&self) -> &[Coefficient] {
+        &self.terms
+    }
+
+    /// Sparse-dense inner product: sum_i val_i * x[pos_i]
+    pub fn dot_dense(&self, x: &[f64]) -> f64 {
+        let mut acc = 0.0;
+        for c in &self.terms {
+            acc += c.val * x[c.pos];
+        }
+        acc
+    }
+
+    /// Dot product in a single row in CSR format: for row r, sum_{k=I[r]..I[r+1]-1} A[k]*x[J[k]]
+    pub fn dot_csr(row: usize, i: &[usize], j: &[usize], a: &[f64], x: &[f64]) -> f64 {
+        assert!(row + 1 < i.len(), "CSR: I must have len >= rows+1");
+        let (s, e) = (i[row], i[row + 1]);
+        assert!(e <= a.len() && e <= j.len(), "CSR: A/J length mismatch");
+
+        let mut acc = 0.0;
+        for k in s..e {
+            acc += a[k] * x[j[k]];
+        }
+        acc
+    }
+}
+```
+
+### 테스트 코드
+```rust
+#[cfg(test)]
+mod tests {
+    use geometry::core::equation::{Coefficient, Equation};
+    use geometry::geom::utils::math::on_solve_2x2;
+
+    fn approx(a: f64, b: f64, eps: f64) -> bool {
+        (a - b).abs() <= eps
+    }
+
+    #[test]
+    fn add_merges_same_pos_and_keeps_sorted() {
+        let mut eq = Equation::new();
+        eq.add(3, 2.0);
+        eq.add(1, 5.0);
+        eq.add(3, 0.5); // 병합되어 pos=3 항의 값이 2.5가 됨
+        eq.add(2, -1.0);
+
+        let terms = eq.terms();
+        let poses: Vec<_> = terms.iter().map(|c| c.pos).collect();
+        let vals:  Vec<_> = terms.iter().map(|c| c.val).collect();
+
+        assert_eq!(poses, vec![1, 2, 3], "positions must be sorted and unique");
+        assert!(approx(vals[0], 5.0, 1e-12));
+        assert!(approx(vals[1], -1.0, 1e-12));
+        assert!(approx(vals[2],  2.5, 1e-12));
+    }
+
+    #[test]
+    fn remove_at_shift_existing_pos() {
+        // 초기:  (1:5.0), (2:-1.0), (3:2.5)
+        let mut eq = Equation::new();
+        eq.add(1, 5.0);
+        eq.add(2, -1.0);
+        eq.add(3, 2.5);
+
+        // pos=2 제거 → (2:-1.0) 삭제, pos>2 들은 -1 → (1:5.0),(2:2.5)
+        eq.remove_at_shift(2);
+
+        let terms = eq.terms();
+        let poses: Vec<_> = terms.iter().map(|c| c.pos).collect();
+        let vals:  Vec<_> = terms.iter().map(|c| c.val).collect();
+
+        assert_eq!(poses, vec![1, 2]);
+        assert!(approx(vals[0], 5.0, 1e-12));
+        assert!(approx(vals[1], 2.5, 1e-12));
+    }
+
+    #[test]
+    fn remove_at_shift_missing_pos_still_shifts_bigger() {
+        // 초기: (1:1.0), (3:3.0), (5:5.0)
+        let mut eq = Equation::new();
+        eq.add(1, 1.0);
+        eq.add(3, 3.0);
+        eq.add(5, 5.0);
+
+        // pos=2 제거: 실제로 pos=2 항은 없지만, pos>2 인 것들(3,5)은 각각 2,4로 -1
+        eq.remove_at_shift(2);
+
+        let terms = eq.terms();
+        let poses: Vec<_> = terms.iter().map(|c| c.pos).collect();
+        let vals:  Vec<_> = terms.iter().map(|c| c.val).collect();
+
+        assert_eq!(poses, vec![1, 2, 4]);
+        assert!(approx(vals[0], 1.0, 1e-12));
+        assert!(approx(vals[1], 3.0, 1e-12));
+        assert!(approx(vals[2], 5.0, 1e-12));
+    }
+
+    #[test]
+    fn get_returns_some_when_present_none_when_absent() {
+        let mut eq = Equation::new();
+        eq.add(4, 10.0);
+        eq.add(7, -2.0);
+
+        let c4 = eq.get(4).copied();
+        let c6 = eq.get(6).copied();
+
+        assert!(matches!(c4, Some(Coefficient { pos: 4, val: v }) if approx(v, 10.0, 1e-12)));
+        assert!(c6.is_none());
+    }
+
+    #[test]
+    fn dot_dense_is_correct() {
+        // eq: 2*x1 + (-1)*x3 + 0.5*x5
+        let mut eq = Equation::new();
+        eq.add(1, 2.0);
+        eq.add(3, -1.0);
+        eq.add(5, 0.5);
+
+        let x = vec![0.0, 10.0, 0.0, 1.5, 0.0, 8.0];
+        let y = eq.dot_dense(&x);
+        // 2*10 + (-1)*1.5 + 0.5*8 = 20 - 1.5 + 4 = 22.5
+        assert!(approx(y, 22.5, 1e-12));
+    }
+
+    #[test]
+    fn dot_csr_is_correct() {
+        // 3x3 예: 행별로 테스트
+        // A = [[2, 0, 1],
+        //      [0, 3, 0],
+        //      [4, 0, 5]]
+        // CSR:
+        // I = [0, 2, 3, 5]
+        // J = [0, 2, 1, 0, 2]
+        // V = [2, 1, 3, 4, 5]
+        let i = vec![0, 2, 3, 5];
+        let j = vec![0, 2, 1, 0, 2];
+        let a = vec![2.0, 1.0, 3.0, 4.0, 5.0];
+        let x = vec![1.0, 2.0, 3.0];
+
+        // row0: 2*x0 + 1*x2 = 2*1 + 1*3 = 5
+        let y0 = Equation::dot_csr(0, &i, &j, &a, &x);
+        // row1: 3*x1 = 6
+        let y1 = Equation::dot_csr(1, &i, &j, &a, &x);
+        // row2: 4*x0 + 5*x2 = 4*1 + 5*3 = 19
+        let y2 = Equation::dot_csr(2, &i, &j, &a, &x);
+
+        assert!(approx(y0, 5.0, 1e-12));
+        assert!(approx(y1, 6.0, 1e-12));
+        assert!(approx(y2, 19.0, 1e-12));
+    }
+
+    #[test]
+    fn test_equation_solver2x2() {
+        // 첫 번째 제약식: -1·x_A + 1·x_B = 10
+        let mut eq1 = Equation::new();
+        eq1.add(0, -1.0); // x_A
+        eq1.add(1, 1.0);  // x_B
+        let d0 = 10.0;
+
+        // 두 번째 제약식: -1·x_B + 1·x_C = 5
+        let mut eq2 = Equation::new();
+        eq2.add(1, -1.0); // x_B
+        eq2.add(2, 1.0);  // x_C
+        let d1 = 5.0;
+
+        // 2x2 시스템으로 축소: x_B와 x_C만 해석한다고 가정
+        let m00 = eq1.get(1).map_or(0.0, |c| c.val); // x_B in eq1
+        let m01 = 0.0; // x_C not in eq1
+        let m10 = eq2.get(1).map_or(0.0, |c| c.val); // x_B in eq2
+        let m11 = eq2.get(2).map_or(0.0, |c| c.val); // x_C in eq2
+
+        let result = on_solve_2x2(m00, m01, m10, m11, d0, d1);
+        println!("해석 결과: {:?}", result);
+        // 해석 결과: Solve2x2Result {
+        //     rank: 2,
+        //     x: 10.0, // x_B
+        //     y: 15.0, // x_C
+        //     pivot_ratio: 1.0
+        // }
+    }
+
+    #[test]
+    fn dot_dense_matches_csharp_meaning() {
+        // eq: 2*x1 + (-1)*x3 + 0.5*x5
+        let mut eq = Equation::new();
+        eq.add(1, 2.0);
+        eq.add(3, -1.0);
+        eq.add(5, 0.5);
+
+        let x = vec![0.0, 10.0, 0.0, 1.5, 0.0, 8.0];
+        // 2*10 + (-1)*1.5 + 0.5*8 = 22.5
+        assert!((eq.dot_dense(&x) - 22.5).abs() < 1e-12);
+    }
+
+    #[test]
+    fn dot_csr_row_matches_standard_csr() {
+        // A = [[2,0,1],
+        //      [0,3,0],
+        //      [4,0,5]]
+        // CSR:
+        // I = [0, 2, 3, 5]
+        // J = [0, 2, 1, 0, 2]
+        // V = [2, 1, 3, 4, 5]
+        let i = vec![0, 2, 3, 5];
+        let j = vec![0, 2, 1, 0, 2];
+        let a = vec![2.0, 1.0, 3.0, 4.0, 5.0];
+        let x = vec![1.0, 2.0, 3.0];
+
+        // row0: 2*x0 + 1*x2 = 5
+        // row1: 3*x1 = 6
+        // row2: 4*x0 + 5*x2 = 19
+        assert!((Equation::dot_csr(0, &i, &j, &a, &x) - 5.0).abs() < 1e-12);
+        assert!((Equation::dot_csr(1, &i, &j, &a, &x) - 6.0).abs() < 1e-12);
+        assert!((Equation::dot_csr(2, &i, &j, &a, &x) - 19.0).abs() < 1e-12);
+    }
+}
+```
+
