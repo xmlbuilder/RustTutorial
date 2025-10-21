@@ -131,7 +131,7 @@ CSR to Dense Matrix:
 ---
 
 ## 🧠 CSC(Compressed Sparse Column) 핵심 요약 
-CSR과 반대되는 방식인 CSC(Compressed Sparse Column) 방식으로 설명
+CSR과 반대되는 방식인 CSC(Compressed Sparse Column) 방식으로 설명  
 CSC는 열 중심으로 희소 행렬을 저장하는 방식입니다.  
 0이 아닌 값만 저장하며, 세 개의 벡터 a, i, j를 사용합니다.
 
