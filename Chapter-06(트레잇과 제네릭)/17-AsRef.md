@@ -97,6 +97,41 @@ AsRef<T>를 쓰는 게 가장 깔끔하고 안전한 선택입니다.
 | Into<T>    | 값으로 변환   | T         | ✅ 필요 있음     |
 
 - AsRef는 참조 기반 변환이라서 가볍고 빠릅니다.
-- Into는 소유권을 넘기는 변환이라서 복사나 이동이 필요할 수 있어요.
+- Into는 소유권을 넘기는 변환이라서 복사나 이동이 필요할 수 있음.
+
+---
+
+## 실전 소스
+```rust
+pub fn chord_length_parametrization<T: AsRef<Point3D>>(
+    i0:usize,
+    i1:usize,
+    pts:&[T],
+    distances:&mut Vec<f64>,
+    u:&mut Vec<f64>
+)->f64{
+    distances.clear();
+    u.clear();
+    let mut total=0.0;
+    let mut last: Option<Point3D> = None;
+    for i in i0..i1 {
+        let p = pts[i].as_ref();
+        if let Some(lp)=last {
+            let d = lp.distance_to(&p);
+            distances.push(d); total += d;
+        } else { distances.push(0.0); }
+        last=Some(*p);
+    }
+    let mut acc=0.0;
+    u.push(0.0);
+    for i in 1..distances.len() {
+        acc += distances[i];
+        u.push(if total>0.0 { acc/total } else { 0.0 });
+    }
+    if u.is_empty(){ u.push(0.0); }
+    total
+}
+```
+  
 
 
