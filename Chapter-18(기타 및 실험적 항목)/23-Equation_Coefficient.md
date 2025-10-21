@@ -111,7 +111,7 @@ fn main() {
 
 
 ### ✅ 출력 예시
-````
+```
 해석 결과: Solve2x2Result {
     rank: 2,
     x: 10.0, // x_B
