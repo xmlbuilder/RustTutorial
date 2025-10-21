@@ -481,9 +481,9 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [16-Excel_Read_Write)](./Chapter-18(기타%20및%20실험적%20항목)/16-Excel_Read_Write.md)
 - [17-Encoding_Decoding](./Chapter-18(기타%20및%20실험적%20항목)/17-Encoding_Decoding.md)
 - [18-toml_parser](./Chapter-18(기타%20및%20실험적%20항목)/18-toml_parser.md)
-- [22-Sparse_Matrix](./Chapter-18(기타%20및%20실험적%20항목)/22-Sparse_Matrix.md)
-
-
+- [19-nalegbra](./Chapter-18(기타%20및%20실험적%20항목)/19-nalegbra.md)
+- [20-DMatrix_SMatrix](./Chapter-18(기타%20및%20실험적%20항목)/20-DMatrix_SMatrix.md)
+- [21-ODE_Solver](./Chapter-18(기타%20및%20실험적%20항목)/21-ODE_Solver.md)
 
 🔼 [맨 위로](#-목차)
 
