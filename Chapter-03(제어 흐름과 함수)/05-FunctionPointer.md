@@ -171,7 +171,7 @@ fn main() {
 ```
 
 
-- x는 클로저 내부로 move되어 캡처됨.
+- `x` 는 클로저 내부로 `move` 되어 캡처됨.
 - 반환된 클로저는 Fn을 구현하므로 여러 번 호출 가능.
 
 ### ✅ Boxed Trait Object 방식
@@ -186,7 +186,7 @@ fn main() {
     println!("{}", mul3(4)); // 출력: 12
 }
 ```
-- Box<dyn Fn>을 사용하면 동적 디스패치가 가능해져 유연성이 높아짐.
+- `Box<dyn Fn>` 을 사용하면 동적 디스패치가 가능해져 유연성이 높아짐.
 - 특히 반환 타입이 복잡하거나 조건에 따라 달라질 때 유용.
 
 ## 📦 요약: 클로저 반환 고차 함수
@@ -227,5 +227,61 @@ fn main() {
 | 스마트 포인터 내부 참조 수 제어 시 | `Rc`, `Arc` 등의 참조 카운트를 수동으로 줄이고 싶을 때              | `drop(rc_value);` → 참조 수 감소              |
 
 ---
+
+## ✅ 동적 디스패치의 장점: 다양한 전략을 런타임에 선택
+```rust
+trait Operation {
+    fn apply(&self, input: i32) -> i32;
+}
+
+struct Add(i32);
+struct Multiply(i32);
+
+impl Operation for Add {
+    fn apply(&self, input: i32) -> i32 {
+        input + self.0
+    }
+}
+
+impl Operation for Multiply {
+    fn apply(&self, input: i32) -> i32 {
+        input * self.0
+    }
+}
+
+// 전략을 런타임에 선택
+fn choose_operation(op_type: &str) -> Box<dyn Operation> {
+    match op_type {
+        "add" => Box::new(Add(10)),
+        "mul" => Box::new(Multiply(3)),
+        _ => panic!("Unknown operation"),
+    }
+}
+
+fn main() {
+    let ops: Vec<Box<dyn Operation>> = vec![
+        choose_operation("add"),
+        choose_operation("mul"),
+    ];
+
+    for op in ops {
+        println!("Result: {}", op.apply(5));
+    }
+}
+```
+
+### 🧠 이 예제가 보여주는 핵심 포인트
+- Operation이라는 trait을 통해 공통 인터페이스 정의
+- `Add`, `Multiply` 는 서로 다른 타입이지만 `Box<dyn Operation>` 으로 동일하게 다룰 수 있음
+- `choose_operation` 함수는 런타임에 전략을 선택 → `전략 패턴` 처럼 동작
+- `Vec<Box<dyn Operation>>` 을 통해 다형성 컨테이너를 구성 가능
+
+## ✅ 왜 유용한가?
+- 다양한 전략을 런타임에 유연하게 선택할 수 있음
+- 여러 타입을 하나의 trait 객체로 추상화하여 코드 확장성과 유지보수성 향상
+- 컴파일 시점에 타입을 알 수 없는 경우에도 안전하게 실행 가능
+
+---
+
 
 
