@@ -1,6 +1,7 @@
 # mut 위치
 
-## 문제 있는 소스
+## 가능한 코드
+- 단 소유권이 이동 된다.
 ```rust
 
 fn on_normalize(mut v: Vector3D) -> Option<Vector3D> {
@@ -10,7 +11,10 @@ fn on_normalize(mut v: Vector3D) -> Option<Vector3D> {
     v.x *= inv; v.y *= inv; v.z *= inv;
     Some(v)
 }
+```
 
+## 잘못된 코드
+```rust
 fn on_normalize(mut v: &Vector3D) -> Option<Vector3D> {
     let len2 = v.x*v.x + v.y*v.y + v.z*v.z;
     if len2 == 0.0 { return None; }
@@ -18,13 +22,10 @@ fn on_normalize(mut v: &Vector3D) -> Option<Vector3D> {
     v.x *= inv; v.y *= inv; v.z *= inv;
     Some(v)
 }
-
-
-
 ```
-핵심은 Rust의 가변 참조(&mut)와 값 복사(Copy)의 차이에 있어요.
-당신이 작성한 on_normalize(mut v: Vector3D)는 값을 복사해서 수정하는 방식이고,
-on_normalize(mut v: &Vector3D)는 참조를 통해 읽기만 하겠다는 의미예요.
+- 핵심은 Rust의 가변 참조(&mut)와 값 복사(Copy)의 차이에 있음.
+- on_normalize(mut v: Vector3D)는 값을 복사해서 수정하는 방식이고,
+- on_normalize(mut v: &Vector3D)는 참조를 통해 읽기만 하겠다는 의미.
 
 ## 🔍 왜 &Vector3D로 하면 에러가 나는가?
 ### 1. &Vector3D는 불변 참조예요
@@ -32,8 +33,8 @@ on_normalize(mut v: &Vector3D)는 참조를 통해 읽기만 하겠다는 의미
 fn on_normalize(mut v: &Vector3D)
 ```
 
-- 여기서 mut v는 참조 자체가 변경 가능하다는 뜻이지
-v.x, v.y, v.z를 변경할 수 있다는 뜻이 아니에요
+- 여기서 mut v는 참조 자체가 변경 가능하다는 뜻  
+    v.x, v.y, v.z를 변경할 수 있다는 뜻이 아님
 - &Vector3D는 내부 필드를 수정할 수 없어요 → ❌ v.x *= inv
 
 ### 2. Vector3D는 Copy 타입이라면, 값으로 받는 게 더 자연스러움
@@ -49,10 +50,9 @@ fn on_normalize(mut v: Vector3D)
 ```rust
 fn on_normalize(mut v: Vector3D) -> Option<Vector3D>
 ```
+- → 가장 간단하고 안전함
 
-→ 가장 간단하고 안전함
-
-### 방법 2: 가변 참조로 받고 직접 수정
+### 방법 2: 가변 참조로 받고 직접 수정 (`&mut Vector3D`)
 ```rust
 fn on_normalize(v: &mut Vector3D) -> bool {
     let len2 = v.x*v.x + v.y*v.y + v.z*v.z;
@@ -62,10 +62,9 @@ fn on_normalize(v: &mut Vector3D) -> bool {
     true
 }
 ```
+- → v를 직접 수정하고, 성공 여부만 반환
 
-→ v를 직접 수정하고, 성공 여부만 반환
-
-## 방법 3: 불변 참조로 받고 새 값 반환 (복사)
+### 방법 3: 불변 참조로 받고 새 값 반환 (복사)
 ```rust
 fn on_normalize(v: &Vector3D) -> Option<Vector3D> {
     let len2 = v.x*v.x + v.y*v.y + v.z*v.z;
@@ -78,22 +77,20 @@ fn on_normalize(v: &Vector3D) -> Option<Vector3D> {
     })
 }
 ```
-
-→ 원본은 그대로 두고, 새 벡터를 반환
+- → 원본은 그대로 두고, 새 벡터를 반환
 
 ## 💬 결론
 - &Vector3D는 불변 참조이기 때문에 내부 필드를 수정할 수 없음.
-- mut v: &Vector3D는 “참조 변수 v를 바꿀 수 있다”는 뜻이지, “참조 대상의 값을 바꿀 수 있다”는 뜻은 아님.
+- mut v: &Vector3D는 “참조 변수 v를 바꿀 수 있다”는 뜻, “참조 대상의 값을 바꿀 수 있다”는 뜻은 아님.
 
 
 ## 🔍 다시 정리하면
 ```rust
 fn on_normalize(mut v: &Vector3D)
 ```
-
 - 여기서 mut는 참조 변수 v 자체를 다른 참조로 바꿀 수 있다는 뜻
 - 하지만 v가 가리키는 Vector3D는 불변이기 때문에 내부 필드 수정은 ❌
-반면에:
+### 반면에:
 ```rust
 fn on_normalize(mut v: Vector3D)
 ```
