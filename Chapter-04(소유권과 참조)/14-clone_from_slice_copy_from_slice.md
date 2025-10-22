@@ -1,6 +1,6 @@
 # clone_from_slice / copy_from_slice
 
-clone_from_slice는 Rust에서 **한 슬라이스의 내용을 다른 슬라이스로 복제(clone)**할 때 사용하는 메서드.
+`clone_from_slice` 는 Rust에서 **한 슬라이스의 내용을 다른 슬라이스로 복제(clone)** 할 때 사용하는 메서드.  
 단순한 복사처럼 보이지만, 이 메서드는 Clone 트레이트를 구현한 타입에 대해 안전하게 복제를 수행.
 
 ## 🧠 기본 개념
@@ -10,8 +10,8 @@ fn clone_from_slice(&mut self, src: &[T])
 
 - self: 복사 대상 (&mut [T])
 - src: 복사 원본 (&[T])
-- T: 반드시 Clone을 구현해야 함
-두 슬라이스의 길이가 같아야 하며, 그렇지 않으면 panic이 발생합니다.
+- T: 반드시 Clone을 구현해야 함  
+- 두 슬라이스의 길이가 같아야 하며, 그렇지 않으면 panic이 발생합니다.
 
 
 ## ✅ 사용 예시
@@ -36,8 +36,7 @@ assert_eq!(dst, src);
 | `copy_from_slice`                           | `Copy`         | 얕은 복사 (`memcpy`) | 매우 빠름       |
 
 
-clone_from_slice는 더 일반적이고 유연하지만,
-copy_from_slice는 더 빠르고 제한적이에요.
+`clone_from_slice` 는 더 일반적이고 유연하지만, `copy_from_slice` 는 더 빠르고 제한적.
 
 
 ## ⚠️ 주의사항
@@ -46,12 +45,9 @@ copy_from_slice는 더 빠르고 제한적이에요.
 - T가 Clone을 구현하지 않으면 컴파일 에러
 
 ## ✨ 언제 쓰면 좋은가?
-- Vec<T>나 Box<[T]> 같은 슬라이스 기반 타입에
-다른 슬라이스의 값을 복제하고 싶을 때
-- T가 Clone만 있고 Copy는 없는 경우
-예: String, Vec<u8>, Arc<T>, Box<T> 등
-
-
+- Vec<T>나 Box<[T]> 같은 슬라이스 기반 타입에 다른 슬라이스의 값을 복제하고 싶을 때
+- T가 Clone만 있고 Copy는 없는 경우  
+  예: String, Vec<u8>, Arc<T>, Box<T> 등
 
 ## 🧩 기본 비교
 | 비교 항목               | `copy_from_slice`         | `clone_from_slice`              |
@@ -65,6 +61,7 @@ copy_from_slice는 더 빠르고 제한적이에요.
 
 
 ## ⚠️ 에러가 나는 이유: Copy vs Clone
+
 ### 🔹 copy_from_slice는 Copy 타입만 가능
 ```rust
 let mut dst: [String; 3] = Default::default();
@@ -96,7 +93,7 @@ dst.copy_from_slice(&src); // ❌ 에러 발생
 dst.clone_from_slice(&src); // ✅ 정상 작동
 ```
 
-이럴 때 에러 메시지는 보통:
+#### 이럴 때 에러 메시지는 보통:
 ```
 the trait bound String: Copy is not satisfied
 ```
@@ -109,12 +106,10 @@ the trait bound String: Copy is not satisfied
 | `T: !Copy + Clone`     | `clone_from_slice`       |
 | `T: !Clone`            | ❌ 사용 불가 (컴파일 에러) |
 
-
-
 ## ✨ 추가 팁
 - Copy는 자동 구현되지만, Clone은 명시적 구현이 필요함
-- Copy와 Drop은 양립 불가 → Drop이 있는 타입은 Copy 불가
-- clone_from_slice는 기존 값을 덮어쓰기만 하므로, 이전 값의 drop은 자동 처리됨
+- `Copy` 와 `Drop` 은 `양립 불가` → Drop이 있는 타입은 Copy 불가
+- `clone_from_slice` 는 기존 값을 덮어쓰기만 하므로, 이전 값의 `drop` 은 자동 처리됨
 
 ---
 
