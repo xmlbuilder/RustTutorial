@@ -1,7 +1,7 @@
 # mut 위치
 
 ## 가능한 코드
-- 단 소유권이 이동 된다.
+- 소유권이 이동 되는 것을 주의 하라.
 ```rust
 
 fn on_normalize(mut v: Vector3D) -> Option<Vector3D> {
@@ -24,8 +24,8 @@ fn on_normalize(mut v: &Vector3D) -> Option<Vector3D> {
 }
 ```
 - 핵심은 Rust의 가변 참조(&mut)와 값 복사(Copy)의 차이에 있음.
-- on_normalize(mut v: Vector3D)는 값을 복사해서 수정하는 방식이고,
-- on_normalize(mut v: &Vector3D)는 참조를 통해 읽기만 하겠다는 의미.
+- `on_normalize(mut v: Vector3D)` 는 값을 복사해서 수정하는 방식이고,
+- `on_normalize(mut v: &Vector3D)` 는 참조를 통해 읽기만 하겠다는 의미.
 
 ## 🔍 왜 &Vector3D로 하면 에러가 나는가?
 ### 1. &Vector3D는 불변 참조예요
@@ -35,7 +35,7 @@ fn on_normalize(mut v: &Vector3D)
 
 - 여기서 mut v는 참조 자체가 변경 가능하다는 뜻  
     v.x, v.y, v.z를 변경할 수 있다는 뜻이 아님
-- &Vector3D는 내부 필드를 수정할 수 없어요 → ❌ v.x *= inv
+- &Vector3D는 내부 필드를 수정할 수 없음 → ❌ v.x *= inv
 
 ### 2. Vector3D는 Copy 타입이라면, 값으로 받는 게 더 자연스러움
 ```rust
@@ -43,7 +43,7 @@ fn on_normalize(mut v: Vector3D)
 ```
 
 - 이건 v를 복사해서 함수 안에서 자유롭게 수정 가능
-- 수정 후 Some(v)로 반환하면 끝
+- 수정 후 `Some(v)` 로 반환하면 끝
 
 ### ✅ 해결 방법 3가지
 ### 방법 1: 값으로 받기 (현재 방식)
@@ -80,8 +80,8 @@ fn on_normalize(v: &Vector3D) -> Option<Vector3D> {
 - → 원본은 그대로 두고, 새 벡터를 반환
 
 ## 💬 결론
-- &Vector3D는 불변 참조이기 때문에 내부 필드를 수정할 수 없음.
-- mut v: &Vector3D는 “참조 변수 v를 바꿀 수 있다”는 뜻, “참조 대상의 값을 바꿀 수 있다”는 뜻은 아님.
+- `&Vector3D` 는 불변 참조이기 때문에 내부 필드를 수정할 수 없음.
+- `mut v: &Vector3D` 는 **참조 변수 v를 바꿀 수 있다** 는 뜻, **참조 대상의 값을 바꿀 수 있다** 는 뜻은 아님.
 
 
 ## 🔍 다시 정리하면
@@ -90,6 +90,7 @@ fn on_normalize(mut v: &Vector3D)
 ```
 - 여기서 mut는 참조 변수 v 자체를 다른 참조로 바꿀 수 있다는 뜻
 - 하지만 v가 가리키는 Vector3D는 불변이기 때문에 내부 필드 수정은 ❌
+  
 ### 반면에:
 ```rust
 fn on_normalize(mut v: Vector3D)
