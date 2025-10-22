@@ -26,7 +26,7 @@ fn main() {
 ```
 
 - 아직 어떤 타입도 보내지 않았기 때문에 컴파일되지 않음
-- tx.send(val)과 rx.recv() 또는 for val in rx로 사용
+- `tx.send(val)` 과 `rx.recv()` 또는 `for val in rx` 로 사용
 
 ## 📤 단일 메시지 전송 & 수신
 ```rust
@@ -59,7 +59,7 @@ thread::spawn(move || {
 
 ```
 
-- val은 send()로 move됨 → 이후 사용 불가
+- val은 `send()` 로 `move` 됨 → 이후 사용 불가
 - Rust는 데이터 불일치나 경쟁 조건을 방지하기 위해 이를 금지
 
 ## 🔁 반복 메시지 전송
@@ -123,7 +123,7 @@ fn main() {
 - tx.clone()을 통해 여러 스레드가 동일한 수신자에게 메시지 전송 가능
 - 수신자는 순서 없이 도착한 메시지를 처리
 
-## ⏳ 비차단 수신: try_recv()
+## ⏳ 비차단 수신: `try_recv()`
 ```rust
 use std::sync::mpsc;
 use std::thread;
@@ -163,10 +163,10 @@ fn main() {
 
 ---
 
-# *메시지 패싱 구조(mpsc) 확장
+# 메시지 패싱 구조(mpsc) 확장
 
-아래는 Rust의 **메시지 패싱 구조(mpsc)**를 기반으로 확장한 세 가지 예제입니다.  
-각각은 실전에서 자주 쓰이는 패턴인 작업 분산, 이벤트 처리, 그리고 **비동기 채널(futures::channel)**을 다룹니다.
+아래는 Rust의 **메시지 패싱 구조(mpsc)** 를 기반으로 확장한 세 가지 예제입니다.  
+각각은 실전에서 자주 쓰이는 패턴인 작업 분산, 이벤트 처리, 그리고 **비동기 채널(futures::channel)** 을 다룹니다.
 
 ## 🧵 1. 스레드 간 작업 분산 (Work Distribution)
 ```rust
@@ -199,7 +199,7 @@ fn main() {
 ### ✅ 설명:
 - 하나의 송신자 → 여러 수신자(worker)로 작업 분산
 - 각 스레드는 recv()로 작업을 받아 처리
-- drop(tx)로 채널 종료 → worker 루프 종료
+- `drop(tx)` 로 채널 종료 → worker 루프 종료
 
 ## 🔔 2. 이벤트 처리 시스템
 ```rust
@@ -275,9 +275,9 @@ async fn main() {
 ```
 
 ### ✅ 설명:
-- futures::channel::mpsc는 비동기 채널을 제공
-- StreamExt::next()로 메시지를 await
-- tokio::task::spawn으로 비동기 작업자 실행
+- `futures::channel::mpsc` 는 비동기 채널을 제공
+- `StreamExt::next()` 로 메시지를 `await`
+- `tokio::task::spawn` 으로 비동기 작업자 실행
 
 ## 🧠 확장 요약
 | 확장 패턴           | 특징                          | 적합한 용도                 | 예시 방식                     |
