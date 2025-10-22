@@ -59,12 +59,33 @@ impl Mul<f64> for Point4D {
         Self::new(self.x * s, self.y * s, self.z * s, self.w * s)
     }
 }
+```
 
-→ 그럼 h_lerp는 이렇게 쓸 수 있어요:
+→ 그럼 h_lerp는 이렇게 쓸 수 있음:
+
+```rust
 pub fn h_lerp(a: &Self, b: &Self, t: f64) -> Point4D {
     (*a * (1.0 - t)) + (*b * t)
 }
 ```
 
+### 상수 * Point4D
+```rust
+impl Mul<Point4D> for f64 {
+    type Output = Point4D;
+    fn mul(self, rhs: Point4D) -> Self::Output {
+        Point4D::new(rhs.x * self, rhs.y * self, rhs.z * self, rhs.w * self)
+    }
+}
+```
+
+→ 그럼 h_lerp2는 이렇게 쓸 수 있음:
+```rust
+pub fn h_lerp2(a: &Self, b: &Self, t: f64) -> Point4D {
+    ((1.0 - t) * (*a)) + (t * (*b))
+}
+```
+
+---
 
 
