@@ -7,7 +7,7 @@
 - 한 시점에 오직 하나의 스레드만 데이터에 접근 가능
 - 데이터 접근 전 lock() 호출 → 락 획득
 - 데이터 사용 후 락 해제 필요  
-    → Rust에서는 MutexGuard가 Drop될 때 자동 해제
+    → Rust에서는 MutexGuard가 `Drop` 될 때 자동 해제
 
 ```rust
 use std::sync::Mutex;
