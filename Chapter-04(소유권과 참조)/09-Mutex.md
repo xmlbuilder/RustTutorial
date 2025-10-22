@@ -135,7 +135,7 @@ fn main() {
 | 에러 코드 | 원인/키워드       | 예시 코드 |
 |-----------|------------------|-----------|
 | E0373     | `'static` 수명 문제 | `thread::spawn(\|\| { counter.lock()... })` |
-| E0382     | move 후 재사용     | `thread::spawn(move \|\| { ... }); println!("{:?}", counter);` |
+| E0382     | `move` 후 재사용     | `thread::spawn(move \|\| { ... }); println!("{:?}", counter);` |
 | E0277     | `Rc<T>`는 `Send`/`Sync` 미구현 | `Rc<Mutex<i32>>` |
 
 
