@@ -6,8 +6,8 @@ Mutex / Arc / Rc / 멀티스레드 환경에서의 사용법과 주의점을 정
 - Mutex = Mutual Exclusion (상호 배제)
 - 한 시점에 오직 하나의 스레드만 데이터에 접근 가능
 - 데이터 접근 전 lock() 호출 → 락 획득
-- 데이터 사용 후 락 해제 필요
-→ Rust에서는 MutexGuard가 Drop될 때 자동 해제
+- 데이터 사용 후 락 해제 필요  
+    → Rust에서는 MutexGuard가 Drop될 때 자동 해제
 
 ```rust
 use std::sync::Mutex;
@@ -23,7 +23,7 @@ fn main() {
 }
 ```
 
-핵심 포인트
+## 핵심 포인트
 - lock() → MutexGuard 반환 (스마트 포인터)
 - Deref 구현 → 내부 데이터 접근 가능
 - 스코프 종료 시 Drop → 락 자동 해제
@@ -49,9 +49,8 @@ fn main() {
 ```
 
 #### 에러 요약 (E0373)
-closure may outlive the current function, but it borrows counter →
-스레드가 'static 수명을 요구하는데, counter는 지역 변수라 빌림 불가
-
+`closure may outlive the current function, but it borrows counter`  
+    → 스레드가 'static 수명을 요구하는데, counter는 지역 변수라 빌림 불가
 
 ### ❌ 잘못된 예제 2 — move 사용했지만 Mutex 단독
 ```rust
@@ -73,8 +72,8 @@ fn main() {
 ```
 
 #### 에러 요약 (E0382)
-use of moved value: counter →
-첫 번째 스레드로 counter가 이동해버려, 다음 반복에서 사용할 수 없음
+`use of moved value: counter`   
+    → 첫 번째 스레드로 counter가 이동해버려, 다음 반복에서 사용할 수 없음
 
 
 ### 3. Rc<T>로 참조 카운트 시도
@@ -99,8 +98,8 @@ fn main() {
 ```
 
 #### 에러 요약 (E0277)
-Rc<Mutex<i32>> cannot be sent between threads safely →
-Rc는 Send/Sync가 아니므로 스레드 간 이동 불가
+`Rc<Mutex<i32>> cannot be sent between threads safely`    
+    → Rc는 Send/Sync가 아니므로 스레드 간 이동 불가
 
 
 #### 4. Arc<T>로 해결
@@ -128,7 +127,6 @@ fn main() {
     println!("Result: {}", *counter.lock().unwrap()); // 10
 }
 ```
-
 #### 설명
 - Arc = Atomic Reference Counted → 멀티스레드 안전한 참조 카운트
 - Arc<Mutex<T>> → 여러 스레드가 안전하게 공유 + 변경 가능
