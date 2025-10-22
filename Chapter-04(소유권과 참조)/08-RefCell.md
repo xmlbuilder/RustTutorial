@@ -1,10 +1,12 @@
 # RefCell
 Rust의 RefCell<T>와 내부 가변성 패턴에 대해 전체적으로 정리.  
-이 개념은 Rust의 안전성과 유연성을 동시에 다루는 핵심적인 부분이라, 제대로 이해하면 Rust의 메모리 모델을 훨씬 깊이 있게 다룰 수 있음.
+이 개념은 Rust의 안전성과 유연성을 동시에 다루는 핵심적인 부분이라,  
+제대로 이해하면 Rust의 메모리 모델을 훨씬 깊이 있게 다룰 수 있음.
 
 ## 🧠 내부 가변성 (Interior Mutability)이란?
 Rust는 기본적으로 불변 참조(&T)로는 값을 변경할 수 없도록 설계되어 있습니다.  
-하지만 때로는 불변 참조를 통해서도 내부 데이터를 변경하고 싶을 때가 있죠. 이럴 때 사용하는 패턴이 바로 내부 가변성입니다.
+하지만 때로는 불변 참조를 통해서도 내부 데이터를 변경하고 싶을 때가 있음.  
+이럴 때 사용하는 패턴이 바로 내부 가변성입니다.
 - RefCell<T>는 불변 참조를 통해서도 내부 값을 변경할 수 있게 해주는 타입입니다.
 - 이는 Rust의 컴파일 타임 빌림 규칙을 런타임 검사로 대체함으로써 가능해집니다.
 - 내부적으로는 unsafe 코드를 사용하지만, API는 안전하게 제공됩니다.
@@ -21,7 +23,8 @@ Rust는 기본적으로 불변 참조(&T)로는 값을 변경할 수 없도록 �
 | 규칙 위반 시 결과     | **`panic!` 발생** (런타임에 중복 가변 빌림 등 위반 시) |
 
 
-#### RefCell<T>는 컴파일 타임에 에러가 발생하지 않기 때문에, 실수로 중복 가변 빌림을 하면 런타임에서 프로그램이 종료될 수 있습니다.
+- RefCell<T>는 컴파일 타임에 에러가 발생하지 않기 때문에,  
+    실수로 중복 가변 빌림을 하면 런타임에서 프로그램이 종료될 수 있습니다.
 
 
 ## 🧪 RefCell<T> vs Box<T> vs Rc<T>
@@ -76,9 +79,6 @@ fn main() {
     wrench indo
      */
 }
-
-
-
 ```
 
 ### 소스 설명
@@ -94,8 +94,9 @@ struct Tool {
     owner: Rc<Owner>,
 }
 ```
-- Owner는 tools 필드를 RefCell로 감싸서 불변 참조로도 툴 목록을 수정할 수 있게 합니다.
+- Owner는 tools 필드를 RefCell로 감싸서 `불변 참조` 로도 툴 `목록을 수정` 할 수 있게 합니다.
 - Tool은 Rc<Owner>를 통해 공유 소유권을 가집니다.
+
 ```rust
 indo.tools.borrow_mut().push(plier);
 indo.tools.borrow_mut().push(wrench);
@@ -193,12 +194,12 @@ fn main() {
         age: 30,
     });
 
-    let people = vec![alice]; 
+    let people = vec![alice]; //소유권 이동
     for person in &people {
         person.borrow_mut().age += 1;
     }
 
-    println!("Alice is now {} years old", alice.borrow().age);
+    println!("Alice is now {} years old", alice.borrow().age); //에러
 }
 ```
 ###  출력 결과
@@ -237,7 +238,7 @@ fn main() {
 
     let people = vec![alice.clone()]; // `Rc`를 복제해서 소유권을 공유
     for person in &people {
-        person.borrow_mut().age += 1; // 가변 소유권 대여
+        person.borrow_mut().age += 1; // 가변 소유권 대여 (RefCell을 통해서 가변)
     }
 
     println!("Alice is now {} years old", alice.borrow().age);
@@ -256,7 +257,8 @@ let mut borrow2 = indo.tools.borrow_mut(); // ❌ 런타임 에러 발생
 
 ## ✅ 정리
 RefCell<T>는 Rust에서 불변 참조로도 내부 값을 변경할 수 있게 해주는 유일한 안전한 방법입니다.  
-하지만 런타임 검사에 의존하기 때문에, 사용 시에는 빌림 규칙을 철저히 지켜야 하며, 멀티스레드 환경에서는 절대 사용하지 말아야 합니다.
+하지만 런타임 검사에 의존하기 때문에, 사용 시에는 빌림 규칙을 철저히 지켜야 하며,  
+멀티스레드 환경에서는 절대 사용하지 말아야 합니다.
 
 ---
 
