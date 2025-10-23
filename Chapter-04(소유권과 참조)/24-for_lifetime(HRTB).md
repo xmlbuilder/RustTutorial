@@ -44,7 +44,7 @@ fn run_scenario(f: &dyn for<'a> Fn(&'a ResultContainer) -> f64) {
 ## 🧠 “모든 lifetime에 대해 안전하게 호출 가능”이란?
 
 Rust에서 `for<'a> Fn(&'a T)` 라는 표현은
-**이 함수는 어떤 'a가 오더라도 그 'a에 맞는 &'a T를 받아들일 수 있다** 는 뜻.
+**이 함수는 어떤 'a가 오더라도 그 'a에 맞는 &'a T를 받아들일 수 있다** 는 뜻.  
 즉, 이 함수는 'a가  
 - 'static이든
 - 'short이든
@@ -328,6 +328,7 @@ error[E0308]: mismatched types
 | 유연성           | 제한적                             | 매우 유연함                                   |
 
 ---
+
 
 
 
