@@ -202,11 +202,10 @@ struct Config {
     host: String,
     port: u16,
 }
-```
 
 let mut cfg = Box::new(Config::default()); // ✅ 기본값으로 초기화
 cfg = Box::new(Config { host: "localhost".into(), port: 8080 }); // ✅ 새 값으로 교체
-
+```
 
 - Default는 초기화 패턴을 단순화시켜줌
 - Option::take()와 함께 쓰면 값을 꺼내고 교체하는 패턴도 가능
