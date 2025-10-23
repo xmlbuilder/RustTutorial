@@ -388,6 +388,7 @@ fn make_trait_object<'a>(value: &'a MyType) -> Rc<dyn MyTrait + 'a> {
 ## 3️⃣ 왜 업캐스팅이 안 되는가?
 - Rust는 Rc<&MyType>을 Rc<dyn MyTrait>로 자동 변환하지 않습니다.
 - 이유는 다음과 같습니다:
+  
 | 표현             | 설명                                                              |
 |------------------|-------------------------------------------------------------------|
 | `Rc<&MyType>`     | `Rc`가 `MyType`의 참조를 소유함 → 타입: `Rc<&MyType>`             |
@@ -506,6 +507,7 @@ let boxed: Box<dyn MyTrait> = Box::new(&my_type); // OK
 - 이 차이는 Rust의 메모리 안전성과 타입 안정성을 위한 설계 결정
 
 ---
+
 
 
 
