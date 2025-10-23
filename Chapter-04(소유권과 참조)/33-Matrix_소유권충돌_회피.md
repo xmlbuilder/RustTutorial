@@ -30,7 +30,7 @@ fn update_matrix(matrix: &mut [[f64; 4]; 4]) {
 ```
 
 - `split_at_mut()` 로 행 단위 분할
-- 각 영역은 겹치지 않으므로 &mut 참조 허용
+- 각 영역은 겹치지 않으므로 `&mut` 참조 허용
 
 ### 🔥 고급 전략
 - Matrix를 flat Vec으로 표현 → Vec<f64> + manual indexing
@@ -95,7 +95,7 @@ fn windows_mut_example() {
 
 #### 🧠 핵심 개념: windows_mut(2)
 - windows_mut(2)는 길이 2짜리 슬라이딩 윈도우를 만들어서  
-겹치면서 순차적으로 배열을 순회합니다.
+    겹치면서 순차적으로 배열을 순회합니다.
 - 반환되는 window는 [i, i+1]에 해당하는 가변 참조 슬라이스입니다.
 
 #### 🔄 단계별 실행 흐름 — 초기 배열: [1, 2, 3, 4, 5]
@@ -157,7 +157,7 @@ fn raw_pointer_example() {
 ```
 
 
-## ✅ 6. scoped 접근 — 스코프 분리로 컴파일러 설득
+## ✅ 6. `scoped` 접근 — 스코프 분리로 컴파일러 설득
 ```rust
 fn scoped_access_example() {
     let mut matrix = [1, 2, 3];
