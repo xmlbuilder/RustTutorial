@@ -1,8 +1,8 @@
 # saturating_sub
-saturating_sub는 Rust에서 정수 타입의 안전한 뺄셈 연산을 제공하는 메서드.
+`saturating_sub` 는 Rust에서 정수 타입의 안전한 뺄셈 연산을 제공하는 메서드.
 
 ## 핵심: 
-언더플로우가 발생할 경우, 0으로 "포화(saturate)"시켜서 안전하게 처리한다.
+언더플로우가 발생할 경우, 0으로 **포화(saturate)** 시켜서 안전하게 처리한다.
 
 
 ## 🔧 기본 개념
@@ -21,7 +21,7 @@ Rust는 기본적으로 정수 오버플로우/언더플로우에 민감:
 - 릴리즈 모드에서는 wrap-around (예: 255 + 1 = 0 in u8)
 하지만 어떤 상황에서는 오버플로우를 허용하지 않고,  
 최댓값 또는 최솟값으로 고정하고 싶을 때가 있음.  
-그럴 때 saturating_add, saturating_sub 같은 메서드가 유용.
+그럴 때 `saturating_add`, `saturating_sub` 같은 메서드가 유용.
 
 ## ✨ 관련 메서드들
 | 메서드 이름         | 설명                                                         |
@@ -51,9 +51,8 @@ fn decrement_counter(counter: u32) -> u32 {
     counter.saturating_sub(1)
 }
 ```
-
-→ counter = 0일 때도 panic 없이 0 유지
-→ 게임, UI, 타이머 등에서 자주 쓰이는 패턴
+- → counter = 0일 때도 panic 없이 0 유지
+- → 게임, UI, 타이머 등에서 자주 쓰이는 패턴
 
 ## 🔍 참고 자료
 Rust 공식 문서에서도 saturating_sub는  
@@ -61,7 +60,7 @@ Rust 공식 문서에서도 saturating_sub는
 
 
 ## 💬 결론
-saturating_sub는 언더플로우를 막고,  
+`saturating_sub` 는 언더플로우를 막고,  
 최솟값으로 고정시켜주는 안전한 뺄셈 연산자입니다.  
 특히 u8, u32 같은 부호 없는 타입에서 유용하게 쓰임.
 
@@ -95,36 +94,33 @@ pub fn from_ctrl(control_points: Vec<Vec<T>>) -> Self {
         }
     }
 ```
-
-이 코드에서 degree_u: nu.saturating_sub(1)와 degree_v: nv.saturating_sub(1)을 사용한 이유는 안전한 차수 계산을 위해서임.
+- 이 코드에서 degree_u: `nu.saturating_sub(1)` 와 degree_v: `nv.saturating_sub(1)` 을 사용한 이유는 안전한 차수 계산을 위해서임.
 
 ## 🔍 saturating_sub(1)을 쓴 이유
 ```rust
 let degree_u = nu.saturating_sub(1);
 let degree_v = nv.saturating_sub(1);
 ```
-
-이건 일반적인 nu - 1, nv - 1 대신 **포화 뺄셈(saturating subtraction)** 을 사용.
+- 이건 일반적인 nu - 1, nv - 1 대신 **포화 뺄셈(saturating subtraction)** 을 사용.
 
 ## 왜?
 - nu나 nv가 1일 경우 → degree = 0 (정상)
 - nu나 nv가 0일 경우 → degree = 0 (오류 방지)
-만약 그냥 nu - 1을 썼다면:
+### 만약 그냥 nu - 1을 썼다면:
 - nu = 0일 때 → 0 - 1 = -1 → usize에서 언더플로우 발생 → 패닉 or wrap-around
 
 ## ✅ saturating_sub의 역할
-언더플로우가 발생할 경우, 결과를 0으로 고정시켜서 안전하게 처리
-
-즉, 이 코드는 제어점이 너무 적을 때도 안전하게 초기화되도록 설계.
+- 언더플로우가 발생할 경우, 결과를 0으로 고정시켜서 안전하게 처리
+- 즉, 이 코드는 제어점이 너무 적을 때도 안전하게 초기화되도록 설계.
 
 ## 💡 왜 assert로 이미 체크했는데도 또 saturating_sub을 썼을까?
 ```rust
 assert!(!control_points.is_empty());
 assert!(nv > 0);
 ```
+- → 이 assert들이 이미 nu >= 1, nv >= 1을 보장.
 
-→ 이 assert들이 이미 nu >= 1, nv >= 1을 보장.
-하지만 saturating_sub를 쓰면:
+### 하지만 saturating_sub를 쓰면:
 - 코드가 더 견고해지고   
 - 나중에 assert가 제거되거나 변경되더라도 안전성 유지
 - 테스트나 디버깅 중 실수로 빈 벡터가 들어와도 panic 없이 처리 가능
