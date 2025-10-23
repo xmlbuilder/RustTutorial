@@ -17,7 +17,7 @@ Box<dyn for<'a> Fn(&'a ResultContainer) -> f64 + Send + Sync>
 ## 🔍 왜 필요한가?
 
 Rust의 trait object는 기본적으로 lifetime을 고정해야 하는데,  
-for<'a>를 붙이면 모든 lifetime에 대해 안전하게 호출 가능하다는 걸 컴파일러에게 알려줍니다.  
+`for<'a>` 를 붙이면 모든 lifetime에 대해 안전하게 호출 가능하다는 걸 컴파일러에게 알려줍니다.  
 ### 예를 들어:
 ```rust
 fn run_scenario(f: &dyn for<'a> Fn(&'a ResultContainer) -> f64) {
@@ -328,6 +328,7 @@ error[E0308]: mismatched types
 | 유연성           | 제한적                             | 매우 유연함                                   |
 
 ---
+
 
 
 
