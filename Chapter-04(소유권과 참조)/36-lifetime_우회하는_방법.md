@@ -162,7 +162,7 @@ fn rk45_with_user_param() {
 ### ❌ 왜 오류가 나는가?
 - rk45_with_user()는 클로저를 OdeSolver 내부에 저장 (Box<dyn FnMut + 'a>)
 - params는 테스트 함수 스코프에 선언되어 'a를 만족하지 못함
-- Rust는 클로저가 params를 너무 오래 참조할 수 있다고 판단 → 오류
+- Rust는 `클로저`가 `params`를 `너무 오래 참조할 수 있다고 판단` → 오류
 
 ## ✅ 해결된 구조 (호출자 스코프와 라이프타임 연결)
 ```rust
@@ -186,7 +186,7 @@ fn rk45_with_user_param() {
 
 ## ✅ 왜 오류가 해결되는가?
 - solver와 params가 같은 스코프에서 선언됨
-- run_solver()는 'a 라이프타임을 명시적으로 연결
+- run_solver()는 `'a` 라이프타임을 명시적으로 연결
 - OdeSolver<'a>와 user: &'a mut Params가 동일한 라이프타임을 공유
 - 클로저가 user를 안전하게 참조할 수 있음 → ✅ 컴파일 성공
 
@@ -215,7 +215,7 @@ fn rk45_with_user_param() {
 
 🔍 이 코드는 왜 되는가?
 - params와 solver가 같은 스코프에서 선언됨
-- rk45_with_user()는 'a 라이프타임을 요구하지만, Rust는 이 경우 'a를 테스트 함수 전체 스코프로 추론함
+- rk45_with_user()는 'a 라이프타임을 요구하지만, Rust는 이 경우 `'a` 를 `테스트 함수 전체 스코프` 로 추론함
 - 클로저가 params를 캡처해도, params가 충분히 오래 살아 있으므로 안전함
 
 ## ❌ 문제가 생기는 코드 (라이프타임 오류 발생)
@@ -255,9 +255,11 @@ fn rk45_with_user_param() {
 ## ✨ 예시로 다시 정리
 ```rust
 // ✅ 안전: 같은 스코프
-let mut solver = OdeSolver::new(1);
 let mut params = Params { k: 1.5 };
-solver.rk45_with_user(..., &mut params, ...);
+{
+    let mut solver = OdeSolver::new(1);
+    solver.rk45_with_user(..., &mut params, ...);
+}
 
 // ❌ 오류: 스코프가 다름
 let mut solver = OdeSolver::new(1);
@@ -271,7 +273,8 @@ let mut solver = OdeSolver::new(1);
 
 # 코딩 주의 사항
 
-라이프타임은 Rust의 가장 강력한 안전장치지만, 이렇게 스코프가 살짝만 어긋나도 오류가 나기 때문에 눈에 잘 띄는 구조로 짜는 습관이 정말 중요.  
+라이프타임은 Rust의 가장 강력한 안전장치지만, 이렇게 스코프가 살짝만 어긋나도 오류가 나기 때문에  
+눈에 잘 띄는 구조로 짜는 습관이 정말 중요.  
 
 ## ✅ 핵심 아이디어
 params를 바깥 스코프에서 선언하고,  
@@ -288,7 +291,6 @@ struct Params { k: f64 }
 fn rk45_safe_scope() {
     let mut params = Params { k: 1.5 }; // 👈 바깥 스코프에서 선언
     let mut y1 = Vec::new();
-
     {
         let mut solver = OdeSolver::new(1); // 👈 내부 스코프에서 solver 생성
 
@@ -408,9 +410,7 @@ let mut params = Params { k: 1.5 }; // ─────────────�
 
 ```
 
-
-
-물론이죠 JungHwan님! 아래는 params와 solver의 스코프 및 라이프타임 관계를 시각적으로 표현한 Mermaid flowchart입니다. 이 구조는 라이프타임 오류가 발생하는 경우와 안전한 경우를 비교해서 보여줍니다.
+이 구조는 라이프타임 오류가 발생하는 경우와 안전한 경우를 비교해서 보여줍니다.
 
 ### ❌ 오류 발생 구조 (params가 너무 짧은 스코프에 있음)
 ```mermaid
@@ -444,9 +444,3 @@ flowchart TD
     A --> G
 
 ```
-
-
-
-
-
-
