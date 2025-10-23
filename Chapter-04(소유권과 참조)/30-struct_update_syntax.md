@@ -48,7 +48,7 @@ let jackie = Person {
 
 # 소유권 이동 주의
 
-jackie를 생성할 때 ..avery를 사용하면, avery의 모든 필드 중에서 사용되지 않은 것들도 소유권이 이동됩니다.  
+jackie를 생성할 때 ..avery를 사용하면, avery의 모든 필드 중에서 `사용되지 않은 것들` 도 `소유권이 이동` 됩니다.  
 Rust는 구조체 업데이트 문법에서 전체 구조체의 소유권을 가져가는 방식을 사용하기 때문.
 
 ## 🧠 왜 name도 소유권이 이동될까?
@@ -59,8 +59,8 @@ let jackie = Person {
 };
 
 ```
-- jackie.name은 새로 지정했기 때문에 avery.name은 사용되지 않음
-- 하지만 ..avery는 avery 전체를 대상으로 하기 때문에
+- jackie.name은 새로 지정했기 때문에 `avery.name` 은 `사용되지 않음`
+- 하지만 `..avery` 는 avery 전체를 대상으로 하기 때문에
 → avery.name의 소유권도 jackie로 이동됨
 - 결과적으로 avery는 이후에 사용할 수 없음 (컴파일 에러 발생)
 
@@ -77,14 +77,12 @@ println!("{}", avery.name); // ❌ 컴파일 에러: value moved
 ### 에러 메시지:
 ```
 value borrowed here after move
-
 ```
 
 ## ✅ 해결 방법
 - Person이 Clone을 구현하고 있다면, ..avery.clone()으로 복사 가능
 - age처럼 Copy 타입은 소유권 이동 없이 복사됨 → 문제 없음
 - String은 Clone이 필요하거나 소유권을 넘겨야 함
-
 
 ---
 
@@ -101,7 +99,7 @@ struct Person {
 }
 ```
 
-- #[derive(Clone)]을 붙이면 Person 구조체가 .clone()을 사용할 수 있게 됩니다
+- `#[derive(Clone)]` 을 붙이면 Person 구조체가 .clone()을 사용할 수 있게 됩니다
 - String과 u8은 각각 Clone을 구현하고 있으므로 문제 없음
 
 ## 🔍 코드 동작 설명
@@ -112,7 +110,7 @@ let jackie = Person {
 };
 ```
 
-- avery.clone()은 Person 전체를 복사
+- `avery.clone()` 은 Person 전체를 복사
 - name 필드는 "재키"로 덮어쓰기
 - age는 avery의 값을 그대로 복사
 - 소유권 이동 없이 안전하게 복제되므로 avery는 이후에도 사용 가능
