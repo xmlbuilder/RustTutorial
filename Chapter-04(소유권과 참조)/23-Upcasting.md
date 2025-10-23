@@ -282,9 +282,10 @@ let observer: Arc<dyn ResultObserver> = concrete; // ❌ concrete는 move됨
 ---
 
 ## 🔍 기본 개념: Trait Object와 Lifetime
+```rust
 let rc: Rc<MyType> = Rc::new(MyType);
 let trait_rc: Rc<dyn MyTrait> = rc; // OK
-
+```
 
 이 코드는 다음과 같은 전제 하에 컴파일됩니다:
 - MyType: MyTrait + 'static
@@ -505,6 +506,7 @@ let boxed: Box<dyn MyTrait> = Box::new(&my_type); // OK
 - 이 차이는 Rust의 메모리 안전성과 타입 안정성을 위한 설계 결정
 
 ---
+
 
 
 
