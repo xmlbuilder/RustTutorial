@@ -191,7 +191,9 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [38-Arc::ptr_eq](./Chapter-04(소유권과%20참조)/38-Arc::ptr_eq.md)
 - [39-어댑터_타입으로_객체를_trait에넣기](./Chapter-04(소유권과%20참조)/39-어댑터_타입으로_객체를_trait에넣기.md)
 - [40-역참조를_다시_참조로_감싸기](./Chapter-04(소유권과%20참조)/40-역참조를_다시_참조로_감싸기.md)
-
+- [41-to_owned](./Chapter-04(소유권과%20참조)/41-to_owned.md)
+- [42-to_string](./Chapter-04(소유권과%20참조)/42-to_string.md)
+- [43-Path_PathBuf](./Chapter-04(소유권과%20참조)/43-Path_PathBuf.md)
 
 🔼 [맨 위로](#-목차)
 
