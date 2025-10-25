@@ -5,7 +5,6 @@
 Rust 학습을 위한 실전 중심 튜토리얼입니다.  
 기초 문법부터 고급 패턴, 디자인 패턴, 프로젝트 예제까지 폭넓게 다룹니다.
 
-
 ---
 
 ## 📚 목차(바로가기)
@@ -29,7 +28,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [Chapter 19 (도구와 생산성)](#chapter19)
 
 ---
-
 
 ## 📚 목차
 
@@ -59,8 +57,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [21-리펙토링_전략](./Chapter-01%28Rust%20소개%20및%20환경%20설정%29/21-리펙토링_전략.md)
 - [22-lifetime_및_borrow의_수렁을_피하는_전략](./Chapter-01%28Rust%20소개%20및%20환경%20설정%29/22-lifetime_및_borrow의_수렁을_피하는_전략.md)
 - [23-Rust의_수치안정성_문제](./Chapter-01%28Rust%20소개%20및%20환경%20설정%29/23-Rust의_수치안정성_문제.md)
-
-
   
 🔼 [맨 위로](#-목차)
 
@@ -129,8 +125,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [59-as_slice](./Chapter-02(기본%20문법과%20타입%20시스템)/59-as_slice.md)
 - [60-Rust_변수_초기화_순서](./Chapter-02(기본%20문법과%20타입%20시스템)/60-Rust_변수_초기화_순서.md)
 - [61-환경변수](./Chapter-02(기본%20문법과%20타입%20시스템)/61-환경변수.md)
-
-
 
 🔼 [맨 위로](#-목차)
 
@@ -246,7 +240,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [29-Sized_trait](./Chapter-06(트레잇과%20제네릭)/29-Sized_trait.md)
 - [30-Borrow](./Chapter-06(트레잇과%20제네릭)/30-Borrow.md)
 
-
 🔼 [맨 위로](#-목차)
 
 ### <a id="chapter07"></a> 📦 [Chapter-07(컬렉션과 반복자)](./Chapter-07(컬렉션과%20반복자))
@@ -274,7 +267,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [22-역순_순회](./Chapter-07(컬렉션과%20반복자)/22-역순_순회.md)
 - [23-중복제거](./Chapter-07(컬렉션과%20반복자)/23-중복제거.md)
 - [24-Map-Collect_idiom패턴](./Chapter-07(컬렉션과%20반복자)24-Map-Collect_idiom패턴.md)
-
 
 🔼 [맨 위로](#-목차)
 
@@ -323,7 +315,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [08-Cargo의_주요_환경_변수_배포](Chapter-10(모듈%2C%20크레이트%2C%20Cargo)/08-Cargo의_주요_환경_변수_배포.md)
 - [09-JaggedArray_소개](Chapter-10(모듈%2C%20크레이트%2C%20Cargo)/09-JaggedArray_소개.md)
 - [10-인기있는_크레이트_정리](Chapter-10(모듈%2C%20크레이트%2C%20Cargo)/10-인기있는_크레이트_정리.md)
-
 
 🔼 [맨 위로](#-목차)
 
@@ -419,7 +410,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [15-RefCell과RC+RefCell의차이](./Chapter-15%28SmartPointers_and_MemoryModels%29/15-RefCell과RC%2BRefCell의차이.md)
 - [16-Box&Rc&RcCell&Arc&Mutex요약](./Chapter-15%28SmartPointers_and_MemoryModels%29/16-Box&Rc&RcCell&Arc&Mutex요약.md)
 
-
 🔼 [맨 위로](#-목차)
 
 ### <a id="chapter16"></a> 🧑‍🎓 [Chapter-16(문자열처리)](./Chapter-16(문자열처리))
@@ -432,7 +422,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [07-문자열_Split](./Chapter-16(문자열처리)/07-문자열_Split.md)
 - [08-문자열_수식_변환](./Chapter-16(문자열처리)/08-문자열_수식_변환.md)
 - [09-타언어와_문자열_호환](./Chapter-16(문자열처리)/09-타언어와_문자열_호환.md)
-
 
 🔼 [맨 위로](#-목차)
 
@@ -477,7 +466,6 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [35-reqwest_Crate](./Chapter-17(실전%20예제와%20프로젝트)/35-reqwest_Crate.md)
 - [36-Cholesky_Solve_SPD](./Chapter-17(실전%20예제와%20프로젝트)/36-Cholesky_Solve_SPD.md)
 
-
 🔼 [맨 위로](#-목차)
   
 ### <a id="chapter18"></a> 🧪 [Chapter-18(기타 및 실험적 항목)](./Chapter-18(기타%20및%20실험적%20항목))
@@ -509,7 +497,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 ### <a id="chapter19"></a> 🛠️ [Chapter-19(도구와 생산성)](./Chapter-19(도구와%20생산성))
 - [01-Clippy](./Chapter-19(도구와%20생산성)/01-Clippy.md)
 - [02-Coverage](./Chapter-19(도구와%20생산성)/02-Coverage.md)
-- [(예정) 03-rustfmt](./Chapter-19(도구와%20생산성)/03-rustfmt.md)
-- [(예정) 04-rust-analyzer](./Chapter-19(도구와%20생산성)/04-rust-analyzer.md)
+- [03-rustfmt](./Chapter-19(도구와%20생산성)/03-rustfmt.md)
+- [04-rust-analyzer](./Chapter-19(도구와%20생산성)/04-rust-analyzer.md)
 
 🔼 [맨 위로](#-목차)
