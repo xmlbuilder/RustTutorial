@@ -24,17 +24,18 @@ use std::sync::mpsc::channel;
 use std::time::Duration;
 
 fn main() {
-    let (tx, rx) = channel();
-    let mut watcher = watcher(tx, Duration::from_secs(2)).unwrap();
+let (tx, rx) = channel();
 
-    watcher.watch("/Users/jeongjunghwan/Downloads", RecursiveMode::Recursive).unwrap();
-
-    loop {
-        match rx.recv() {
+    let mut watcher = RecommendedWatcher::new(tx, Config::default()).unwrap();
+    watcher.watch("D:\\Temp".as_ref(), RecursiveMode::Recursive).expect("TODO: panic message");
+    println!("Watching...");
+    for res in rx {
+        match res {
             Ok(event) => println!("이벤트 발생: {:?}", event),
             Err(e) => println!("watch error: {:?}", e),
         }
     }
+
 }
 ```
 - RecursiveMode::Recursive는 하위 디렉토리까지 감시
