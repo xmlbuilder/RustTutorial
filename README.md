@@ -465,6 +465,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [34-Actix-web](./Chapter-17(실전%20예제와%20프로젝트)/34-Actix-web.md)
 - [35-reqwest_Crate](./Chapter-17(실전%20예제와%20프로젝트)/35-reqwest_Crate.md)
 - [36-Cholesky_Solve_SPD](./Chapter-17(실전%20예제와%20프로젝트)/36-Cholesky_Solve_SPD.md)
+- [37-File_Notify_Check](./Chapter-17(실전%20예제와%20프로젝트)/37-File_Notify_Check.md)
 - [38-Regular_Expression](./Chapter-17(실전%20예제와%20프로젝트)/38-Regular_Expression.md)
 
 
