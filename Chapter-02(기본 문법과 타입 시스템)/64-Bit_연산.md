@@ -44,3 +44,28 @@ fn main() {
 - 비트 마스크 처리: 특정 비트를 켜거나 끌 때 `|`, `&`, `~` 조합 사용
 - 플래그 시스템: enum과 bitflags 크레이트를 활용하면 안전한 비트 플래그 구현 가능
 - 성능 최적화: 비트 연산은 조건문보다 빠르기 때문에 알고리즘 최적화에 유리
+
+# Bit 확인 코드
+
+`Integer.toBinaryString()`은 Java에서 정수를 2진 문자열로 변환하는 메서드인데, Rust와 비슷한 기능을 직접 구현.
+
+## 🦀 Rust 버전
+```
+fn to_binary_string(n: u32) -> String {
+    format!("{:b}", n)
+}
+
+fn main() {
+    let value = 2147483648;
+    let binary = to_binary_string(value);
+    println!("Binary: {}", binary); // "10000000000000000000000000000000"
+}
+```
+### ✅ 설명
+- {:b}는 Rust의 포맷 지정자로, 2진수 출력
+- u32, u64 등 부호 없는 타입을 쓰면 `>>>` 같은 논리 시프트도 자연스럽게 처리됨
+
+---
+
+
+
