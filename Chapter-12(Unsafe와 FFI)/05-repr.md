@@ -57,7 +57,7 @@ extern "C" {
 ```
 
 이때 Bar는 C에서 정의된 enum과 값과 타입이 정확히 일치해야 하므로
-#[repr(u32)]는 필수입니다.
+`#[repr(u32)]` 는 필수입니다.
 
 
 ## 🧩 C++ 쪽 대응 코드
@@ -119,3 +119,57 @@ enum 값이 정확히 일치해야 하는 상황에서는 명시적 지정과 �
 실전에서 버그 없이 연동할 수 있음.
 
 ---
+
+# Rust를 통한 메모리 할당 및 해제
+
+## ✅ Rust에서도 같은 방식 가능
+Rust에서는 #[repr(C)]를 사용해 구조체 레이아웃을 명시하고, extern "C"로 C 스타일 API를 제공합니다.
+```rust
+#[repr(C)]
+pub struct DriverConfig {
+    pub mode: u32,
+    pub timeout_ms: u64,
+}
+
+#[no_mangle]
+pub extern "C" fn create_config(mode: u32, timeout: u64) -> *mut DriverConfig {
+    let config = DriverConfig { mode, timeout_ms: timeout };
+    Box::into_raw(Box::new(config))
+}
+
+#[no_mangle]
+pub extern "C" fn destroy_config(ptr: *mut DriverConfig) {
+    if !ptr.is_null() {
+        unsafe { Box::from_raw(ptr); } // drop
+    }
+}
+```
+
+###  C나 C++ 에서 사용
+```cpp
+// Rust에서 노출된 헤더
+typedef struct DriverConfig DriverConfig;
+
+DriverConfig* create_config(unsigned int mode, unsigned long timeout);
+void destroy_config(DriverConfig* ptr);
+
+
+
+// 사용 예
+DriverConfig* cfg = create_config(1, 5000);
+// cfg->mode, cfg->timeout_ms 사용 가능 (구조체 정의가 있다면)
+destroy_config(cfg);
+
+```
+
+## 💬 결론
+구조체를 노출하되 내부는 숨기고, 메모리 관리는 반드시 라이브러리 내부 함수로만 처리하는 방식은
+Windows에서 디버그/릴리스 호환성과 ABI 안정성을 확보하는 가장 실용적인 전략입니다.
+
+
+
+
+
+
+
+
