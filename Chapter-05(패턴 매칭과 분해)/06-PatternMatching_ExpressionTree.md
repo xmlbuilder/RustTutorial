@@ -59,7 +59,7 @@ fn eval(e: Expression) -> Result<i64, String> {
 fn test_value() {
     assert_eq!(eval(Expression::Value(19)), Ok(19));
 }
-
+```rust
 #[test]
 fn test_sum() {
     assert_eq!(
@@ -71,7 +71,8 @@ fn test_sum() {
         Ok(30)
     );
 }
-
+```
+```rust
 #[test]
 fn test_recursion() {
     let term1 = Expression::Op {
@@ -97,7 +98,8 @@ fn test_recursion() {
         Ok(85)
     );
 }
-
+```
+```rust
 #[test]
 fn test_error() {
     assert_eq!(
@@ -109,7 +111,8 @@ fn test_error() {
         Err(String::from("0으로 나누기"))
     );
 }
-
+```
+```rust
 fn main() {
     let expr = Expression::Op {
         op: Operation::Sub,
@@ -135,7 +138,7 @@ enum Operation {
 
 - 수식에서 사용할 연산 종류를 정의
 - Add, Sub, Mul, Div는 각각 +, −, ×, ÷에 해당
-- #[derive(Debug)] → 디버깅 시 출력 가능
+- `#[derive(Debug)]` → 디버깅 시 출력 가능
 
 ### 🔹 Expression 열거형
 ```rust
@@ -576,7 +579,6 @@ Rust의 Box<T>는 C++ 포인터처럼 가볍지만,
 
 ----
 
-
 # C++로 재연
 
 아래는 C++ 에서 std::unique_ptr을 사용해 Rust 스타일의 enum + Box 트리 구조를 흉내 낸 예제입니다.
@@ -710,6 +712,7 @@ C++에서는 std::variant를 쓰면서 std::holds_alternative<T>로 먼저 타�
 
 
 ----
+
 
 
 
