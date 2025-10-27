@@ -38,7 +38,6 @@ fn main() {
 Looks like a normal number
 13 is unlucky in North America, lucky in Italy! In bocca al lupo!
 4 is an unlucky number in China (sounds close to 死)!
-
 ```
 
 ## 🔍 예제 분석
@@ -105,7 +104,7 @@ fn main() {
 | 안전성        | 모든 경우를 반드시 처리해야 하므로 컴파일 타임에 오류 방지 가능       |
 | 표현식        | `match`는 표현식이므로 값을 반환할 수 있음                           |
 
-Rust의 match는 단순한 조건문을 넘어서 열거형 처리, 패턴 분해, 바인딩, 조건 분기까지 모두 커버하는 강력한 도구.
+- Rust의 match는 단순한 조건문을 넘어서 열거형 처리, 패턴 분해, 바인딩, 조건 분기까지 모두 커버하는 강력한 도구.
 
 ---
 
