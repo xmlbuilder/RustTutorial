@@ -108,21 +108,24 @@ match value {
 ```rust
 use tokio::sync::mpsc;
 use tokio::time::{sleep, Duration};
-
+```
+```rust
 #[derive(Debug)]
 enum Message {
     Start,
     Stop,
     Move { x: i32, y: i32 },
 }
-
+```
+```rust
 #[derive(Debug)]
 enum State {
     Idle,
     Running { x: i32, y: i32 },
     Stopped,
 }
-
+```
+```rust
 async fn state_machine(mut rx: mpsc::Receiver<Message>) {
     let mut state = State::Idle;
 
@@ -147,7 +150,8 @@ async fn state_machine(mut rx: mpsc::Receiver<Message>) {
         println!("Current State: {:?}", state);
     }
 }
-
+```
+```rust
 #[tokio::main]
 async fn main() {
     let (tx, rx) = mpsc::channel(32);
@@ -187,8 +191,8 @@ async fn main() {
 - enum을 활용하면 상태와 명령을 명확하게 표현할 수 있고,
 - tokio::mpsc와 spawn을 조합하면 비동기 이벤트 기반 시스템을 안전하게 구성할 수 있어요.
 
-
 ---
+
 # Rust / Java Enum 비교
 
 Rust와 Java 모두 enum에 데이터를 넣을 수 있지만, 철학과 구현 방식은 꽤 다릅니다.  
@@ -214,7 +218,8 @@ enum Message {
     Move { x: i32, y: i32 },
     Write(String),
 }
-
+```
+```rust
 fn handle(msg: Message) {
     match msg {
         Message::Quit => println!("Quit"),
@@ -297,7 +302,6 @@ if let Message::Move { x, y } = msg {
 }
 ```
 
-
 ## ✅ 방법 4: helper 메서드로 variant 확인
 ```rust
 impl Message {
@@ -354,7 +358,8 @@ enum Action {
     Add(i32, i32),
     Quit,
 }
-
+```
+```rust
 fn handle(action: Action) {
     match action {
         Action::Print(msg) => println!("Message: {}", msg),
@@ -371,7 +376,8 @@ enum Command {
     Greet(String),
     Multiply(i32, i32),
 }
-
+```
+```rust
 impl Command {
     fn execute(&self) {
         match self {
@@ -393,12 +399,14 @@ fn main() {
 trait Runnable {
     fn run(&self);
 }
-
+```
+```rust
 enum Job {
     Email(String),
     Compute(i32),
 }
-
+```
+```rust
 impl Runnable for Job {
     fn run(&self) {
         match self {
@@ -437,7 +445,8 @@ enum Event {
     KeyPress(char),
     Resize { width: u32, height: u32 },
 }
-
+```
+```rust
 fn handle_event(event: Event) {
     match event {
         Event::Click { x, y } => println!("Clicked at ({}, {})", x, y),
@@ -458,7 +467,8 @@ trait Plugin {
     fn name(&self) -> &str;
     fn execute(&self, event: &Event);
 }
-
+```
+```rust
 struct Logger;
 impl Plugin for Logger {
     fn name(&self) -> &str { "Logger" }
@@ -466,7 +476,8 @@ impl Plugin for Logger {
         println!("[LOG] {:?}", event);
     }
 }
-
+```
+```rust
 struct ClickTracker;
 impl Plugin for ClickTracker {
     fn name(&self) -> &str { "ClickTracker" }
