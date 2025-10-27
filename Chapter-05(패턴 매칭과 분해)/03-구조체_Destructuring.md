@@ -2,8 +2,8 @@
 이 기능은 구조체의 필드를 개별 변수로 해체해서 추출하는 방식으로, 코드의 가독성과 유연성을 높여줍니다.
 
 ## 🧱 구조체 Destructuring이란?
-Destructuring은 구조체의 필드를 하나하나 꺼내서 개별 변수로 바인딩하는 문법입니다.
-이는 패턴 매칭의 일종이며, 구조체의 내부 데이터를 쉽게 접근하거나 재구성할 때 유용합니다.
+Destructuring은 구조체의 필드를 하나하나 꺼내서 개별 변수로 바인딩하는 문법입니다.  
+이는 `패턴 매칭의 일종` 이며, 구조체의 내부 데이터를 쉽게 접근하거나 재구성할 때 유용합니다.
 
 ## 📌 기본 문법
 ```rust
@@ -14,7 +14,6 @@ let StructName { field1, field2, ... } = instance;
 ```rust
 let StructName { field1: new_var1, field2: new_var2 } = instance;
 ```
-
 
 ## 🧪 예제 ①: Person 구조체 분해
 ```rust
