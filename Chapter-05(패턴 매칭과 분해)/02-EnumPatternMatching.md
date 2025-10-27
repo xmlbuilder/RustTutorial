@@ -1,5 +1,6 @@
 # enum 패턴 매칭(Pattern Matching)
-좋Rust의 **enum 패턴 매칭(Pattern Matching)** 은 언어의 핵심 기능 중 하나로,  
+
+Rust의 **enum 패턴 매칭(Pattern Matching)** 은 언어의 핵심 기능 중 하나로,  
 값의 종류에 따라 분기 처리하면서 내부 데이터를 꺼내는 기능까지 제공합니다.    
 다른 언어의 switch 문보다 훨씬 강력하고 안전.
 
@@ -135,13 +136,14 @@ fn main() {
 
 
 ## 🧪 ③ 예제: Option / Result 타입 매칭
+```rust
 fn increment(x: Option<i32>) -> Option<i32> {
     match x {
         Some(i) => Some(i + 1),
         None => None,
     }
 }
-
+```
 - Option은 enum Option<T> { Some(T), None } 형태
 - Some(i)에서 i를 꺼내 연산 가능
 - None은 값이 없음을 의미
@@ -192,8 +194,7 @@ match message {
     Message::ChangePlayerName(_) => println!("Player Name"),
 }
 ```
-
-- _는 값을 무시한다는 의미
+- `_` 는 값을 무시한다는 의미
 - 꺼내지 않고 단순히 분기 처리만 할 때 사용
 
 ### 예제
@@ -259,10 +260,9 @@ fn main() {
     handle_message(&message2); //게임시작
     handle_message(&message3); //아직 처리 하지 못합니다
 }
-
 ```
 
-- _는 모든 나머지 경우를 처리
+- `_` 는 모든 나머지 경우를 처리
 - ChangePlayerName을 따로 처리하지 않고 _로 묶음
 - match는 모든 경우를 처리해야 하므로 _가 없으면 컴파일 에러
 
