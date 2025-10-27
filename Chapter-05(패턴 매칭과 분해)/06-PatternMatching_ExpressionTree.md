@@ -14,7 +14,9 @@ enum Operation {
     Mul,
     Div,
 }
+```
 
+```rust
 /// 트리 형식의 표현식입니다.
 #[derive(Debug)]
 enum Expression {
@@ -51,7 +53,8 @@ fn eval(e: Expression) -> Result<i64, String> {
         Expression::Value(v) => Ok(v),
     }
 }
-
+```
+```rust
 #[test]
 fn test_value() {
     assert_eq!(eval(Expression::Value(19)), Ok(19));
@@ -707,6 +710,7 @@ C++에서는 std::variant를 쓰면서 std::holds_alternative<T>로 먼저 타�
 
 
 ----
+
 
 
 
