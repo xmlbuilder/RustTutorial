@@ -161,7 +161,7 @@ crate-type = ["cdylib"]을 선언하면 Rust 내부에서 일반적인 방식으
 - cargo는 cdylib을 Rust 라이브러리로 인식하지 않고, 외부 바이너리처럼 취급합니다.
 
 ## ✅ 해결 방법: 다중 crate-type 선언
-Rust에서 내부에서도 쓰고 외부에서도 노출하고 싶다면, crate-type을 이렇게 설정하세요:
+Rust에서 내부에서도 쓰고 외부에서도 노출하고 싶다면, crate-type을 이렇게 설정:
 ```
 [lib]
 crate-type = ["rlib", "cdylib"]
@@ -189,16 +189,17 @@ crate-type = ["rlib", "cdylib"]
 ## ✅ 실전에서 어떻게 활용하나?
 - Rust 내부 모듈이나 다른 crate에서 재사용 → rlib
 - Python, C, Node.js 등에서 FFI로 호출 → cdylib
+
 ### 예를 들어:
 - 드라이버 설정 로직은 Rust 내부에서 use해서 테스트하고,
 - Python에서 ctypes나 PyO3로 .so를 불러와서 실제 설정에 적용
 
 ## 💬 결론
-crate-type = ["cdylib"]만 선언하면 Rust 내부에서는 재사용이 어렵고,  
+`crate-type = ["cdylib"]` 만 선언하면 Rust 내부에서는 재사용이 어렵고,  
 외부 언어용으로만 빌드되는 라이브러리가 됩니다.
 Rust에서도 쓰고 싶다면 "rlib"을 함께 선언하는 게 가장 안전한 방법.
 
-crate-type = ["rlib", "cdylib"]을 쓰면  
+`crate-type = ["rlib", "cdylib"]` 을 쓰면  
 Rust 내부용과 외부 연동용 라이브러리를 동시에 생성할 수 있음.  
 하나의 코드베이스로 두 환경을 모두 커버할 수 있는 전략적 선택입니다.
 
