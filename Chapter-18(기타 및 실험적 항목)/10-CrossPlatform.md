@@ -1,9 +1,9 @@
 # 크로스 플랫폼과 GUI 프로그래밍
-Rust로 크로스 플랫폼과 GUI 프로그래밍을 다루는 방법을 핵심만 정리.
+Rust로 크로스 플랫폼과 GUI 프로그래밍을 다루는 방법을 핵심만 정리.  
 실제 예제와 툴체인, GUI 라이브러리까지 모두 포함된 아주 실용적인 자료.
 
 ## 🧭 1. 크로스 플랫폼 개발: Rust의 강점
-Rust는 단일 코드베이스로 다양한 플랫폼에 배포할 수 있는 구조를 갖추고 있어
+Rust는 단일 코드베이스로 다양한 플랫폼에 배포할 수 있는 구조를 갖추고 있어  
 크로스 플랫폼 개발에 매우 적합합니다.
 
 ### ✅ 주요 타겟 플랫폼 (Tier1 기준)
@@ -22,7 +22,7 @@ rustup target add aarch64-unknown-linux-gnu
 ```
 
 - .cargo/config에 링커 설정 추가
-- cargo build --target=aarch64-unknown-linux-gnu로 빌드
+- `cargo build --target=aarch64-unknown-linux-gnu` 로 빌드
 - file 명령어로 바이너리 확인 후 라즈베리파이 등에 배포
 
 ## 🤖 2. Android NDK + Rust
@@ -31,13 +31,13 @@ Rust는 Android NDK와 연동하여 네이티브 라이브러리 개발이 가�
 - Android Studio 설치 → SDK Manager에서 NDK, CMake, Command-line Tools 설치
 - Rust에 Android 타겟 등록: aarch64-linux-android, armv7-linux-androideabi 등
 - .cargo/config에 Android용 링커 설정
+  
 ### 🧬 JNI 연동 예시
 Rust 함수명은 JNI 명명 규칙을 따라야 합니다:
 ```
 #[no_mangle]
 pub extern "C" fn Java_com_example_MainActivity_helloRust(...) { ... }
 ```
-
 - jni 크레이트 사용
 - JNIEnv를 통해 Java ↔ Rust 자료형 변환
 - 빌드된 .so 파일을 jniLibs/ 경로에 복사하여 Android 앱에서 호출
