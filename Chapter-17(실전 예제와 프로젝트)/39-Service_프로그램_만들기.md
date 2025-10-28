@@ -203,7 +203,7 @@ async fn main() -> std::io::Result<()> {
 | 로깅 및 모니터링  | `log`, `tracing`, `prometheus`                      |
 
 ----
-# Windows 에서 서비스 들록 
+# Windows 에서 서비스 등록 
 Windows 서비스로 등록하려면 nssm 또는 sc create 명령어를 사용하는 것이 가장 일반적이며,  
 실행 파일을 백그라운드에서 자동으로 실행되도록 설정할 수 있습니다.
 
