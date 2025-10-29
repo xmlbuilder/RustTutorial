@@ -19,21 +19,21 @@ $P_{00}^{uv}$, $P_{01}^{uv}$, $P_{10}^{uv}$, $P_{11}^{uv}$
 이러한 정보를 통해 곡면의 형태와 경계 조건을 직접 제어할 수 있습니다.
 
 ## 📊 수식 구조
-Hermite Surface는 다음과 같은 형태의 이중 Hermite 보간식으로 표현됩니다:
-$S(u, v) = \sum_{i=0}^{3} \sum_{j=0}^{3} h_i(u) \cdot h_j(v) \cdot C_{ij}$
-여기서:
+Hermite Surface는 다음과 같은 형태의 이중 Hermite 보간식으로 표현됩니다:  
+$S(u, v) = \sum_{i=0}^{3} \sum_{j=0}^{3} h_i(u) \cdot h_j(v) \cdot C_{ij}$  
+### 여기서:
 - $h_i(u)$, $h_j(v)$: Hermite basis functions
 - $C_{ij}$: 16개의 기하 정보 (위치, 접선, 꼬임 벡터)
-Hermite basis function은 다음과 같이 정의됩니다:
+- Hermite basis function은 다음과 같이 정의됩니다:
 ```
 h₀(t) =  2t³ − 3t² + 1  
 h₁(t) = −2t³ + 3t²  
 h₂(t) =  t³ − 2t² + t  
 h₃(t) =  t³ − t²
 ```
-따라서 전체 곡면은 다음과 같이 행렬 형태로 표현할 수 있습니다:
+따라서 전체 곡면은 다음과 같이 행렬 형태로 표현할 수 있습니다:  
 $S(u, v) = [u^3 \quad u^2 \quad u \quad 1] \cdot M_u \cdot G \cdot M_v^T \cdot [v^3 \quad v^2 \quad v \quad 1]^T$
-여기서:
+### 여기서:
 - $M_u$, $M_v$: Hermite basis 행렬
 - G: 4×4 기하 정보 행렬 (16개의 벡터)
 
