@@ -165,3 +165,161 @@ impl HermiteCurve {
 }
 
 ```
+# 기능 추가
+## offset_curve
+```rust
+pub fn offset_curve(
+    dim: usize,
+    curve: &HermiteCurve,
+    pln_norm: &Vector3D,
+    offset: f64,
+) -> Self {
+    let mut new_curve = curve.clone();
+    new_curve.dim = dim;
+
+    // Convert to Bezier form
+    let s_p0 = curve.p1;
+    let s_p1 = curve.p1 + curve.d1 / 3.0;
+    let s_p2 = curve.p2 - curve.d2 / 3.0;
+    let s_p3 = curve.p2;
+
+    // Compute a
+    let a0 = s_p1 - s_p0;
+    let a1 = s_p2 - s_p1;
+    let a2 = s_p3 - s_p2;
+    let a3 = s_p3 - s_p0;
+
+    if a0.length_squared() < ON_EPSILON {
+        return new_curve;
+    };
+    if a2.length_squared() < ON_EPSILON {
+        return new_curve;
+    };
+
+    // Compute a0 Transpose and a2 Transpose
+    let a0t = a0.cross(pln_norm).unitize();
+    let a2t = a2.cross(pln_norm).unitize();
+    if a0t.length_squared() < ON_EPSILON {
+        return new_curve;
+    };
+    if a2t.length() < ON_EPSILON {
+        return new_curve;
+    };
+
+    // Test for first case where all points are on same line (relative to offset plane
+    // projection.
+    let dist = offset;
+    let s_q0 = s_p0 + dist * a0t;
+    let s_q3 = s_p3 + dist * a2t;
+    let s_q1: Point3D;
+    let s_q2: Point3D;
+    if dot(&a1, &a0t).abs() < ON_EPSILON && dot(&a2, &a0t).abs() < ON_EPSILON {
+        // Have straight line.
+        s_q1 = s_p1 + dist * a0t;
+        s_q2 = s_p2 + dist * a2t;
+    } else if dot(&a2, &a0t).abs() < ON_EPSILON {
+        // Have case where end edges of control polygon are parallel
+        s_q1 = s_p1 + dist * a0t + (8.0 * dist / 3.0) * a0 / (a0.length() + a2.length());
+        s_q2 = s_p2 + dist * a2t - (8.0 * dist / 3.0) * a2 / (a0.length() + a2.length());
+    } else {
+        // Have standard Bezier offset case
+        // Compute vec
+        let a1a3 = a1 + a3;
+        if a1a3.length_squared() < ON_EPSILON {
+            return new_curve;
+        }
+
+        let vec = 2.0 * (a1 + a3) / a1a3.length() - a0 / a0.length() - a2 / a2.length();
+        s_q1 = s_p1
+            + dist * a0t
+            + (4.0 * dist / 3.0) * ((dot(&vec, &a2)) / (dot(&a0, &(a2t * a2.length())))) * a0;
+        s_q2 = s_p2
+            + dist * a2t
+            + (4.0 * dist / 3.0) * ((dot(&vec, &a0)) / (dot(&a2, &(a0t * a0.length())))) * a2;
+    }
+
+    let p1 = s_q0;
+    let d1 = 3.0 * (s_q1 - s_q0);
+    let p2 = s_q3;
+    let d2 = 3.0 * (s_q3 - s_q2);
+    let c = -3.0 * p1 - 2.0 * d1 + 3.0 * p2 - d2;
+    let d = 2.0 * p1 + d1 - 2.0 * p2 + d2;
+
+    new_curve.p1 = p1;
+    new_curve.p2 = p2;
+    new_curve.d1 = d1;
+    new_curve.d2 = d2;
+    new_curve.c = c.as_vector();
+    new_curve.d = d;
+
+    new_curve
+}
+```
+
+## is_valid
+```rust
+#[inline]
+pub fn is_valid(&self) -> bool {
+    (self.dim == 2 || self.dim == 3)
+        && (self.p1.is_valid()
+            && self.p2.is_valid()
+            && self.d1.is_valid()
+            && self.d2.is_valid()
+            && self.c.is_valid()
+            && self.d.is_valid())
+}
+```
+
+## control_bounding_box
+```rust
+fn control_bounding_box(&self) -> BoundingBox {
+    let mut bb = BoundingBox::default();
+    let pts = [
+        &self.p1,
+        &(self.p1 + self.d1 / 3.0),
+        &(self.p2 - self.d2 / 3.0),
+        &self.p2,
+    ];
+    for pt in pts {
+        bb.grow_point3d(pt);
+    }
+    bb
+}
+```
+
+## to_bezier 
+```rust
+fn to_bezier(&self) -> Option<BezierCurve> {
+    if !self.is_valid() {
+        return None;
+    };
+
+    let pt1 = &self.p1;
+    let pt2 = self.p1 + self.d1 / 3.0;
+    let pt3 = self.p2 - self.d2 / 3.0;
+    let pt4 = &self.p2;
+
+    let pt_4d1 = Point4D::new(pt1.x, pt1.y, pt1.z, 1.0);
+    let pt_4d2 = Point4D::new(pt2.x, pt2.y, pt2.z, 1.0);
+    let pt_4d3 = Point4D::new(pt3.x, pt3.y, pt3.z, 1.0);
+    let pt_4d4 = Point4D::new(pt4.x, pt4.y, pt4.z, 1.0);
+
+    Some(BezierCurve::new(vec![pt_4d1, pt_4d2, pt_4d3, pt_4d4]))
+}
+```
+## to_nurbs
+```rust
+fn to_nurbs(&self) -> Option<NurbsCurve> {
+    if !self.is_valid() {
+        return None;
+    };
+
+    if let Some(curve) = self.to_bezier() {
+        return Some(curve.to_nurbs());
+    }
+    None
+}
+```
+
+---
+
