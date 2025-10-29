@@ -1,5 +1,5 @@
 # Directory
- Rust에서 디렉토리 내 파일 탐색 및 정보 추출을 구현한 예시.
+ Rust에서 디렉토리 내 파일 탐색 및 정보 추출을 구현한 예시.  
 이 구조는 실전에서 파일 필터링, 확장자 검사, 디렉토리 트리 탐색 등에 유용하게 쓰입니다.
 
 ## 🧠 핵심 기능 요약
@@ -14,20 +14,20 @@
 
 
 ## ✅ 코드 흐름 설명
+- `path::Path::new`
 ```rust
 const SAMPLE_DIR: &str = "D:/Development/Rust/communicator";
 let sample_dir_path = path::Path::new(SAMPLE_DIR);
 ```
-
 - 문자열 경로를 Path 객체로 변환
 - Path는 파일 시스템 경로를 안전하게 다루는 구조체
+
 ```rust
 for entry in fs::read_dir(sample_dir_path)? {
     let entry = entry?;
     let metadata = entry.metadata()?;
 ```
-
-- read_dir()는 Result<DirEntry> 반복자를 반환
+- `read_dir()` 는 `Result<DirEntry>` 반복자를 반환
 - 각 항목에 대해 metadata()를 호출해 파일인지 디렉토리인지 확인
 ```rust
 if metadata.is_file() {
@@ -40,9 +40,8 @@ if metadata.is_file() {
     }
 }
 ```
-
-- 파일일 경우 file_name()과 extension()을 추출
-- OsStr 타입이므로 필요시 .to_str()로 변환 가능
+- 파일일 경우 `file_name()` 과 `extension()` 을 추출
+- OsStr 타입이므로 필요시 `.to_str()` 로 변환 가능
 
 ## 🧪 확장 예시: 특정 확장자만 필터링
 ```rust
@@ -71,7 +70,6 @@ fn main() -> Result<(), Box<dyn StdError>>{
     for entry in fs::read_dir(sample_dir_path)? {
 
         let entry = entry?;
-
         println!("{:?}", entry);
     
         let metadata = entry.metadata()?;
@@ -82,7 +80,6 @@ fn main() -> Result<(), Box<dyn StdError>>{
             let entry_path = entry.path();
 
             if let Some(file_name) = entry_path.file_name() {
-
                 println!("File filename : {:?}", file_name);
 
                 let ext = entry_path.extension();
@@ -114,14 +111,14 @@ fn main() -> Result<(), Box<dyn StdError>>{
 | `extension()`          | 확장자 추출 (`Some("txt")`)               |
 | `PathBuf::to_str()`    | 경로를 문자열로 변환                      |
 
-
 ---
+
 # 재귀적 탐색
 
-Rust에서 디렉토리 내 파일을 재귀적으로 탐색하거나 특정 패턴으로 필터링하는 두 가지 강력한 방법을 정리해드릴게요:
+Rust에서 디렉토리 내 파일을 재귀적으로 탐색하거나 특정 패턴으로 필터링하는 두 가지 강력한 방법을 정리:
 
 ### 🧭 1. walkdir을 활용한 재귀 디렉토리 탐색
-walkdir 크레이트는 하위 디렉토리까지 포함한 전체 트리 탐색을 매우 효율적으로 처리합니다.
+`walkdir` 크레이트는 하위 디렉토리까지 포함한 전체 트리 탐색을 매우 효율적으로 처리합니다.
 
 #### ✅ 설치
 ```
@@ -146,11 +143,9 @@ fn main() {
     }
 }
 ```
-
-
-- WalkDir::new()로 시작 디렉토리 지정
-- filter_map(|e| e.ok())로 오류 무시
-- entry.path()로 PathBuf 반환
+- `WalkDir::new()` 로 시작 디렉토리 지정
+- `filter_map(|e| e.ok())` 로 오류 무시
+- `entry.path()` 로 PathBuf 반환
 
 #### 🧪 고급 옵션
 ```rust
@@ -159,9 +154,7 @@ WalkDir::new("dir")
     .max_depth(3)       // 최대 깊이 제한
     .into_iter()
 ```
-
-
-📘 자세한 문서는 walkdir 공식 문서에서 확인할 수 있어요.
+- 📘 자세한 문서는 walkdir 공식 문서에서 확인할 수 있어요.
 
 ### 🎯 2. glob 패턴으로 특정 파일명 매칭
 glob 크레이트는 Unix 스타일의 와일드카드 패턴으로 파일을 필터링할 수 있게 해줍니다.
@@ -188,8 +181,8 @@ fn main() {
 }
 ```
 
-- **/*.txt: 모든 하위 디렉토리의 .txt 파일
-- glob()는 Result<PathBuf> 반복자 반환
+- `**/*.txt`: 모든 하위 디렉토리의 .txt 파일
+- `glob()` 는 Result<PathBuf> 반복자 반환
 #### 🧪 여러 확장자 매칭
 ```rust
 use glob::glob;
@@ -205,8 +198,7 @@ fn main() {
     }
 }
 ```
-
-📘 고급 패턴은 glob 공식 문서에서 확인할 수 있어요.
+- 📘 고급 패턴은 glob 공식 문서에서 확인할 수 있어요.
 
 ## 📦 비교 요약
 | 기능        | 크레이트  | 목적                          | 특징                                 |
@@ -222,7 +214,6 @@ fn main() {
 | `glob(pattern).unwrap()`    | `Paths`                                | 패턴이 유효하다고 가정하고 반복자 반환 |
 | `for entry in Paths`        | `Result<PathBuf, GlobError>`           | 각 파일 경로에 대한 성공/실패 결과   |
 | `match entry` 또는 `if let` | `Ok(path)` / `Err(e)`                  | 실제 경로 추출 또는 오류 처리        |
-
 
 ---
 
