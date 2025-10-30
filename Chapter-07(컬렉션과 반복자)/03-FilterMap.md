@@ -18,29 +18,35 @@ struct Person {
     pub last_name: Option<String>,
     pub age: i32,
 }
-
+```
+```rust
 fn main() {
     let mut persons: Vec<Person> = Vec::new();
+
     persons.push(Person {
         first_name: "Asnim".to_string(),
         last_name: None,
         age: 1,
     });
+
     persons.push(Person {
         first_name: "Fahim".to_string(),
         last_name: Some("Ansari".to_string()),
         age: 2,
     });
+
     persons.push(Person {
         first_name: "Shahul".to_string(),
         last_name: None,
         age: 6,
     });
+
     persons.push(Person {
         first_name: "Mujeeb".to_string(),
         last_name: Some("Rahuman".to_string()),
         age: 6,
     });
+
     let ages_of_people_with_second_name_using_seperate_filter_map: Vec<i32> = persons
         .iter()
         .filter(|p| p.last_name.is_some())
@@ -48,13 +54,16 @@ fn main() {
         .collect();
     println!("{:?}", ages_of_people_with_second_name)
 }
+```
 
-
+```rust
 let ages_of_people_with_second_name_using_seperate_filter_map: Vec<i32> = persons
         .iter()
         .filter_map(|p| p.last_name.map(|_| p.age))
         .collect();
+```
 
+```rust
 let ages_of_people_with_second_name_using_seperate_filter_map: Vec<i32> = persons
 .iter()
 .filter_map(|p| match p.last_name { 
@@ -62,7 +71,6 @@ let ages_of_people_with_second_name_using_seperate_filter_map: Vec<i32> = person
     None => None
 })
 .collect();        
-
 ```
 
 
@@ -75,7 +83,6 @@ let ages: Vec<i32> = persons
     .map(|p| p.age)                    // 나이만 추출
     .collect();
 ```
-
 - 2단계 처리: 먼저 조건 필터링 → 그 다음 값 추출
 - filter는 bool을 반환하는 조건식이 필요
 
@@ -87,7 +94,7 @@ let ages: Vec<i32> = persons
     .collect();
 ```
 
-또는
+#### 또는
 ```rust
 let ages: Vec<i32> = persons
     .iter()
@@ -97,7 +104,6 @@ let ages: Vec<i32> = persons
     })
     .collect();
 ```
-
 - 1단계 처리: 조건 검사와 값 추출을 동시에 수행
 - filter_map은 Option<T>을 반환 → Some(val)만 남김
 
@@ -106,7 +112,6 @@ let ages: Vec<i32> = persons
 |----------------------------------|-------------------|-------------------------------------------|
 | 조건만 걸러내고 원본 그대로 사용     | `filter()`         | `bool` 조건으로 요소를 선택               |
 | 조건에 따라 값을 추출하거나 변환     | `filter_map()`     | `Option<T>`을 반환하여 값 추출과 필터링 동시 수행 |
-
 
 
 ## 💡 실전 팁
@@ -129,9 +134,8 @@ Rust의 고급 이터레이터 메서드인 group_by, partition, fold까지 함�
 | `fold`       | 누적 계산 수행                            | `T` (초기값과 동일한 타입)      | 합계, 누적, 집계 등                     |
 
 
-
 ## 🔍 각 메서드 상세 설명 & 예제
-### ✅ group_by (from itertools crate)
+### ✅ `group_by` (from itertools crate)
 ```rust
 use itertools::Itertools;
 
@@ -145,26 +149,22 @@ for (key, group) in &data.into_iter().group_by(|x| *x) {
 - group_by는 itertools 크레이트에서 제공됨
 - 비슷한 날짜, 상태, 키 값으로 묶을 때 유용
 
-### ✅ partition
+### ✅ `partition`
 ```rust
 let nums = vec![1, 2, 3, 4, 5, 6];
 let (even, odd): (Vec<_>, Vec<_>) = nums.into_iter().partition(|x| x % 2 == 0);
 println!("Even: {:?}, Odd: {:?}", even, odd);
 ```
-
-
 - 조건에 따라 두 그룹으로 나눔
 - 반환값은 (Vec<T>, Vec<T>)
 - 성공/실패, 유효/무효 등 이진 분류에 적합
 
-### ✅ fold
+### ✅ `fold`
 ```rust
 let nums = vec![1, 2, 3, 4];
 let sum = nums.iter().fold(0, |acc, x| acc + x);
 println!("Sum: {}", sum);
 ```
-
-
 - 초기값부터 시작해 누적 계산
 - fold(init, |acc, item| ...)
 - 합계, 평균, 누적 문자열 등 다양한 집계에 사용
@@ -203,9 +203,7 @@ let result: Vec<i32> = vec![1, 2, 3, 4]
     .collect();
 // result = [2, 4]
 ```
-
-
-## 🔗 함께 쓰는 이유
+### 🔗 함께 쓰는 이유
 ```rust
 for header in (0..header_count)
     .filter_map(|i| loader.get_header_by_index(i)) // Option<String> → String
@@ -235,12 +233,11 @@ for header in headers
 }
 ```
 
-### 출력 결과:
+#### 출력 결과:
 ```
 Header: Name
 Header: Age
 ```
-
 
 ## 💡 팁: 가독성 높이기
 긴 체이닝은 가독성이 떨어질 수 있으니, 중간에 변수로 분리해도 좋음:
@@ -253,6 +250,7 @@ for header in valid_headers {
     // ...
 }
 ```
+
 ## 실전 예제
 ```rust
     let header_count = loader.header_count();
@@ -269,5 +267,4 @@ for header in valid_headers {
     }
 ```
 
-
-
+---
