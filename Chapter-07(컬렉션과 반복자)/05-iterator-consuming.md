@@ -1,5 +1,5 @@
 # iterator-consuming methods
- Rust의 **이터레이터 소비 함수(iterator-consuming methods)** 에 대해 깊이 있게 정리. 
+ Rust의 **이터레이터 소비 함수(iterator-consuming methods)** 에 대해 깊이 있게 정리.  
  이터레이터가 어떻게 데이터를 처리하고, 어떤 방식으로 결과를 반환하는지 명확하게 설명.
 
 ## 🧠 이터레이터 소비 함수란?
