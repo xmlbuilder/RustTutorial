@@ -14,10 +14,10 @@
 
 
 ## 🧠 기타 특징
-- 모든 컬렉션은 **반복자(iterator)**를 지원해서 for, map, filter, fold 같은 함수형 스타일로 처리 가능
-- 대부분의 컬렉션은 new(), insert(), remove(), len(), is_empty() 같은 공통 메서드를 제공합니다
-- HashMap, HashSet은 해시 기반이라 키 타입에 Hash와 Eq 트레이트가 필요해요
-- BTreeMap, BTreeSet은 키 타입에 Ord 트레이트가 필요해요
+- 모든 컬렉션은 **반복자(iterator)** 를 지원해서 for, map, filter, fold 같은 함수형 스타일로 처리 가능
+- 대부분의 컬렉션은 `new()`, `insert()`, `remove()`, `len()`, `is_empty`() 같은 공통 메서드를 제공합니다
+- `HashMap`, `HashSet` 은 해시 기반이라 키 타입에 `Hash` 와 `Eq` 트레이트가 필요해요
+- `BTreeMap`, `BTreeSet` 은 키 타입에 Ord 트레이트가 필요해요
 
 ## ✨ 추천 사용 시나리오
 | 목적        | 적합한 컬렉션                      |
@@ -29,7 +29,7 @@
 | 우선순위 기반 처리            | `BinaryHeap`                      |
 | 삽입/삭제가 빈번한 리스트     | `LinkedList`                      |
 
-Rust는 기본적으로 Vec과 HashMap만으로도 대부분의 작업을 처리할 수 있을 만큼 강력.
+Rust는 기본적으로 `Vec`과 `HashMap` 만으로도 대부분의 작업을 처리할 수 있을 만큼 강력.
 
 ---
 
