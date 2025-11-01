@@ -6,7 +6,8 @@ struct Grid {
     x_coords: Vec<u32>,
     y_coords: Vec<u32>,
 }
-
+```
+```rust
 impl IntoIterator for Grid {
     type Item = (u32, u32);
     type IntoIter = GridIter;
@@ -14,13 +15,15 @@ impl IntoIterator for Grid {
         GridIter { grid: self, i: 0, j: 0 }
     }
 }
-
+```
+```rust
 struct GridIter {
     grid: Grid,
     i: usize,
     j: usize,
 }
-
+```
+```rust
 impl Iterator for GridIter {
     type Item = (u32, u32);
 
@@ -37,7 +40,8 @@ impl Iterator for GridIter {
         res
     }
 }
-
+```
+```rust
 use std::iter::FromIterator;
 
 impl FromIterator<(u32, u32)> for Grid {
@@ -53,7 +57,8 @@ impl FromIterator<(u32, u32)> for Grid {
         Grid { x_coords, y_coords }
     }
 }
-
+```
+```rust
 //IntoIterator
 fn main() {
     let grid = Grid { x_coords: vec![3, 5, 7, 9], y_coords: vec![10, 20, 30, 40] };
@@ -61,7 +66,8 @@ fn main() {
         println!("point = {x}, {y}");
     }
 }
-
+```
+```rust
 //FromIterator
 fn main() {
     let points = vec![(1, 10), (2, 20), (3, 30)];
@@ -70,7 +76,6 @@ fn main() {
 
     for (x, y) in grid {
         println!("point = {x}, {y}");
- 
 ```
 
 이 코드는 IntoIterator와 Iterator 트레이트를 직접 구현해서 2차원 좌표 그리드(Grid)를 순회 가능한 구조로 만든 예제.  
