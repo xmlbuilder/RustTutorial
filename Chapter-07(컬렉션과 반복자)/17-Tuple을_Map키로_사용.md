@@ -36,7 +36,7 @@ items.sort(); // 문자열 우선 정렬됨
 items.sort_by(|a, b| a.1.cmp(&b.1)); // 숫자 기준으로 정렬
 ```
 
-### ✅ 3. 정렬 우선순위를 튜플로 만들어서 sort
+### ✅ 3. 정렬 우선순위를 튜플로 만들어서 `sort_by_key`
 ```rust
 let mut items = vec![
     ("banana", 2),
@@ -80,9 +80,8 @@ tasks.sort_by_key(|t| (t.priority, t.deadline)); // priority → deadline 순으
 HashMap이나 BTreeMap에 키로 들어갈 때는 우리가 직접 정렬을 호출하는 게 아니라,  
 키 자체의 비교 기준에 따라 자동으로 정렬되거나 해시 충돌이 처리되기 때문에, 원하는 우선순위를 만들려면 키 구조 자체를 설계해야 함.
 
-## 🧠 핵심: 키로 들어가는 튜플은 "비교 기준"을 내포한 구조여야 한다
-Rust에서 HashMap은 해시 기반이라 정렬은 없지만,  
-BTreeMap은 키의 Ord 구현에 따라 자동 정렬됩니다.
+## 🧠 핵심: 키로 들어가는 튜플은 `비교 기준` 을 내포한 구조여야 한다
+Rust에서 HashMap은 해시 기반이라 정렬은 없지만, BTreeMap은 키의 Ord 구현에 따라 자동 정렬됩니다.
 
 ## ✅ 튜플 키는 앞쪽 요소부터 비교됨
 ```rust
@@ -101,7 +100,7 @@ map.insert((priority, timestamp), value);
 | 날짜 → 이름 순            | `(date, name)`                     | 날짜 기준 정렬, 같으면 이름순              |
 | 사용자 등급 → 활동량 순    | `(user_level, activity_score)`     | 등급 높은 사용자 먼저, 같으면 활동 많은 순 |
 
-이 구조는 BTreeMap뿐 아니라 Vec 정렬에도 그대로 적용 가능.
+- 이 구조는 BTreeMap뿐 아니라 Vec 정렬에도 그대로 적용 가능.
 
 
 ### ✅ 실전 예: 이벤트 우선순위 큐
@@ -112,11 +111,12 @@ struct Event {
     timestamp: u64,
     name: String,
 }
+```
+```rust
 let mut queue = BTreeMap::new();
 let event = Event { priority: 1, timestamp: 100, name: "Start".into() };
 queue.insert((event.priority, event.timestamp), event);
 ```
-
 - BTreeMap은 (priority, timestamp) 기준으로 자동 정렬됨
 - priority가 낮을수록 먼저 처리됨
 
@@ -152,7 +152,7 @@ space.insert(key, value);
 
 ## 🔧 장점
 - 정확한 위치 비교 대신 근사 셀 단위로 처리 → 부동소수점 문제 회피
-- 튜플 키는 Eq + Hash 자동 구현됨 → HashMap에서 바로 사용 가능
+- 튜플 키는 `Eq + Hash` 자동 구현됨 → HashMap에서 바로 사용 가능
 - 정렬이 필요하면 BTreeMap으로 전환 가능 → Ord도 자동 구현됨
 
 ## ✨ 실전 활용 예 – 튜플 키 기반 공간 인덱싱
@@ -188,7 +188,6 @@ space.insert(key, value);
 | `HashMap`          | 빠른 조회 가능 → 정렬 불필요할 때 적합      |
 | `(i, j, k)` 튜플 키 | `Eq` + `Hash` 자동 구현 → 바로 사용 가능     |
 | 목적이 조회 중심    | `HashMap`이 성능과 단순성에서 더 유리함     |
-
 
 
 ## 🔧 실전 예
