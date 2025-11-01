@@ -74,6 +74,15 @@ impl Hash for F64Key {
 }
 ```
 ```rust
+impl PartialEq for F64Key {
+    fn eq(&self, other: &Self) -> bool {
+        let a = (self.value / self.tol).round() as i64;
+        let b = (other.value / other.tol).round() as i64;
+        a == b
+    }
+}
+```
+```rust
 fn main() {
     let tol = 1e-3;
     let mut set = HashSet::new();
@@ -93,6 +102,13 @@ fn main() {
 1.0001, 1.0020 — 1.0001과 1.0002는 tol 내에서 같으므로 하나만 유지됨
 ```
 
+### 암묵적으로 만들어 지는 코드
+```rust
+// 암묵적으로 생성된 코드
+fn eq(&self, other: &Self) -> bool {
+    self.value == other.value && self.tol == other.tol
+}
+```
 
 ## ✅ 요약 – Rust에서 Set + f64 근사 비교
 
@@ -127,7 +143,7 @@ fn main() {
 
 ## 🧠 2. impl Eq for F64Key {} 꼭 필요한 이유
 ### ✅ 왜 비어 있어도 impl Eq가 필요할까?
-Rust에서 Eq는 PartialEq의 확장으로, "모든 값은 자기 자신과 같아야 한다"는 수학적 동치성을 보장하는 marker trait입니다.
+Rust에서 Eq는 PartialEq의 확장으로, **모든 값은 자기 자신과 같아야 한다** 는 수학적 동치성을 보장하는 marker trait입니다.
 - Eq는 비교 연산을 직접 정의하지 않음
 - PartialEq만 구현하면 `==` 는 작동하지만,
 - HashSet, HashMap에서는 Eq가 반드시 필요합니다
@@ -141,7 +157,8 @@ struct F64Key {
     value: f64,
     tol: f64,
 }
-
+```
+```rust
 // ❌ Eq가 없으면 HashSet<F64Key> 사용 불가
 let mut set = HashSet::new();
 set.insert(F64Key { value: 1.0, tol: 1e-3 }); // 컴파일 에러
@@ -160,16 +177,15 @@ impl Eq for F64Key {} 추가하면 OK
 | `impl Eq {}` | `HashSet`, `HashMap`에서 필수 (비어 있어도 선언 필요) |
 | Eq           | `PartialEq`의 확장, 동치성 보장 marker trait |
 
-
 ---
 
 # PartialOrd / Ord
 
 PartialOrd는 일부 값만 비교 가능한 타입에 꼭 필요하며, Ord를 쓸 수 없는 경우에만 사용됩니다.  
-반대로, 비교가 항상 가능해야 하는 곳에서는 PartialOrd를 단독으로 쓰면 안 됩니다.
+반대로, 비교가 항상 가능해야 하는 곳에서는 `PartialOrd` 를 `단독` 으로 쓰면 안 됩니다.
 
 ## 🧠 PartialOrd가 반드시 필요한 경우
-PartialOrd는 **부분 순서(partial order)**를 표현하는 트레이트로, 비교가 항상 가능하지 않은 타입에 사용됩니다.  
+PartialOrd는 **부분 순서(partial order)** 를 표현하는 트레이트로, 비교가 항상 가능하지 않은 타입에 사용됩니다.  
 대표적인 예는 **부동소수점 타입 f32, f64**입니다.
 
 ## ✅ 꼭 필요한 상황 – PartialOrd
@@ -196,8 +212,8 @@ assert_eq!(a.partial_cmp(&b), None); // 비교 불가
 | `min()`, `max()`   | 항상 비교 가능해야 함 → `Ord` 필요         |
 
 ### 💡 참고:
-- PartialOrd는 Option<Ordering>을 반환하므로 None이 나올 수 있어요.
-- Ord는 항상 Ordering을 반환해야 하므로 정렬 자료구조나 전체 정렬 함수에서만 사용 가능.
+- `PartialOrd` 는 `Option<Ordering>` 을 반환하므로 None이 나올 수 있음.
+- `Ord` 는 항상 `Ordering` 을 반환해야 하므로 정렬 자료구조나 전체 정렬 함수에서만 사용 가능.
 
 ```rust
 use std::collections::BTreeSet;
@@ -214,14 +230,13 @@ set.insert(1.0); // ❌ f64는 Ord를 구현하지 않아서 컴파일 에러
 | 사용 가능 위치   | `Vec.sort_by()`                          | `BTreeSet`, `BTreeMap`, `Vec.sort()` |
 
 
-
 ## 🔍 실수 방지 팁
 - Ord를 구현하려면 반드시 PartialOrd, Eq, PartialEq도 함께 구현함.
 - PartialOrd만 구현하고 Ord를 생략하면 정렬 자료구조에서 사용할 수 없음.
-- NaN이 포함될 수 있는 타입은 Ord를 구현하면 논리 오류가 발생할 수 있음.
+- `NaN` 이 포함될 수 있는 타입은 `Ord` 를 구현하면 논리 오류가 발생할 수 있음.
 
 ## 🧩 1. Ord와 PartialOrd 함께 구현하는 예제
-Rust에서는 Ord를 구현할 때 반드시 PartialOrd, Eq, PartialEq도 함께 구현해야 함.  
+Rust에서는 `Ord` 를 구현할 때 반드시 `PartialOrd`, `Eq`, `PartialEq` 도 함께 구현해야 함.  
 아래는 나이 기준으로 정렬되는 Person 타입 예제입니다:
 ```rust
 use std::cmp::Ordering;
@@ -231,45 +246,50 @@ struct Person {
     name: String,
     age: u32,
 }
-
+```
+```rust
 impl Ord for Person {
     fn cmp(&self, other: &Self) -> Ordering {
         self.age.cmp(&other.age)
     }
 }
-
+```
+```rust
 impl PartialOrd for Person {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
 }
 ```
-Ord는 반드시 Ordering을 반환해야 하며, PartialOrd는 Option<Ordering>을 반환합니다.
+- Ord는 반드시 Ordering을 반환해야 하며, PartialOrd는 Option<Ordering>을 반환합니다.
 
 
 ## 🧠 2. NaN이 포함된 타입을 안전하게 다루는 트릭
-f64는 NaN 때문에 Ord를 구현할 수 없어요.  
-하지만 NaN을 제거하거나 무시하는 래퍼 타입을 만들면 BTreeMap, BTreeSet에서도 사용할 수 있어요.
+f64는 NaN 때문에 Ord를 구현할 수 없음.    
+하지만 `NaN` 을 제거하거나 무시하는 래퍼 타입을 만들면 BTreeMap, BTreeSet에서도 사용할 수 있어요.
 ### ✅ 예제: NoNaN 래퍼 타입
 ```rust
 #[derive(Debug, PartialEq)]
 struct NoNaN(f64);
-
+```
+```rust
 impl Eq for NoNaN {}
-
+```
+```rust
 impl Ord for NoNaN {
     fn cmp(&self, other: &Self) -> Ordering {
         self.0.partial_cmp(&other.0).unwrap_or(Ordering::Equal)
     }
 }
-
+```
+```rust
 impl PartialOrd for NoNaN {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         self.0.partial_cmp(&other.0)
     }
 }
 ```
-unwrap_or(Ordering::Equal)로 NaN을 무시하거나, panic!으로 처리할 수도 있어요.
+- unwrap_or(Ordering::Equal)로 NaN을 무시하거나, panic!으로 처리할 수도 있음.
 
 
 ## 🧩 3. PartialOrd를 활용한 사용자 정의 타입 예제
@@ -281,13 +301,15 @@ enum MaybeNumber {
     Value(f64),
     Unknown,
 }
-
+```
+```rust
 impl PartialEq for MaybeNumber {
     fn eq(&self, other: &Self) -> bool {
         matches!((self, other), (MaybeNumber::Unknown, MaybeNumber::Unknown))
     }
 }
-
+```
+```rust
 impl PartialOrd for MaybeNumber {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         match (self, other) {
@@ -297,7 +319,6 @@ impl PartialOrd for MaybeNumber {
     }
 }
 ```
-
 
 ## 🧨 4. Ord와 PartialOrd 충돌 디버깅 팁
 ### ❗ 흔한 오류
@@ -323,7 +344,6 @@ Ord는 항상 Ordering을 반환해야 하며, PartialOrd와 논리적으로 일
 | `PartialOrd` 활용 | `Option`, `enum` 등 일부 값만 비교 가능한 구조 |
 | 구현 시 주의      | `Ord`와 `PartialOrd`는 논리적으로 일치해야 함 |
 
-
 ---
 
 # 🧠 왜 NaN이 문제일까?
@@ -333,8 +353,7 @@ let x = std::f64::NAN;
 let y = 1.0;
 println!("{:?}", x.partial_cmp(&y)); // 출력: None
 ```
-NaN은 자기 자신과도 비교할 수 없기 때문에 cmp()가 항상 Ordering을 반환해야 하는 Ord를 만족하지 못해요.
-
+NaN은 자기 자신과도 비교할 수 없기 때문에 cmp()가 항상 Ordering을 반환해야 하는 Ord를 만족하지 못함.
 
 ## 🧩 NoNaN 래퍼 타입의 의미
 ```rust
@@ -373,7 +392,7 @@ impl NoNaN {
     }
 }
 ```
-이렇게 하면 아예 NaN이 들어오지 못하게 막을 수 있어요.
+이렇게 하면 아예 NaN이 들어오지 못하게 막을 수 있음.
 
 ## 🧠 f64.partial_cmp()가 None을 반환하는 경우
 ```rust
@@ -385,7 +404,7 @@ println!("{:?}", a.partial_cmp(&b)); // 출력: None
 
 ### ✅ 이유:
 - NaN은 IEEE 754 표준에 따라 어떤 값과도 비교할 수 없고, 자기 자신과도 같지 않음.
-- 따라서 partial_cmp()는 None을 반환해서 "비교 불가능"을 표현합니다.
+- 따라서 partial_cmp()는 None을 반환해서 **비교 불가능** 을 표현합니다.
 
 ## ❌ inf는 비교 가능
 C++에서 inf는 특별한 값이지만, Rust에서는 f64::INFINITY나 f64::NEG_INFINITY도 정상적으로 비교됩니다:
@@ -405,18 +424,18 @@ inf는 Ord를 구현하지 않지만, PartialOrd에서는 비교가 됩니다.
 | 일반 숫자    | `Some(Ordering)`       | `Less`, `Equal`, `Greater` |
 
 ## 💡 참고:
-- NaN은 ==, <, > 등 모든 비교 연산에서 false를 반환합니다.
-- NaN == NaN도 false예요.
+- `NaN` 은 `==`, `<`, `>` 등 모든 비교 연산에서 `false` 를 반환합니다.
+- `NaN == NaN` 도 `false` 예요.
 
 
 ## 🧠 어떤 연산이 NaN을 만들어낼까?
 아래는 Rust에서 f64 연산을 통해 NaN이 생성되는 대표적인 예시들이에요:
-### ✅ 1. 0.0 / 0.0
+### ✅ 1. `0.0 / 0.0`
 ```rust
 let x = 0.0 / 0.0;
 println!("{}", x.is_nan()); // true
 ```
-0을 0으로 나누면 수학적으로 정의되지 않기 때문에 NaN이 됩니다.
+- 0을 0으로 나누면 수학적으로 정의되지 않기 때문에 `NaN` 이 됩니다.
 
 
 ### ✅ 2. sqrt() of negative number
@@ -424,7 +443,7 @@ println!("{}", x.is_nan()); // true
 let x = (-1.0f64).sqrt();
 println!("{}", x.is_nan()); // true
 ```
-실수 범위에서 음수의 제곱근은 존재하지 않기 때문에 NaN이 됩니다.
+- 실수 범위에서 음수의 제곱근은 존재하지 않기 때문에 NaN이 됩니다.
 
 
 ### ✅ 3. log() of negative number or zero
@@ -432,7 +451,7 @@ println!("{}", x.is_nan()); // true
 let x = (-5.0f64).ln(); // 자연로그
 println!("{}", x.is_nan()); // true
 ```
-로그 함수는 음수나 0에 대해 정의되지 않기 때문에 NaN이 됩니다.
+- 로그 함수는 음수나 0에 대해 정의되지 않기 때문에 NaN이 됩니다.
 
 
 ### ✅ 4. inf - inf 또는 inf / inf
@@ -440,7 +459,7 @@ println!("{}", x.is_nan()); // true
 let x = std::f64::INFINITY - std::f64::INFINITY;
 println!("{}", x.is_nan()); // true
 ```
-무한대끼리의 연산도 정의되지 않으면 NaN이 됩니다.
+- 무한대끼리의 연산도 정의되지 않으면 NaN이 됩니다.
 
 ### ✅ 요약: 연산으로 NaN이 나오는 경우
 
@@ -451,8 +470,7 @@ println!("{}", x.is_nan()); // true
 | `(-5.0).ln()`          | NaN  | 로그의 정의역 벗어남            |
 | `INFINITY - INFINITY` | NaN  | 무한대 간의 연산 불가능         |
 
-- 💡 즉, NaN은 단순히 상수로 지정하는 것뿐 아니라, 수학적으로 정의되지 않은 연산을 수행했을 때 자동으로 생성되는 값이에요.
-
+- 💡 즉, NaN은 단순히 상수로 지정하는 것뿐 아니라, 수학적으로 정의되지 않은 연산을 수행했을 때 자동으로 생성되는 값.
 
 ### 🧠 C++에서 NaN의 위험한 전파
 ### ✅ 예시: NaN이 계속 퍼지는 상황
@@ -468,13 +486,12 @@ int main() {
     std::cout << std::isnan(z) << std::endl; // 출력: 1 (true)
 }
 ```
-NaN은 연산을 거쳐도 계속 NaN으로 남고, 어디서부터 잘못됐는지 추적하기 어려워요.
-
+NaN은 연산을 거쳐도 계속 NaN으로 남고, 어디서부터 잘못됐는지 추적하기 어려움.
 
 ### ⚠️ C++에는 None이 없다
-Rust에서는 Option<f64>처럼 값이 없음을 명시적으로 표현할 수 있어요:
+Rust에서는 `Option<f64>` 처럼 값이 없음을 명시적으로 표현할 수 있음:
 let x: Option<f64> = None;
-C++에서는 이런 표현이 없기 때문에, NaN이 "값이 없는 상태"처럼 동작하지만,  
+C++에서는 이런 표현이 없기 때문에, NaN이 **값이 없는 상태** 처럼 동작하지만,  
 실제로는 값이 있는 것처럼 취급됨. 이게 문제를 더 복잡하게 만듬.
 
 ## ✅ Rust의 안전 장치 – NaN 처리
@@ -489,12 +506,12 @@ C++에서는 이런 표현이 없기 때문에, NaN이 "값이 없는 상태"처
 - C++처럼 NaN이 조용히 퍼지지 않고, Rust에서는 타입 시스템이 이를 명확하게 드러내줍니다.
 
 ### 🔍 결론
-C++에서는 NaN이 숨어 있는 오류처럼 퍼질 수 있고, 디버깅이 어려워요.  
+C++에서는 NaN이 숨어 있는 오류처럼 퍼질 수 있고, 디버깅이 어려움.  
 Rust는 NaN을 감지하거나 Option으로 감싸서 명시적으로 처리할 수 있어서 더 안전한 방식.  
 
 ### C++ std::optional
-C에도 이제 std::optional이 생겨서 Rust의 Option<T>처럼 값이 없을 수 있는 상황을 명시적으로 표현할 수 있게 됨.  
-C17부터 도입된 기능인데, 예전엔 이런 걸 nullptr, sentinel, magic value로 처리하느라 오류가 많았어요.
+C에도 이제 `std::optional` 이 생겨서 `Rust의 Option<T>` 처럼 값이 없을 수 있는 상황을 명시적으로 표현할 수 있게 됨.  
+C17부터 도입된 기능인데, 예전엔 이런 걸 nullptr, sentinel, magic value로 처리하느라 오류가 많음.
 
 ### 🧩 C++의 std::optional vs Rust의 Option<T>
 | 기능/표현            | `std::optional<T>` (C++)         | `Option<T>` (Rust)             |
@@ -515,7 +532,8 @@ std::optional<double> safe_sqrt(double x) {
     if (x < 0.0) return std::nullopt;
     return std::sqrt(x);
 }
-
+```
+```cpp
 auto result = safe_sqrt(-1.0);
 if (result) {
     std::cout << "sqrt: " << *result << "\n";
@@ -523,7 +541,7 @@ if (result) {
     std::cout << "Invalid input\n";
 }
 ```
-Rust에서는 fn safe_sqrt(x: f64) -> Option<f64>로 거의 똑같이 표현할 수 있어요.
+Rust에서는 fn safe_sqrt(x: f64) -> Option<f64>로 거의 똑같이 표현할 수 있음.
 
 
 ## 🔍 장점
