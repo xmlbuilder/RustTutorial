@@ -56,13 +56,15 @@ struct Task {
     deadline: u32,
     name: String,
 }
-
+```
+```rust
 let mut tasks = vec![
     Task { priority: 2, deadline: 100, name: "Write".into() },
     Task { priority: 1, deadline: 200, name: "Read".into() },
     Task { priority: 1, deadline: 100, name: "Code".into() },
 ];
-
+```
+```rust
 tasks.sort_by_key(|t| (t.priority, t.deadline)); // priority → deadline 순으로 정렬
 ```
 
