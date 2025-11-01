@@ -29,19 +29,22 @@ struct Person {
     name: String,
     age: u32,
 }
-
+```
+```rust
 impl Ord for Person {
     fn cmp(&self, other: &Self) -> Ordering {
         self.age.cmp(&other.age) // 나이 기준 정렬
     }
 }
-
+```
+```rust
 impl PartialOrd for Person {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
 }
-
+```
+```rust
 let mut people = BTreeSet::new();
 people.insert(Person { name: "Alice".into(), age: 30 });
 people.insert(Person { name: "Bob".into(), age: 25 });
@@ -93,19 +96,23 @@ struct Person {
     name: String,
     age: u32,
 }
+```
+```rust
 // 나이 기준으로 정렬
 impl Ord for Person {
     fn cmp(&self, other: &Self) -> Ordering {
         self.age.cmp(&other.age)
     }
 }
-
+```
+```rust
 impl PartialOrd for Person {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
 }
-
+```
+```rust
 fn main() {
     let mut map = BTreeMap::new();
 
@@ -126,27 +133,32 @@ Rust의 BTreeMap은 정렬 기준을 런타임에 바꿀 수는 없지만, 다�
 ```rust
 #[derive(Debug, Eq, PartialEq)]
 struct Descending(u32);
-
+```
+```rust
 impl Ord for Descending {
     fn cmp(&self, other: &Self) -> Ordering {
         other.0.cmp(&self.0) // 내림차순
     }
 }
-
+```
+```rust
 impl PartialOrd for Descending {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
 }
-
+```
+```rust
 impl PartialEq for Descending {
     fn eq(&self, other: &Self) -> bool {
         self.0 == other.0
     }
 }
-
+```
+```rust
 impl Eq for Descending {}
-
+```
+```rust
 use std::collections::BTreeMap;
 
 fn main() {
@@ -176,7 +188,8 @@ struct Person {
     name: String,
     age: u32,
 }
-
+```
+```rust
 fn main() {
     let mut map = BTreeMap::new();
 
@@ -223,8 +236,6 @@ let a = std::f64::NAN;
 let b = 1.0;
 assert_eq!(a.partial_cmp(&b), None); // 비교 불가
 ```
-
-
 ### ✅ Ord (전순서)
 - cmp() 메서드를 구현해야 함 → 항상 Ordering (Less, Equal, Greater) 반환
 - 모든 값 쌍이 비교 가능해야 함
@@ -242,7 +253,7 @@ let mut set = BTreeSet::new();
 set.insert(1.0_f64);
 set.insert(std::f64::NAN); // ❌ 컴파일 에러: f64는 Ord를 구현하지 않음
 ```
-NaN은 자기 자신과도 비교할 수 없기 때문에 Ord를 만족하지 못해요.
+- NaN은 자기 자신과도 비교할 수 없기 때문에 Ord를 만족하지 못함.
 
 
 ## ✅ 요약 – PartialOrd vs Ord
@@ -271,9 +282,11 @@ pub struct F64Key {
     pub value: f64,
     pub tol: f64, // 허용 오차
 }
-
+```
+```rust
 impl Eq for F64Key {}
-
+```
+```rust
 impl Ord for F64Key {
     fn cmp(&self, other: &Self) -> Ordering {
         let diff = self.value - other.value;
@@ -286,7 +299,8 @@ impl Ord for F64Key {
         }
     }
 }
-
+```
+```rust
 impl PartialOrd for F64Key {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
@@ -344,9 +358,11 @@ pub struct F64Key {
     pub value: f64,
     pub tol: f64,
 }
-
+```
+```rust
 impl Eq for F64Key {}
-
+```
+```rust
 impl Hash for F64Key {
     fn hash<H: Hasher>(&self, state: &mut H) {
         // tol 내에서 반올림된 값으로 해시
@@ -354,7 +370,8 @@ impl Hash for F64Key {
         rounded.hash(state);
     }
 }
-
+```
+```rust
 fn main() {
     let tol = 1e-3;
     let mut map = HashMap::new();
@@ -434,8 +451,8 @@ impl Hash for F64Key {
 이런 방식은 부동소수점 값의 근사치를 해시로 묶기 위한 전략.  
 Rust에서 f64는 Hash를 직접 구현하지 않기 때문에,
 - NaN, -0.0, 0.0 같은 값들이 해시 충돌을 일으킬 수 있고
-- 아주 미세한 차이로 해시가 달라지는 걸 방지하고 싶을 때
-→ tol을 기준으로 "같은 범위"에 있는 값들을 같은 해시로 묶는 것임.
+- 아주 미세한 차이로 해시가 달라지는 걸 방지하고 싶을 때  
+    → tol을 기준으로 "같은 범위"에 있는 값들을 같은 해시로 묶는 것임.
 
 ### 🔍 예시: HashSet<F64Key>에서 근사값 중복 제거
 ```rust
@@ -443,7 +460,7 @@ let mut set = HashSet::new();
 set.insert(F64Key { value: 1.01, tol: 0.1 });
 set.insert(F64Key { value: 1.04, tol: 0.1 }); // 같은 해시 → 중복으로 간주됨
 ```
-이 경우 두 값은 Hash와 Eq가 동일하게 작동하면 중복으로 처리돼요.
+- 이 경우 두 값은 Hash와 Eq가 동일하게 작동하면 중복으로 처리됨.
 
 ## 💡 요약 – Hash 구현 흐름
 
@@ -455,8 +472,7 @@ set.insert(F64Key { value: 1.04, tol: 0.1 }); // 같은 해시 → 중복으로 
 | 결과 해시             | `value`와 `tol` 조합으로 결정됨           |
 
 - 이건 Rust에서 부동소수점 기반 키를 안전하게 해시하는 고급 패턴.
-
-hash() 함수 안에서 state가 바뀌는 이유는, 우리가 직접 값을 바꾸는 게 아니라, Hasher가 내부적으로 상태를 누적하기 때문.
+- hash() 함수 안에서 state가 바뀌는 이유는, 우리가 직접 값을 바꾸는 게 아니라, Hasher가 내부적으로 상태를 누적하기 때문.
 
 ## 🧠 hash() 함수의 역할
 ```rust
@@ -489,7 +505,7 @@ fn main() {
     println!("해시값: {}", result);
 }
 ```
-여기서도 42.hash(&mut hasher)는 값을 리턴하지 않지만,
+여기서도 42.hash(&mut hasher)는 값을 리턴하지 않지만,  
 hasher의 내부 상태는 변화했고, finish()로 그 결과를 꺼낼 수 있음.
 
 ## 💡 요약 – Hash 트레이트와 Hasher 흐름
@@ -499,7 +515,8 @@ hasher의 내부 상태는 변화했고, finish()로 그 결과를 꺼낼 수 �
 | `.hash(state)`    | 내부적으로 `state.write(...)` 호출        |
 | `state.finish()`  | 누적된 상태를 기반으로 최종 해시값 생성   |
 | `state`           | 값은 직접 안 바뀌지만 내부 상태는 변화함  |
-겉으로는 변화가 없지만, state는 내부적으로 계속 누적되고 있는 거죠.
+
+- 겉으로는 변화가 없지만, state는 내부적으로 계속 누적되고 있는 것임.
 
 ---
 
@@ -517,9 +534,11 @@ hasher의 내부 상태는 변화했고, finish()로 그 결과를 꺼낼 수 �
 ### 1. 트레이트 기반
 - Hash는 트레이트로 구현해야 하며, Hasher에 값을 피드하는 방식
 - 해시 결과는 Hasher.finish()로 추출
+
 ### 2. 보안 중심 해시
 - 기본 HashMap은 SipHash를 사용 → 해시 충돌 공격에 강함
 - C++/Java는 성능 중심 해시가 많음 → 보안은 개발자 책임
+
 ### 3. 부동소수점은 기본 해시 불가
 - f64, f32는 Hash 미구현 → NaN, -0.0 등 문제 방지
 - 커스텀 키(F64Key)로 Eq + Hash를 직접 구현해야 함
@@ -532,7 +551,8 @@ struct F64Key {
     value: f64,
     tol: f64,
 }
-
+```
+```rust
 impl Hash for F64Key {
     fn hash<H: Hasher>(&self, state: &mut H) {
         let rounded = (self.value / self.tol).round() as i64;
@@ -547,3 +567,6 @@ Rust에서는 정확한 비교 기준과 해시 전략을 명시적으로 설계
 - Rust는 해시를 안전성과 일관성 중심으로 설계함
 - C++/Java는 해시를 편의성과 성능 중심으로 설계함
 - Rust에서는 해시와 비교(Eq)가 항상 함께 작동해야 하며, 개발자가 의도적으로 설계해야만 안전하게 동작합니다
+
+---
+
