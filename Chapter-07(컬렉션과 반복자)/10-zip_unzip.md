@@ -1,5 +1,5 @@
 # zip / unzip
-Rust의 zip과 unzip은 반복자(iterator)를 다룰 때 정말 강력한 도구.  
+Rust의 `zip` 과 `unzip` 은 `반복자(iterator)` 를 다룰 때 정말 강력한 도구.  
 두 개의 컬렉션을 짝지어 묶거나, 묶인 쌍을 다시 분리할 때 사용됩니다.  
 아래에 개념 설명 + 샘플 코드 + 주의사항까지 깔끔하게 정리.  
 
@@ -19,14 +19,13 @@ fn main() {
 ```
 
 - zip()은 `(&str, &i32)` 를 반환하므로 `*n`, `*s` 로 `역참조` 필요
-- collect()로 Vec<(T1, T2)>로 변환
+- `collect()` 로 `Vec<(T1, T2)>` 로 변환
 
-### 🔄 `unzip`: 튜플 반복자를 두 벡터로 분리
-#### ✅ 개념
-- (a, b) 형태의 반복자를 받아서
-`Vec<A>`와 `Vec<B>`로 각각 분리합니다.
+## 🔄 `unzip`: 튜플 반복자를 두 벡터로 분리
+### ✅ 개념
+- (a, b) 형태의 반복자를 받아서 `Vec<A>`와 `Vec<B>`로 각각 분리합니다.
 
-#### 🧪 예제
+### 🧪 예제
 
 ```rust
 fn main() {
@@ -39,7 +38,7 @@ fn main() {
 }
 ```
 
-#### 🧪 샘플: 두 벡터를 zip해서 합산
+### 🧪 샘플: 두 벡터를 zip해서 합산
 ```rust
 fn main() {
     let a = vec![1, 2, 3];
@@ -56,12 +55,12 @@ fn main() {
 ```
 
 #### 🔍 설명
-- a.iter().zip(b.iter()): (1, 10), (2, 20), (3, 30) 형태로 묶음
-- .map(|(x, y)| x + y): 각 쌍을 더함
-- .collect(): 결과를 Vec<i32>로 수집
+- `a.iter().zip(b.iter())`: (1, 10), (2, 20), (3, 30) 형태로 묶음
+- `.map(|(x, y)| x + y)`: 각 쌍을 더함
+- `.collect()`: 결과를 Vec<i32>로 수집
 
 #### ✅ 참고
-- iter()는 참조를 반환하므로 x와 y는 &i32 타입 → x + y는 자동 역참조됨
+- iter()는 참조를 반환하므로 x와 y는 &i32 타입 → `x + y` 는 `자동 역참조` 됨
 - into_iter()를 쓰면 move가 발생하므로 String, 구조체 등에서는 주의 필요
 
 - into_iter().unzip()은 튜플을 자동으로 분리해줍니다
@@ -92,7 +91,7 @@ Rust의 반복자 패턴은 Python의 zip, enumerate, map과 매우 유사하면
 
 ## 🧠 고급 zip 패턴 in Rust
 ### 1. ✅ zip_with: 직접 zip을 구현하는 방식
-Rust에는 zip_with라는 이름의 메서드는 없지만,  
+Rust에는 `zip_with` 라는 이름의 메서드는 없지만,  
 zip().map() 조합으로 직접 zip-with 기능을 구현할 수 있음.
 ```rust
 fn main() {
@@ -104,10 +103,10 @@ fn main() {
 }
 ```
 
-- Python의 zip(a, b) + map(lambda x, y: x + y)와 동일한 효과
+- Python의 `zip(a, b) + map(lambda x, y: x + y)` 와 동일한 효과
 - 이게 사실상 Rust의 zip_with 패턴입니다
 
-### 2. ✅ multi_zip: 여러 반복자 zip
+### 2. ✅ `multi_zip`: 여러 반복자 zip
 기본 zip()은 두 개까지만 지원되지만,
 세 개 이상 zip하려면 중첩하거나 itertools를 사용해야 합니다.
 
@@ -136,7 +135,7 @@ fn main() {
 - multizip((a, b, c))은 (x, y, z) 튜플로 묶어줍니다
 
 ### 3. ✅ itertools::izip!: 매크로 기반 zip
-izip!은 반복자 zip을 매크로 형태로 간결하게 표현할 수 있어요.
+`izip!`은 반복자 zip을 매크로 형태로 간결하게 표현할 수 있음.
 ```rust
 use itertools::izip;
 
@@ -151,7 +150,7 @@ fn main() {
 }
 ```
 
-- izip!은 multizip보다 더 간결하고 직관적
+- `izip!`은 `multizip` 보다 더 간결하고 직관적
 - 반복자뿐 아니라 Vec, 슬라이스도 바로 사용 가능
 
 ### 🔑 핵심 요약: 고급 zip 패턴
@@ -162,7 +161,7 @@ fn main() {
 | `multizip()`  | 여러 반복자를 튜플로 zip   | `itertools`              | 반복자 기반 zip                    |
 | `izip!`       | 매크로 기반 zip 표현       | `Vec`, `slice`, `itertools` | 가장 간결하고 직관적 zip 표현      |
 
-Rust는 반복자 조합이 강력해서 Python 스타일 zip 패턴을 더 안전하고 빠르게 구현할 수 있음.
+- Rust는 반복자 조합이 강력해서 Python 스타일 zip 패턴을 더 안전하고 빠르게 구현할 수 있음.
 
 ---
 
@@ -190,7 +189,8 @@ struct Score {
     name: String,
     value: i32,
 }
-
+```
+```rust
 let pairs: Vec<Score> = vec![
     Score { name: "Alice".into(), value: 85 },
     Score { name: "Bob".into(), value: 92 },
@@ -209,7 +209,9 @@ let pairs: Vec<Score> = vec![
 | `String` | ✅ 있음       | heap에 저장   | 가변 문자열, 구조체에 넣기 적합      |
 
 
-결론적으로 Vec<(String, i32)>는 구조체로 보관할 때의 중간 단계이고,
-Vec<Score>처럼 명시적인 구조체로 감싸는 게 가장 Rust다운 방식
+결론적으로 `Vec<(String, i32)>` 는 구조체로 보관할 때의 `중간 단계` 이고,
+`Vec<Score>` 처럼 명시적인 구조체로 감싸는 게 가장 Rust다운 방식
+
+---
 
 
