@@ -2,7 +2,7 @@
 # Set 커스텀 타입 비교
 
 아래는 Rust에서 커스텀 타입을 Set에 넣는 예제와,  
-f64를 tol 기반으로 근사 비교해서 중복을 통제하는 Set 예제를 함께 정리.
+`f64를 tol` 기반으로 근사 비교해서 중복을 통제하는 Set 예제를 함께 정리.
 
 ## 🧩 1. 커스텀 타입을 BTreeSet에 넣기
 - `Ord`, `PartialOrd` 정의
@@ -15,20 +15,23 @@ struct Person {
     name: String,
     age: u32,
 }
-
+```
+```rust
 // 나이 기준으로 정렬
 impl Ord for Person {
     fn cmp(&self, other: &Self) -> Ordering {
         self.age.cmp(&other.age)
     }
 }
-
+```
+```rust
 impl PartialOrd for Person {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
 }
-
+```
+```rust
 fn main() {
     let mut set = BTreeSet::new();
     set.insert(Person { name: "Alice".into(), age: 30 });
@@ -47,7 +50,7 @@ Bob (25), Alice (30) — Charlie는 나이 기준으로 중복이라 무시됨
 ```
 
 
-## 🧩 2. f64를 tol로 통제하는 HashSet 예제
+## 🧩 2. `f64를 tol` 로 통제하는 HashSet 예제
 - `Eq`, `Hash` 정의
 ```rust
 use std::collections::HashSet;
@@ -58,16 +61,19 @@ struct F64Key {
     value: f64,
     tol: f64,
 }
-
+```
+```rust
 impl Eq for F64Key {}
-
+```
+```rust
 impl Hash for F64Key {
     fn hash<H: Hasher>(&self, state: &mut H) {
         let rounded = (self.value / self.tol).round() as i64;
         rounded.hash(state);
     }
 }
-
+```
+```rust
 fn main() {
     let tol = 1e-3;
     let mut set = HashSet::new();
@@ -115,8 +121,7 @@ fn main() {
     println!("차집합: {:?}", diff);  // {1}
 }
 ```
-
-BTreeSet도 동일한 API를 갖고 있어요.
+- BTreeSet도 동일한 API를 갖고 있음.
 
 ---
 
