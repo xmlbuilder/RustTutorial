@@ -1,7 +1,7 @@
 # std::slice::IterMut
 
-std::slice::IterMut 는 Rust에서 가변 참조를 반복(iterate)할 수 있게 해주는 반복자 타입.  
-즉, Vec<T>나 [T] 같은 슬라이스에서 각 요소를 &mut T 형태로 하나씩 꺼내서 수정할 수 있게 해주는 도구.
+`std::slice::IterMut` 는 Rust에서 가변 참조를 `반복(iterate)` 할 수 있게 해주는 반복자 타입.  
+즉, `Vec<T>` 나 `[T]` 같은 슬라이스에서 각 요소를 `&mut T` 형태로 하나씩 꺼내서 수정할 수 있게 해주는 도구.
 
 ## 🔧 핵심 개념
 ```rust
@@ -11,9 +11,9 @@ for x in data.iter_mut() {
 }
 ```
 
-- iter_mut()은 IterMut<'_, T> 타입을 반환
+- iter_mut()은 `IterMut<'_, T>` 타입을 반환
 - 각 요소는 `&mut T` 로 접근 가능 → 직접 수정 가능
-- for 루프, map, enumerate, zip 등과 함께 사용 가능
+- `for` 루프, `map`, `enumerate`, `zip` 등과 함께 사용 가능
 
 ## 🧠 언제 쓰나?
 | 상황                             | 설명 또는 이유                                      |
@@ -31,29 +31,31 @@ struct Point {
     x: f64,
     y: f64,
 }
-
+```
+```rust
 let mut points = vec![
     Point { x: 1.0, y: 2.0 },
     Point { x: 3.0, y: 4.0 },
 ];
-
+```
+```rust
 for p in points.iter_mut() {
     p.x += 10.0;
 }
 ```
-
-→ points의 각 x 값을 직접 수정
+- points의 각 x 값을 직접 수정
 
 ## ⚠️ 주의할 점
 - iter_mut()은 가변 참조를 반환하므로, 해당 슬라이스는 반복 중에 다른 곳에서 접근하면 컴파일 에러가 발생
 - 반복 중에 슬라이스를 변경하거나 재할당하면 불안정한 상태가 될 수 있음
 
 ---
+
 ## Tuple 구조체와 결합 하면
-KnotVector가 Vec<T>를 튜플 구조체로 감싼 다음 std::slice::IterMut를 재정의하면,  
+KnotVector가 `Vec<T>` 를 튜플 구조체로 감싼 다음 `std::slice::IterMut` 를 재정의하면,  
 그건 단순한 반복 이상의 도메인 제어, API 안정성, 타입 안전성을 의도한 구조적 설계를 할 수 있음.
 
-## 🔍 구조 예시 (추정)
+## 🔍 구조 예시
 ```rust
 pub struct KnotVector<T>(pub Vec<T>);
 impl<T> KnotVector<T> {
@@ -154,7 +156,7 @@ impl ParameterU {
     }
 }
 ```
-→ 단순한 f64가 아니라 NURBS의 파라메터 공간을 표현하는 의미 있는 타입으로 진화
+- 단순한 f64가 아니라 NURBS의 파라메터 공간을 표현하는 의미 있는 타입으로 진화
 
 ---
 
