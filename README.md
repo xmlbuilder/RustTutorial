@@ -215,6 +215,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [06-PatternMatching_ExpressionTree](./Chapter-05(패턴%20매칭과%20분해)/06-PatternMatching_ExpressionTree.md)
 - [07-PatternMatching_Eum_Struct](./Chapter-05(패턴%20매칭과%20분해)/07-PatternMatching_Eum_Struct.md)
 - [08-배열_중첩패턴](./Chapter-05(패턴%20매칭과%20분해)/08-배열_중첩패턴.md)
+- [09-Reverse_패턴매칭](./Chapter-05(패턴%20매칭과%20분해)/09-Reverse_패턴매칭.md)
 
 
 🔼 [맨 위로](#-목차)
