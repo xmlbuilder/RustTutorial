@@ -42,7 +42,7 @@ $$
 - 베지어 → power basis 변환 행렬:  
 
 $$
-PUM=\mathrm{power_basis_matrix}(p),\quad PVM=\mathrm{power_basis_matrix}(q)
+P_UM=\mathrm{power_basis_matrix}(p),\quad P_VM=\mathrm{power_basis_matrix}(q)
 $$
 
 - 구간 재매핑:
