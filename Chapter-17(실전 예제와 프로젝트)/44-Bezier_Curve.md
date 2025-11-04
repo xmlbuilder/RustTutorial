@@ -23,7 +23,7 @@ $$
 - elevate_degree() → 정확한 행렬 기반 구현
 
 ### 3. 📉 차수 감소 (degree reduction)
-- 근사 방식: $P_i'=P(t_i), where t_i=\frac{i}{q}$
+- 근사 방식: $P_i'=P(t_i), where \quadt_i=\frac{i}{q}$
 - reduce_degree() → rational 평가 기반 보간
 - 정확한 방식은 least-squares 기반이지만, 현재는 보간 기반으로 충분
 
