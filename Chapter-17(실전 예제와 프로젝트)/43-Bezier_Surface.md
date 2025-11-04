@@ -384,6 +384,25 @@ impl BezierSurface {
         }
         bw
     }
+
+    pub fn to_nurbs(&self) -> Surface {
+        let (nu, nv) = self.dims();
+        let degree_u = self.u_degree;
+        let degree_v = self.v_degree;
+
+        let knots_u = clamped_uniform_knot_vector(degree_u, nu);
+        let knots_v = clamped_uniform_knot_vector(degree_v, nv);
+
+        Surface {
+            pu: degree_u,
+            pv: degree_v,
+            nu,
+            nv,
+            ctrl: self.ctrl.clone(),
+            ku: KnotVector {knots: knots_u},
+            kv: KnotVector {knots: knots_v},
+        }
+    }
 }
 ```
 
