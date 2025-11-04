@@ -187,7 +187,8 @@ pub struct CoonsOptions {
     pub use_arclen_sampling: bool,  // 경계 파라미터 기록용
     pub force_corner_match: bool,
 }
-
+```
+```rust
 pub fn build_coons_patch_mesh(
     bottom: &[Vec3f], right: &[Vec3f], top: &[Vec3f], left: &[Vec3f],
     opt: &CoonsOptions, want_maps: bool
@@ -225,7 +226,8 @@ Coons 패치는 단순한 선형 혼합과 bilinear 보정만으로 **경계 충
 ```rust
 use crate::math::prelude::{Point3D, Vector3D};
 use crate::mesh::mesh::Mesh;
-
+```
+```rust
 #[derive(Copy, Clone, Debug, Default, PartialEq)]
 pub struct Vec3f { pub x: f32, pub y: f32, pub z: f32 }
 impl Vec3f {
@@ -243,11 +245,13 @@ impl Vec3f {
         if l > 0.0 { self.mul(1.0/l) } else { Self::new(0.0,0.0,0.0) }
     }
 }
-
+```
+```rust
 #[derive(Copy, Clone, Debug, Default, PartialEq)]
 pub struct Vec2f { pub x: f32, pub y: f32 }
 impl Vec2f { pub fn new(x: f32, y: f32) -> Self { Self { x, y } } }
-
+```
+```rust
 
 
 #[derive(Clone, Debug)]
@@ -257,15 +261,19 @@ pub struct CoonsMesh {
     pub v_normals: Vec<Vec3f>,
     pub tex_coords: Vec<Vec2f>,
 }
+```
+```rust
 impl CoonsMesh {
     pub fn empty() -> Self {
         Self { vertices: vec![], faces: vec![], v_normals: vec![], tex_coords: vec![] }
     }
 }
-
+```
+```rust
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum TriStyle { AlignLeft, AlignRight, UnionJack }
-
+```
+```rust
 #[derive(Copy, Clone, Debug)]
 pub struct CoonsOptions {
     pub quad_mesh: bool,            // true 면 quad, false 면 triangle
@@ -287,7 +295,8 @@ impl Default for CoonsOptions {
         }
     }
 }
-
+```
+```rust
 #[derive(Clone, Debug)]
 pub struct CoonsBoundaryMaps {
     // 정규화된 경계 UV
@@ -297,8 +306,8 @@ pub struct CoonsBoundaryMaps {
     pub t_bottom: Vec<f64>, pub t_top: Vec<f64>, // size=Nu
     pub t_left:   Vec<f64>, pub t_right: Vec<f64>, // size=Nv
 }
-
-
+```
+```rust
 #[inline]
 fn grid_idx(iu: usize, iv: usize, nv: usize) -> usize { iu*nv + iv }
 
@@ -316,7 +325,8 @@ fn cumulative_lengths(poly: &[Vec3f]) -> Vec<f64> {
     }
     acc
 }
-
+```
+```rust
 #[inline]
 fn push_tri(out: &mut Vec<[u32;4]>, a:u32,b:u32,c:u32) {
     out.push([a,b,c,c]); // STL 호환: 삼각형은 마지막 인덱스를 c로 중복
@@ -325,7 +335,8 @@ fn push_tri(out: &mut Vec<[u32;4]>, a:u32,b:u32,c:u32) {
 fn push_quad(out: &mut Vec<[u32;4]>, a:u32,b:u32,c:u32,d:u32) {
     out.push([a,b,c,d]);
 }
-
+```
+```rust
 /// bottom: left->right, top: left->right, left: bottom->top, right: bottom->top
 pub fn build_coons_patch_mesh(
     bottom: &[Vec3f],
@@ -430,9 +441,9 @@ pub fn build_coons_patch_mesh(
     // if opt.build_normals { recompute_normals_for_coons(&mut mesh); }
     Ok((mesh, maps))
 }
-
+```
+```rust
 /* --------------------------- 유틸: 노멀 --------------------------- */
-
 fn face_normal(a:Vec3f,b:Vec3f,c:Vec3f)->Vec3f {
     (b.sub(a)).cross(c.sub(a)).normalize()
 }
@@ -455,7 +466,8 @@ pub fn recompute_normals(mesh: &mut CoonsMesh) {
     }
     for v in &mut mesh.v_normals { *v = v.normalize(); }
 }
-
+```
+```rust
 pub fn coons_into_mesh(cm: &CoonsMesh) -> Mesh {
     let vertices: Vec<Point3D> = cm.vertices.iter().map(|v| Point3D {
         x: v.x as f64, y: v.y as f64, z: v.z as f64
@@ -484,7 +496,8 @@ mod tests {
     use geometry::io::stl_writer::StlWriter;
     use geometry::mesh::coons_patch::{build_coons_patch_mesh, coons_into_mesh, CoonsMesh, CoonsOptions, TriStyle, Vec3f};
     use geometry::mesh::mesh::Mesh;
-
+```
+```rust
     #[test]
     fn coons_quad_and_tri_ok() {
         // 축 정렬 사각 경계(정사각형): bottom/ top (left->right), left/right (bottom->top)
@@ -575,7 +588,8 @@ mod tests {
 
         (bottom, right, top, left)
     }
-
+```
+```rust
     #[test]
     fn coons_patch_export_to_stl() -> Result<(), Box<dyn std::error::Error>> {
         // 샘플 해상도(경계 포인트 개수)
@@ -625,7 +639,6 @@ mod tests {
         Ok(())
     }
 }
-
 ```
 
 
