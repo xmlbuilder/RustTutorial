@@ -1,0 +1,260 @@
+# FixData
+
+## 소스 코드 
+
+```rust
+use crate::core::tarray::TArray;
+use std::ops::{Index, IndexMut};
+
+#[derive(Clone, Debug)]
+pub struct FixData<T> {
+    comps: Vec<Vec<T>>,
+    size: usize,
+}
+```
+```rust
+impl<T> Default for FixData<T> {
+    fn default() -> Self {
+        Self {
+            comps: Vec::new(),
+            size: 0,
+        }
+    }
+}
+```
+```rust
+
+impl<T> FixData<T> {
+    /// 빈 컨테이너 (comp=0, size=0)
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn with(n_comp: usize, size: usize) -> Self
+    where
+        T: Default + Clone,
+    {
+        let comps = vec![vec![T::default(); size]; n_comp];
+        Self { comps, size }
+    }
+
+    pub fn init(&mut self, n_comp: usize, size: usize)
+    where
+        T: Default + Clone,
+    {
+        self.comps = vec![vec![T::default(); size]; n_comp];
+        self.size = size;
+    }
+
+    pub fn clear(&mut self) {
+        self.comps.clear();
+        self.size = 0;
+    }
+
+    pub fn comp_count(&self) -> usize {
+        self.comps.len()
+    }
+
+    pub fn len(&self) -> usize {
+        self.size
+    }
+
+    /// (C++: isEmpty)
+    pub fn is_empty(&self) -> bool {
+        self.size == 0
+    }
+
+    pub fn get(&self, comp: usize, idx: usize) -> &T {
+        assert!(
+            comp < self.comp_count(),
+            "comp {} out of range {}",
+            comp,
+            self.comp_count()
+        );
+        assert!(idx < self.size, "index {} out of range {}", idx, self.size);
+        &self.comps[comp][idx]
+    }
+
+    pub fn set(&mut self, comp: usize, idx: usize, val: T) {
+        assert!(
+            comp < self.comp_count(),
+            "comp {} out of range {}",
+            comp,
+            self.comp_count()
+        );
+        assert!(idx < self.size, "index {} out of range {}", idx, self.size);
+        self.comps[comp][idx] = val;
+    }
+
+    pub fn try_get(&self, comp: usize, idx: usize) -> Option<&T> {
+        self.comps.get(comp).and_then(|v| v.get(idx))
+    }
+    pub fn try_get_mut(&mut self, comp: usize, idx: usize) -> Option<&mut T> {
+        self.comps.get_mut(comp).and_then(|v| v.get_mut(idx))
+    }
+
+    pub fn comp_slice(&self, comp: usize) -> &[T] {
+        assert!(
+            comp < self.comp_count(),
+            "comp {} out of range {}",
+            comp,
+            self.comp_count()
+        );
+        &self.comps[comp]
+    }
+    pub fn comp_mut_slice(&mut self, comp: usize) -> &mut [T] {
+        assert!(
+            comp < self.comp_count(),
+            "comp {} out of range {}",
+            comp,
+            self.comp_count()
+        );
+        &mut self.comps[comp]
+    }
+
+    pub fn resize_component(&mut self, n_comp: usize, keep_data: bool)
+    where
+        T: Default + Clone,
+    {
+        if n_comp == self.comp_count() {
+            return;
+        }
+
+        if self.size == 0 {
+            self.comps.resize_with(n_comp, Vec::new);
+            return;
+        }
+
+        if keep_data {
+            self.comps
+                .resize_with(n_comp, || vec![T::default(); self.size]);
+        } else {
+            self.comps = vec![vec![T::default(); self.size]; n_comp];
+        }
+    }
+
+    pub fn fill(&mut self, val: T)
+    where
+        T: Clone,
+    {
+        for c in &mut self.comps {
+            for x in c.iter_mut() {
+                *x = val.clone();
+            }
+        }
+    }
+}
+```
+
+```rust
+pub struct CompIndex(pub usize, pub usize);
+impl<T> Index<CompIndex> for FixData<T> {
+    type Output = T;
+    fn index(&self, idx: CompIndex) -> &Self::Output {
+        self.get(idx.0, idx.1)
+    }
+}
+
+impl<T> IndexMut<CompIndex> for FixData<T> {
+    fn index_mut(&mut self, idx: CompIndex) -> &mut Self::Output {
+        assert!(idx.0 < self.comp_count() && idx.1 < self.size);
+        &mut self.comps[idx.0][idx.1]
+    }
+}
+```
+```rust
+pub type FixDataF32 = FixData<f32>;
+pub type FixDataF64 = FixData<f64>;
+pub type FixDataI32 = FixData<i32>;
+pub type FixDataI64 = FixData<i64>;
+pub type FixDataArrayF64 = FixData<TArray<f64>>;
+
+```
+
+## 🧱 구조 개요: FixData<T>
+`FixData<T>`는 컴포넌트(component) 단위로 데이터를 나누고, 각 컴포넌트는 고정 길이의 벡터를 갖습니다.  
+예를 들어, FixData::<i32>::with(3, 4)는 Vec<Vec<i32>> 형태로 3개의 컴포넌트에 각각 4개의 값을 갖습니다.  
+```rust
+FixData<T> {
+    comps: Vec<Vec<T>>, // 컴포넌트별 데이터
+    size: usize,         // 각 컴포넌트의 길이
+}
+```
+
+## 📋 주요 함수 요약표
+
+| 함수 이름                  | 설명 또는 제약 조건                  |
+|----------------------------|--------------------------------------|
+| new()                      | size = 0                             |
+| with(n_comp, size)         | T: Default + Clone                   |
+| init(n_comp, size)         | 기존 객체를 재초기화                |
+| clear()                    | 모든 데이터 제거                    |
+| comp_count()               | 컴포넌트 수 반환                    |
+| len()                      | 각 컴포넌트의 길이 반환             |
+| is_empty()                 | 길이가 0인지 확인                   |
+| get(comp, idx)             | 안전한 접근 (panic 발생 가능)       |
+| set(comp, idx, val)        | 안전한 설정 (panic 발생 가능)       |
+| try_get(comp, idx)         | 안전하지 않은 접근 (Option 반환)    |
+| try_get_mut(comp, idx)     | 가변 참조 접근 (Option 반환)        |
+| comp_slice(comp)           | 컴포넌트의 슬라이스 반환            |
+| comp_mut_slice(comp)       | 컴포넌트의 가변 슬라이스 반환       |
+| resize_component(n, keep_data) | 컴포넌트 수 변경 및 데이터 유지 여부 |
+| fill(val)                  | 모든 값을 동일한 값으로 채움 (T: Clone) |
+
+
+
+## 🧪 동작 예시
+### 1. 생성 및 값 설정
+```rust
+let mut fd = FixData::<i32>::with(2, 3);
+fd.set(0, 0, 10);
+fd.set(1, 2, 99);
+assert_eq!(fd.get(1, 2), &99);
+```
+
+### 2. 슬라이스 접근
+```rust
+let slice = fd.comp_slice(1);
+println!("{:?}", slice); // [0, 0, 99]
+```
+
+### 3. 컴포넌트 리사이즈
+```rust
+fd.resize_component(3, true); // 기존 데이터 유지
+fd.resize_component(1, false); // 전체 초기화
+```
+
+## 🧪 추가 샘플 코드: 평균 계산
+```rust
+fn average_per_component(fd: &FixData<f64>) -> Vec<f64> {
+    let mut result = Vec::new();
+    for c in 0..fd.comp_count() {
+        let slice = fd.comp_slice(c);
+        let sum: f64 = slice.iter().copied().sum();
+        result.push(sum / slice.len() as f64);
+    }
+    result
+}
+
+#[test]
+fn test_average() {
+    let mut fd = FixData::<f64>::with(2, 3);
+    fd.set(0, 0, 1.0);
+    fd.set(0, 1, 2.0);
+    fd.set(0, 2, 3.0);
+    fd.set(1, 0, 4.0);
+    fd.set(1, 1, 5.0);
+    fd.set(1, 2, 6.0);
+
+    let avg = average_per_component(&fd);
+    assert_eq!(avg, vec![2.0, 5.0]);
+}
+```
+
+
+## 🧠 활용 예시
+- 수치 해석: 각 컴포넌트가 변수별 시계열 데이터일 때 유용
+- 멀티 채널 처리: 이미지, 센서, 시뮬레이션 등에서 채널별 데이터 관리
+
+---
+
