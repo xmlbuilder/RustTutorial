@@ -42,7 +42,7 @@ $$
 - 베지어 → power basis 변환 행렬:  
 
 $$
-PUM=\mathrm{power-basis-matrix}(p),\quad PVM=\mathrm{power-basis-matrix}(q)
+PUM=\mathrm{power\_basis\_matrix}(p),\quad PVM=\mathrm{power-basis-matrix}(q)
 $$
 
 
