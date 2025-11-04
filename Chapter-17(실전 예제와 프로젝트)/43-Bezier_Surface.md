@@ -42,14 +42,14 @@ $$
 - 베지어 → power basis 변환 행렬:  
 
 $$
-PUM=\mathrm{power\\_basis\\_matrix}(p),\quad PVM=\mathrm{power-basis-matrix}(q)
+PUM=\mathrm{power\\_basis\\_matrix}(p),\quad PVM=\mathrm{power\\_basis\\_matrix}(q)
 $$
 
 
 - 구간 재매핑:
 
 $$
-RUM=\mathrm{reparam matrix}(p,a,b,0,1),\quad RVM=\mathrm{reparam matrix}(q,c,d,0,1)
+RUM=\mathrm{reparam\\_matrix}(p,a,b,0,1),\quad RVM=\mathrm{reparam\\_matrix}(q,c,d,0,1)
 $$
 
 - 전체 변환 행렬:
