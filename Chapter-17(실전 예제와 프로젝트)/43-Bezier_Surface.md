@@ -39,7 +39,7 @@ $$
 ### 6. to_power_basis(a, b, c, d)
 기능: 베지어 곡면을 power basis로 변환
 수식 흐름:
-- 베지어 → power basis 변환 행렬:
+- 베지어 → power basis 변환 행렬:  
 
 $$
 PUM=\mathrm{power_basis_matrix}(p),\quad PVM=\mathrm{power_basis_matrix}(q)
