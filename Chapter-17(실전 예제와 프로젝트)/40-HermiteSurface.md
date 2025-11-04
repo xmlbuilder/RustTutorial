@@ -45,8 +45,8 @@ $S(u, v) = [u^3 \quad u^2 \quad u \quad 1] \cdot M_u \cdot G \cdot M_v^T \cdot [
 
   ---
 
-  ## 소스 코드
-  ```rust
+## 소스 코드
+```rust
 use crate::math::point3d::Point3D;
 use crate::math::prelude::Vector3D;
 
