@@ -5,6 +5,23 @@ Rust에서 a[i] 문법은 내부적으로 Index 트레이트를 호출합니다:
 - IndexMut<Idx>: 쓰기 가능한 인덱싱 (a[i] = value)
 이 트레이트를 구현하면 구조체를 배열처럼 다룰 수 있음.
 
+
+## 🔧 트레잇 정의
+```rust
+pub trait Index<Idx> {
+    type Output;
+
+    fn index(&self, index: Idx) -> &Self::Output;
+}
+```
+```rust
+pub trait IndexMut<Idx>: Index<Idx> {
+    fn index_mut(&mut self, index: Idx) -> &mut Self::Output;
+}
+```
+- Idx: 인덱스 타입 (예: usize, String, 사용자 정의 타입 등)
+- Output: 반환되는 참조 타입 (예: T, [T], str 등)
+
 ## ✅ 기본 예제: RGB 색상 구조체
 ```rust
 use std::ops::{Index, IndexMut};
@@ -136,5 +153,6 @@ fn diagonal_length(bbox: &BoundingBox) -> f64 {
     sum.sqrt()
 }
 ```
+
 
 
