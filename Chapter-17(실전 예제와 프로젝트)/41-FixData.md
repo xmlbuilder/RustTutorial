@@ -354,3 +354,138 @@ pub type FixDataArrayF64 = FixData<TArray<f64>>;
 
 ---
 
+### 테스트 코드
+```rust
+#[cfg(test)]
+mod tests {
+    use nurbslib::core::fix_data::{CompIndex, FixData};
+    use nurbslib::core::tarray::TArray;
+```
+```rust
+    #[test]
+    fn basic_new_with_get_set() {
+        let mut fd = FixData::<i32>::with(3, 4);
+        assert_eq!(fd.comp_count(), 3);
+        assert_eq!(fd.len(), 4);
+
+        for i in 0..3 {
+            for j in 0..4 {
+                fd.set(i, j, (i * 4 + j) as i32);
+            }
+        }
+        for i in 0..3 {
+            for j in 0..4 {
+                let val = fd[CompIndex(i, j)];
+                assert_eq!(val, (i * 4 + j) as i32);
+            }
+        }
+
+        fd.set(1, 2, 42);
+        assert_eq!(*fd.get(1, 2), 42);
+
+        fd[CompIndex(2, 3)] = 7;
+        assert_eq!(fd[CompIndex(2, 3)], 7);
+    }
+```
+```rust
+    #[test]
+    fn try_get_and_slices() {
+        let mut fd = FixData::<i32>::with(2, 2);
+        fd.set(0, 0, 1);
+        fd.set(1, 1, 9);
+        assert_eq!(fd.try_get(0, 0), Some(&1));
+        assert_eq!(fd.try_get(9, 0), None);
+
+        let s0 = fd.comp_slice(0);
+        println!("{:?}", s0);
+        assert_eq!(s0, &[1, 0]);
+
+        let s1 = fd.comp_mut_slice(1);
+        s1[0] = 5;
+        assert_eq!(fd.get(1, 0), &5);
+    }
+```
+```rust
+    #[test]
+    fn resize_component_keep_and_reinit() {
+        // keep_data = true
+        let mut fd = FixData::<i32>::with(2, 3);
+        fd.set(0, 0, 1);
+        fd.set(1, 0, 2);
+        fd.resize_component(3, true);
+        assert_eq!(fd.comp_count(), 3);
+        assert_eq!(*fd.get(0, 0), 1);
+        assert_eq!(*fd.get(1, 0), 2);
+        assert_eq!(*fd.get(2, 0), 0);
+
+        // truncate
+        fd.resize_component(1, true);
+        assert_eq!(fd.comp_count(), 1);
+        assert_eq!(*fd.get(0, 0), 1);
+
+        // keep_data = false (전체 재초기화)
+        fd.resize_component(4, false);
+        assert_eq!(fd.comp_count(), 4);
+        for c in 0..4 {
+            for i in 0..fd.len() {
+                assert_eq!(*fd.get(c, i), 0);
+            }
+        }
+    }
+```
+```rust
+    #[test]
+    fn fixdata_of_tarray() {
+        let mut fd = FixData::<TArray<f64>>::with(2, 3);
+        let _ = fd.get(0, 1).clone();
+        let mut v = TArray::from_vec_f64(vec![1.0, 2.0]);
+        fd.set(1, 2, v.clone());
+        v.append(3.0);
+        assert_eq!(fd.get(1, 2).as_slice(), &[1.0, 2.0]);
+    }
+```
+```rust
+    fn average_per_component(fd: &FixData<f64>) -> Vec<f64> {
+        let mut result = Vec::new();
+        for c in 0..fd.comp_count() {
+            let slice = fd.comp_slice(c);
+            let sum: f64 = slice.iter().copied().sum();
+            result.push(sum / slice.len() as f64);
+        }
+        result
+    }
+    #[test]
+    fn test_average() {
+        let mut fd = FixData::<f64>::with(2, 3);
+        fd.set(0, 0, 1.0);
+        fd.set(0, 1, 2.0);
+        fd.set(0, 2, 3.0);
+        fd.set(1, 0, 4.0);
+        fd.set(1, 1, 5.0);
+        fd.set(1, 2, 6.0);
+
+        let avg = average_per_component(&fd);
+        assert_eq!(avg, vec![2.0, 5.0]);
+    }
+```
+```rust
+    #[test]
+    fn test_array() {
+        let mut data = FixData::<i32>::with(3, 5);
+        // 이중 배열처럼 접근
+        data[0][2] = 42;
+        println!("Value: {}", data[0][2]); //Value: 42
+
+        // 슬라이스 전체 접근
+        let slice = &data[1];
+        println!("Slice: {:?}", slice); //Slice: [0, 0, 0, 0, 0]
+
+
+        let slice = &data[0];
+        println!("Slice: {:?}", slice); //Slice: [0, 0, 42, 0, 0]
+    }
+}
+```
+
+
+
