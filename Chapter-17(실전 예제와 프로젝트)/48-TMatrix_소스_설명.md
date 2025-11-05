@@ -591,7 +591,7 @@ $$
 - 수식:
 
 $$
-\text{swap rows } r_1 \text{ and } r_2 \text{ of } A
+A[r_1, :] \leftrightarrow A[r_2, :]
 $$
 
 - 구현: self.data.swap()으로 각 열에 대해 교환
