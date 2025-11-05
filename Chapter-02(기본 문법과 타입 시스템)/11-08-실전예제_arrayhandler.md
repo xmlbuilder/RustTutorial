@@ -113,7 +113,8 @@ pub struct ArrayHandler<T: Default + Clone> {
     buffer_size: usize,
     param: i64,
 }
-
+```
+```rust
 impl<T: Default + Clone> ArrayHandler<T> {
     pub fn new() -> Self {
         Self {
@@ -389,7 +390,8 @@ fn array_handler_basic() {
     ah.re_array_size(); // shrink
     assert!(ah.get_alloc_size() >= ah.get_size());
 }
-
+```
+```rust
 #[test]
 fn array_handler_copy_append() {
     let mut a: ArrayHandler<i32> = ArrayHandler::new();
