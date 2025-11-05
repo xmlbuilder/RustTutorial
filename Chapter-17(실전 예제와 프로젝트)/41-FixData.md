@@ -83,6 +83,56 @@ println!("Slice: {:?}", data.comp_slice(1));
 ```
 
 
+
+## 🧪 동작 예시
+### 1. 생성 및 값 설정
+```rust
+let mut fd = FixData::<i32>::with(2, 3);
+fd.set(0, 0, 10);
+fd.set(1, 2, 99);
+assert_eq!(fd.get(1, 2), &99);
+```
+
+### 2. 슬라이스 접근
+```rust
+let slice = fd.comp_slice(1);
+println!("{:?}", slice); // [0, 0, 99]
+```
+
+### 3. 컴포넌트 리사이즈
+```rust
+fd.resize_component(3, true); // 기존 데이터 유지
+fd.resize_component(1, false); // 전체 초기화
+```
+
+## 🧪 추가 샘플 코드: 평균 계산
+```rust
+fn average_per_component(fd: &FixData<f64>) -> Vec<f64> {
+    let mut result = Vec::new();
+    for c in 0..fd.comp_count() {
+        let slice = fd.comp_slice(c);
+        let sum: f64 = slice.iter().copied().sum();
+        result.push(sum / slice.len() as f64);
+    }
+    result
+}
+
+#[test]
+fn test_average() {
+    let mut fd = FixData::<f64>::with(2, 3);
+    fd.set(0, 0, 1.0);
+    fd.set(0, 1, 2.0);
+    fd.set(0, 2, 3.0);
+    fd.set(1, 0, 4.0);
+    fd.set(1, 1, 5.0);
+    fd.set(1, 2, 6.0);
+
+    let avg = average_per_component(&fd);
+    assert_eq!(avg, vec![2.0, 5.0]);
+}
+```
+
+
 ## 📌 확장 가능성
 - FixData<T>는 ArrayPoolContainer와 연동하여 컴포넌트 기반 데이터 처리에 활용 가능
 - TArray<T>와 함께 사용하면 다차원 배열 처리도 가능
@@ -107,7 +157,6 @@ impl<T> IndexMut<usize> for FixData<T> {
     }
 }
 ```
-
 
 ## ✅ 결과
 이제 다음과 같이 사용할 수 있어요:
@@ -313,81 +362,5 @@ FixData<T> {
     size: usize,         // 각 컴포넌트의 길이
 }
 ```
-
-## 📋 주요 함수 요약표
-
-| 함수 이름                  | 설명 또는 제약 조건                  |
-|----------------------------|--------------------------------------|
-| new()                      | size = 0                             |
-| with(n_comp, size)         | T: Default + Clone                   |
-| init(n_comp, size)         | 기존 객체를 재초기화                |
-| clear()                    | 모든 데이터 제거                    |
-| comp_count()               | 컴포넌트 수 반환                    |
-| len()                      | 각 컴포넌트의 길이 반환             |
-| is_empty()                 | 길이가 0인지 확인                   |
-| get(comp, idx)             | 안전한 접근 (panic 발생 가능)       |
-| set(comp, idx, val)        | 안전한 설정 (panic 발생 가능)       |
-| try_get(comp, idx)         | 안전하지 않은 접근 (Option 반환)    |
-| try_get_mut(comp, idx)     | 가변 참조 접근 (Option 반환)        |
-| comp_slice(comp)           | 컴포넌트의 슬라이스 반환            |
-| comp_mut_slice(comp)       | 컴포넌트의 가변 슬라이스 반환       |
-| resize_component(n, keep_data) | 컴포넌트 수 변경 및 데이터 유지 여부 |
-| fill(val)                  | 모든 값을 동일한 값으로 채움 (T: Clone) |
-
-
-
-## 🧪 동작 예시
-### 1. 생성 및 값 설정
-```rust
-let mut fd = FixData::<i32>::with(2, 3);
-fd.set(0, 0, 10);
-fd.set(1, 2, 99);
-assert_eq!(fd.get(1, 2), &99);
-```
-
-### 2. 슬라이스 접근
-```rust
-let slice = fd.comp_slice(1);
-println!("{:?}", slice); // [0, 0, 99]
-```
-
-### 3. 컴포넌트 리사이즈
-```rust
-fd.resize_component(3, true); // 기존 데이터 유지
-fd.resize_component(1, false); // 전체 초기화
-```
-
-## 🧪 추가 샘플 코드: 평균 계산
-```rust
-fn average_per_component(fd: &FixData<f64>) -> Vec<f64> {
-    let mut result = Vec::new();
-    for c in 0..fd.comp_count() {
-        let slice = fd.comp_slice(c);
-        let sum: f64 = slice.iter().copied().sum();
-        result.push(sum / slice.len() as f64);
-    }
-    result
-}
-
-#[test]
-fn test_average() {
-    let mut fd = FixData::<f64>::with(2, 3);
-    fd.set(0, 0, 1.0);
-    fd.set(0, 1, 2.0);
-    fd.set(0, 2, 3.0);
-    fd.set(1, 0, 4.0);
-    fd.set(1, 1, 5.0);
-    fd.set(1, 2, 6.0);
-
-    let avg = average_per_component(&fd);
-    assert_eq!(avg, vec![2.0, 5.0]);
-}
-```
-
-
-## 🧠 활용 예시
-- 수치 해석: 각 컴포넌트가 변수별 시계열 데이터일 때 유용
-- 멀티 채널 처리: 이미지, 센서, 시뮬레이션 등에서 채널별 데이터 관리
-
 ---
 
