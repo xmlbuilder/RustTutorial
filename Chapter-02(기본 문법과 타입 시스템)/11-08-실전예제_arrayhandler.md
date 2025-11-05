@@ -352,6 +352,58 @@ impl<T: Default + Clone> ArrayHandler<T> {
     }
 }
 ```
+### 테스트 코드
+```rust
+fn array_handler_basic() {
+    let mut ah: ArrayHandler<i32> = ArrayHandler::with_buffer(16);
+    assert_eq!(ah.get_size(), 0);
+    assert!(ah.is_empty());
 
+    ah.set_size(3); // [0,0,0]
+    assert_eq!(ah.get_size(), 3);
+    assert_eq!(ah.as_slice(), &[0, 0, 0]);
+
+    ah.set_value(5, 42); // [0,0,0,0,0,42]
+    assert_eq!(ah.get_size(), 6);
+    assert_eq!(ah.get(5), &42);
+
+    ah.push_back(7);
+    assert_eq!(ah.as_slice(), &[0, 0, 0, 0, 0, 42, 7]);
+
+    ah.insert(1, 9);
+    assert_eq!(ah.as_slice(), &[0, 9, 0, 0, 0, 0, 42, 7]);
+
+    ah.insert_slice(3, &[1, 2, 3]);
+    assert_eq!(ah.as_slice(), &[0, 9, 0, 1, 2, 3, 0, 0, 0, 42, 7]); // ← 이렇게
+
+    ah.remove_at(2);
+    assert_eq!(ah.as_slice(), &[0, 9, 1, 2, 3, 0, 0, 0, 42, 7]);
+
+    ah.remove_range(3, 2); // remove 2 items at idx 3
+    assert_eq!(ah.as_slice(), &[0, 9, 1, 0, 0, 0, 42, 7]);
+
+    let flags = vec![0u8, 1, 0, 1, 1, 1, 0, 1];
+    ah.remove_by_flags(&flags, 1);
+    assert_eq!(ah.as_slice(), &[0, 1, 42]);
+
+    ah.re_array_size(); // shrink
+    assert!(ah.get_alloc_size() >= ah.get_size());
+}
+
+#[test]
+fn array_handler_copy_append() {
+    let mut a: ArrayHandler<i32> = ArrayHandler::new();
+    a.set_array(&[1, 2, 3, 4]);
+
+    let mut b = ArrayHandler::with_buffer(8);
+    b.copy_from(&a);
+    assert_eq!(b.as_slice(), &[1, 2, 3, 4]);
+
+    let mut c: ArrayHandler<i32> = ArrayHandler::new();
+    c.set_array(&[5, 6]);
+    b.append(&c);
+    assert_eq!(b.as_slice(), &[1, 2, 3, 4, 5, 6]);
+}
+```
 ---
 
