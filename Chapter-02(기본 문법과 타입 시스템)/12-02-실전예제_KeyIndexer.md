@@ -177,3 +177,35 @@ impl KeyIndexer {
     }
 }
 ```
+
+### 테스트 코드
+```rust
+#[test]
+fn key_indexer_basic() {
+    let mut ki = KeyIndexer::new(1024);
+    assert_eq!(ki.find_idx_raw(10), KeyIndexer::ARRAY_INDEX_NONE);
+
+    let i0 = ki.insert_key(10);
+    let i1 = ki.insert_key(20);
+    let i2 = ki.insert_key(10); // 기존 인덱스 반환
+    assert_eq!(i0, i2);
+    assert_eq!(ki.find_idx_raw(20), i1 as isize);
+    assert_eq!(ki.get_size(), 2);
+    assert_eq!(ki.get_max_key(), 20);
+
+    // set_key_array
+    ki.set_key_array(&[5, 8, 13, 21]);
+    assert_eq!(ki.get_size(), 4);
+    assert!(ki.find_idx_raw(13) >= 0);
+    assert_eq!(ki.get_max_key(), 21);
+
+    // 해시 테이블 크기 재설정(재해싱)
+    ki.set_hash_table_size(2048);
+    assert!(ki.find_idx_raw(13) >= 0);
+
+    // 버퍼 리저브
+    ki.set_buffer_size(1000);
+    assert_eq!(ki.get_key_slice(), &[5, 8, 13, 21]);
+}
+```
+
