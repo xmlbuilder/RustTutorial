@@ -501,6 +501,11 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [38-Regular_Expression](./Chapter-17(실전%20예제와%20프로젝트)/38-Regular_Expression.md)
 - [39-Service_프로그램_만들기](./Chapter-17(실전%20예제와%20프로젝트)/39-Service_프로그램_만들기.md)
 - [40-HermiteSurface](./Chapter-17(실전%20예제와%20프로젝트)/40-HermiteSurface.md)
+- [41-FixData](./Chapter-17(실전%20예제와%20프로젝트)/41-FixData.md)
+- [42-TVector](./Chapter-17(실전%20예제와%20프로젝트)/42-TVector.md)
+- [43-Bezier_Surface](./Chapter-17(실전%20예제와%20프로젝트)/43-Bezier_Surface.md)
+- [44-Bezier_Curve](./Chapter-17(실전%20예제와%20프로젝트)/44-Bezier_Curve.md)
+- [45-DynaKeyParser](./Chapter-17(실전%20예제와%20프로젝트)/45-DynaKeyParser.md)
 
 🔼 [맨 위로](#-목차)
   
