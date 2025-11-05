@@ -576,15 +576,15 @@ impl<T: Clone> TMatrix<T> {
 ### 1. append_cols()
 - 수식:
 
+
 $$
 C_{i,j} =
-\left\{
-\begin{array}{ll}
-A_{i,j}, & j < \operatorname{cols}(A) \\[2pt]
-B_{i, j - \operatorname{cols}(A)}, & j \ge \operatorname{cols}(A)
-\end{array}
-\right.
+\begin{cases}
+A_{i,j}, & j < \mathrm{cols}(A)\\
+B_{i,\,j-\mathrm{cols}(A)}, & j \ge \mathrm{cols}(A)
+\end{cases}
 $$
+
 
 - 구현: clone_from_slice로 각 행의 a, b 부분을 정확히 이어붙임
 ### 2. swap_rows()
