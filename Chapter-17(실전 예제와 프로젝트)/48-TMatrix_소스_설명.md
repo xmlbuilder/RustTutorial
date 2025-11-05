@@ -577,7 +577,13 @@ impl<T: Clone> TMatrix<T> {
 - 수식:
 
 $$
-C_{i,j}=\left\{ \, \begin{array}{ll}\textstyle A_{i,j}&\textstyle \mathrm{if\  }j<a.cols\\ \textstyle B_{i,j-a.cols}&\textstyle \mathrm{if\  }j\geq a.cols\end{array}\right.
+C_{i,j} =
+\left\{
+\begin{array}{ll}
+A_{i,j} & \text{if } j < a.cols \\
+B_{i,j - a.cols} & \text{if } j \geq a.cols
+\end{array}
+\right.
 $$
 
 - 구현: clone_from_slice로 각 행의 a, b 부분을 정확히 이어붙임
