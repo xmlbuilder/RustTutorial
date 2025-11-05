@@ -13,7 +13,7 @@
 | 다양한 시스템 구성 요소에 활용 | 캐시, 설정값 저장, 인덱스 관리 등 다양한 용도에 적합          |
 
 ## 🧠 HashMap 핵심 개념 요약
-| 🧠 기능 항목                | 🔧 사용 예시 및 설명                                               |
+| 기능 항목                |   사용 예시 및 설명                                               |
 |----------------------------|--------------------------------------------------------------------|
 | 선언 및 가져오기           | `use std::collections::HashMap;`                                   |
 | 생성                       | `HashMap::new()`, `HashMap::from([...])`                           |
@@ -26,21 +26,19 @@
 | 값 조건 검색               | `.values().any(\|v\| ...)`                                           |
 
 
-
 ## 📦 소유권과 트레잇 관련 주의사항
 ### 1. HashMap의 키로 구조체를 쓰려면?
 ```rust
 #[derive(Debug, Eq, Hash, PartialEq)]
 struct Book { ... }
 ```
-
 - `Eq`, `Hash`, `PartialEq` 트레잇이 필요함
 - 이유: HashMap은 내부적으로 키를 해시하고 비교해야 하기 때문
+
 ### 2. 키로 구조체를 쓰면 소유권이 이동됨
 ```rust
 library.insert(book1, "1".to_string()); // book1은 여기서 move됨
 ```
-
 - 이후 book1을 직접 사용할 수 없음
 - 대신 library.get(`&Book::new(...)`)처럼 동일한 값의 새 인스턴스로 조회 가능
 
@@ -50,9 +48,9 @@ library.insert(book1, "1".to_string()); // book1은 여기서 move됨
 let mut library: HashMap<String, Book> = HashMap::new();
 library.insert("Rust".to_string(), Book::new(...));
 ```
-
 - 키는 복사 가능한 String
 - 값은 구조체 → 소유권은 HashMap이 가짐
+
 ### ✅ 구조체 키로 문자열 값 저장
 ```rust
 #[derive(Debug, Eq, Hash, PartialEq)]
@@ -84,9 +82,10 @@ library.insert(book1, "Rust".to_string());
 
 ----
 
-# Find & Remove
+## Find & Remove
 
 Rust에서는 HashMap에서 값을 찾거나 제거할 때 아래 메서드를 사용합니다:
+
 ## 🔍 HashMap에서 값 찾기와 제거
 | 동작 유형 | 메서드                     | 반환값 및 설명                                      |
 |-----------|----------------------------|-----------------------------------------------------|
@@ -115,7 +114,6 @@ if let Some(removed) = map.remove("banana") {
 }
 ```
 
-
 ## 🧬 구조체 내부에 HashMap이 있을 때 생명 주기와 주의사항
 
 Rust에서는 구조체 안에 HashMap을 넣을 때 **값의 생명 주기(lifetime)** 와 **소유권(ownership)** 을 잘 관리해야 합니다.
@@ -127,20 +125,19 @@ struct Book<'a> {
     metadata: HashMap<&'a str, &'a str>,
 }
 ```
-
 - `'a` 생명 주기를 명시하지 않으면 컴파일 에러 발생
 - 참조된 값이 구조체보다 먼저 drop되면 dangling reference가 생김
+
 ### 2. 📦 값 자체를 저장할 경우 → 생명 주기 필요 없음
 ```rust
 struct Book {
     metadata: HashMap<String, String>,
 }
 ```
-
 - String은 소유권을 가지므로 생명 주기 명시 불필요
 - 구조체가 drop될 때 HashMap도 함께 drop됨
 
-### 3. ⚠️ HashMap 사용 시 주의사항 (Rust 기준)
+### 3. ⚠️ HashMap 사용 시 주의사항
 
 | 항목       | 설명                                                                 |
 |------------|----------------------------------------------------------------------|
@@ -158,14 +155,14 @@ struct Book {
 
 ----
 
-# HashMap내에 String
+## HashMap내에 String
 
 String이 heap에 저장된다는 점에서 생명 주기가 있다는 건 맞지만, 여기서 중요한 건 소유권과 drop 시점의 관계입니다.
 
 ## 🔍 HashMap<String, String>에서 생명 주기와 drop 순서
 ### ✅ 핵심 개념
-- String은 소유권을 가진 값입니다. 즉, HashMap이 String을 소유하고 있기 때문에,
-해당 String은 HashMap이 drop될 때 함께 drop됩니다.
+- String은 소유권을 가진 값입니다. 즉, HashMap이 String을 소유하고 있기 때문에,  
+    해당 String은 HashMap이 drop될 때 함께 drop됩니다.
 - 생명 주기(lifetime)는 참조 타입(&str, &String)에서만 명시적으로 관리해야 합니다.
 - HashMap<String, String>에서는 생명 주기 명시가 필요하지 않습니다.
 
@@ -178,7 +175,7 @@ struct Book {
 - 이 구조체가 drop되면 → 내부 HashMap도 drop됨
 - HashMap이 drop되면 → 내부의 String 값들도 함께 drop됨
 - 즉, String이 HashMap보다 오래 살아야 할 필요는 없습니다.  
-오히려 HashMap이 String을 소유하고 관리하기 때문에,  
+    오히려 HashMap이 String을 소유하고 관리하기 때문에,  
 `String` 의 생명 주기는 `HashMap` 의 생명 주기에 종속됩니다.
 
 ### ⚠️ 생명 주기가 문제가 되는 경우는?
@@ -190,12 +187,13 @@ struct Book<'a> {
 ```
 
 - 여기서는 Book이 외부의 `&str` 을 참조하고 있으므로 `'a` 생명 주기를 명시해야 합니다.  
-- 이 경우 Book이 참조하는 데이터가 먼저 drop되면 문제가 생기므로,  
-Rust가 컴파일 타임에 생명 주기를 체크합니다.
+- 이 경우 Book이 참조하는 데이터가 먼저 drop되면 문제가 생기므로, Rust가 컴파일 타임에 생명 주기를 체크합니다.
 
 ## ✅ 결론
-HashMap<String, String>에서 String은 heap에 있지만,
-생명 주기 명시가 필요하지 않으며,  
+HashMap<String, String>에서 String은 heap에 있지만, 생명 주기 명시가 필요하지 않으며,  
 HashMap이 drop될 때 함께 안전하게 drop됩니다.
+
+---
+
 
 
