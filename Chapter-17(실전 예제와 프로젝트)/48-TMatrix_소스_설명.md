@@ -11,7 +11,7 @@ use core::ops::{Index, IndexMut, Mul, MulAssign};
 use num_traits::Float;
 ```
 
-``rust
+```rust
 /// 부동소수 전용 기능(역행렬/곱셈 등)에 쓰는 간단 트레이트
 /// Row-major 행렬 (연속 메모리)
 #[derive(Clone, PartialEq, Eq)]
