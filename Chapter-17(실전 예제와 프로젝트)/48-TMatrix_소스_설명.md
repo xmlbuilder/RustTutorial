@@ -580,8 +580,8 @@ $$
 C_{i,j} =
 \left\{
 \begin{array}{ll}
-A_{i,j} & \text{if } j < a.cols \\
-B_{i,j - a.cols} & \text{if } j \geq a.cols
+A_{i,j}, & j < \operatorname{cols}(A) \\[2pt]
+B_{i, j - \operatorname{cols}(A)}, & j \ge \operatorname{cols}(A)
 \end{array}
 \right.
 $$
