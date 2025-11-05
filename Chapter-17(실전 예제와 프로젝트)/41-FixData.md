@@ -350,17 +350,7 @@ pub type FixDataF64 = FixData<f64>;
 pub type FixDataI32 = FixData<i32>;
 pub type FixDataI64 = FixData<i64>;
 pub type FixDataArrayF64 = FixData<TArray<f64>>;
-
 ```
 
-## 🧱 구조 개요: FixData<T>
-`FixData<T>`는 컴포넌트(component) 단위로 데이터를 나누고, 각 컴포넌트는 고정 길이의 벡터를 갖습니다.  
-예를 들어, FixData::<i32>::with(3, 4)는 Vec<Vec<i32>> 형태로 3개의 컴포넌트에 각각 4개의 값을 갖습니다.  
-```rust
-FixData<T> {
-    comps: Vec<Vec<T>>, // 컴포넌트별 데이터
-    size: usize,         // 각 컴포넌트의 길이
-}
-```
 ---
 
