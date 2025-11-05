@@ -30,22 +30,22 @@ pub struct KeyIndexer {
 
 ## 🛠 주요 메서드 설명
 ### 생성 및 초기화
-- new(hash_size: usize): 지정된 크기의 해시 테이블로 초기화
-- default_new(): 기본 크기(50_000)로 초기화
+- `new(hash_size: usize)`: 지정된 크기의 해시 테이블로 초기화
+- `default_new()`: 기본 크기(50_000)로 초기화
 ### 키 관리
-- insert_key(key: i32) -> usize: 키가 존재하지 않으면 삽입하고 인덱스 반환
-- find_idx(key: i32) -> Option<usize>: 키에 해당하는 인덱스 조회
-- find_idx_raw(key: i32) -> isize: 조회 실패 시 -1 반환하는 버전
+- `insert_key(key: i32)` -> usize: 키가 존재하지 않으면 삽입하고 인덱스 반환
+- `find_idx(key: i32)` -> Option<usize>: 키에 해당하는 인덱스 조회
+- `find_idx_raw(key: i32)` -> isize: 조회 실패 시 -1 반환하는 버전
 ### 해시 테이블 조작
-- set_hash_table_size(size: usize): 기존 키를 기반으로 새로운 크기의 HashMap 재생성
-- set_buffer_size(size: usize): Vec와 HashMap의 메모리 사전 확보
+- `set_hash_table_size(size: usize)`: 기존 키를 기반으로 새로운 크기의 HashMap 재생성
+- `set_buffer_size(size: usize)`: Vec와 HashMap의 메모리 사전 확보
 ### 키 배열 설정
-- set_key_array(keys: &[i32]): 외부 키 배열을 기반으로 내부 상태 초기화 및 해시 매핑 구성
+- `set_key_array(keys: &[i32])`: 외부 키 배열을 기반으로 내부 상태 초기화 및 해시 매핑 구성
 ### 기타 유틸리티
-- clear(): 전체 상태 초기화
-- get_size(): 키 개수 반환
-- get_key_slice(): 키 배열 슬라이스 반환
-- get_max_key(): 현재까지 삽입된 최대 키 반환
+- `clear()`: 전체 상태 초기화
+- `get_size()`: 키 개수 반환
+- `get_key_slice()`: 키 배열 슬라이스 반환
+- `get_max_key()`: 현재까지 삽입된 최대 키 반환
 ### 📌 기본 상수
 ```rust
 pub const DEFAULT_ARRAY_HASHMAP_SIZE: usize = 50_000;
