@@ -1,4 +1,137 @@
-# FixData
+# 🧩 FixData<T> 구조 설계 문서
+## 📦 개요
+FixData<T>는 다중 컴포넌트 기반의 2차원 고정형 데이터 구조입니다.  
+각 컴포넌트는 동일한 길이의 Vec<T>로 구성되며, 전체적으로 Vec<Vec<T>> 형태로 데이터를 보관합니다.  
+이 구조는 성능 중심의 배열 처리, 컴포넌트 단위 접근, 인덱스 기반 조회 및 수정을 목적으로 설계되었습니다.
+
+## 🧠 설계 의도
+- ✅ 고정 길이의 컴포넌트 배열을 관리
+- ✅ 컴포넌트 수와 배열 크기 초기화 및 재설정
+- ✅ 인덱스 기반 접근 및 수정
+- ✅ 컴포넌트 단위 슬라이스 제공
+- ✅ 데이터 초기화 및 채우기 기능
+- ✅ Index/IndexMut 연산자 오버로딩으로 직관적 접근
+
+## 🧱 데이터 구조
+```rust
+pub struct FixData<T> {
+    comps: Vec<Vec<T>>, // 컴포넌트별 데이터
+    size: usize,         // 각 컴포넌트의 길이
+}
+```
+
+- comps: 컴포넌트별 데이터 벡터
+- size: 각 컴포넌트의 고정 길이
+
+## 🔧 주요 메서드
+
+| 메서드 이름              | 설명                                                                 |
+|--------------------------|----------------------------------------------------------------------|
+| new()                    | 기본 초기화된 빈 구조체를 생성합니다.                                |
+| with(n, size)            | n개의 컴포넌트와 고정된 길이를 가진 데이터 구조를 생성합니다.         |
+| init(n, size)            | 기존 구조체를 재초기화하여 컴포넌트 수와 길이를 설정합니다.           |
+| clear()                  | 모든 컴포넌트와 데이터를 제거합니다.                                 |
+| comp_count()             | 현재 컴포넌트의 개수를 반환합니다.                                   |
+| len()                    | 각 컴포넌트의 길이(데이터 수)를 반환합니다.                          |
+| is_empty()               | 데이터가 비어 있는지 확인합니다.                                     |
+| get(comp, idx)           | 지정된 컴포넌트와 인덱스의 값을 반환합니다. (범위 검사 포함)          |
+| set(comp, idx, val)      | 지정된 위치에 값을 설정합니다. (범위 검사 포함)                       |
+| try_get(comp, idx)       | 안전하게 값을 조회하며 Option으로 반환합니다.                         |
+| try_get_mut(comp, idx)   | 안전하게 가변 참조를 반환합니다.                                     |
+| comp_slice(comp)         | 지정된 컴포넌트의 전체 슬라이스를 반환합니다.                         |
+| comp_mut_slice(comp)     | 지정된 컴포넌트의 가변 슬라이스를 반환합니다.                         |
+| resize_component(n, keep)| 컴포넌트 수를 재조정하며 기존 데이터를 유지할지 여부를 선택합니다.     |
+| fill(val)                | 모든 값을 지정된 값으로 채웁니다.                                    |
+
+
+
+## 🔁 Index 연산자 오버로딩
+```rust
+pub struct CompIndex(pub usize, pub usize);
+impl<T> Index<CompIndex> for FixData<T> {
+    fn index(&self, idx: CompIndex) -> &T
+}
+```
+```rust
+impl<T> IndexMut<CompIndex> for FixData<T> {
+    fn index_mut(&mut self, idx: CompIndex) -> &mut T
+}
+```
+- data[CompIndex(1, 3)] 형태로 접근 가능
+- 컴포넌트와 인덱스를 튜플처럼 지정
+
+## 🧪 타입 별 별칭
+```rust
+pub type FixDataF32 = FixData<f32>;
+pub type FixDataF64 = FixData<f64>;
+pub type FixDataI32 = FixData<i32>;
+pub type FixDataI64 = FixData<i64>;
+pub type FixDataArrayF64 = FixData<TArray<f64>>;
+```
+
+- 다양한 타입에 대해 명시적 별칭 제공
+- TArray<f64> 같은 복합 타입도 지원
+
+## 🧪 사용 예시
+```rust
+let mut data = FixData::<i32>::with(3, 5);
+data.set(0, 2, 42);
+println!("Value: {}", data.get(0, 2));
+
+data[CompIndex(1, 4)] = 99;
+println!("Slice: {:?}", data.comp_slice(1));
+```
+
+
+## 📌 확장 가능성
+- FixData<T>는 ArrayPoolContainer와 연동하여 컴포넌트 기반 데이터 처리에 활용 가능
+- TArray<T>와 함께 사용하면 다차원 배열 처리도 가능
+- fill(), resize_component() 등을 통해 시뮬레이션, 그래픽, 수치해석 등 다양한 분야에 적용 가능
+
+
+## 🧩 목표: data[comp][idx] 형태로 접근
+이를 위해 FixData<T>에 대해 Index<usize>를 구현하면 됩니다:
+```rust
+impl<T> Index<usize> for FixData<T> {
+    type Output = [T];
+
+    fn index(&self, comp: usize) -> &Self::Output {
+        self.comp_slice(comp)
+    }
+}
+```
+```rust
+impl<T> IndexMut<usize> for FixData<T> {
+    fn index_mut(&mut self, comp: usize) -> &mut Self::Output {
+        self.comp_mut_slice(comp)
+    }
+}
+```
+
+
+## ✅ 결과
+이제 다음과 같이 사용할 수 있어요:
+```rust
+let mut data = FixData::<i32>::with(3, 5);
+
+// 이중 배열처럼 접근
+data[0][2] = 42;
+println!("Value: {}", data[0][2]);
+
+// 슬라이스 전체 접근
+let slice = &data[1];
+println!("Slice: {:?}", slice);
+```
+
+## 📌 요약
+
+| 구현 항목           | 설명 또는 사용 예시            |
+|---------------------|-------------------------------|
+| Index<usize>        | FixData[comp] → &[T]          |
+| IndexMut<usize>     | FixData[comp] → &mut [T]      |
+| 이중 인덱싱 지원     | FixData[comp][idx] 형태로 접근 가능 |
+
+---
 
 ## 소스 코드 
 
