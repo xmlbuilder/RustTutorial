@@ -354,7 +354,7 @@ fn to_nurbs(&self) -> Option<Curve> {
 | test_new_hermite_curve_is_valid     | 곡선 구성 요소 유효성 확인              | $\( \text{dim},\ \text{point},\ \text{vector} \)$ 모두 유효               |
 | test_evaluate_point_and_derivatives | 위치 및 도함수 평가                     | $\( P(t),\ P'(t),\ P''(t),\ P'''(t) \)$                                  |
 | test_bezier_points_match_expected   | Bezier 제어점 수식과 일치 여부 확인     | $\( B_0 = P_1,\ B_1 = P_1 + \frac{D_1}{3},\ B_2 = P_2 - \frac{D_2}{3},\ B_3 = P_2 \)$ |
-| test_to_nurbs_returns_some          | Bezier → NURBS 변환 가능성 확인         | $\( \text{to\_bezier()} \rightarrow \text{to\_nurbs()} \)$               |
+| test_to_nurbs_returns_some          | Bezier → NURBS 변환 가능성 확인         | $\( \text{to\\_bezier()} \rightarrow \text{to\\_nurbs()} \)$               |
 
 
 
