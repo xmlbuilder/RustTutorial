@@ -34,8 +34,8 @@ h₃(t) =  t³ − t²
 따라서 전체 곡면은 다음과 같이 행렬 형태로 표현할 수 있습니다:  
 $S(u, v) = [u^3 \quad u^2 \quad u \quad 1] \cdot M_u \cdot G \cdot M_v^T \cdot [v^3 \quad v^2 \quad v \quad 1]^T$
 ### 여기서:
-- `$M_u$`, `$M_v$` : Hermite basis 행렬
-- `$G$` : 4×4 기하 정보 행렬 (16개의 벡터)
+- $M_u$, $M_v$ : Hermite basis 행렬
+- $G$ : 4×4 기하 정보 행렬 (16개의 벡터)
 
 ## 🧠 특징 요약
 - 정의 요소: 4 위치 + 8 접선 + 4 꼬임 = 16 벡터
