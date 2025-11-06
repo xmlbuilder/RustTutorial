@@ -356,7 +356,162 @@ fn to_nurbs(&self) -> Option<Curve> {
 | test_bezier_points_match_expected   | Bezier 제어점 수식과 일치 여부 확인     | $\( B_0 = P_1,\ B_1 = P_1 + \frac{D_1}{3},\ B_2 = P_2 - \frac{D_2}{3},\ B_3 = P_2 \)$ |
 | test_to_nurbs_returns_some          | Bezier → NURBS 변환 가능성 확인         | $\( \text{to\\_bezier()} \rightarrow \text{to\\_nurbs()} \)$               |
 
+### 테스트 코드
+```rust
+#[cfg(test)]
+mod tests {
+    use nurbslib::core::geom::{Point2, Vector2};
+    use nurbslib::core::hermite_curve::{on_hermite_color_rgb, on_hermite_spline_2d, HermiteCurve};
+    use nurbslib::core::prelude::{Point, Vector};
 
+    fn approx(a: f64, b: f64) -> bool {
+        (a - b).abs() < 1e-9
+    }
+```
+```rust
+    #[test]
+    fn test_hermite_spline_2d_endpoints() {
+        let p0 = Point2 { x: 0.0, y: 0.0 };
+        let p1 = Point2 { x: 1.0, y: 1.0 };
+        let t0 = Vector2 { x: 1.0, y: 0.0 };
+        let t1 = Vector2 { x: 1.0, y: 0.0 };
 
+        let a = on_hermite_spline_2d(p0, t0, p1, t1, 0.0);
+        let b = on_hermite_spline_2d(p0, t0, p1, t1, 1.0);
+        assert!(approx(a.x, 0.0) && approx(a.y, 0.0));
+        assert!(approx(b.x, 1.0) && approx(b.y, 1.0));
+
+        // 가운데 y는 0.5 (smooth step)
+        let m = on_hermite_spline_2d(p0, t0, p1, t1, 0.5);
+        assert!(approx(m.y, 0.5));
+    }
+```
+```rust
+    #[test]
+    fn test_hermite_color_rgb_mid() {
+        let c1 = (0u8, 0u8, 0u8);
+        let c2 = (255u8, 255u8, 255u8);
+        let mid = on_hermite_color_rgb(c1, c2, 0.5);
+        // 정확히 128/127는 반올림 규칙에 따라 다를 수 있음
+        assert!(mid.0 >= 127 && mid.0 <= 128);
+        assert!(mid.1 >= 127 && mid.1 <= 128);
+        assert!(mid.2 >= 127 && mid.2 <= 128);
+    }
+```
+```rust
+    #[test]
+    fn test_hermite_curve_bezier_points_and_eval() {
+        let p1 = Point {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        };
+        let p2 = Point {
+            x: 1.0,
+            y: 1.0,
+            z: 0.0,
+        };
+        let v1 = Vector {
+            x: 1.0,
+            y: 0.0,
+            z: 0.0,
+        };
+        let v2 = Vector {
+            x: 0.0,
+            y: 1.0,
+            z: 0.0,
+        };
+
+        let h = HermiteCurve::new_3d(p1, v1, p2, v2);
+        assert!(h.is_valid());
+
+        // 엔드포인트/접선 확인
+        let p0 = h.evaluate_point(0.0);
+        let p1_eval = h.evaluate_point(1.0);
+        assert!(approx(p0.x, p1.x) && approx(p0.y, p1.y) && approx(p0.z, p1.z));
+        assert!(approx(p1_eval.x, p2.x) && approx(p1_eval.y, p2.y) && approx(p1_eval.z, p2.z));
+
+        let d0 = h.evaluate(0.0, 1);
+        let d1 = h.evaluate(1.0, 1);
+        // 1차도함수(속도)는 입력 접선과 동일해야 함
+        assert!(approx(d0[1].x, v1.x) && approx(d0[1].y, v1.y));
+        assert!(approx(d1[1].x, v2.x) && approx(d1[1].y, v2.y));
+
+        // 베지어 포인트 확인
+        let (b1, b2, b3, b4) = h.bezier_points();
+        assert!(approx(b1.x, p1.x) && approx(b1.y, p1.y));
+        assert!(approx(b4.x, p2.x) && approx(b4.y, p2.y));
+        assert!(approx(b2.x, p1.x + v1.x / 3.0) && approx(b2.y, p1.y + v1.y / 3.0));
+        assert!(approx(b3.x, p2.x - v2.x / 3.0) && approx(b3.y, p2.y - v2.y / 3.0));
+    }
+```
+```rust
+    #[test]
+    fn test_new_hermite_curve_is_valid() {
+        let p1 = Point::new(0.0, 0.0, 0.0);
+        let p2 = Point::new(1.0, 1.0, 0.0);
+        let d1 = Vector::new(1.0, 0.0, 0.0);
+        let d2 = Vector::new(0.0, 1.0, 0.0);
+
+        let curve = HermiteCurve::new_3d(p1, d1, p2, d2);
+        assert!(curve.is_valid());
+    }
+```
+```rust
+    #[test]
+    fn test_evaluate_point_and_derivatives() {
+        let curve = HermiteCurve::new_3d(
+            Point::new(0.0, 0.0, 0.0),
+            Vector::new(1.0, 0.0, 0.0),
+            Point::new(1.0, 1.0, 0.0),
+            Vector::new(0.0, 1.0, 0.0),
+        );
+
+        let result = curve.evaluate(0.5, 3);
+        let p = result[0];
+        let dp = result[1];
+        let ddp = result[2];
+        let dddp = result[3];
+
+        assert!(p.is_valid());
+        assert!(dp.is_valid());
+        assert!(ddp.is_valid());
+        assert!(dddp.is_valid());
+    }
+```
+```rust
+    #[test]
+    fn test_bezier_points_match_expected() {
+        let curve = HermiteCurve::new_3d(
+            Point::new(0.0, 0.0, 0.0),
+            Vector::new(3.0, 0.0, 0.0),
+            Point::new(1.0, 1.0, 0.0),
+            Vector::new(0.0, 3.0, 0.0),
+        );
+
+        let (p1, p2, p3, p4) = curve.bezier_points();
+        assert_eq!(p1, Point::new(0.0, 0.0, 0.0));
+        assert_eq!(p2, Point::new(1.0, 0.0, 0.0));
+        assert_eq!(p3, Point::new(1.0, 0.0, 0.0));
+        assert_eq!(p4, Point::new(1.0, 1.0, 0.0));
+    }
+```
+```rust
+    #[test]
+    fn test_to_nurbs_returns_some() {
+        let curve = HermiteCurve::new_3d(
+            Point::new(0.0, 0.0, 0.0),
+            Vector::new(1.0, 0.0, 0.0),
+            Point::new(1.0, 1.0, 0.0),
+            Vector::new(0.0, 1.0, 0.0),
+        );
+
+        let nurbs = curve.to_nurbs();
+        assert!(nurbs.is_some());
+
+        println!("{:?}", nurbs);
+    }
+}
+```
 
 
