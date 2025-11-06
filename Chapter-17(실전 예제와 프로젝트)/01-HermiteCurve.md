@@ -62,23 +62,23 @@ P(t) = A + t(B + t(C + tD))
 #[derive(Clone, Debug)]
 pub struct HermiteCurve {
     // P(t) = A + t(B + t(C + tD)), A=P1, B=D1
-    p1: Point3D,
-    d1: Vector3D,
-    p2: Point3D,
-    d2: Vector3D,
-    c:  Vector3D,
-    d:  Vector3D,
+    p1: Point,
+    d1: Vector,
+    p2: Point,
+    d2: Vector,
+    c:  Vector,
+    d:  Vector,
     dim: usize, // 2 or 3 (정보용)
 }
 
 impl HermiteCurve {
-    pub fn new_3d(p1: Point3D, v1: Vector3D, p2: Point3D, v2: Vector3D) -> Self {
-        let c = Vector3D {
+    pub fn new_3d(p1: Point, v1: Vector, p2: Point, v2: Vector) -> Self {
+        let c = Vector {
             x: -3.0*p1.x - 2.0*v1.x + 3.0*p2.x - v2.x,
             y: -3.0*p1.y - 2.0*v1.y + 3.0*p2.y - v2.y,
             z: -3.0*p1.z - 2.0*v1.z + 3.0*p2.z - v2.z,
         };
-        let d = Vector3D {
+        let d = Vector {
             x:  2.0*p1.x + v1.x - 2.0*p2.x + v2.x,
             y:  2.0*p1.y + v1.y - 2.0*p2.y + v2.y,
             z:  2.0*p1.z + v1.z - 2.0*p2.z + v2.z,
@@ -87,10 +87,10 @@ impl HermiteCurve {
     }
 
     pub fn new_2d(p1: Point2D, v1: Vector2D, p2: Point2D, v2: Vector2D) -> Self {
-        let p1_3 = Point3D { x: p1.x, y: p1.y, z: 0.0 };
-        let p2_3 = Point3D { x: p2.x, y: p2.y, z: 0.0 };
-        let v1_3 = Vector3D { x: v1.x, y: v1.y, z: 0.0 };
-        let v2_3 = Vector3D { x: v2.x, y: v2.y, z: 0.0 };
+        let p1_3 = Point { x: p1.x, y: p1.y, z: 0.0 };
+        let p2_3 = Point { x: p2.x, y: p2.y, z: 0.0 };
+        let v1_3 = Vector { x: v1.x, y: v1.y, z: 0.0 };
+        let v2_3 = Vector { x: v2.x, y: v2.y, z: 0.0 };
         let mut h = Self::new_3d(p1_3, v1_3, p2_3, v2_3);
         h.dim = 2;
         h
@@ -101,14 +101,14 @@ impl HermiteCurve {
     }
 
     /// 베지어 4개 컨트롤 포인트 반환 (P1, P1 + D1/3, P2 - D2/3, P2)
-    pub fn bezier_points(&self) -> (Point3D, Point3D, Point3D, Point3D) {
+    pub fn bezier_points(&self) -> (Point, Point, Point, Point) {
         let p1 = self.p1;
-        let p2 = Point3D {
+        let p2 = Point {
             x: self.p1.x + self.d1.x / 3.0,
             y: self.p1.y + self.d1.y / 3.0,
             z: self.p1.z + self.d1.z / 3.0,
         };
-        let p3 = Point3D {
+        let p3 = Point {
             x: self.p2.x - self.d2.x / 3.0,
             y: self.p2.y - self.d2.y / 3.0,
             z: self.p2.z - self.d2.z / 3.0,
@@ -118,7 +118,7 @@ impl HermiteCurve {
     }
 
     /// 위치/도함수 평가. l_num_derivatives: 0..=3 지원
-    pub fn evaluate(&self, t: f64, l_num_derivatives: usize) -> [Point3D; 4] {
+    pub fn evaluate(&self, t: f64, l_num_derivatives: usize) -> [Point; 4] {
         let u  = t;
         let a  = self.p1;
         let b  = self.d1;
@@ -126,7 +126,7 @@ impl HermiteCurve {
         let d  = self.d;
 
         // P
-        let p = Point3D {
+        let p = Point {
             x: a.x + u*(b.x + u*(c.x + u*d.x)),
             y: a.y + u*(b.y + u*(c.y + u*d.y)),
             z: a.z + u*(b.z + u*(c.z + u*d.z)),
@@ -134,32 +134,32 @@ impl HermiteCurve {
 
         // 1st
         let dp = if l_num_derivatives >= 1 {
-            Point3D {
+            Point {
                 x: b.x + u*(2.0*c.x + 3.0*u*d.x),
                 y: b.y + u*(2.0*c.y + 3.0*u*d.y),
                 z: b.z + u*(2.0*c.z + 3.0*u*d.z),
             }
-        } else { Point3D { x:0.0,y:0.0,z:0.0 } };
+        } else { Point { x:0.0,y:0.0,z:0.0 } };
 
         // 2nd
         let ddp = if l_num_derivatives >= 2 {
-            Point3D {
+            Point {
                 x: 2.0*c.x + 6.0*u*d.x,
                 y: 2.0*c.y + 6.0*u*d.y,
                 z: 2.0*c.z + 6.0*u*d.z,
             }
-        } else { Point3D { x:0.0,y:0.0,z:0.0 } };
+        } else { Point { x:0.0,y:0.0,z:0.0 } };
 
         // 3rd
         let dddp = if l_num_derivatives >= 3 {
-            Point3D { x: 6.0*d.x, y: 6.0*d.y, z: 6.0*d.z }
-        } else { Point3D { x:0.0,y:0.0,z:0.0 } };
+            Point { x: 6.0*d.x, y: 6.0*d.y, z: 6.0*d.z }
+        } else { Point { x:0.0,y:0.0,z:0.0 } };
 
         [p, dp, ddp, dddp]
     }
 
     #[inline]
-    pub fn evaluate_point(&self, t: f64) -> Point3D {
+    pub fn evaluate_point(&self, t: f64) -> Point {
         self.evaluate(t, 0)[0]
     }
 }
@@ -171,7 +171,7 @@ impl HermiteCurve {
 pub fn offset_curve(
     dim: usize,
     curve: &HermiteCurve,
-    pln_norm: &Vector3D,
+    pln_norm: &Vector,
     offset: f64,
 ) -> Self {
     let mut new_curve = curve.clone();
@@ -211,8 +211,8 @@ pub fn offset_curve(
     let dist = offset;
     let s_q0 = s_p0 + dist * a0t;
     let s_q3 = s_p3 + dist * a2t;
-    let s_q1: Point3D;
-    let s_q2: Point3D;
+    let s_q1: Point;
+    let s_q2: Point;
     if dot(&a1, &a0t).abs() < ON_EPSILON && dot(&a2, &a0t).abs() < ON_EPSILON {
         // Have straight line.
         s_q1 = s_p1 + dist * a0t;
@@ -281,7 +281,7 @@ fn control_bounding_box(&self) -> BoundingBox {
         &self.p2,
     ];
     for pt in pts {
-        bb.grow_point3d(pt);
+        bb.grow_Point(pt);
     }
     bb
 }
@@ -309,7 +309,7 @@ fn to_bezier(&self) -> Option<BezierCurve> {
 ```
 ## to_nurbs
 ```rust
-fn to_nurbs(&self) -> Option<NurbsCurve> {
+fn to_nurbs(&self) -> Option<Curve> {
     if !self.is_valid() {
         return None;
     };
