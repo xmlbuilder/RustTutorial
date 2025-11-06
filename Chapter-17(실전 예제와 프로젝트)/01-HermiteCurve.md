@@ -344,3 +344,19 @@ fn to_nurbs(&self) -> Option<Curve> {
 
 ---
 
+## 테스트 항목 정리
+
+| 함수                          | 검증 항목 설명                          | 수식 요약                                                              |
+|-------------------------------------|-----------------------------------------|------------------------------------------------------------------------|
+| test_hermite_spline_2d_endpoints    | 2D Hermite 보간의 시작/끝/중간 점 확인 | $\( P(0) = p_0,\ P(1) = p_1,\ P(0.5).y \approx 0.5 \)$                    |
+| test_hermite_color_rgb_mid          | RGB Hermite 보간의 중간 색상 확인       | $\( C(0.5) \approx \frac{C_1 + C_2}{2} \in [127, 128] \)$                |
+| test_hermite_curve_bezier_points_and_eval | 곡선 평가 및 Bezier 제어점 확인     | $\( P(t) = A + t(B + t(C + tD)) \),<br> \( B_0 = P_1,\ B_1 = P_1 + \frac{D_1}{3},\ B_2 = P_2 - \frac{D_2}{3},\ B_3 = P_2 \)$ |
+| test_new_hermite_curve_is_valid     | 곡선 구성 요소 유효성 확인              | $\( \text{dim},\ \text{point},\ \text{vector} \)$ 모두 유효               |
+| test_evaluate_point_and_derivatives | 위치 및 도함수 평가                     | $\( P(t),\ P'(t),\ P''(t),\ P'''(t) \)$                                  |
+| test_bezier_points_match_expected   | Bezier 제어점 수식과 일치 여부 확인     | $\( B_0 = P_1,\ B_1 = P_1 + \frac{D_1}{3},\ B_2 = P_2 - \frac{D_2}{3},\ B_3 = P_2 \)$ |
+| test_to_nurbs_returns_some          | Bezier → NURBS 변환 가능성 확인         | $\( \text{to\_bezier()} \rightarrow \text{to\_nurbs()} \)$               |
+
+
+
+
+
