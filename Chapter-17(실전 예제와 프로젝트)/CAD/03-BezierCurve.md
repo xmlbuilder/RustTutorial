@@ -3,13 +3,13 @@ BezierCurve 구현을 기반으로 수식 점검 및 문서화를 아래와 같�
 
 ## 소스 코드
 ```rust
-
 #[derive(Debug, Clone)]
 pub struct BezierCurve {
     pub degree: usize,
     pub ctrl: Vec<CPoint>,
 }
-
+```
+```rust
 impl BezierCurve {
     pub fn new(control_points: Vec<CPoint>) -> Self {
         let degree = control_points.len().saturating_sub(1);
@@ -283,7 +283,6 @@ pub fn on_bezier_arc_len(ctrl: &[CPoint], tol: f64) -> f64 {
     let pts: Vec<Point> = ctrl.iter().map(|c| c.to_point()).collect();
     0.5 * rec(&pts, 2.0 * tol)
 }
-
 ```
 
 ## 📐 BezierCurve 기능 및 수식 정리
