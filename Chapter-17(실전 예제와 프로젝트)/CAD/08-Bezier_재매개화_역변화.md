@@ -56,9 +56,7 @@ $$
 ### 3.3. 최종 재매개화 행렬
 전체 변환:
 
-$$
-c'=M\cdot c=P\cdot R\cdot T\cdot c
-$$
+$c'=M\cdot c=P\cdot R\cdot T\cdot c$
 
 - $T$: Bezier → Power basis 변환 행렬
 - $R$: affine 치환 행렬
@@ -67,9 +65,7 @@ $$
 ## 4. 역변환
 역변환은 위의 순서를 정확히 반대로 수행합니다:
 
-$$
-c=M^{-1}\cdot c'=T^{-1}\cdot R^{-1}\cdot P^{-1}\cdot c'
-$$
+$c=M^{-1}\cdot c'=T^{-1}\cdot R^{-1}\cdot P^{-1}\cdot c'$
 
 - $T^{-1}=\mathrm{power\_ to\_ bezier\_ matrix}(n)$
 - $P^{-1}=\mathrm{bezier\_ to\_ power\_ matrix}(n)$
