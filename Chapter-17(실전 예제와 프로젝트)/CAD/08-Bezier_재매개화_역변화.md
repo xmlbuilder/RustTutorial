@@ -135,6 +135,76 @@ let c_orig = Matrix::mul_vec(&m_inv, &c_new); // 원래 계수 복원
 | 곡면 패치의 매개변수 방향을 재정렬할 때       | ✅ 사용                   | ✅ (역정규화 시)                  |
 | 곡선 병합 후 각 곡선을 원래 구간으로 되돌릴 때 | ❌ 사용 안 함             | ✅ 사용                           |
 
+---
 
+
+##  재매개화 행렬 (on_re_param_matrix)
+```rust
+/// 재매개화 행렬  M  (Bezier 계수 변환:  c' = M · c)
+/// Piegl의 B_REPMAT에 해당. 위의 reparam_affine(α,β) 사용.
+/// 참고: Bezier(n)의 모노미얼로 확장해 α,β 적용 후 다시 Bezier로 투영하는 표준 구성.
+pub fn on_re_param_matrix(p: usize, a: Real, b: Real, ap: Real, bp: Real) -> Vec<Vec<Real>> {
+    let (alpha, beta) = on_re_param_affine(a, b, ap, bp);
+
+    // Step 1: R 행렬 생성 — (αu' + β)^i 전개
+    let mut r = vec![vec![0.0; p + 1]; p + 1];
+    for i in 0..=p {
+        for j in 0..=i {
+            let comb = binomial_usize(i, j) as f64;
+            r[i][j] = comb * beta.powi((i - j) as i32) * alpha.powi(j as i32);
+        }
+    }
+
+    // Step 2: Bezier → Power basis 변환 행렬 T
+    let t = bezier_to_power_matrix(p);
+
+    // Step 3: Power → Bezier basis 변환 행렬 P
+    let p_mat = power_to_bezier_matrix(p);
+
+    // Step 4: 최종 재매개화 행렬 M = P · R · T
+    let rt = Matrix::mul(&r, &t);
+    let m = Matrix::mul(&p_mat, &rt);
+    m
+}
+```
+
+## 역변환 (on_re_param_inverse_matrix)
+```rust
+pub fn on_re_param_inverse_matrix(p: usize, a: f64, b: f64, ap: f64, bp: f64) -> Vec<Vec<f64>> {
+    // 1. affine 역변환 계수
+    let (alpha, beta) = on_re_param_affine(ap, bp, a, b); // 역방향
+
+    // 2. R⁻¹ 행렬 구성: (αt + β)^i 전개
+    let mut r_inv = vec![vec![0.0; p + 1]; p + 1];
+    for i in 0..=p {
+        for j in 0..=i {
+            let comb = binomial_usize(i, j) as f64;
+            r_inv[i][j] = comb * beta.powi((i - j) as i32) * alpha.powi(j as i32);
+        }
+    }
+
+    // 3. T⁻¹ = power_to_bezier_matrix(p)
+    let t_inv = power_to_bezier_matrix(p);
+
+    // 4. P⁻¹ = bezier_to_power_matrix(p)
+    let p_inv = bezier_to_power_matrix(p);
+
+    // 5. nalgebra 로 행렬 곱: T⁻¹ · R⁻¹ · P⁻¹
+    let r_na = DMatrix::from_row_slice(p + 1, p + 1, &r_inv.concat());
+    let t_na = DMatrix::from_row_slice(p + 1, p + 1, &t_inv.concat());
+    let p_na = DMatrix::from_row_slice(p + 1, p + 1, &p_inv.concat());
+
+    let m_inv = t_na * r_na * p_na;
+
+    // 6. DMatrix → Vec<Vec<f64>>
+    let mut result = vec![vec![0.0; p + 1]; p + 1];
+    for i in 0..=p {
+        for j in 0..=p {
+            result[i][j] = m_inv[(i, j)];
+        }
+    }
+    result
+}
+```
 
 ---
