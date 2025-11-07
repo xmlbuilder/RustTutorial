@@ -65,7 +65,7 @@ pub fn contains_point(&self, p: &Point3D) -> bool
 ```
 
 - 점이 박스 내부에 있는지 확인
-- 경계 포함: \mathrm{min}\leq p\leq \mathrm{max}
+- 경계 포함: $\mathrm{min}\leq p\leq \mathrm{max}$
 
 ## 📈 확장 및 병합
 ```rust
@@ -83,7 +83,7 @@ pub fn union(&self, other: &Self) -> Self
 pub fn intersection(&self, other: &Self) -> Option<Self>
 ```
 - 교차 영역 반환 (없으면 None)
-- 수학적 조건: \mathrm{max}\geq \mathrm{min} 축별로 모두 만족해야 함
+- 수학적 조건: $\mathrm{max}\geq \mathrm{min}$ 축별로 모두 만족해야 함
 
 
 ## ✅ 결론
