@@ -1355,6 +1355,7 @@ fn test_closest_point_and_far_point() {
 }
 ```
 ### 4. test_union_and_intersection
+```rust
 #[test]
 fn test_union_and_intersection() {
     let a = BoundingBox::new(Point::new(0.0, 0.0, 0.0), Point::new(1.0, 1.0, 1.0));
@@ -1369,9 +1370,10 @@ fn test_union_and_intersection() {
     assert_eq!(union.min, Point::new(0.0, 0.0, 0.0));
     assert_eq!(union.max, Point::new(2.0, 2.0, 2.0));
 }
-
+```
 
 ### 5. test_degenerate_and_empty
+```rust
 #[test]
 fn test_degenerate_and_empty() {
     let b = BoundingBox::new(Point::new(1.0, 1.0, 1.0), Point::new(1.0, 1.0, 1.0));
@@ -1381,9 +1383,10 @@ fn test_degenerate_and_empty() {
     assert!(empty.is_empty());
     assert!(!empty.is_valid());
 }
+```
 
 ### 6. test_expand_and_shrink
-
+```rust
 #[test]
 fn test_expand_and_shrink() {
     let mut b = BoundingBox::new(Point::new(1.0, 1.0, 1.0), Point::new(2.0, 2.0, 2.0));
@@ -1395,8 +1398,9 @@ fn test_expand_and_shrink() {
     assert_eq!(b.min, Point::new(0.5, 0.5, 0.5));
     assert_eq!(b.max, Point::new(2.5, 2.5, 2.5));
 }
-
+```
 ### 7. test_distance_to_point_and_bbox
+```rust
 #[test]
 fn test_distance_to_point_and_bbox() {
     let a = BoundingBox::new(Point::new(0.0, 0.0, 0.0), Point::new(1.0, 1.0, 1.0));
@@ -1404,6 +1408,6 @@ fn test_distance_to_point_and_bbox() {
     let d = a.min_distance_to_bbox(&b);
     assert!((d - (3.0f64).sqrt()).abs() < 1e-6);
 }
-
+```
 
 ---
