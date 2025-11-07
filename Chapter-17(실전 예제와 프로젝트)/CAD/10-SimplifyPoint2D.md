@@ -196,9 +196,9 @@ impl SimplifyPoint2D {
 
 ---
 
-
 ## 테스트 코드
-✅ 테스트 코드 점검 요약
+
+### ✅ 테스트 코드 점검 요약
 | 테스트 이름                                         | 목적 설명                              | 기대 결과                          | 상태 |
 |----------------------------------------------------|----------------------------------------|------------------------------------|------|
 | rdp_distance_closest_point                         | 세그먼트와 점 사이 거리 계산 정확성     | 거리 = 1.0                         | ✅   |
@@ -450,7 +450,7 @@ fn rdp_handles_reverse_order_input() {
 ```
 
 ### test_simplify_with_angle_preserves_sharp_turns
-
+```rust
 #[test]
 fn test_simplify_with_angle_preserves_sharp_turns() {
     use rand::Rng;
@@ -503,6 +503,7 @@ fn test_simplify_with_angle_preserves_sharp_turns() {
         "거리 기반 단순화에서 코너가 유지되었습니다 (예외적일 수 있음)"
     );
 }
+```
 ### 이미지
 ![Simplfied Point](/image/simplified_points.png)
 
