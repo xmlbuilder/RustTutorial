@@ -35,12 +35,21 @@ $t=\alpha u+\beta$
 
 ### 3.2. 기저 변환
 Bezier 계수는 Bezier basis에서 정의되어 있으므로, 다음과 같은 변환이 필요합니다:
-- Bezier → Power basis  
-$\mathrm{power}=T\cdot \mathrm{bezier}$ 
+- Bezier → Power basis
+-   
+$$
+\mathrm{power}=T\cdot \mathrm{bezier}
+
+$$ 
 - Affine 치환  
-$\mathrm{power}'=R\cdot \mathrm{power}- R_{i,j}={i \choose j}\cdot \beta ^{i-j}\cdot \alpha ^j$
+$$
+\mathrm{power}'=R\cdot \mathrm{power}- R_{i,j}={i \choose j}\cdot \beta ^{i-j}\cdot \alpha ^j
+$$
+
 - Power → Bezier basis  
-$\mathrm{bezier}'=P\cdot \mathrm{power}'$
+$$
+\mathrm{bezier}'=P\cdot \mathrm{power}'
+$$
 
 ### 3.3. 최종 재매개화 행렬
 전체 변환:
