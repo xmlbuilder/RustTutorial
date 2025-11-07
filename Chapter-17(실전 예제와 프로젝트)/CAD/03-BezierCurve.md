@@ -295,7 +295,6 @@ struct BezierCurve {
 }
 ```
 
-## 📏 핵심 수식 정리
 ## 📏 Bezier 관련 수식
 
 ### 1. Bernstein Basis
