@@ -67,8 +67,8 @@ $c'=M\cdot c=P\cdot R\cdot T\cdot c$
 
 $c=M^{-1}\cdot c'=T^{-1}\cdot R^{-1}\cdot P^{-1}\cdot c'$
 
-- $T^{-1}=\mathrm{power\_ to\_ bezier\_ matrix}(n)$
-- $P^{-1}=\mathrm{bezier\_ to\_ power\_ matrix}(n)$
+- $T^{-1} = \texttt{power\_to\_bezier\_matrix}(n)$
+- $P^{-1} = \texttt{bezier\_to\_power\_matrix}(n)$
 - $R^{-1}$ : affine 역변환 t=\alpha u+\beta 의 다항식 전개
 
 ## 5. 구현 요약
