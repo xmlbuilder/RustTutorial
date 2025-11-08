@@ -56,7 +56,7 @@ $$
 
 - $U\in \mathbb{R^{\mathnormal{m\times n}}}$: 열 직교
 - $\Sigma \in \mathbb{R^{\mathnormal{n\times n}}}$: 특이값 대각 행렬
-- V\in \mathbb{R^{\mathnormal{n\times n}}}: 직교행렬
+- $V\in \mathbb{R^{\mathnormal{n\times n}}}$: 직교행렬
 
 ### 단계별 수식
 - 고유분해 기반 SVD:  
