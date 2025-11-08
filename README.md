@@ -140,6 +140,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [68-wrapping_sub](./Chapter-02(기본%20문법과%20타입%20시스템)/68-wrapping_sub.md)
 - [69-std::fs::File_std::io::Write](./Chapter-02(기본%20문법과%20타입%20시스템)/69-std::fs::File_std::io::Write.md)
 - [70-from_str_radix](./Chapter-02(기본%20문법과%20타입%20시스템)/70-from_str_radix.md)
+- [71-into_boxed_slice](./Chapter-02(기본%20문법과%20타입%20시스템)/71-into_boxed_slice.md)
+
 
 🔼 [맨 위로](#-목차)
 
