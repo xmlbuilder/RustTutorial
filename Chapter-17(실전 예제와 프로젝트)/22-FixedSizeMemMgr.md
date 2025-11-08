@@ -1,12 +1,20 @@
 # Fixed Size Memory Pool
 
-이 코드는 Rust로 작성된 **고정 크기 메모리 풀(Fixed Size Memory Pool)**입니다. 
+이 코드는 Rust로 작성된 **고정 크기 메모리 풀(Fixed Size Memory Pool)** 입니다. 
 즉, 일정 크기의 블록을 반복적으로 빠르게 할당/반환할 수 있도록 설계된 커스텀 메모리 관리자입니다. 
 아래에 구조, 동작 방식, 문제점, 그리고 테스트 코드를 자세히 설명.
 
 ## 🧠 구조 설명
 ### 🔹 FixedSizeMemMgr
 고정 크기 블록을 관리하는 메모리 풀입니다.
+```rust
+pub struct FixedSizeMemMgr {
+    alloc_size: usize,
+    block_size: usize,
+    chunk_bytes: usize,
+    state: Mutex<FixedState>,
+}
+```
 - alloc_size: 사용자가 요청한 블록 크기
 - block_size: 실제 할당되는 블록 크기 (정렬 고려)
 - chunk_bytes: 한 번에 확보하는 청크 크기
@@ -14,6 +22,29 @@
 ### 🔹 FreeNode
 - 각 블록을 연결하는 단일 연결 리스트 노드입니다.
 - next: 다음 free 블록을 가리키는 포인터 (Option<NonNull<FreeNode>>)
+
+```rust
+#[repr(C)]
+struct FreeNode {
+    next: Option<NonNull<FreeNode>>,
+}
+```
+
+### 🔹 FixedState
+```rust
+struct FixedState {
+    free_head: Option<NonNull<FreeNode>>,
+    chunks: Vec<&'static mut [u8]>,
+    allocated: HashSet<*mut u8>,
+    freed: HashSet<*mut u8>,
+}
+```
+- 메모리 상태를 관리하는 내부 구조
+- free_head: 현재 사용 가능한 블록의 시작
+- chunks: 누적된 메모리 덩어리
+- allocated: 할당된 블록 추적
+- freed: 해제된 블록 추적 (double-free 방지)
+
 
 ## ⚙️ 주요 동작
 - new()
@@ -788,3 +819,4 @@ fn main() {
 
 
 ---
+
