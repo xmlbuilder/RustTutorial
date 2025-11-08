@@ -21,26 +21,26 @@ DBMS 시스템 문서를 기반으로 전체 구조와 함수 흐름을 다음�
 | `dbutil.rs`        | 문자열 포맷, 경로 유틸리티              |
 
 ## 🧩 핵심 구조체와 함수 설명
-### 1. TxAction
-- 트랜잭션 단위 액션: Insert, Remove, Modify, Cancelled
-### 2. Cursor
+### 1. `TxAction`
+- 트랜잭션 단위 액션: Insert, Remove, Modify
+### 2. `Cursor`
 - Arc<dyn DItem>을 감싸는 포인터
 - visible, param_data, param 등 상태 포함
-### 3. HashSetTable
+### 3. `HashSetTable`
 - insert(cursor): 키 기반 삽입
 - remove(key): 키 기반 삭제
 - find_visible(key): visible 상태 항목 조회
-### 4. ItemFactory
+### 4. `ItemFactory`
 - register_type(...): 타입 등록
 - create_item(item_type, key): 항목 생성
-### 5. Table
+### 5. `Table`
 - insert(key, factory): 항목 삽입 + 트랜잭션 기록
 - remove(key): 항목 삭제 + 트랜잭션 기록
 - undo() / redo(): 트랜잭션 되돌리기/재적용
-### 6. Session
+### 6. `Session`
 - register_table(...): 테이블 등록
 - undo_all() / redo_all() / clear_all(): 전체 트랜잭션 처리
-### 7. Transaction
+### 7. `Transaction`
 - commit(): 반영 후 초기화
 - rollback(): 되돌리기
 - Drop: 자동 롤백
@@ -79,15 +79,15 @@ flowchart TD
 ## ✅ 테스트 체크리스트
 | 기능 항목         | 주요 메서드 / 속성                     | 테스트 목적                          |
 |------------------|----------------------------------------|--------------------------------------|
-| insert/remove/get| `Table::insert`, `remove`, `get`       | 항목 삽입, 삭제, 조회 동작 확인     |
-| undo/redo        | `Table::undo`, `redo`                  | 트랜잭션 되돌리기 및 재적용 확인    |
-| commit/rollback  | `Transaction::commit`, `rollback`      | 명시적 트랜잭션 처리 확인           |
-| Cursor           | `visible`, `param_data`, `param`       | 항목 상태 및 파라미터 설정 확인     |
-| ItemFactory      | `register_type`, `create_item`         | 타입 등록 및 항목 생성 확인         |
-| GUID             | `to_string`, `from_string`             | GUID 생성 및 문자열 변환 확인       |
-| TxStream         | `write_action`, `read_action`          | 트랜잭션 액션 직렬화/역직렬화 확인  |
-| Session          | `register_table`, `get_table`          | 테이블 등록 및 조회 확인            |
-| TxDeltaList      | `add`, `find_alive`, `find_by_key`     | 액션 추가, 필터링, 키 기반 조회 확인|
+| `insert`/`remove`/`get`| `Table::insert`, `remove`, `get`       | 항목 삽입, 삭제, 조회 동작 확인     |
+| `undo`/`redo`        | `Table::undo`, `redo`                  | 트랜잭션 되돌리기 및 재적용 확인    |
+| `commit`/`rollback`  | `Transaction::commit`, `rollback`      | 명시적 트랜잭션 처리 확인           |
+| `Cursor`           | `visible`, `param_data`, `param`       | 항목 상태 및 파라미터 설정 확인     |
+| `ItemFactory`      | `register_type`, `create_item`         | 타입 등록 및 항목 생성 확인         |
+| `GUID`             | `to_string`, `from_string`             | GUID 생성 및 문자열 변환 확인       |
+| `TxStream`         | `write_action`, `read_action`          | 트랜잭션 액션 직렬화/역직렬화 확인  |
+| `Session`          | `register_table`, `get_table`          | 테이블 등록 및 조회 확인            |
+| `TxDeltaList`      | `add`, `find_alive`, `find_by_key`     | 액션 추가, 필터링, 키 기반 조회 확인|
 
 
 ## 1. define.rs
@@ -106,7 +106,6 @@ pub enum TxAction {
     Insert(Cursor), // undo: remove
     Remove(Cursor), // undo: insert
     Modify { before: Cursor, after: Cursor },
-    Cancelled, // 트랜잭션이 되돌려진 후 상태 초기화용
 }
 
 // 시스템 제한값
@@ -128,7 +127,6 @@ pub enum TxAction {
     Insert(Cursor), // undo: remove
     Remove(Cursor), // undo: insert
     Modify { before: Cursor, after: Cursor },
-    Cancelled,
 }
 ```
 ### 🎯 목적
@@ -140,7 +138,6 @@ pub enum TxAction {
 | Insert(Cursor)                | 새로운 아이템을 테이블에 삽입함           | Remove(Cursor)                       |
 | Remove(Cursor)                | 기존 아이템을 테이블에서 제거함           | Insert(Cursor)                       |
 | Modify { before, after }      | 아이템의 상태를 변경함 (before → after)   | Modify { after, before } 또는 Insert(before) |
-| Cancelled                     | (사용 안 함) 트랜잭션이 무효화된 상태      | 없음 또는 무시됨                     |
 
 ### 🔸 시스템 제한값
 ```rust
@@ -157,7 +154,7 @@ pub const STATUS_HIDDEN: u8 = 0x02;
 ```
 - 아이템의 가시성 상태를 나타냅니다.
 - 예: 삭제된 아이템은 STATUS_HIDDEN, 살아있는 아이템은 STATUS_VISIBLE로 표시
-이 값들은 Cursor.param_data 같은 필드에 저장되어, 직렬화/복원 시에도 함께 기록됩니다.
+
 
 ### ✅ 요약
 | 항목                        | 설명                                                                 |
@@ -173,7 +170,6 @@ pub const STATUS_HIDDEN: u8 = 0x02;
 - Cursor를 통해 아이템의 위치와 상태를 추적
 - Modify는 before와 after를 모두 저장해서 되돌리기 가능
 - Cancelled는 과거에는 사용됐지만, 현재는 제거 예정
-
 
 ## 2. guid.rs
 ```rust
@@ -280,10 +276,10 @@ pub struct Guid {
     - data4 (8바이트)
 
 ### 🧩 파생 trait
-- Clone: 복사 가능
-- PartialEq, Eq: 비교 가능
-- Hash: 해시 가능 (HashMap 키로 사용 가능)
-- Debug: {:?}로 출력 가능
+- `Clone`: 복사 가능
+- `PartialEq`, `Eq`: 비교 가능
+- `Hash`: 해시 가능 (HashMap 키로 사용 가능)
+- `Debug`: {:?}로 출력 가능
 
 ### ⚙️ Guid::new()
 ```rust
@@ -302,7 +298,7 @@ pub fn new() -> Self {
 ### 🎯 설명
 - 랜덤 기반으로 새로운 GUID를 생성합니다.
 - rand::Rng::gen()을 사용해 각 필드를 무작위로 채움
-- r#gen()은 gen이 예약어일 수 있어서 raw identifier로 사용
+- `r#gen()` 은 gen이 예약어일 수 있어서 raw identifier로 사용
 - 이 방식은 UUID v4와 유사하지만, 시간 기반은 포함되지 않음. 순서 보장 없이 완전 랜덤입니다.
 
 
@@ -373,18 +369,17 @@ pub fn is_null(&self) -> bool {
 ### ✅ 요약
 | 메서드        | 설명                                                   |
 |---------------|--------------------------------------------------------|
-| new()         | 랜덤 기반으로 새로운 GUID를 생성                       |
-| to_string()   | GUID를 문자열 형식 ("XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX")으로 변환 |
-| from_string() | 문자열을 GUID로 파싱. 형식이 맞지 않으면 None 반환     |
-| null()        | 모든 값이 0인 Null GUID 생성                           |
-| is_null()     | 현재 GUID가 Null인지 확인                              |
+| `new()`         | 랜덤 기반으로 새로운 GUID를 생성                       |
+| `to_string()`   | GUID를 문자열 형식 ("XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX")으로 변환 |
+| `from_string()` | 문자열을 GUID로 파싱. 형식이 맞지 않으면 None 반환     |
+| `null()`        | 모든 값이 0인 Null GUID 생성                           |
+| `is_null()`     | 현재 GUID가 Null인지 확인                              |
 
 ### 🧠 설계 의도
 - Guid는 DBMS나 트랜잭션 시스템에서 고유 식별자로 사용됨
 - Hash, Eq 파생으로 HashMap 키로 사용 가능
 - to_string() / from_string()으로 직렬화/복원 가능
 - null()은 초기화 또는 삭제 상태 표현에 유용
-
 
 ## 3. heshset.rs
 ```rust
@@ -463,19 +458,17 @@ pub struct HashSetTable {
 ```
 
 ### 🔍 설명
-- table_type: 테이블의 종류를 구분하는 값 (예: 사용자 테이블, 로그 테이블 등)
-- item_type: 이 테이블이 어떤 종류의 아이템을 저장하는지 나타냄 (ItemFactory와 연동)
-- items: 실제 데이터를 저장하는 해시맵
-- 키는 i32 (아이템의 고유 키)
+- `table_type`: 테이블의 종류를 구분하는 값 (예: 사용자 테이블, 로그 테이블 등)
+- `item_type`: 이 테이블이 어떤 종류의 아이템을 저장하는지 나타냄 (ItemFactory와 연동)
+- `items`: 실제 데이터를 저장하는 해시맵
+- 키는 `i32` (아이템의 고유 키)
 - 값은 Vec<Cursor> (해당 키에 연결된 아이템 목록)  
     하나의 키에 여러 Cursor가 연결될 수 있는 구조로, 버전 관리나 상태 추적에 유용합니다.
-
 
 ### ⚙️ 생성자
 ```rust
 pub fn new(table_type: u16, item_type: u16) -> Self
 ```
-
 - 새로운 HashSetTable을 생성
 - table_type, item_type을 외부에서 지정 가능
 - items는 빈 HashMap으로 초기화
@@ -485,7 +478,7 @@ pub fn new(table_type: u16, item_type: u16) -> Self
 pub fn insert(&mut self, cursor: Cursor)
 ```
 
-- cursor.key()를 기준으로 items에 삽입
+- `cursor.key()` 를 기준으로 items에 삽입
 - 해당 키가 없으면 새 Vec을 만들고 추가
 - 여러 Cursor가 같은 키에 쌓일 수 있음 → 버전 스택처럼 동작
 
@@ -529,9 +522,9 @@ pub fn all_items(&self) -> impl Iterator<Item = &Cursor>
 pub fn find_visible(&self, key: i32) -> Option<&Cursor>
 pub fn find_alive(&self, key: i32) -> Option<&Cursor>
 ```
-- find_visible: visible == true인 첫 번째 Cursor 반환
-- find_alive: is_alive()가 true인 첫 번째 Cursor 반환
-- is_alive()는 Cursor의 상태 플래그 기반으로 구현된 메서드로 추정됨  
+- `find_visible` : visible == true인 첫 번째 Cursor 반환
+- `find_alive` : is_alive()가 true인 첫 번째 Cursor 반환
+- `is_alive()` 는 Cursor의 상태 플래그 기반으로 구현된 메서드로 추정됨  
 이 메서드들은 상태 기반 필터링을 제공하여, 삭제된 아이템을 제외하거나 UI에 표시할 수 있는 항목만 추출할 때 유용합니다.
 
 ### ✅ 요약 테이블
@@ -629,7 +622,6 @@ pub trait DItem: std::fmt::Debug + Send + Sync {
     fn table_type(&self) -> u16;
     fn serialize(&self, stream: &mut dyn TxStream, session: &Session);
 }
-
 ```
 ### 🎯 목적
 - DBMS에서 저장되는 모든 아이템의 공통 인터페이스를 정의합니다.
