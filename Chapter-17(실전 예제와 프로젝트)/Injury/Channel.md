@@ -68,6 +68,7 @@ Channel은 시계열 또는 CAD 데이터의 단일 채널을 표현하는 구�
 
 ## 🧩 관련 트레잇
 ### 🔧 ChannelOffset
+```rust
 pub trait ChannelOffset {
     fn calc_channel_offset(
         &self,
@@ -75,6 +76,7 @@ pub trait ChannelOffset {
         y: &TArray<f64>,
     ) -> Option<(TArray<f64>, f64, f64)>;
 }
+```
 - Y 데이터에 오프셋을 적용하고, 새로운 Y + Min/Max 반환
 
 ### 🧩 유틸리티 함수
