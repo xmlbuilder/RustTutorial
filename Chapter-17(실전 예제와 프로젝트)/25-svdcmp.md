@@ -1,5 +1,5 @@
 # SVD 
-이 코드는 야코비 회전법 기반 고유분해, 이를 활용한 SVD(Singular Value Decomposition),  
+이 코드는 야코비 회전법 기반 고유분해, 이를 활용한 `SVD(Singular Value Decomposition)`,  
 그리고 최소제곱 해법을 구현한 고급 선형대수 알고리즘입니다.  
 아래에 수학적으로 정확한 의미와 단계별 수식 설명.
 
