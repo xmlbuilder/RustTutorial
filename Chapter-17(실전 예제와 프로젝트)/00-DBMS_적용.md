@@ -76,6 +76,54 @@ flowchart TD
     N --> O[파일 저장/복원]
 ```
 
+## insert() 호출 시 
+내부적으로 어떤 흐름으로 동작이 이루어지는지를 정리한 것입니다.  
+이 흐름은 Table::insert() 기준이며, Cursor, TxAction, ItemFactory, TxManager까지 포함합니다.
+
+## 🧩 insert() 전체 흐름도 (Mermaid - Top to Bottom)
+```mermaid
+flowchart TD
+    A[사용자: Table::insert(key, factory)] --> B[ItemFactory::create_item()]
+    B --> C[Cursor::new(item)]
+    C --> D[Table::items.insert(cursor)]
+    D --> E[TxAction::Insert(cursor.clone())]
+    E --> F[TxManager::add(action)]
+    F --> G[TxDelta::current.push(action)]
+    G --> H[insert() → Some(cursor)]
+```
+
+### 단계
+| 번호 | 설명                                |
+|-----------|-------------------------------------|
+| ①         | Table::insert() 호출                |
+| ②         | ItemFactory를 통해 DItem 생성       |
+| ③         | 생성된 DItem으로 Cursor 생성        |
+| ④         | Table.items에 Cursor 삽입           |
+| ⑤         | TxAction::Insert(cursor) 생성       |
+| ⑥         | TxManager::add()로 액션 등록        |
+| ⑦         | TxDelta.current에 액션 저장         |
+| ⑧         | 최종적으로 Some(cursor) 반환        |
+
+
+### 🧪 이후 흐름
+```mermaid
+flowchart TD
+    A1[tx.commit()] --> B1[TxDelta::current → undo_stack 이동]
+    A2[tx.rollback()] --> C1[undo_stack.pop()]
+    C1 --> C2[TxAction::Insert.undo()]
+    C2 --> C3[Table::remove(cursor.key())]
+```
+
+### 🔍 흐름 요약
+- insert()는 단순히 데이터를 넣는 것뿐 아니라, 트랜잭션에 되돌릴 수 있는 액션을 등록합니다.
+- TxManager::add()는 undo/redo를 위한 핵심 연결점이며, TxDelta.current는 아직 커밋되지 않은 작업을 보관합니다.
+- Some(cursor)는 삽입된 아이템을 참조할 수 있는 핸들이며, 이후 연산에 사용됩니다.
+
+---
+
+
+
+
 ## ✅ 테스트 체크리스트
 | 기능 항목         | 주요 메서드 / 속성                     | 테스트 목적                          |
 |------------------|----------------------------------------|--------------------------------------|
