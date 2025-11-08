@@ -231,6 +231,44 @@ flowchart TD
 
 ---
 
+### 🧠 왜 TxStream에 저장되지 않을까?
+| 동작                      | 관련 스택/버퍼             | TxStream 기록 여부 | 설명                                               |
+|---------------------------|-----------------------------|--------------------|----------------------------------------------------|
+| TxStream::write() ← commit() | TxDelta.current             | ✅ 기록됨           | 커밋 시점에만 TxDelta가 TxStream에 직렬화되어 저장됨 |
+| undo() → undo_stack.pop()   | TxDelta → redo_stack        | ❌ 기록 안됨        | 메모리에서 되돌리기만 수행, TxStream에는 기록 안 됨 |
+| redo() → redo_stack.pop()   | TxDelta → undo_stack        | ❌ 기록 안됨        | 메모리에서 복원만 수행, TxStream에는 기록 안 됨     |
+
+### 🔁 흐름 요약
+- commit()만이 **TxStream::write()** 를 호출하여 트랜잭션 로그를 남깁니다
+- undo()와 redo()는 메모리 상의 상태 전환일 뿐, 영속적 기록은 하지 않습니다
+- 따라서 undo나 redo 이후에 다시 commit()을 호출해야만 TxStream에 반영됩니다
+
+### 🔁 흐름 요약
+```mermaid
+flowchart TD
+    A[TxDelta.current] -->|commit| B[TxStream::write]
+    B --> C[TxStream에 기록됨]
+
+    D[undo_stack] -->|undo| E[redo_stack]
+    E -->|redo| D
+
+    F[redo 이후 commit] --> B
+```
+
+- undo/redo는 TxStream과 무관한 메모리 기반 동작
+- redo 이후 다시 commit()하면 그 시점에만 TxStream에 기록됨
+
+### ✅ 요약
+| 동작              | 상태 변화                    | TxStream 기록 여부 | 설명                                               |
+|-------------------|------------------------------|--------------------|----------------------------------------------------|
+| `insert()`          | TxDelta.current에 액션 추가   | ❌ 기록 안됨        | 아직 커밋되지 않은 상태, 메모리 상에만 존재        |
+| `commit()`          | current → undo_stack 이동     | ✅ 기록됨           | TxStream::write() 호출로 트랜잭션 로그 저장        |
+| `undo()`           | undo_stack → redo_stack 이동  | ❌ 기록 안됨        | 메모리에서 되돌리기만 수행, TxStream에는 기록 안 됨 |
+| `redo()`            | redo_stack → undo_stack 이동  | ❌ 기록 안됨        | 메모리에서 복원만 수행, TxStream에는 기록 안 됨     |
+| `redo` → `commit()`   | 복원된 상태를 다시 커밋       | ✅ 기록됨           | 이 시점에 TxStream::write() 호출되어 로그 저장됨   |
+
+
+---
 
 
 ## ✅ 테스트 체크리스트
