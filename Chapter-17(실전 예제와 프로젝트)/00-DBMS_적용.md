@@ -111,7 +111,7 @@ flowchart TD
     A1[tx.commit] --> B1[TxDelta::current → undo_stack 이동]
     A2[tx.rollback] --> C1[undo_stack.pop]
     C1 --> C2[TxAction::Insert.undo]
-    C2 --> C3[Table::remove(cursor.key)]
+    C2 --> C3[Table::remove - cursor.key]
 ```
 
 ### 🔍 흐름 요약
