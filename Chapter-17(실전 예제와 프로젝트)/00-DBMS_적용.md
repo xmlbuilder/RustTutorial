@@ -83,13 +83,13 @@ flowchart TD
 ## 🧩 insert() 전체 흐름도 (Mermaid - Top to Bottom)
 ```mermaid
 flowchart TD
-    A[사용자: Table::insert(key, factory)] --> B[ItemFactory::create_item()]
-    B --> C[Cursor::new(item)]
-    C --> D[Table::items.insert(cursor)]
-    D --> E[TxAction::Insert(cursor.clone())]
-    E --> F[TxManager::add(action)]
-    F --> G[TxDelta::current.push(action)]
-    G --> H[insert() → Some(cursor)]
+    A[사용자: Table::insert - key, factory] --> B[ItemFactory::create_item]
+    B --> C[Cursor::new - item]
+    C --> D[Table::items.insert - cursor]
+    D --> E[TxAction::Insert - cursor.clone]
+    E --> F[TxManager::add - action]
+    F --> G[TxDelta::current.push - action]
+    G --> H[insert → Some - cursor ]
 ```
 
 ### 단계
