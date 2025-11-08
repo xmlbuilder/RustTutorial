@@ -134,7 +134,9 @@ $$
 ### 📘 문제 설정
 
 $$
-A=\left[ \begin{matrix}1&0&2\\ 0&1&1\\ 1&1&3\\ \end{matrix}\right] ,\quad x=\left[ \begin{matrix}2\\ -1\\ 1\\ \end{matrix}\right] \quad \Rightarrow \quad b=Ax
+A=\left[ \begin{matrix}1&0&2\\ 0&1&1\\ 1&1&3\\ \end{matrix}\right] 
+,\quad x=\left[ \begin{matrix}2\\ -1\\ 1\\ \end{matrix}\right] \quad \Rightarrow \quad 
+b=Ax
 $$
 
 ### 🧪 테스트 코드
