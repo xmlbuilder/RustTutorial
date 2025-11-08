@@ -41,6 +41,7 @@ B\leftarrow J^{\top }BJ,\quad V\leftarrow VJ
 $$
 
 - 반복 종료 조건:
+  
 $$
 \sum _{i\neq j}a_{ij}^2<\varepsilon 
 $$
