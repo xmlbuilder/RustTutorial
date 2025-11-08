@@ -15,6 +15,430 @@
 - `SVD 구성`: svdcmp는 고유값의 제곱근을 특이값으로 사용하고, 고유벡터를 통해 V 구성
 - `최소제곱 해`: `solve_least_squares_svd` 는 $x=V\Sigma ^{-1}U^{\top }b$ 공식을 통해 해를 계산
 
+## 소스
+```rust
+use crate::core::tarray::TArray;
+use std::f64::EPSILON;
+use nalgebra::{DMatrix, SVD};
+use crate::core::matrix::Matrix;
+
+#[inline]
+fn hypot2(a: f64, b: f64) -> f64 {
+    a.hypot(b)
+}
+```
+```rust
+/// 대칭행렬 B (n×n)를 야코비 회전으로 고유분해.
+/// 결과: B는 대각(고유값), v는 열-고유벡터(정규직교).
+fn on_jacobi_symmetric_eigen(b: &mut Matrix, vals: &mut Vec<f64>, v: &mut Matrix) -> bool {
+    let n = b.row_count();
+    if n == 0 || b.col_count() != n {
+        return false;
+    }
+
+    // v <- I
+    if !v.create(n, n) {
+        return false;
+    }
+    for i in 0..n {
+        for j in 0..n {
+            *v.at_mut(i as i32, j as i32) = if i == j { 1.0 } else { 0.0 };
+        }
+    }
+
+    // 반복 파라미터
+    let max_sweeps = 50 * n * n;
+    let tol = 1e-14_f64;
+
+    // 도움: 합 오프대각의 제곱합
+    let off2 = |m: &Matrix| -> f64 {
+        let mut s = 0.0;
+        for p in 0..n {
+            for q in 0..n {
+                if p != q {
+                    let x = *m.at(p as i32, q as i32);
+                    s += x * x;
+                }
+            }
+        }
+        s
+    };
+
+    // 반복
+    let mut sweep = 0usize;
+    loop {
+        let mut changed = false;
+
+        for p in 0..n {
+            for q in (p + 1)..n {
+                let app = *b.at(p as i32, p as i32);
+                let aqq = *b.at(q as i32, q as i32);
+                let apq = *b.at(p as i32, q as i32);
+                if apq.abs() <= tol * hypot2(app.abs(), aqq.abs()) {
+                    continue;
+                }
+
+                // 회전계수 (NR 방식)
+                let tau = (aqq - app) / (2.0 * apq);
+                if !tau.is_finite() || tau == 0.0 {
+                    continue; // 회전 생략
+                }
+
+                let t = if tau.abs() + 1.0 == 1.0 {
+                    1.0 / (2.0 * tau)
+                } else {
+                    let sgn = if tau >= 0.0 { 1.0 } else { -1.0 };
+                    sgn / (tau.abs() + (1.0 + tau * tau).sqrt())
+                };
+                let c = 1.0 / (1.0 + t * t).sqrt();
+                let s = t * c;
+
+                if !t.is_finite() || !c.is_finite() || !s.is_finite() {
+                    println!("⚠️ 수치 불안정: t={}, c={}, s={} → 회전 생략", t, c, s);
+                    continue;
+                }
+
+
+                // B <- Jᵀ B J  (대칭 유지)
+                // 행/열 p,q 업데이트
+                let bpp = app - t * apq;
+                let bqq = aqq + t * apq;
+                *b.at_mut(p as i32, p as i32) = bpp;
+                *b.at_mut(q as i32, q as i32) = bqq;
+                *b.at_mut(p as i32, q as i32) = 0.0;
+                *b.at_mut(q as i32, p as i32) = 0.0;
+
+                for r in 0..n {
+                    if r != p && r != q {
+                        let arp = *b.at(r as i32, p as i32);
+                        let arq = *b.at(r as i32, q as i32);
+                        let nrp = c * arp - s * arq;
+                        let nrq = s * arp + c * arq;
+                        *b.at_mut(r as i32, p as i32) = nrp;
+                        *b.at_mut(p as i32, r as i32) = nrp;
+                        *b.at_mut(r as i32, q as i32) = nrq;
+                        *b.at_mut(q as i32, r as i32) = nrq;
+                    }
+                }
+
+                // V <- V J (열-고유벡터)
+                for r in 0..n {
+                    let vrp = *v.at(r as i32, p as i32);
+                    let vrq = *v.at(r as i32, q as i32);
+                    *v.at_mut(r as i32, p as i32) = c * vrp - s * vrq;
+                    *v.at_mut(r as i32, q as i32) = s * vrp + c * vrq;
+                }
+
+                changed = true;
+            }
+        }
+
+        sweep += 1;
+        if !changed {
+            break;
+        }
+        if sweep > max_sweeps {
+            break;
+        } // 안전 탈출
+        if off2(b) < tol {
+            break;
+        }
+    }
+
+    // 고유값 추출
+    vals.clear();
+    vals.resize(n, 0.0);
+    for i in 0..n {
+        vals[i] = *b.at(i as i32, i as i32);
+    }
+    true
+}
+```
+```rust
+/// SVD via Jacobi-eigen on AᵀA
+/// 입력:  a (m×n)  — 변경 후 U 저장 (m×n)
+/// 출력:  w (n)    — 특이값
+///        v (n×n)  — 우직교 행렬
+pub fn on_svdcmp_sym_left(a: &mut Matrix, w: &mut TArray<f64>, v: &mut Matrix) -> bool {
+    let m = a.row_count();
+    let n = a.col_count();
+    if m == 0 || n == 0 {
+        return false;
+    }
+
+    // A 보존
+    let a0 = a.clone();
+
+    // B = AᵀA (n×n)
+    let mut at = a0.clone();
+    at.transpose(); // n×m
+    let mut b = &at * &a0; // (n×m)*(m×n) = n×n
+
+    // 대칭 수치화(미세한 비대칭 제거)
+    for i in 0..n {
+        for j in 0..n {
+            let x = 0.5 * (*b.at(i as i32, j as i32) + *b.at(j as i32, i as i32));
+            *b.at_mut(i as i32, j as i32) = x;
+        }
+    }
+
+    // 고유분해
+    let mut evals: Vec<f64> = Vec::new();
+    if !on_jacobi_symmetric_eigen(&mut b, &mut evals, v) {
+        return false;
+    }
+
+    println!("evals {:?}", evals);
+    // 고유값↓ 정렬 + V 열 재정렬
+    let mut idx: Vec<usize> = (0..n).collect();
+    idx.sort_by(|&i, &j| evals[j].partial_cmp(&evals[i]).unwrap());
+
+    let mut wvec = vec![0.0f64; n];
+    let mut v_sorted = Matrix::with_dims(n, n);
+    for (col, &k) in idx.iter().enumerate() {
+        wvec[col] = evals[k].max(0.0).sqrt();
+        for r in 0..n {
+            *v_sorted.at_mut(r as i32, col as i32) = *v.at(r as i32, k as i32);
+        }
+    }
+    *v = v_sorted;
+    w.set_size(n);
+    for i in 0..n {
+        w[i] = wvec[i];
+    }
+
+    // U = A * V * Σ^{-1}  (σ_i > 0만)
+    if !a.create(m, n) {
+        return false;
+    }
+    let eps = 1e-12_f64;
+    for j in 0..n {
+        let sigma = w[j];
+        if sigma > eps {
+            for r in 0..m {
+                let mut s = 0.0;
+                for k in 0..n {
+                    s += *a0.at(r as i32, k as i32) * *v.at(k as i32, j as i32);
+                }
+                *a.at_mut(r as i32, j as i32) = s / sigma;
+            }
+        } else {
+            // σ=0: 임의의 직교 완성 (여기서는 0 벡터로 두고, 필요하면 그람-슈미트로 보강 가능)
+            for r in 0..m {
+                *a.at_mut(r as i32, j as i32) = 0.0;
+            }
+        }
+    }
+
+    // 선택: U 열 정규화(수치 안정)
+    for j in 0..n {
+        let mut s = 0.0;
+        for r in 0..m {
+            let x = *a.at(r as i32, j as i32);
+            s += x * x;
+        }
+        let nrm = s.sqrt();
+        if nrm > EPSILON {
+            for r in 0..m {
+                *a.at_mut(r as i32, j as i32) /= nrm;
+            }
+        }
+    }
+    true
+}
+```
+```rust
+pub fn on_solve_least_squares_svd(mut a: Matrix, b: &[f64], tol: f64) -> Vec<f64> {
+    let m = a.row_count();
+    let n = a.col_count();
+    assert_eq!(b.len(), m, "b must have length m");
+
+    // SVD
+    let mut w = TArray::<f64>::with_size(n);
+    let mut v = Matrix::with_dims(n, n);
+    assert!(on_svdcmp_sym_left(&mut a, &mut w, &mut v)); // a=U, w=σ, v=V
+
+    // y = Uᵀ b  (길이 n)
+    let mut y = vec![0.0; n];
+    for i in 0..n {
+        let mut dot = 0.0;
+        for r in 0..m {
+            dot += a.at(r as i32, i as i32) * b[r]; // U[:,i]·b
+        }
+        let sigma = w[i].abs();
+        y[i] = if sigma > tol { dot / sigma } else { 0.0 };
+    }
+
+    // x = V y  (길이 n)
+    let mut x = vec![0.0; n];
+    for j in 0..n {
+        let mut s = 0.0;
+        for i in 0..n {
+            s += v.at(j as i32, i as i32) * y[i]; // V[:,i]*y[i] 누적
+        }
+        x[j] = s;
+    }
+    x
+}
+```
+```rust
+pub fn on_svdcmp_sym_right(a: &mut Matrix, w: &mut TArray<f64>, v: &mut Matrix) -> bool {
+    let m = a.row_count();
+    let n = a.col_count();
+    if m == 0 || n == 0 {
+        return false;
+    }
+
+    let a0 = a.clone();
+
+    // B = A Aᵀ (m×m)
+    let mut at = a0.clone();
+    at.transpose(); // n×m
+    let mut b = &a0 * &at; // (m×n)*(n×m) = m×m
+
+    // 대칭화
+    for i in 0..m {
+        for j in 0..m {
+            let x = 0.5 * (*b.at(i as i32, j as i32) + *b.at(j as i32, i as i32));
+            *b.at_mut(i as i32, j as i32) = x;
+        }
+    }
+
+    // 고유값 분해: B = U Λ Uᵀ
+    let mut evals: Vec<f64> = Vec::new();
+    if !on_jacobi_symmetric_eigen(&mut b, &mut evals, a) {
+        return false;
+    }
+
+    // 고유값 정렬
+    let mut idx: Vec<usize> = (0..m).collect();
+    idx.sort_by(|&i, &j| evals[j].partial_cmp(&evals[i]).unwrap());
+
+    // 특이값 w = sqrt(λ)
+    let mut wvec = vec![0.0f64; m];
+    for (i, &k) in idx.iter().enumerate() {
+        wvec[i] = evals[k].max(0.0).sqrt();
+    }
+    w.set_size(m);
+    for i in 0..m {
+        w[i] = wvec[i];
+    }
+
+    // U 정렬
+    let mut u_sorted = Matrix::with_dims(m, m);
+    for (col, &k) in idx.iter().enumerate() {
+        for r in 0..m {
+            *u_sorted.at_mut(r as i32, col as i32) = *a.at(r as i32, k as i32);
+        }
+    }
+    *a = u_sorted;
+
+    // V = Aᵀ U / σ
+    if !v.create(n, m) {
+        return false;
+    }
+    let eps = 1e-12_f64;
+    for j in 0..m {
+        let sigma = w[j];
+        if sigma > eps {
+            for r in 0..n {
+                let mut s = 0.0;
+                for k in 0..m {
+                    s += *at.at(r as i32, k as i32) * *a.at(k as i32, j as i32);
+                }
+                *v.at_mut(r as i32, j as i32) = s / sigma;
+            }
+        } else {
+            for r in 0..n {
+                *v.at_mut(r as i32, j as i32) = 0.0;
+            }
+        }
+    }
+    true
+}
+```
+```rust
+pub fn on_svdcmp(a: &mut Matrix, w: &mut TArray<f64>, v: &mut Matrix) -> bool {
+    let m = a.row_count();
+    let n = a.col_count();
+
+    // 1. Matrix → DMatrix 변환
+    let mut data = vec![0.0; m * n];
+    for i in 0..m {
+        for j in 0..n {
+            data[i * n + j] = *a.at(i as i32, j as i32);
+        }
+    }
+    let a_na = DMatrix::from_row_slice(m, n, &data);
+
+    // 2. SVD 수행
+    let svd = SVD::new(a_na.clone(), true, true);
+    let u_na = match svd.u {
+        Some(u) => u,
+        None => return false,
+    };
+    let v_t_na = match svd.v_t {
+        Some(vt) => vt,
+        None => return false,
+    };
+    let sigma = svd.singular_values;
+
+    // 3. 결과 복사: w
+    w.set_size(sigma.len());
+    for i in 0..sigma.len() {
+        w[i] = sigma[i];
+    }
+
+    // 4. 결과 복사: a ← U
+    if !a.create(m, u_na.ncols()) {
+        return false;
+    }
+    for i in 0..m {
+        for j in 0..u_na.ncols() {
+            *a.at_mut(i as i32, j as i32) = u_na[(i, j)];
+        }
+    }
+
+    // 5. 결과 복사: v ← V
+    let v_na = v_t_na.transpose();
+    if !v.create(v_na.nrows(), v_na.ncols()) {
+        return false;
+    }
+    for i in 0..v_na.nrows() {
+        for j in 0..v_na.ncols() {
+            *v.at_mut(i as i32, j as i32) = v_na[(i, j)];
+        }
+    }
+    true
+}
+```
+```rust
+// 외부 인터페이스: 기존 구조를 유지
+pub fn on_solve_least_squares_svd_na(a: Matrix, b: &[f64], tol: f64) -> Vec<f64> {
+    let m = a.row_count();
+    let n = a.col_count();
+    assert_eq!(b.len(), m, "b must have length equal to row count of A");
+
+    // 1. Matrix → DMatrix 변환
+    let mut data = vec![0.0; m * n];
+    for i in 0..m {
+        for j in 0..n {
+            data[i * n + j] = *a.at(i as i32, j as i32);
+        }
+    }
+    let a_na = DMatrix::from_row_slice(m, n, &data);
+
+    // 2. b → DMatrix 변환
+    let b_na = DMatrix::from_column_slice(m, 1, b);
+
+    // 3. SVD 최소제곱 해 계산
+    let svd = SVD::new(a_na, true, true);
+    let x = svd.solve(&b_na, tol).expect("SVD solve failed");
+
+    // 4. 결과 반환: Vec<f64>
+    x.column(0).iter().copied().collect()
+}
+```
 
 ## 1️⃣ jacobi_symmetric_eigen: 야코비 회전법
 ### 목적
