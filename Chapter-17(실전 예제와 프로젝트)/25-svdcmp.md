@@ -11,9 +11,9 @@
 | `solve_least_squares_svd`| $x = V \Sigma^{-1} U^{\top} b$         | SVD 기반 최소제곱 해법                         |
 
 ## 🔍 흐름 설명
-- 고유값 분해: jacobi_symmetric_eigen은 대칭행렬 $B=A^{\top }A$ 에 대해 고유값과 고유벡터를 구함
-- SVD 구성: svdcmp는 고유값의 제곱근을 특이값으로 사용하고, 고유벡터를 통해 V 구성
-- 최소제곱 해: solve_least_squares_svd는 $x=V\Sigma ^{-1}U^{\top }b$ 공식을 통해 해를 계산
+- `고유값 분해`: jacobi_symmetric_eigen은 대칭행렬 $B = V \Lambda V^{\top}$ 에 대해 고유값과 고유벡터를 구함
+- `SVD 구성`: svdcmp는 고유값의 제곱근을 특이값으로 사용하고, 고유벡터를 통해 V 구성
+- `최소제곱 해`: `solve_least_squares_svd` 는 $x=V\Sigma ^{-1}U^{\top }b$ 공식을 통해 해를 계산
 
 
 ## 1️⃣ jacobi_symmetric_eigen: 야코비 회전법
