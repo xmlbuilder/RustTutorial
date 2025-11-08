@@ -440,7 +440,7 @@ pub fn on_solve_least_squares_svd_na(a: Matrix, b: &[f64], tol: f64) -> Vec<f64>
 }
 ```
 
-## 1️⃣ jacobi_symmetric_eigen: 야코비 회전법
+## 1️⃣ on_jacobi_symmetric_eigen: 야코비 회전법
 ### 목적
 대칭행렬 $B\in \mathbb{R^{\mathnormal{n\times n}}}$ 에 대해:
 
@@ -470,7 +470,7 @@ $$
 \sum _{i\neq j}a_{ij}^2<\varepsilon 
 $$
 
-## 2️⃣ svdcmp: SVD via 고유분해
+## 2️⃣ on_svdcmp_sym_left: SVD via 고유분해
 ### 목적
 임의 행렬 $A\in \mathbb{R^{\mathnormal{m\times n}}}$ 에 대해: 
 
@@ -507,7 +507,7 @@ $$
 U_i\leftarrow \frac{U_i}{\| U_i\| }
 $$
 
-## 3️⃣ solve_least_squares_svd: 최소제곱 해법
+## 3️⃣ on_solve_least_squares_svd: 최소제곱 해법
 ### 목적
 과잉결정 선형 시스템 Ax=b의 최소제곱 해:  
 
@@ -589,7 +589,7 @@ fn solve_svd_sample_3x3() {
     }
 
     // SVD 기반 해 구하기
-    let x = solve_least_squares_svd(a.clone(), &b, 1e-12);
+    let x = on_solve_least_squares_svd(a.clone(), &b, 1e-12);
     println!("x* = {:?}", x);
 
     // 오차 확인
@@ -618,9 +618,9 @@ fn solve_svd_sample_3x3() {
 
 
 
-## ✅ 두 SVD 방식 비교: `svdcmp_sym_right` vs `svdcmp_sym_left`
+## ✅ 두 SVD 방식 비교: `on_svdcmp_sym_right` vs `on_svdcmp_sym_left`
 
-| 항목                 | svdcmp_sym_right              | svdcmp_sym_left               |
+| 항목                 | on_svdcmp_sym_right              | on_svdcmp_sym_left               |
 |----------------------|-------------------------------|-------------------------------|
 | 기반 행렬            | AᵀA                           | AAᵀ                           |
 | 고유값 분해 대상     | 오른쪽 특이벡터 V             | 왼쪽 특이벡터 U               |
@@ -632,5 +632,372 @@ fn solve_svd_sample_3x3() {
 | 추천 용도            | 풀랭크 행렬, 단순한 구조      | 랭크 결손, 고정밀 해석, 공학적 안정성 |
 
 ---
+
+# 테스트 코드
+
+## 🧪 SVD 관련 테스트 요약
+| 테스트 함수명                  | 목적 / 검증 내용                                                                 |
+|-------------------------------|----------------------------------------------------------------------------------|
+| svd_identity_3x3              | 단위 행렬의 SVD → σ = [1,1,1], U/V 직교성, 재구성 정확도 확인                     |
+| svd_diagonal_rect_3x2         | 직사각형 대각 행렬 SVD → σ = [3,2], 직교성 및 재구성 오차 확인                    |
+| dbg_rank1_rect_3x2            | 랭크 1 행렬 SVD → σ = [9,0], 재구성 오차 및 σ 값 검증                             |
+| dbg_constructed_answer_4x3    | 인위적 구성 행렬 SVD → σ = [7,3,1], 재구성 정확도 및 σ 값 비교                    |
+| svd_constructed_answer_4x3    | 위와 유사한 구성으로 SVD → σ = [7,3,1], 오차 및 σ 값 검증                         |
+| solve_svdcmd                  | SVD 기반 최소제곱 해법 테스트 (노이즈 포함), 잔차 노름 확인                       |
+| solve_svd_sample_3x3          | 풀랭크 3x3 행렬에 대한 SVD 최소제곱 해법, 해 정확도 및 잔차 확인                  |
+| test_is_symmetric             | 대칭 행렬 여부 확인 (허용 오차 포함)                                             |
+| test_is_diagonal              | 대각 행렬 여부 확인 (허용 오차 포함)                                             |
+| check_svd_reconstruction      | U, Σ, Vᵀ로부터 A 재구성 후 오차 비교 함수 (테스트용 유틸리티)                     |
+
+
+## ✅ 테스트 범주별 분류
+- 기초 SVD 검증: svd_identity_3x3, svd_diagonal_rect_3x2, dbg_rank1_rect_3x2
+- 인위적 구성 검증: dbg_constructed_answer_4x3, svd_constructed_answer_4x3
+- 최소제곱 해법: solve_svdcmd, solve_svd_sample_3x3
+- 행렬 속성 검사: test_is_symmetric, test_is_diagonal
+- 재구성 유틸리티: check_svd_reconstruction
+
+### 1. svd_identity_3x3
+```rust
+#[test]
+fn svd_identity_3x3() {
+    let mut a = Matrix::with_dims(3, 3);
+    a.set_diagonal_scalar(1.0);
+    let a0 = a.clone();
+
+    let mut w = TArray::<f64>::new();
+    let mut v = Matrix::new();
+    assert!(on_svdcmp_sym_right(&mut a, &mut w, &mut v));
+
+    assert!(on_has_orthonormal_cols(&a, 1e-12), "UᵀU ≉ I");
+    assert!(on_is_orthonormal(&v, 1e-12), "VᵀV ≉ I");
+
+    let got = on_sorted_desc_vec(w.data.clone());
+    let expect = vec![1.0, 1.0, 1.0];
+    for (g, e) in got.iter().zip(expect.iter()) {
+        assert!(on_are_equal(*g, *e, 1e-12), "σ mismatch: {g} vs {e}");
+    }
+
+    let a_rec = on_mat_reconstruct(&a, &w.data, &v);
+    let err = on_diff_mat_norm(&a0, &a_rec);
+    assert!(err <= 1e-12, "reconstruction error = {}", err);
+}
+```
+```rust
+#[test]
+fn svd_diagonal_rect_3x2() {
+    // A = diag(3,2) in 3x2 (m≥n)
+    let mut a = Matrix::with_dims(3, 2);
+    a.zero();
+    *a.at_mut(0, 0) = 3.0;
+    *a.at_mut(1, 1) = 2.0;
+    let a0 = a.clone();
+
+    let mut w = TArray::<f64>::new();
+    let mut v = Matrix::new();
+    assert!(on_svdcmp_sym_right(&mut a, &mut w, &mut v));
+
+    on_assert_all_nonneg(&w.data, 1e-12);
+    let got = on_sorted_desc_vec(w.data.clone());
+    let expect = vec![3.0, 2.0];
+    for (g, e) in got.iter().zip(expect.iter()) {
+        assert!(on_are_equal(*g, *e, 1e-10), "σ mismatch: {g} vs {e}");
+    }
+
+    assert!(on_has_orthonormal_cols(&a, 1e-12));
+    assert!(on_is_orthonormal(&v, 1e-12));
+
+    let a_rec = on_mat_reconstruct(&a, &w.data, &v);
+    let err = on_diff_mat_norm(&a0, &a_rec);
+    assert!(err <= 1e-12, "reconstruction error = {}", err);
+}
+```
+```rust
+#[test]
+fn dbg_rank1_rect_3x2() {
+    // A = u vᵀ (랭크 1) → σ = [9, 0]
+    let u = [1.0, 2.0, 2.0];
+    let v2 = [0.0, 3.0];
+    let mut a = Matrix::with_dims(3, 2);
+    for i in 0..3 {
+        for j in 0..2 {
+            *a.at_mut(i as i32, j as i32) = u[i] * v2[j];
+        }
+    }
+    let a0 = a.clone();
+
+    let mut w = TArray::<f64>::new();
+    let mut v = Matrix::new();
+    let ok = on_svdcmp_sym_right(&mut a, &mut w, &mut v);
+    println!("\n[rank1 3x2] ok={ok}, w={:?}", w.data);
+
+    assert!(ok, "svdcmp failed");
+
+    let mut ws = w.data.clone();
+    ws.sort_by(|a, b| b.partial_cmp(a).unwrap());
+    println!("sorted σ = {:?}", ws);
+
+    let a_rec = on_mat_reconstruct(&a, &w.data, &v);
+    let err = on_mat_diff(&a0, &a_rec);
+    println!("reconstruct error (fro) = {:.6e}", err);
+    println!("‖A‖_F = {:.6},  ‖UΣVᵀ‖_F = {:.6}", on_mat_add_square(&a0), on_mat_add_square(&a_rec));
+
+    assert!(
+        (ws[0] - 9.0).abs() < 1e-8 && ws[1].abs() < 1e-7,
+        "σ = {:?} (expected [9,0])",
+        ws
+    );
+    assert!(err < 1e-8, "reconstruction error too large");
+}
+```
+```rust
+#[test]
+fn dbg_constructed_answer_4x3() {
+    // Σ = diag(7,3,1) 를 인위적으로 구성한 4×3 케이스
+    let mut u0 = Matrix::with_dims(4, 3);
+    u0.zero();
+    *u0.at_mut(0, 0) = 1.0;
+    *u0.at_mut(1, 1) = 1.0;
+    *u0.at_mut(2, 2) = 1.0;
+
+    let sigma = [7.0, 3.0, 1.0];
+    let mut s = Matrix::with_dims(3, 3);
+    s.zero();
+    for i in 0..3 {
+        *s.at_mut(i as i32, i as i32) = sigma[i];
+    }
+
+    let (c, s_) = (
+        (std::f64::consts::PI / 7.0).cos(),
+        (std::f64::consts::PI / 7.0).sin(),
+    );
+    let mut v0 = Matrix::with_dims(3, 3);
+    *v0.at_mut(0, 0) = c;
+    *v0.at_mut(0, 1) = -s_;
+    *v0.at_mut(0, 2) = 0.0;
+    *v0.at_mut(1, 0) = s_;
+    *v0.at_mut(1, 1) = c;
+    *v0.at_mut(1, 2) = 0.0;
+    *v0.at_mut(2, 0) = 0.0;
+    *v0.at_mut(2, 1) = 0.0;
+    *v0.at_mut(2, 2) = 1.0;
+
+    let mut v0t = v0.clone();
+    v0t.transpose();
+    let a0 = &(&u0 * &s) * &v0t;
+
+    let mut a = a0.clone();
+    let mut w = TArray::<f64>::new();
+    let mut v = Matrix::new();
+    let ok = on_svdcmp_sym_right(&mut a, &mut w, &mut v);
+    println!("\n[constructed 4x3] ok={ok}, w={:?}", w.data);
+
+    assert!(ok, "svdcmp failed");
+
+    let mut ws = w.data.clone();
+    ws.sort_by(|a, b| b.partial_cmp(a).unwrap());
+    println!("sorted σ = {:?}", ws);
+
+    let a_rec = on_mat_reconstruct(&a, &w.data, &v);
+    let err = on_mat_diff(&a0, &a_rec);
+    println!("reconstruct error (fro) = {:.6e}", err);
+    println!("‖A‖_F = {:.6},  ‖UΣVᵀ‖_F = {:.6}", on_mat_add_square(&a0), on_mat_add_square(&a_rec));
+
+    let mut ex = sigma.to_vec();
+    ex.sort_by(|a, b| b.partial_cmp(a).unwrap());
+    for (g, e) in ws.iter().zip(ex.iter()) {
+        assert!((g - e).abs() < 1e-8, "σ mismatch: got {}, expect {}", g, e);
+    }
+    assert!(err < 1e-8, "reconstruction error too large");
+}
+```
+```rust
+#[test]
+fn svd_constructed_answer_4x3() {
+    // Σ = diag(7,3,1) 를 인위적으로 구성한 4×3
+    let mut u0 = Matrix::with_dims(4, 3);
+    u0.zero();
+    *u0.at_mut(0, 0) = 1.0;
+    *u0.at_mut(1, 1) = 1.0;
+    *u0.at_mut(2, 2) = 1.0; // 직교 열 3개(간단)
+
+    let sigma = [7.0, 3.0, 1.0];
+    let mut s = Matrix::with_dims(3, 3);
+    s.zero();
+    for i in 0..3 {
+        *s.at_mut(i as i32, i as i32) = sigma[i];
+    }
+
+    let (c, s_) = (
+        (std::f64::consts::PI / 7.0).cos(),
+        (std::f64::consts::PI / 7.0).sin(),
+    );
+    let mut v0 = Matrix::with_dims(3, 3);
+    *v0.at_mut(0, 0) = c;
+    *v0.at_mut(0, 1) = -s_;
+    *v0.at_mut(0, 2) = 0.0;
+    *v0.at_mut(1, 0) = s_;
+    *v0.at_mut(1, 1) = c;
+    *v0.at_mut(1, 2) = 0.0;
+    *v0.at_mut(2, 0) = 0.0;
+    *v0.at_mut(2, 1) = 0.0;
+    *v0.at_mut(2, 2) = 1.0;
+
+    let mut v0t = v0.clone();
+    v0t.transpose();
+    let a0 = &(&u0 * &s) * &v0t;
+
+    let mut a = a0.clone();
+    let mut w = TArray::<f64>::new();
+    let mut v = Matrix::new();
+    let ok = on_svdcmp_sym_right(&mut a, &mut w, &mut v);
+    assert!(ok, "svdcmp failed");
+
+    let mut ws = w.data.clone();
+    ws.sort_by(|a, b| b.partial_cmp(a).unwrap());
+    println!("constructed σ = {:?}", ws);
+    let mut ex = sigma.to_vec();
+    ex.sort_by(|a, b| b.partial_cmp(a).unwrap());
+    for (g, e) in ws.iter().zip(ex.iter()) {
+        assert!((g - e).abs() < 1e-10, "σ mismatch: got {}, expect {}", g, e);
+    }
+
+    let a_rec = on_mat_reconstruct(&a, &w.data, &v);
+    let err = on_mat_diff(&a0, &a_rec);
+    println!("recon err = {:.3e}", err);
+    assert!(err < 1e-10, "reconstruction error too large");
+}
+```
+```rust
+#[test]
+fn solve_svdcmd() {
+    let a = Matrix::from_nested(&[&[1.0, 1.0], &[1.0, 2.0], &[1.0, 3.0], &[1.0, 4.0]]);
+    let x_true = [2.0, -1.0];
+    let mut b = vec![
+        1.0 * x_true[0] + 1.0 * x_true[1],
+        1.0 * x_true[0] + 2.0 * x_true[1],
+        1.0 * x_true[0] + 3.0 * x_true[1],
+        1.0 * x_true[0] + 4.0 * x_true[1],
+    ];
+    b[2] += 0.05; // 노이즈
+
+    let x = on_solve_least_squares_svd(a.clone(), &b, 1e-12);
+    println!("x* = {:?}", x);
+
+    // 잔차 노름
+    let mut s2 = 0.0;
+    for i in 0..a.row_count() {
+
+        let ax = a.at(i as i32, 0) * x[0] + a.at(i as i32, 1) * x[1];
+        let r = b[i] - ax;
+        s2 += r * r;
+    }
+    println!("||r||2 = {}", s2.sqrt());
+}
+```
+```rust
+#[test]
+fn solve_svd_sample_3x3() {
+    use nurbslib::core::matrix::Matrix;
+    use nurbslib::core::svd::on_solve_least_squares_svd;
+    // A 정의
+    let a = Matrix::from_nested(&[
+        &[1.0, 0.0, 2.0],
+        &[0.0, 1.0, 1.0],
+        &[1.0, 1.0, 4.0], // ← 세 번째 행 수정: [1,1,4] → 풀랭크
+    ]);
+
+
+    // x_true 정의
+    let x_true = [2.0, -1.0, 1.0];
+
+    // b = Ax 계산
+    let mut b = vec![0.0; 3];
+    for i in 0..3 {
+        b[i] = a.at(i as i32, 0) * x_true[0]
+            + a.at(i as i32, 1) * x_true[1]
+            + a.at(i as i32, 2) * x_true[2];
+    }
+
+
+    // SVD 기반 해 구하기
+    let x = on_solve_least_squares_svd(a.clone(), &b, 1e-12);
+    println!("x* = {:?}", x);
+
+    // 오차 확인
+    for i in 0..3 {
+        assert!((x[i] - x_true[i]).abs() < 1e-10, "x mismatch at {}: got {}, expect {}", i, x[i], x_true[i]);
+    }
+
+    // 잔차 노름
+    let mut s2 = 0.0;
+    for i in 0..3 {
+        let ax = a.at(i as i32, 0) * x[0]
+            + a.at(i as i32, 1) * x[1]
+            + a.at(i as i32, 2) * x[2];
+        let r = b[i] - ax;
+        s2 += r * r;
+    }
+    println!("||r||₂ = {:.6e}", s2.sqrt());
+    assert!(s2.sqrt() < 1e-10, "residual too large");
+}
+```
+```rust
+#[test]
+fn test_is_symmetric() {
+    let mut m = Matrix::with_dims(3, 3);
+    m.zero();
+    *m.at_mut(0, 1) = 2.0;
+    *m.at_mut(1, 0) = 2.0;
+    *m.at_mut(2, 2) = 5.0;
+    assert!(on_is_symmetric(&m, 1e-12));
+
+    *m.at_mut(0, 2) = 1.0;
+    *m.at_mut(2, 0) = 1.001;
+    assert!(!on_is_symmetric(&m, 1e-4)); // 허용 오차 초과
+}
+```
+```rust
+#[test]
+fn test_is_diagonal() {
+    let mut m = Matrix::with_dims(3, 3);
+    m.zero();
+    *m.at_mut(0, 0) = 1.0;
+    *m.at_mut(1, 1) = 2.0;
+    *m.at_mut(2, 2) = 3.0;
+    assert!(on_is_diagonal(&m, 1e-12));
+
+    *m.at_mut(0, 1) = 0.001;
+    assert!(!on_is_diagonal(&m, 1e-4));
+}
+```
+```rust
+fn check_svd_reconstruction(a0: &Matrix, u: &Matrix, sigma: &[f64], v: &Matrix, tol: f64) -> bool {
+    let mut s = Matrix::with_dims(sigma.len(), sigma.len());
+    s.zero();
+    for i in 0..sigma.len() {
+        *s.at_mut(i as i32, i as i32) = sigma[i];
+    }
+    let mut vt = v.clone();
+    vt.transpose();
+    let a_rec = &(u * &s) * &vt;
+    on_mat_diff(a0, &a_rec) < tol
+}
+#[test]
+fn test_check_svd_reconstruction() {
+    let mut a = Matrix::with_dims(3, 2);
+    *a.at_mut(0, 0) = 3.0;
+    *a.at_mut(1, 1) = 4.0;
+    let a0 = a.clone();
+
+    let mut w = TArray::<f64>::new();
+    let mut v = Matrix::new();
+    assert!(on_svdcmp_sym_right(&mut a, &mut w, &mut v));
+
+    assert!(check_svd_reconstruction(&a0, &a, &w.data, &v, 1e-10));
+}
+```
+---
+
 
 
