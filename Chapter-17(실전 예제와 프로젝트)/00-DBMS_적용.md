@@ -145,7 +145,7 @@ flowchart TD
 flowchart TD
     A[사용자: Table::insert - key, factory] --> B[ItemFactory::create_item]
     B --> C[Cursor::new - item]
-    C --> D[Table.items.insertcursor]
+    C --> D[Table.items.insert - cursor]
     D --> E[TxAction::Insert - cursor.clone]
     E --> F[TxManager::add - action]
     F --> G[TxDelta.current.push - action]
@@ -183,6 +183,51 @@ assert!(tx_stream.len() > 0);
 - TxManager는 트랜잭션 상태 관리자
 - TxStream은 트랜잭션 로그 기록자
 - commit()은 상태 확정 + 로그 기록을 동시에 수행
+
+---
+
+### Undo /Redo 흐름도
+Undo와 Redo가 발생했을 때의 내부 동작을 정리한 Mermaid 흐름도와 단계별 설명 테이블입니다.  
+이전에 설명드린 insert() 흐름과 동일한 스타일로 구성했고, TxManager, TxDelta, TxAction, TxStream까지 포함됩니다.
+
+### 🧩 Undo / Redo 동작 흐름도 (Mermaid - Top to Bottom)
+```mermaid
+flowchart TD
+    A[사용자: tx.undo] --> B[TxManager::undo]
+    B --> C[undo_stack.pop]
+    C --> D[TxDelta.undo]
+    D --> E[TxAction::undo]
+    E --> F[Table.remove- key]
+    F --> G[redo_stack.push delta ]
+
+    H[사용자: tx.redo] --> I[TxManager::redo]
+    I --> J[redo_stack.pop]
+    J --> K[TxDelta.redo]
+    K --> L[TxAction::redo]
+    L --> M[Table.insert - key]
+    M --> N[undo_stack.push - delta]
+```
+
+
+### 🧠 단계별 설명 테이블
+| 단계 번호 | 설명                                      |
+|-----------|-------------------------------------------|
+| ①         | tx.undo() 호출                            |
+| ②         | TxManager가 undo_stack에서 TxDelta 꺼냄   |
+| ③         | TxDelta가 내부 TxAction들을 순회하며 undo |
+| ④         | 각 TxAction이 Table에서 삭제 수행         |
+| ⑤         | TxDelta는 redo_stack에 push됨             |
+| ⑥         | 이후 tx.redo() 호출                       |
+| ⑦         | TxManager가 redo_stack에서 TxDelta 꺼냄   |
+| ⑧         | TxDelta가 내부 TxAction들을 순회하며 redo |
+| ⑨         | 각 TxAction이 Table에 다시 삽입 수행      |
+| ⑩         | TxDelta는 undo_stack에 다시 push됨        |
+
+
+### 🔁 흐름 요약
+- undo()는 마지막 커밋된 TxDelta를 되돌리고, redo_stack에 저장
+- redo()는 되돌린 TxDelta를 다시 적용하고, undo_stack에 복원
+- 이 구조는 다단계 undo/redo를 지원하며, TxStream과 연결하면 영속적 복구도 가능
 
 ---
 
