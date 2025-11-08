@@ -121,6 +121,70 @@ flowchart TD
 
 ---
 
+### TxStream 흐름도
+
+트랜잭션 스트림(TxStream)에 액션이 언제, 어떻게 기록되는지 흐름상 보이지 않는 상태입니다.  
+이건 트랜잭션의 로그 기록 또는 복구 대상 저장소로서 TxStream이 어떤 시점에 개입하는지를 명확히 드러냄.
+
+### 🧠 TxStream의 역할 요약
+| 구성 요소              | 설명                                              |
+|------------------------|---------------------------------------------------|
+| TxStream               | 트랜잭션 로그를 기록하고 복구하는 스트림         |
+| TxManager::commit()    | TxDelta를 확정하고 TxStream에 기록 요청           |
+| TxStream::write(delta) | TxDelta를 직렬화하여 로그에 저장                  |
+| TxStream::read()       | 저장된 로그를 읽어 트랜잭션 상태를 복구           |
+
+### 🔍 흐름 요약
+- TxManager::commit()은 트랜잭션을 확정하면서 TxDelta를 TxStream에 전달
+- TxStream::write()는 이를 로그로 남겨서 복구 가능성을 확보
+- 시스템 재시작 또는 장애 복구 시 TxStream::read()를 통해 트랜잭션을 재적용
+
+
+### 🧩 확장된 흐름도 (TxStream 포함)
+```mermaid
+flowchart TD
+    A[사용자: Table::insert - key, factory] --> B[ItemFactory::create_item]
+    B --> C[Cursor::new - item]
+    C --> D[Table.items.insertcursor]
+    D --> E[TxAction::Insert - cursor.clone]
+    E --> F[TxManager::add - action]
+    F --> G[TxDelta.current.push - action]
+    G --> H[사용자: tx.commit]
+    H --> I[TxManager::commit]
+    I --> J[TxStream::write - TxDelta]
+    J --> K[TxStream에 기록됨]
+```
+
+
+### ✅ 흐름 설명
+| 단계            | 설명                                                                 |
+|-----------------|----------------------------------------------------------------------|
+| commit()        | 트랜잭션을 확정하며 현재 작업(TxDelta.current)을 처리함              |
+| TxManager       | TxDelta.current을 undo_stack에 push하고, TxStream에 기록 요청         |
+| TxStream::write() | TxDelta를 직렬화하여 트랜잭션 로그로 기록함                         |
+| TxStream        | 트랜잭션 로그를 저장하고, 복구 시점에 read()로 재적용 가능            |
+
+### 🔁 흐름 요약
+- commit()은 단순한 상태 확정이 아니라 트랜잭션 로그 기록까지 포함
+- TxManager는 트랜잭션 상태를 관리하며, TxStream은 영속적 기록자
+- 이 구조 덕분에 시스템 재시작 시 TxStream::read()를 통해 트랜잭션을 복원할 수 있음
+
+## 🧪 디버깅 팁
+- TxStream::write() 호출 시점에 로그 출력 추가:  
+```rust
+println!("TxStream 기록: {:?}", delta);
+```
+- TxStream이 실제로 기록하는지 확인하려면: 
+```rust 
+assert!(tx_stream.len() > 0);
+```
+
+### 🧠 설계 철학
+- TxManager는 트랜잭션 상태 관리자
+- TxStream은 트랜잭션 로그 기록자
+- commit()은 상태 확정 + 로그 기록을 동시에 수행
+
+---
 
 
 
