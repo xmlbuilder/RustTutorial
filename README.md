@@ -437,8 +437,9 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [14-Weak](./Chapter-15%28SmartPointers_and_MemoryModels%29/14-Weak.md)
 - [15-RefCell과RC+RefCell의차이](./Chapter-15%28SmartPointers_and_MemoryModels%29/15-RefCell과RC%2BRefCell의차이.md)
 - [16-Box&Rc&RcCell&Arc&Mutex요약](./Chapter-15%28SmartPointers_and_MemoryModels%29/16-Box&Rc&RcCell&Arc&Mutex요약.md)
+- [17-ArrayPool](./Chapter-15%28SmartPointers_and_MemoryModels%29/17-ArrayPool.md)
 - [18-MutexGuard](./Chapter-15%28SmartPointers_and_MemoryModels%29/18-MutexGuard.md)
-- 
+
 
 🔼 [맨 위로](#-목차)
 
