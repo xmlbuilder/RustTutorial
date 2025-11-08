@@ -6,9 +6,9 @@
 ## 📘 전체 흐름 요약
 | 함수 이름                  | 수학적 표현                                | 설명                                           |
 |---------------------------|---------------------------------------------|------------------------------------------------|
-| `jacobi_symmetric_eigen`  | $ B = V \Lambda V^{\top} $               | 대칭행렬 B의 고유값 분해 (야코비 회전법)       |
-| `svdcmp`                  | $ A = U \Sigma V^{\top} $                | 행렬 A의 특이값 분해 (SVD)                     |
-| `solve_least_squares_svd`| $ x = V \Sigma^{-1} U^{\top} b $         | SVD 기반 최소제곱 해법                         |
+| `jacobi_symmetric_eigen`  | $B = V \Lambda V^{\top}$               | 대칭행렬 B의 고유값 분해 (야코비 회전법)       |
+| `svdcmp`                  | $A = U \Sigma V^{\top}$                | 행렬 A의 특이값 분해 (SVD)                     |
+| `solve_least_squares_svd`| $x = V \Sigma^{-1} U^{\top} b$         | SVD 기반 최소제곱 해법                         |
 
 ## 🔍 흐름 설명
 - 고유값 분해: jacobi_symmetric_eigen은 대칭행렬 $B=A^{\top }A$ 에 대해 고유값과 고유벡터를 구함
