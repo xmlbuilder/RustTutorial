@@ -486,7 +486,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [23-02-Spatial_Partition_완성본](./Chapter-17(실전%20예제와%20프로젝트)/23-02-Spatial_Partition_완성본.md)
 - [24-SpatialPartition2D](./Chapter-17(실전%20예제와%20프로젝트)/24-SpatialPartition2D.md)
 - [25-svdcmp](./Chapter-17(실전%20예제와%20프로젝트)/25-svdcmp.md)
-- [26-solve_svdcmp](./Chapter-17(실전%20예제와%20프로젝트)/26-solve_svdcmp.md)
+- [26-Observer_실전](./Chapter-17(실전%20예제와%20프로젝트)/26-Observer_실전.md)
 - [27-웹_스크래핑](./Chapter-17(실전%20예제와%20프로젝트)/27-웹_스크래핑.md)
 - [28-소유권_Closure_lifetime이_동시에_얽힌문제](./Chapter-17(실전%20예제와%20프로젝트)/28-소유권_Closure_lifetime이_동시에_얽힌문제.md)
 - [29-baryCentric_퇴화](./Chapter-17(실전%20예제와%20프로젝트)/29-baryCentric_퇴화.md)
