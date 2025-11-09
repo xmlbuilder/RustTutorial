@@ -2,7 +2,7 @@
 
 NURBS 곡선은 Bezier와 B-Spline을 일반화한 형태이며,  
 이항 계수(Binomial)와 NURBS의 N basis 함수는 모두 곡선의 형태를 제어하는 수학적 도구입니다.  
-이 둘은 서로 다른 방식으로 곡선을 구성하지만, 핵심 원리는 “제어점 × 가중치 함수”라는 점에서 연결됩니다.
+이 둘은 서로 다른 방식으로 곡선을 구성하지만, 핵심 원리는 **제어점 × 가중치 함수** 라는 점에서 연결됩니다.
 
 ## 🧩 전체 구조: Bezier → B-Spline → NURBS
 
@@ -68,13 +68,11 @@ $$
 | 매개변수               | $t$ (0~1 범위)                                               | $u$ (Knot vector 기반 범위)                                 |
 
 
-
 ## 🧠 정리하면…
 - Bezier는 이항 계수 기반의 전역 곡선
 - B-Spline은 N basis 기반의 국소 곡선
 - NURBS는 B-Spline에 가중치를 더한 Rational 곡선
 - Binomial과 N basis 함수는 모두 곡선의 형태를 제어하는 수학적 도구이며, 목적은 같지만 방식이 다름
-
 
 ---
 
@@ -89,7 +87,6 @@ $$
 $$
 C(u)=\sum _{i=0}^nN_{i,k}(u)\cdot P_i\quad \mathrm{(B-Spline)}C(u)=\frac{\sum _{i=0}^nw_iN_{i,k}(u)\cdot P_i}{\sum _{i=0}^nw_iN_{i,k}(u)}\quad \mathrm{(NURBS)}
 $$
-
 
 - 여기서 $N_{i,k}(u)$ 는 N basis 함수로, 곡선의 형태를 결정하는 가중치 함수입니다.
 
@@ -122,8 +119,6 @@ N_{i,k}(u) &=
 \frac{u_{i+k+1} - u}{u_{i+k+1} - u_{i+1}} \cdot N_{i+1,k-1}(u)
 \end{aligned}
 $$
-
-
 
 - 이 재귀식은 De Boor 알고리즘의 기반이 되며, 곡선 계산에 사용됩니다.
 
