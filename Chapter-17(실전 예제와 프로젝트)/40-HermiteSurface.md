@@ -18,6 +18,91 @@ $P_{00}^{uv}$, $P_{01}^{uv}$, $P_{10}^{uv}$, $P_{11}^{uv}$
 
 이러한 정보를 통해 곡면의 형태와 경계 조건을 직접 제어할 수 있습니다.
 
+## 📘 HermiteSurface 구조 요약
+### ✅ HermiteSurface 핵심 구성
+
+| 필드 이름              | 수학적 의미                          |
+|------------------------|--------------------------------------|
+| `grid_points[u][v]`      | $P(u, v)$                        |
+| `u_tangents[u][v]`       | $\frac{\partial P}{\partial u}$ |
+| `v_tangents[u][v]`       | $\frac{\partial P}{\partial v}$ |
+| `twists[u][v]`           | $\frac{\partial^2 P}{\partial u \partial v}$ |
+| `u_parameters`, `v_parameters` | 파라메터 벡터 (strictly increasing) |
+
+
+### 🧠 수식 검토
+#### 1. Hermite Basis
+- 1D basis functions:
+
+$$
+\begin{aligned}h_{00}(s)&=2s^3-3s^2+1\\ h_{10}(s)&=s^3-2s^2+s\\ h_{01}(s)&=-2s^3+3s^2\\ h_{11}(s)&=s^3-s^2\end{aligned}
+$$
+
+- 2D 평가:
+
+$$
+P(u,v)=\sum _{i=0}^1\sum _{j=0}^1\left[ h_{0i}(s)h_{0j}(t)P_{ij}+h_{1i}(s)h_{0j}(t)h_u\frac{\partial P}{\partial u}+h_{0i}(s)h_{1j}(t)h_v\frac{\partial P}{\partial v}+h_{1i}(s)h_{1j}(t)h_uh_v\frac{\partial ^2P}{\partial u\partial v}\right] 
+$$
+
+- point_at_param()과 eval_cell_hermite() 모두 이 수식을 정확히 구현하고 있음
+
+#### 2. Bézier 변환
+- Hermite → Bézier 변환에서 스케일링:
+
+$$
+\begin{aligned}s_u&=\frac{du}{3},\quad s_v=\frac{dv}{3},\quad s_{uv}=\frac{du\cdot dv}{9}\end{aligned}
+$$
+
+- 제어점 계산:
+- 에지: 
+
+$$
+P\pm s_u\cdot \frac{\partial P}{\partial u}, P\pm s_v\cdot \frac{\partial P}{\partial v}
+$$
+
+- 내부: 
+$$
+P+s_u\cdot \frac{\partial P}{\partial u}+s_v\cdot \frac{\partial P}{\partial v}+s_{uv}\cdot \frac{\partial ^2P}{\partial u\partial v}
+$$
+
+- cell_to_bezier()와 to_bezier_surface() 모두 정확한 변환 수식 사용
+
+### 🔄 NURBS 변환 가능성
+#### ✅ 강점
+- Hermite 데이터는 위치 + 접선 + 트위스트까지 포함 → 충분한 곡면 정보 보유
+- Bézier 변환이 정확히 구현되어 있음 → NURBS로의 변환은 Bézier 기반으로 가능
+### ⚠️ NURBS 변환 시 고려할 점
+
+| 항목                        | 설명                                                   |
+|-----------------------------|--------------------------------------------------------|
+| u_parameters, v_parameters | Knot vector 생성의 기반이 되며 strictly increasing 필요 |
+| Point4D(w=1.0)              | 현재 모든 제어점의 weight가 1.0으로 고정됨              |
+| 차수 설정                   | Hermite → Bézier는 3차 → NURBS도 차수 3으로 설정 필요   |
+| 연속성                      | Hermite는 C¹ 연속성 보장 → NURBS에서 G¹ 이상 보장하려면 제어점 정렬 필요 |
+| builder 함수                | `to_nurbs()`는 외부 builder에 위임 → 정확한 변환 로직 필요 |
+
+- to_nurbs()에서 builder를 통해 NURBS 변환을 유연하게 처리 가능
+
+## 📄 문서 요약
+### 📘 HermiteSurface 개요
+- 격자 기반 곡면 표현
+- 각 점에 위치, 접선(u/v), 트위스트 저장
+- Bézier 및 NURBS로 변환 가능
+
+## 🧮 주요 함수
+
+| 함수 이름                  | 설명                                                             |
+|---------------------------|------------------------------------------------------------------|
+| `create(u, v)`              | 격자 크기를 설정하고 내부 데이터를 초기화                        |
+| `is_valid()`                | 구조적 유효성 및 수치적 안정성 검사                             |
+| `point_at_param(u, v)`      | Hermite basis를 사용하여 임의 파라미터 위치에서 곡면 점 계산     |
+| `to_bezier_patches()`       | 전체 셀을 BézierPatch 4×4 배열로 변환                            |
+| `to_bezier_surface(i, j)`   | 단일 셀을 BezierSurface로 변환 (Point4D 기반)                    |
+| `to_nurbs(builder)`         | 외부 builder를 통해 NURBS 표현으로 변환                         |
+
+
+
+
 ## 📊 수식 구조
 Hermite Surface는 다음과 같은 형태의 이중 Hermite 보간식으로 표현됩니다:  
 $S(u, v) = \sum_{i=0}^{3} \sum_{j=0}^{3} h_i(u) \cdot h_j(v) \cdot C_{ij}$  
