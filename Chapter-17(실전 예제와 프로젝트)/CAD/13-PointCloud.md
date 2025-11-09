@@ -2,6 +2,79 @@
 수학적으로 분석하고, 각 함수의 목적과 계산 원리를 정리한 문서 형태로 구성.  
 아래는 구조체별로 기능 요약, 수학적 설명, 사용 목적을 포함한 문서입니다.
 
+
+## 소스 코드
+```rust
+use crate::core::circle::Circle;
+use crate::core::line::Line;
+use crate::core::maths::on_get_sampling_3d;
+use crate::core::plane::Plane;
+use crate::core::prelude::{Point, Vector};
+use crate::core::transform::Transform;
+
+pub struct PointCloud {
+    points: Vec<Point>,
+}
+```
+```rust
+impl PointCloud {
+    pub fn new(pts: &Vec<Point>) -> PointCloud {
+        let mut points: Vec<Point> = vec![];
+        pts.iter().for_each(|x| points.push(x.clone()));
+        Self { points }
+    }
+
+    pub fn points(&self) -> &Vec<Point> {
+        &self.points
+    }
+
+    pub fn transform_by(&mut self, t: Transform) {
+        for i in 0..self.points.len() {
+            let new_origin = t.transform_point3d(&self.points[i]);
+            self.points[i] = new_origin;
+        }
+    }
+
+    pub fn fit_line(&self, pt: &mut Point, dir: &mut Vector) {
+        let array: &[Point] = &self.points;
+
+        if let Some(line) = Line::fit_from_points(array) {
+            let p = line.start.clone();
+            pt.clone_from(&p);
+            dir.clone_from(&line.direction());
+        }
+    }
+
+    pub fn fit_circle(&self, plane: &mut Plane, r: &mut f64) {
+        let array: &[Point] = &self.points;
+        if let Some(circle) = Circle::fit_from_points(array) {
+            *r = circle.radius;
+            plane.origin = circle.plane.origin.clone();
+            plane.x_axis = circle.plane.x_axis.clone();
+            plane.y_axis = circle.plane.x_axis.clone();
+            plane.z_axis = circle.plane.z_axis.clone();
+            plane.equation = circle.plane.equation.clone();
+        }
+    }
+
+    pub fn fit_plane(&self, plane: &mut Plane) {
+        let array: &[Point] = &self.points;
+        if let Some(pln) = Plane::fit_from_points(array) {
+            plane.origin = pln.origin.clone();
+            plane.x_axis = pln.x_axis.clone();
+            plane.y_axis = pln.x_axis.clone();
+            plane.z_axis = pln.z_axis.clone();
+            plane.equation = pln.equation.clone();
+        }
+    }
+
+    pub fn get_sampling(&self) -> Vec<Point> {
+        let array: &[Point] = &self.points;
+        on_get_sampling_3d(array)
+    }
+}
+```
+
 ## 📘 PointCloud, Line, Circle, Plane 수학 기반 문서화
 
 ## 🧱 구조체: PointCloud
