@@ -129,7 +129,7 @@ plt.savefig(output_path)
 
 print("Plotted Bernstein basis functions B_{i,3}(u) for i = 0 to 3 and saved as bernstein_basis_n3.png")
 ```
-!(Bernstein Basis Function n = 3)(/image/Bernstein_Basis_3.png)
+![Bernstein Basis Function n = 3](/image/Bernstein_Basis_3.png)
 
 - 이 코드는 Bernstein 다항식의 정의를 기반으로 각 basis 함수의 값을 계산하고, 그래프로 시각화합니다.
 
