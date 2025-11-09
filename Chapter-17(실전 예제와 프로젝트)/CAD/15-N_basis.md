@@ -154,7 +154,13 @@ $$
 ## 🧠 수학적 구조: 재귀 정의
 
 $$
-N_{i,0}(u)=\left\{ \, \begin{array}{ll}\textstyle 1&\textstyle \mathrm{if\  }u_i\leq u<u_{i+1}\\ \textstyle 0&\textstyle \mathrm{otherwise}\end{array}\right. 
+N_{i,0}(u) = 
+\left\{
+\begin{array}{ll}
+1 & \text{if } u_i \leq u < u_{i+1} \\
+0 & \text{otherwise}
+\end{array}
+\right.
 $$
 
 $$
