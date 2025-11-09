@@ -101,6 +101,9 @@ $$
 
 $$
 N_{i,0}(u)=\left\{ \, \begin{array}{ll}\textstyle 1&\textstyle \mathrm{if\  }u_i\leq u<u_{i+1}\\ \textstyle 0&\textstyle \mathrm{otherwise}\end{array}\right. 
+$$
+
+$$
 N_{i,k}(u)=\frac{u-u_i}{u_{i+k}-u_i}N_{i,k-1}(u)+\frac{u_{i+k+1}-u}{u_{i+k+1}-u_{i+1}}N_{i+1,k-1}(u)
 $$
 
@@ -152,6 +155,9 @@ $$
 
 $$
 N_{i,0}(u)=\left\{ \, \begin{array}{ll}\textstyle 1&\textstyle \mathrm{if\  }u_i\leq u<u_{i+1}\\ \textstyle 0&\textstyle \mathrm{otherwise}\end{array}\right. 
+$$
+
+$$
 N_{i,p}(u)=\frac{u-u_i}{u_{i+p}-u_i}N_{i,p-1}(u)+\frac{u_{i+p+1}-u}{u_{i+p+1}-u_{i+1}}N_{i+1,p-1}(u)
 $$
 
