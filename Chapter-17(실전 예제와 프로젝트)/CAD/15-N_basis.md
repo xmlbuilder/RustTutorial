@@ -146,7 +146,7 @@ NURBS와 B-Spline에서 N basis 함수의 유효 범위(support range)는 곡선
 - Basis 함수 $N_{i,p}(u)$: 제어점 P_i에 대응되는 가중치 함수
 
 ## 🔍 유효 범위(Support Range) 정의
-각 basis 함수 N_{i,p}(u)는 다음 구간에서만 0이 아닌 값을 가집니다:
+각 basis 함수 $N_{i,p}(u)$ 는 다음 구간에서만 0이 아닌 값을 가집니다:
 
 $$
 \mathrm{Support\  of\  }N_{i,p}(u)=[u_i,u_{i+p+1})
