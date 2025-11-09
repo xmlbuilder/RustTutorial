@@ -33,7 +33,7 @@ N_{i,0}(u) &=
 \begin{cases}
 1, & u_i \le u < u_{i+1},\\
 0, & \text{otherwise},
-\end
+\end{cases}
 $$
 
 
