@@ -85,7 +85,7 @@ $$
 - B-Spline과 NURBS 곡선은 다음과 같이 정의됩니다:
 
 $$
-C(u)=\sum _{i=0}^nN_{i,k}(u)\cdot P_i\quad \mathrm{(B-Spline)}C(u)=\frac{\sum _{i=0}^nw_iN_{i,k}(u)\cdot P_i}{\sum _{i=0}^nw_iN_{i,k}(u)}\quad \mathrm{(NURBS)}
+C(u)=\sum _{i=0}^nN_{i,k}(u)\cdot P_i\quad \mathrm{(B-Spline)}\quad \quad C(u)=\frac{\sum _{i=0}^nw_iN_{i,k}(u)\cdot P_i}{\sum _{i=0}^nw_iN_{i,k}(u)}\quad \mathrm{(NURBS)}
 $$
 
 - 여기서 $N_{i,k}(u)$ 는 N basis 함수로, 곡선의 형태를 결정하는 가중치 함수입니다.
