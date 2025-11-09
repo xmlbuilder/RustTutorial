@@ -28,7 +28,11 @@ $$
 - B-Spline은 N basis 함수로 정의됨:
 
 $$
-N_{i,0}(u)=\left\{ \, \begin{array}{ll}\textstyle 1&\textstyle \mathrm{if\  }u_i\leq u<u_{i+1}\\ \textstyle 0&\textstyle \mathrm{otherwise}\end{array}\right. N_{i,k}(u)=\frac{u-u_i}{u_{i+k}-u_i}N_{i,k-1}(u)+\frac{u_{i+k+1}-u}{u_{i+k+1}-u_{i+1}}N_{i+1,k-1}(u)
+N_{i,0}(u)=\left\{ \, \begin{array}{ll}\textstyle 1&\textstyle \mathrm{if\  }u_i\leq u<u_{i+1}\\ \textstyle 0&\textstyle \mathrm{otherwise}\end{array}\right. 
+$$
+
+$$
+N_{i,k}(u)=\frac{u-u_i}{u_{i+k}-u_i}N_{i,k-1}(u)+\frac{u_{i+k+1}-u}{u_{i+k+1}-u_{i+1}}N_{i+1,k-1}(u)
 $$
 
 - 재귀적 정의로 인해 국소 제어가 가능
