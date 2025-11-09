@@ -33,7 +33,7 @@ N_{i,0}(u) &=
 \begin{cases}
 1, & u_i \le u < u_{i+1},\\
 0, & \text{otherwise},
-\end{cases}\\[6pt]
+\end{cases}
 N_{i,k}(u) &= 
 \frac{u - u_i}{\,u_{i+k} - u_i\,}\,N_{i,k-1}(u)
 + 
