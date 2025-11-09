@@ -115,7 +115,7 @@ N_{i,0}(u) &=
 \begin{cases}
 1, & u_i \le u < u_{i+1}, \\
 0, & \text{otherwise}
-\end{cases} \\[1ex]
+\end{cases} 
 N_{i,k}(u) &=
 \frac{u - u_i}{u_{i+k} - u_i} \cdot N_{i,k-1}(u)
 +
@@ -124,10 +124,6 @@ N_{i,k}(u) &=
 $$
 
 
-
-$$
-N_{i,k}(u)=\frac{u-u_i}{u_{i+k}-u_i}N_{i,k-1}(u)+\frac{u_{i+k+1}-u}{u_{i+k+1}-u_{i+1}}N_{i+1,k-1}(u)
-$$
 
 - 이 재귀식은 De Boor 알고리즘의 기반이 되며, 곡선 계산에 사용됩니다.
 
@@ -176,19 +172,18 @@ $$
 ## 🧠 수학적 구조: 재귀 정의
 
 $$
-N_{i,0}(u) = 
-\left\{
-\begin{array}{ll}
-1 & \text{if } u_i \leq u < u_{i+1} \\
-0 & \text{otherwise}
-\end{array}
-\right.
+\begin{aligned}
+N_{i,0}(u) &=
+\begin{cases}
+1, & u_i \le u < u_{i+1},\\
+0, & \text{otherwise},
+\end{cases}
+N_{i,p}(u) &=
+\frac{u - u_i}{\,u_{i+p} - u_i\,}\,N_{i,p-1}(u)
++ 
+\frac{u_{i+p+1} - u}{\,u_{i+p+1} - u_{i+1}\,}\,N_{i+1,p-1}(u).
+\end{aligned}
 $$
-
-$$
-N_{i,p}(u)=\frac{u-u_i}{u_{i+p}-u_i}N_{i,p-1}(u)+\frac{u_{i+p+1}-u}{u_{i+p+1}-u_{i+1}}N_{i+1,p-1}(u)
-$$
-
 
 - 이 재귀식은 basis 함수의 형태와 유효 범위를 결정
 - 각 basis 함수는 **p+1** 개의 Knot 구간에 걸쳐 정의됨
