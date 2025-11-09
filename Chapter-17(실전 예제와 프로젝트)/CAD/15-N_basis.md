@@ -111,13 +111,15 @@ $$
 
 $$
 \begin{aligned}
-N_{i,0}(u) =
-\left\{
-\begin{array}{ll}
-1, & \text{if } u_i \leq u < u_{i+1} \\
+N_{i,0}(u) &=
+\begin{cases}
+1, & u_i \le u < u_{i+1}, \\
 0, & \text{otherwise}
-\end{array}
-\right.
+\end{cases} \\[1ex]
+N_{i,k}(u) &=
+\frac{u - u_i}{u_{i+k} - u_i} \cdot N_{i,k-1}(u)
++
+\frac{u_{i+k+1} - u}{u_{i+k+1} - u_{i+1}} \cdot N_{i+1,k-1}(u)
 \end{aligned}
 $$
 
