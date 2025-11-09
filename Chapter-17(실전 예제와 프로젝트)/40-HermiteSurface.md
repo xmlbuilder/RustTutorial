@@ -60,7 +60,8 @@ $$
 P\pm s_u\cdot \frac{\partial P}{\partial u}, P\pm s_v\cdot \frac{\partial P}{\partial v}
 $$
 
-- 내부: 
+- 내부:
+   
 $$
 P+s_u\cdot \frac{\partial P}{\partial u}+s_v\cdot \frac{\partial P}{\partial v}+s_{uv}\cdot \frac{\partial ^2P}{\partial u\partial v}
 $$
