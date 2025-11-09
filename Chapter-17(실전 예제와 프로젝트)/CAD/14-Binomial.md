@@ -14,8 +14,8 @@ $$
 ### 2️⃣ on_binomial_u128(n, k) -> Option<u128>
 - 기능: 큰 수를 다루기 위해 u128 사용 + 약분 최적화
 - 핵심 로직:
-- 분자: $n\times (n-1)\times \dots \times (n-k+1)$
-- 분모: $k!$
+- 분자:     $n\times (n-1)\times \dots \times (n-k+1)$
+- 분모:     $k!$
 - 약분: 분모의 각 항을 분자의 항들과 최대공약수(GCD)로 나눔
 - 오버플로우 방지: checked_mul, checked_div 사용
 - 장점: 매우 큰 n,k 값에서도 안전하게 계산 가능
