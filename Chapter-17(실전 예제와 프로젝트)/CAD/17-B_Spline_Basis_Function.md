@@ -87,7 +87,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-![Nurbs N basis(/image/Nurbs_basis.png)
+![Nurbs N basis](/image/Nurbs_basis.png)
 
 
 ### 🔹 도함수 공식
@@ -98,6 +98,7 @@ $$
 $$
 
 - 일반 도함수 (k차):
+
 $$
 N_{i,p}^{(k)}(u)=\sum _{j=0}^ka_{k,j}N_{i+j,p-k}(u)
 $$
