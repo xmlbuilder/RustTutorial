@@ -1,6 +1,6 @@
 # Pin
 이번 주제는 Rust 비동기에서의 핵심 개념인 Pin입니다.  
-특히 Future가 자기참조(self-referential) 구조를 가질 수 있기 때문에  
+특히 Future가 **자기참조(self-referential)** 구조를 가질 수 있기 때문에  
 메모리 위치가 고정되어야만 안전하게 poll할 수 있다는 원리를 이해하는 게 핵심입니다.
 
 ## ✅ 핵심 원리 요약
@@ -23,12 +23,12 @@ struct SelfRef {
 ```
 
 이 구조는 data를 가리키는 포인터를 내부에 가지고 있음.  
-그런데 이 값이 move되면 data의 메모리 주소가 바뀌고, ptr은 dangling pointer가 되어버림.  
+그런데 이 값이 `move` 되면 data의 메모리 주소가 바뀌고, ptr은 `dangling pointer` 가 되어버림.  
 Rust는 이런 걸 컴파일 타임에 막을 수 없기 때문에, Pin이라는 개념을 도입함.
 
 
 ## 🧠 Pin의 핵심 개념
-- Pin<T>는 T를 고정된 메모리 위치에 "핀"으로 박아둔 것처럼 만들어서, 이동 불가능하게 만듦
+- Pin<T>는 T를 고정된 메모리 위치에 **핀** 으로 박아둔 것처럼 만들어서, 이동 불가능하게 만듦
 - Pin<&mut T> 또는 Pin<Box<T>> 형태로 사용
 - Unpin 트레잇을 구현한 타입은 이동 가능 → Pin이 필요 없음
 - Unpin을 구현하지 않은 타입은 Pin을 통해 이동 금지를 보장해야 함
@@ -41,8 +41,7 @@ async fn example() {
 }
 ```
 
-
-이런 경우 Rust는 Future를 Pin<Box<dyn Future>>로 감싸서 메모리 위치가 고정되도록 강제함.  
+이런 경우 Rust는 Future를 `Pin<Box<dyn Future>>` 로 감싸서 메모리 위치가 고정되도록 강제함.  
 그래야 안전하게 실행할 수 있음.
 
 ## 🔍 Pin을 사용하는 코드 예시
@@ -61,8 +60,8 @@ fn poll_future(fut: Pin<&mut dyn Future<Output = ()>>) {
 ## 🧩 Unpin이란?
 - 대부분의 타입은 Unpin을 자동으로 구현함 → 자유롭게 이동 가능
 - 자기 참조 구조를 가진 타입은 Unpin을 구현하지 않음 → Pin이 필요함
-- Unpin은 “이 타입은 안전하게 이동할 수 있다”는 표시야
-
+- Unpin은 **이 타입은 안전하게 이동할 수 있다** 는 표시
+  
 ## ✅ 요약: Rust의 `Pin`과 `Unpin`
 
 | 개념     | 설명                                                                 |
@@ -74,8 +73,8 @@ fn poll_future(fut: Pin<&mut dyn Future<Output = ()>>) {
 
 
 ## 🔚 결론
-Pin은 Rust의 메모리 안전성 철학을 비동기와 자기 참조 구조까지 확장하기 위한 도구. 
-처음엔 생소하지만, 이걸 통해 Rust는 C/C++에서도 어려운 문제를 안전하게 해결할 수 있음.
+Pin은 Rust의 메모리 안전성 철학을 비동기와 자기 참조 구조까지 확장하기 위한 도구.  
+이걸 통해 Rust는 C/C++에서도 어려운 문제를 안전하게 해결할 수 있음.
 
 
 ## 실전 예제
@@ -96,10 +95,10 @@ use std::task::Waker;
 struct MyFuture {
     shared_state: Arc<Mutex<bool>>,
 }
-
+```
+```rust
 impl Future for MyFuture {
     type Output = &'static str;
-
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
         let mut state = self.shared_state.lock().unwrap();
         if *state {
@@ -118,7 +117,8 @@ impl Future for MyFuture {
         }
     }
 }
-
+```
+```rust
 fn main() {
     use futures::executor::block_on;
 
@@ -254,7 +254,8 @@ loop {
 → 완료되면 다시 poll하면 Ready만 반환됨
 - 그래서 매번 새로 생성해야 정상 동작
 
-📊 절차도: Pin을 사용한 select! 흐름
+## 📊 절차도: Pin을 사용한 select! 흐름
+```mermaid
 sequenceDiagram
     participant Main
     participant TimeoutFuture
@@ -270,6 +271,7 @@ sequenceDiagram
             Worker-->>Main: 응답 처리
         end
     end
+```
 
 ---
 
