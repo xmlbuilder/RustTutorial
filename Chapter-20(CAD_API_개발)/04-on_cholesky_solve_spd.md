@@ -138,7 +138,26 @@ on_cholesky_solve_spd 함수는 수학적으로 Cholesky 분해와 선형 시스
 ### ✅ 1. Cholesky 분해 단계
 ```rust
 for k in 0..n {
-    ...
+    let mut sum = 0.0;
+    for p in 0..k {
+        let l = g[k * n + p];
+        sum += l * l;
+    }
+    let diag = g[k * n + k] - sum;
+    if diag <= ON_TOL14 {
+        return false;
+    }
+    g[k * n + k] = diag.sqrt();
+    for i in (k + 1)..n {
+        let mut s = 0.0;
+        for p in 0..k {
+            s += g[i * n + p] * g[k * n + p];
+        }
+        g[i * n + k] = (g[i * n + k] - s) / g[k * n + k];
+    }
+    for j in (k + 1)..n {
+        g[k * n + j] = 0.0;
+    }
 }
 ```
 - 대각 원소 계산:
@@ -162,7 +181,11 @@ $$
 ### ✅ 2. 전진 대입 $Ly=b$
 ```rust
 for i in 0..n {
-    ...
+    let mut s = 0.0;
+    for j in 0..i {
+        s += g[i * n + j] * b[j];
+    }
+    b[i] = (b[i] - s) / g[i * n + i];
 }
 ```
 
@@ -179,7 +202,11 @@ $$
 ### ✅ 3. 후진 대입 $L^{\top }x=y$
 ```rust
 for i in (0..n).rev() {
-    ...
+    let mut s = 0.0;
+    for j in (i + 1)..n {
+        s += g[j * n + i] * b[j];
+    }
+    b[i] = (b[i] - s) / g[i * n + i];
 }
 ```
 
