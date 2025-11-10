@@ -125,8 +125,12 @@ pub fn to_bryant_angles(&self) -> (f64, f64, f64) {
 - 이 함수는 기존 to_euler_angles와 거의 유사하지만, 회전 순서가 ZYX임을 명확히 반영합니다.
 
 - from_euler_angles: 일반적인 XYZ 회전 순서 (Roll → Pitch → Yaw)
-- from_bryant_angles: 항공역학에서 흔한 ZYX 회전 순서 (Yaw → Pitch → Roll)
-각각의 수학적 의미와 구현을 함께 설명드릴게요.
+- from_bryant_angles: 항공역학에서 흔한 ZYX 회전 순서 (Yaw → Pitch → Roll)  
+
+---
+
+## from_euler_angles / from_bryant_angles
+각각의 수학적 의미와 구현을 함께 설명.
 
 ### ✅ from_euler_angles (XYZ 순서)
 ```rust
@@ -174,9 +178,6 @@ let q2 = Quaternion::from_bryant_angles(yaw, pitch, roll);
 ```
 
 ---
-
-
-
 
 # 쿼터니언을 이용한 벡터 회전
 
@@ -236,4 +237,6 @@ impl Quaternion {
 | Extract result  | $\vec{v}' = (v'_x, v'_y, v'_z)$           | Final rotated vector components     |
 
 ---
+
+
 
