@@ -208,7 +208,7 @@ let mut val = item.lock().unwrap();
 - 📌 단점: 구조가 복잡해지고, 전체 순회 시 락 관리가 까다로움
 
 ## 구조도
-아래는 Arc<Mutex<Vec<T>>>와 Vec<Arc<Mutex<T>>>의 구조적 차이를 시각적으로 표현한 다이어그램입니다..
+아래는 `Arc<Mutex<Vec<T>>>` 와 `Vec<Arc<Mutex<T>>>` 의 구조적 차이를 시각적으로 표현한 다이어그램입니다..
 
 ```mermaid
 graph TD
