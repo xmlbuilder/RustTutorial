@@ -25,6 +25,7 @@ q=\cos \left( \frac{\theta }{2}\right) +\sin \left( \frac{\theta }{2}\right) (u_
 $$
 
 - 또는
+
 $$
 q=\left( \cos \left( \frac{\theta }{2}\right) ,\sin \left( \frac{\theta }{2}\right) \cdot \vec {u}\right) 
 $$
