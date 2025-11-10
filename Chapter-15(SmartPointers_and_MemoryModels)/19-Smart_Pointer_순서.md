@@ -212,7 +212,7 @@ let mut val = item.lock().unwrap();
 
 ```mermaid
 graph TD
-  subgraph SharedVecPattern
+  subgraph SharedVec Pattern
     A1[Arc]
     A2[Mutex]
     A3[Vec]
@@ -229,7 +229,7 @@ graph TD
 
 ```mermaid
 graph TD
-  subgraph PerItemPattern
+  subgraph PerItem Pattern
     B1[Vec]
     B2[Arc1]
     B3[Mutex1]
