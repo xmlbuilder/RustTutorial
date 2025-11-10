@@ -134,6 +134,32 @@ fn main() {
 | `Rc<RefCell<T>>`     | 여러 소유자가 하나의 가변 데이터를 공유      | 트리 구조, GUI 위젯 공유 등        |
 | `RefCell<Rc<T>>`     | 하나의 소유자가 공유 대상 자체를 바꾸고 싶을 때 | 상태 스왑, 동적 참조 변경 등       |
 
+
+## 구조도
+아래는 RefCell<Rc<T>>와 Rc<RefCell<T>>의 구조적 차이를 시각적으로 표현한 다이어그램입니다.  
+
+```mermaid
+graph TD
+  subgraph Rc_RefCell
+    A1[Rc]
+    A2[RefCell]
+    A3[T]
+    A1 --> A2
+    A2 --> A3
+  end
+
+  subgraph RefCell_Rc
+    B1[RefCell]
+    B2[Rc]
+    B3[T]
+    B1 --> B2
+    B2 --> B3
+  end
+```
+## 📌 설명
+- `Rc → RefCell → T`: 여러 소유자가 하나의 가변 데이터를 공유 (Rc<RefCell<T>>)
+- `RefCell → Rc → T`: 하나의 소유자가 공유 대상 자체를 변경 (RefCell<Rc<T>>)
+
 --- 
 
 # Arc<Mutex<Vec<T>>> / Vec<Arc<Mutex<T>>>
