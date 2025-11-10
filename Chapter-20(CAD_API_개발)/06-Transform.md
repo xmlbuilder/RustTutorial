@@ -64,7 +64,7 @@
 | `is_uniform_scale(eps)`      | $\|s_x - s_y\|\ < \varepsilon,\ \|s_y - s_z\| < \varepsilon$ <br>모든 축이 동일한 스케일인지 확인 |
 | `is_plane_uniform_scale(eps)`| $\|s_x - s_y\|\ < \varepsilon$ <br>X-Y 평면 기준 스케일 일치 여부 확인           |
 | `shear_xy/yz/zx()`           | $\text{shear}_{ij} = \hat{i} \cdot \hat{j}$ <br>단위 벡터 간 내적 (전단 계수) |
-| `shear_factors()`            | $(\text{shear}_{xy}, \text{shear}_{yz}, \text{shear}_{zx})$ <br>전단 계수 튜플 반환 |
+| `shear_factors()`            | $( \text{shear}_{xy} , \text{shear}_{yz} , \text{shear}_{zx} )$ <br>전단 계수 튜플 반환 |
 | `is_orthogonal_basis(eps)`   | $\|\text{shear}_{ij}\| < \varepsilon$ <br>축 간 직교 여부 확인                 |
 
 ### 📌 참고
