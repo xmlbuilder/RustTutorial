@@ -304,7 +304,7 @@ $$
 하지만 실무에서는 재귀적 관계를 이용해 계산하는 것이 효율적입니다:  
 
 $$
-{n \choose 0}={n \choose n}=1\\ {n \choose k}={n-1 \choose k-1}+{n-1 \choose k}\quad \mathrm{for\  }1\leq k\leq n-1
+{n \choose 0}={n \choose n}=1\\ \quad\quad {n \choose k}={n-1 \choose k-1}+{n-1 \choose k}\quad \mathrm{for\  }1\leq k\leq n-1
 $$
 
 
