@@ -141,7 +141,7 @@ fn main() {
 
 ```mermaid
 graph TD
-  subgraph Rc_RefCell
+  subgraph Rc RefCell
     A1[Rc]
     A2[RefCell]
     A3[T]
@@ -151,7 +151,7 @@ graph TD
 ```
 ```mermaid
 graph TD
-  subgraph RefCell_Rc
+  subgraph RefCell Rc
     B1[RefCell]
     B2[Rc]
     B3[T]
