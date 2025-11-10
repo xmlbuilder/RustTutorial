@@ -157,18 +157,11 @@ $$
 ## 🧭 벡터/점 변환
 
 ### `Transform::multi_homogeneous(m, x, y, z, w)`
-- **수식**:  
 
-$$
-  \begin{bmatrix}
-  x' \\ y' \\ z' \\ w'
-  \end{bmatrix}
-  =
-  M \cdot
-  \begin{bmatrix}
-  x \\ y \\ z \\ w
-  \end{bmatrix}
-$$
+- 수식:  
+
+[x′ y′ z′ w′]ᵀ = M · [x y z w]ᵀ
+
 
 - ✅ **검증**: 정확함. 동차 좌표 변환.
 
