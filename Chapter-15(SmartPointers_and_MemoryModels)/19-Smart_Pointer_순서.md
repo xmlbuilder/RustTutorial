@@ -109,6 +109,7 @@ struct Data {
     value: i32,
 }
 ```
+
 ```rust        
 fn main() {
     let a = Rc::new(Data { value: 1 });
@@ -136,7 +137,7 @@ fn main() {
 
 
 ## 구조도
-아래는 RefCell<Rc<T>>와 Rc<RefCell<T>>의 구조적 차이를 시각적으로 표현한 다이어그램입니다.  
+아래는 `RefCell<Rc<T>>` 와 `Rc<RefCell<T>>` 의 구조적 차이를 시각적으로 표현한 다이어그램입니다.  
 
 ```mermaid
 graph TD
@@ -157,8 +158,8 @@ graph TD
   end
 ```
 ## 📌 설명
-- `Rc → RefCell → T`: 여러 소유자가 하나의 가변 데이터를 공유 (Rc<RefCell<T>>)
-- `RefCell → Rc → T`: 하나의 소유자가 공유 대상 자체를 변경 (RefCell<Rc<T>>)
+- `Rc → RefCell → T`: 여러 소유자가 하나의 가변 데이터를 공유 (`Rc<RefCell<T>>`)
+- `RefCell → Rc → T`: 하나의 소유자가 공유 대상 자체를 변경 (`RefCell<Rc<T>>`)
 
 --- 
 
@@ -222,7 +223,10 @@ graph TD
     A3 --> A5
     A3 --> A6
   end
+```
 
+```mermaid
+graph TD
   subgraph PerItemPattern
     B1[Vec]
     B2[Arc1]
