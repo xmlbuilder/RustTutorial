@@ -291,3 +291,69 @@ $$
 
 ---
 
+# on_binomial_table
+
+
+## 🧮 수학적 배경: 이항 계수
+이항 계수는 다음과 같이 정의됩니다:  
+
+$$
+{n \choose k}=\frac{n!}{k!(n-k)!}
+$$
+  
+하지만 실무에서는 재귀적 관계를 이용해 계산하는 것이 효율적입니다:  
+
+$$
+{n \choose 0}={n \choose n}=1\\ {n \choose k}={n-1 \choose k-1}+{n-1 \choose k}\quad \mathrm{for\  }1\leq k\leq n-1
+$$
+
+
+### ✅ 1. on_binomial_table(n_max) 함수 검증
+이 함수는 $0\leq n\leq n_{\mathrm{max}}$ 범위의 모든 이항 계수를 계산합니다.
+#### 🔍 단계별 수식 대응
+```rust
+c[n][0] = 1.0;
+c[n][n] = 1.0;
+```
+
+- 수식: ${n \choose 0}={n \choose n}=1$
+```rust
+c[n][k] = c[n - 1][k - 1] + c[n - 1][k];
+```
+
+- 수식: ${n \choose k}={n-1 \choose k-1}+{n-1 \choose k}$
+
+#### ✅ 검증 결과: 파스칼의 삼각형 정의를 정확히 따름
+
+### ✅ 2. on_update_binomial_coefficients(coeffs, max_degree) 함수 검증
+이 함수는 기존 이항 계수 테이블을 확장하거나 보완합니다.
+
+#### 🔍 핵심 로직
+```rust
+if coeffs[n].len() == n + 1 {
+    start_n = n + 1;
+}
+```
+
+- 유효한 행인지 확인: $\mathrm{len}=n+1$ 이면 ${n \choose k}$ 가 모두 계산된 상태
+```rust
+row[k] = prev[k - 1] + prev[k];
+```
+
+- 수식: ${n \choose k}={n-1 \choose k-1}+{n-1 \choose k}$
+
+#### ✅ 검증 결과: 기존 테이블을 기반으로 정확히 확장하며, 수학적으로 일관됨
+
+## 📌 요약
+
+| 함수 이름                         | 수학적 의미                          | 주요 동작 요약                                 |
+|----------------------------------|--------------------------------------|------------------------------------------------|
+| on_binomial_table(n_max)         | 파스칼 삼각형 생성                   | $\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$ 재귀 계산 |
+| on_update_binomial_coefficients  | 기존 테이블 확장 및 보완            | 누락된 행만 계산하여 기존 테이블을 효율적으로 갱신 |
+
+---
+
+
+
+
+
