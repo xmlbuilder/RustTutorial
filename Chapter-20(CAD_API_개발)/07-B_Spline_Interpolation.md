@@ -366,4 +366,245 @@ pub fn least_squares_end_interpolate(
 | `test_least_squares_underconstrained_should_fail` | 제어점 수 부족 시 실패하는지 확인                                                 | p=3, m=3, 샘플 2개                              | `None` 반환 확인                                 |
 | `test_least_squares_high_degree_dense_data`       | 고차수(p=5) + 고밀도 데이터에 대한 근사 성능 확인                                  | p=5, m=8, y=sin(πx), 샘플 50개                  | 오차 < 1e-2                                      |
 
+```rust
+#[cfg(test)]
+mod tests {
+    use nurbslib::core::geom::Point;
+    use nurbslib::core::knot::{on_clamped_uniform_knot_vector, KnotVector};
+    use nurbslib::core::maths::on_least_squares_end_interpolate;
+    use nurbslib::core::prelude::{Curve, Interval};
+    use nurbslib::core::types::Degree;
+
+    fn close(a: f64, b: f64, tol: f64) -> bool {
+        (a - b).abs() <= tol * (1.0 + a.abs().max(b.abs()))
+    }
+
+    fn max_sample_err(c: &Curve, samples: &[(f64, Point)]) -> f64 {
+        samples.iter().fold(0.0, |acc, (u, p)| {
+            let q = c.eval_point(*u);
+            let dx = q.x - p.x;
+            let dy = q.y - p.y;
+            let dz = q.z - p.z;
+            acc.max((dx * dx + dy * dy + dz * dz).sqrt())
+        })
+    }
+```
+```rust
+    #[test]
+    fn test_least_squares_line_cubic_clamped() {
+        // 목표: x축 직선 [0,1] 구간. p=3, m=4 (clamped uniform knots).
+        let p = 3usize;
+        let m = 4usize;
+        let knot = on_clamped_uniform_knot_vector(p, m); // [0,0,0,0,1,1,1,1]
+
+
+        // 샘플 9개 (u=0..1). 데이터는 정확한 직선 (0,0,0) → (1,0,0).
+        let n_data = 9usize;
+        let mut params = Vec::with_capacity(n_data);
+        let mut samples = Vec::with_capacity(n_data);
+        for i in 0..n_data {
+            let u = i as f64 / (n_data as f64 - 1.0);
+            params.push(u);
+            samples.push((u, Point::new(u, 0.0, 0.0)));
+        }
+        let points: Vec<Point> = samples.iter().map(|(_, p)| *p).collect();
+
+        println!("points: {:?}", points);
+        println!("params {:?}", params);
+        println!("knot {:?}", knot);
+        println!("knot {:?}", p);
+        println!("m {:?}", m);
+
+        let ctrl = on_least_squares_end_interpolate(&points, p, m, &params, &knot)
+            .expect("least_squares_end_interpolate failed");
+
+        // 제어점 개수 확인
+        assert_eq!(ctrl.len(), m);
+
+        // 엔드포인트는 데이터 첫/끝과 동일해야 함
+        assert!(close(ctrl[0].x, points[0].x, 1e-12));
+        assert!(close(ctrl[0].y, points[0].y, 1e-12));
+        assert!(close(ctrl[0].z, points[0].z, 1e-12));
+        let last = points[points.len() - 1];
+        assert!(close(ctrl[m - 1].x, last.x, 1e-12));
+        assert!(close(ctrl[m - 1].y, last.y, 1e-12));
+        assert!(close(ctrl[m - 1].z, last.z, 1e-12));
+
+        // 내부 제어점이 직선 근처에 형성됐는지(특히 y≈0) 확인
+        for k in 1..(m - 1) {
+            assert!(
+                ctrl[k].y.abs() <= 1e-12,
+                "internal CP y not near 0: {}",
+                ctrl[k].y
+            );
+        }
+
+        // 곡선을 만들어 샘플 오차 확인 (거의 0이어야 함)
+        let mut c = Curve::new(p as Degree, ctrl.clone(), KnotVector{knots: knot.clone()} ).unwrap_or(Curve::default());
+        // (필요 시) 도메인 재설정
+        c.domain = Interval {
+            t0: knot[p],
+            t1: knot[m],
+        };
+
+        let err = max_sample_err(&c, &samples);
+        assert!(err < 1e-9, "fit error too large on line: {}", err);
+    }
+```
+```rust
+    #[test]
+    fn test_least_squares_quadratic_like_cubic_fit() {
+        // 목표: y = 0.25 * x^2 (완만한 포물선), 0..2 구간.
+        // p=3, m=5 → 2 스팬 clamped uniform: [0,0,0,0,1,2,2,2,2] (주의: 프로젝트의 knot 생성 정책에 맞춰 u범위 [0,2])
+        let p = 3usize;
+        let m = 5usize;
+
+        // 커스텀 클램프드 knot (파라미터 범위를 [0,2]로)
+        let knot = vec![0.0, 0.0, 0.0, 0.0, 1.0, 2.0, 2.0, 2.0, 2.0];
+
+        // 샘플 21개
+        let n_data = 21usize;
+        let mut params = Vec::with_capacity(n_data);
+        let mut samples = Vec::with_capacity(n_data);
+        for i in 0..n_data {
+            let t = 2.0 * (i as f64 / (n_data as f64 - 1.0)); // 0..2
+            let x = t;
+            let y = 0.25 * x * x;
+            params.push(t);
+            samples.push((t, Point::new(x, y, 0.0)));
+        }
+        let points: Vec<Point> = samples.iter().map(|(_, p)| *p).collect();
+
+        let ctrl = on_least_squares_end_interpolate(&points, p, m, &params, &knot)
+            .expect("least_squares_end_interpolate failed");
+
+        assert_eq!(ctrl.len(), m);
+
+        // 엔드포인트 일치
+        assert!(close(ctrl[0].x, points[0].x, 1e-9));
+        assert!(close(ctrl[0].y, points[0].y, 1e-9));
+        let last = points.last().copied().unwrap();
+        assert!(close(ctrl[m - 1].x, last.x, 1e-9));
+        assert!(close(ctrl[m - 1].y, last.y, 1e-9));
+
+        // 곡선 만들어서 오차 체크 (완벽 일치는 아님, 수치 근사)
+        let mut c = Curve::new(p as Degree, ctrl.clone(), KnotVector{knots:knot.clone()}).unwrap_or(Curve::default());
+        c.domain = Interval {
+            t0: knot[p],
+            t1: knot[m],
+        };
+        let err = max_sample_err(&c, &samples);
+        assert!(err < 1e-3, "fit error too large on quadratic-like: {}", err);
+    }
+```
+```rust
+    #[test]
+    fn test_least_squares_noisy_data_robustness() {
+        // x축 직선 + 약간의 노이즈
+        use rand::rngs::StdRng;
+        use rand::{Rng, SeedableRng};
+
+        let p = 3usize;
+        let m = 4usize;
+        let knot = on_clamped_uniform_knot_vector(p, m);
+
+        let n_data = 21usize;
+        let mut rng = StdRng::seed_from_u64(42);
+        let mut params = Vec::with_capacity(n_data);
+        let mut samples = Vec::with_capacity(n_data);
+        for i in 0..n_data {
+            let u = i as f64 / (n_data as f64 - 1.0);
+            let nx = (rng.r#gen::<f64>() - 0.5) * 1e-4;
+            let ny = (rng.r#gen::<f64>() - 0.5) * 1e-4;
+            //let nx: f64 = rng.gen_range(-0.5..0.5) * 1e-4;
+            //let ny: f64 = rng.gen_range(-0.5..0.5) * 1e-4;
+            params.push(u);
+            samples.push((u, Point::new(u + nx, ny, 0.0)));
+        }
+        let points: Vec<Point> = samples.iter().map(|(_, p)| *p).collect();
+
+        let ctrl = on_least_squares_end_interpolate(&points, p, m, &params, &knot)
+            .expect("least_squares_end_interpolate failed");
+
+        // 곡선으로 재구성
+        let mut c = Curve::new(p as Degree, ctrl.clone(), KnotVector{knots: knot.clone()} ).unwrap_or(Curve::default());
+        c.domain = Interval {
+            t0: knot[p],
+            t1: knot[m],
+        };
+        let err = max_sample_err(&c, &samples);
+        // 노이즈가 있으므로 너무 타이트하지 않게
+        assert!(err < 5e-3, "noisy fit error too large: {}", err);
+    }
+```
+```rust
+    #[test]
+    #[should_panic(expected = "Interpolation failed unexpectedly with 2 control points (should fallback to straight line)")]
+    fn test_least_squares_should_panic_on_invalid_fallback() {
+        let p = 3;
+        let m = 2; // 최소 제어점 수
+        let knot = on_clamped_uniform_knot_vector(p, m);
+        let points = vec![
+            Point::new(0.0, 0.0, 0.0),
+            Point::new(1.0, 1.0, 1.0),
+        ];
+        let params = vec![0.0, 1.0];
+
+        match on_least_squares_end_interpolate(&points, p, m, &params, &knot) {
+            Some(ctrl) => {
+                assert_eq!(ctrl.len(), 2);
+                assert!(close(ctrl[0].x, 0.0, 1e-12));
+                assert!(close(ctrl[1].x, 1.0, 1e-12));
+            }
+            None => {
+                panic!("Interpolation failed unexpectedly with 2 control points (should fallback to straight line)");
+            }
+        }
+    }
+```
+```rust
+    #[test]
+    fn test_least_squares_underconstrained_should_fail() {
+        let p = 3;
+        let m = 3; // m < p+1 → underconstrained
+        let knot = on_clamped_uniform_knot_vector(p, m);
+        let points = vec![
+            Point::new(0.0, 0.0, 0.0),
+            Point::new(1.0, 1.0, 1.0),
+        ];
+        let params = vec![0.0, 1.0];
+
+        let result = on_least_squares_end_interpolate(&points, p, m, &params, &knot);
+        assert!(result.is_none(), "should fail due to underconstrained system");
+    }
+```
+```rust
+    #[test]
+    fn test_least_squares_high_degree_dense_data() {
+        let p = 5;
+        let m = 8;
+        let knot = on_clamped_uniform_knot_vector(p, m);
+        let n_data = 50;
+        let mut params = Vec::with_capacity(n_data);
+        let mut samples = Vec::with_capacity(n_data);
+        for i in 0..n_data {
+            let u = i as f64 / (n_data as f64 - 1.0);
+            let y = (u * std::f64::consts::PI).sin();
+            params.push(u);
+            samples.push((u, Point::new(u, y, 0.0)));
+        }
+        let points: Vec<Point> = samples.iter().map(|(_, p)| *p).collect();
+
+        let ctrl = on_least_squares_end_interpolate(&points, p, m, &params, &knot)
+            .expect("high-degree fit failed");
+
+        let mut c = Curve::new(p as Degree, ctrl.clone(), KnotVector { knots: knot.clone() })
+            .unwrap_or(Curve::default());
+        c.domain = Interval { t0: knot[p], t1: knot[m] };
+
+        let err = max_sample_err(&c, &samples);
+        assert!(err < 1e-2, "high-degree fit error too large: {}", err);
+    }
+}
+```
 
