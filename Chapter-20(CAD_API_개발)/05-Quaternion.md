@@ -181,15 +181,17 @@ let q2 = Quaternion::from_bryant_angles(yaw, pitch, roll);
 
 # 쿼터니언을 이용한 벡터 회전
 
+![Quternion Ration](/image/quaternion_rotation.png)
+
 ## 🎯 목적: 쿼터니언을 이용한 벡터 회전
 ## ✅ 수학적 정의
-- 벡터 \vec {v}를 쿼터니언 q로 회전시키는 공식은:
+- 벡터 $\vec {v}$ 를 쿼터니언 q로 회전시키는 공식은:
 
 $$
 \vec {v}_{\mathrm{rotated}}=q\cdot \vec {v}\cdot q^{-1}
 $$
 
-- 여기서 \vec {v}는 쿼터니언으로 표현된 순허수 쿼터니언:
+- 여기서 $\vec {v}$ 는 쿼터니언으로 표현된 순허수 쿼터니언:
 
 $$
 v_q=(0,v_x,v_y,v_z)
