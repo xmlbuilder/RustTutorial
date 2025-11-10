@@ -354,6 +354,214 @@ row[k] = prev[k - 1] + prev[k];
 ---
 
 
+# 다항식 -> 베지어 곡석
+
+이 코드는 **다항식(Power basis)** 을 **베지어 곡선(Bézier basis)** 로 변환하는 과정에서 이항 계수를 활용한 수학적 변환을 수행합니다.  
+아래에 수학적 검토와 효율성 측면을 단계적으로 설명.
+
+## 소스 코드
+```rust
+#[inline]
+fn on_binom_2(k: i32) -> f64 {
+    if k < 0 || k > 2 {
+        return 0.0;
+    }
+    if k == 0 || k == 2 {
+        return 1.0;
+    }
+    // Since only n=2,4 is needed, a table is sufficient
+    const C2: [[f64; 3]; 3] = [[1.0, 0.0, 0.0], [1.0, 1.0, 0.0], [1.0, 2.0, 1.0]];
+    C2[2][k as usize]
+}
+```
+```rust
+#[inline]
+fn on_binom_4(k: i32) -> f64 {
+    if k < 0 || k > 4 {
+        return 0.0;
+    }
+    if k == 0 || k == 4 {
+        return 1.0;
+    }
+    // Since only n=2,4 is needed, a table is sufficient
+    const C4: [[f64; 5]; 5] = [
+        [1.0, 0.0, 0.0, 0.0, 0.0],
+        [1.0, 1.0, 0.0, 0.0, 0.0],
+        [1.0, 2.0, 1.0, 0.0, 0.0],
+        [1.0, 3.0, 3.0, 1.0, 0.0],
+        [1.0, 4.0, 6.0, 4.0, 1.0],
+    ];
+    C4[4][k as usize]
+}
+```
+```rust
+#[inline]
+fn on_binom_f64(n: usize, k: usize) -> f64 {
+    if k > n {
+        return 0.0;
+    }
+    if k == 0 || k == n {
+        return 1.0;
+    }
+    let k = k.min(n - k);
+    let mut res = 1.0;
+    for i in 1..=k {
+        res *= (n - k + i) as f64 / (i as f64);
+    }
+    res
+}
+```
+```rust
+pub fn on_power_to_bezier_deg2(a: [f64; 3]) -> [f64; 3] {
+    // b_i = sum_{k=0..i} C(i,k)/C(2,k) * a[k]
+    let mut b = [0.0; 3];
+    for i in 0..=2 {
+        let mut s = 0.0;
+        for k in 0..=i {
+            s += on_binom_f64(i, k) / on_binom_2(k as i32) * a[k as usize];
+        }
+        b[i as usize] = s;
+    }
+    b
+}
+```
+```rust
+pub fn on_power_to_bezier_deg4(a: [f64; 5]) -> [f64; 5] {
+    let mut b = [0.0; 5];
+    for i in 0..=4 {
+        let mut s = 0.0;
+        for k in 0..=i {
+            s += on_binom_f64(i, k) / on_binom_4(k as i32) * a[k as usize];
+        }
+        b[i as usize] = s;
+    }
+    b
+}
+```
+
+## 🧮 수학적 검토: Power → Bézier 변환
+### ✅ 기본 수식
+베지어 곡선의 i-번째 베지어 계수 $b_i$ 는 다음과 같이 계산됩니다:
+
+$$
+b_i=\sum _{k=0}^i\frac{{i \choose k}}{{n \choose k}}a_k
+$$
+
+- $a_k$: Power basis 계수
+- ${i \choose k}$: 베지어 변환을 위한 조합 계수
+- ${n \choose k}$: 정규화 계수 (전체 차수 기준)
+이 수식은 Bernstein basis와 Power basis 간의 선형 변환을 나타냅니다.
+- ✅ on_power_to_bezier_deg2와 deg4 함수는 이 수식을 정확히 구현하고 있습니다.
+
+### 🔍 함수별 수학적 검증
+```rust
+on_binom_f64(n, k)
+```
+- 계산식:
+
+$$
+{n \choose k}=\prod _{i=1}^k\frac{n-k+i}{i}
+$$
+
+- 이 방식은 오버플로 방지와 정밀도 확보를 위한 실용적 접근입니다
+- ✅ 수학적으로 정확하며, 효율적이고 안정적
+
+
+### on_binom_2(k) / on_binom_4(k)
+- 고정된 n=2,4에 대해 이항 계수를 테이블로 저장
+- 예: ${4 \choose 2}=6$, ${2 \choose 1}=2$
+- ✅ 수학적으로 정확하며, 불필요한 계산을 피하기 위한 최적화
+
+## ⚙️ 효율성 측면
+
+| 항목                     | 최적화 대상 또는 조건 | 효율성 이유                                      |
+|--------------------------|------------------------|--------------------------------------------------|
+| on_binom_2 / on_binom_4  | 고정된 차수 $n$     | 테이블 조회로 계산 생략, 빠른 실행               |
+| on_binom_f64             | 일반 $n, k$         | 반복문 기반으로 오버플로 방지 및 정밀도 확보     |
+| #[inline]                | 컴파일러 최적화 힌트    | 함수 호출 오버헤드 제거, 성능 향상 가능          |
+| k < 0 || k > n           | 경계 조건 검사          | 불필요한 계산 방지, 안전성 확보                  |
+
+- ✅ 전체적으로 정확성과 효율성 모두를 고려한 설계입니다
+
+## 📌 요약
+| 함수 이름                     | 수학적 의미                              | 효율성 목적                         |
+|------------------------------|------------------------------------------|-------------------------------------|
+| `on_binom_f64(n, k)`           | 일반 이항 계수 계산                      | 반복문 기반으로 오버플로 방지       |
+| `on_binom_2(k)`, `on_binom_4(k)` | 고정 차수 이항 계수 테이블 조회          | 빠른 조회로 성능 최적화             |
+| `on_power_to_bezier_deg2/4`    | Power → Bézier 변환                      | 정규화된 조합 계수로 정확한 변환     |
+
+
+# nalgebra 설명
+
+아래는 기존 구조를 그대로 유지하면서 내부 계산을  기반으로 대체한 버전입니다.  
+핵심은 이항 계수 계산과 Power → Bézier 변환을 nalgebra의 벡터 연산으로 처리하는 것입니다.
+
+## ✅ nalgebra 기반 변환 함수
+```rust
+use nalgebra::{DVector};
+
+#[inline]
+fn on_binom_f64(n: usize, k: usize) -> f64 {
+    if k > n {
+        return 0.0;
+    }
+    if k == 0 || k == n {
+        return 1.0;
+    }
+    let k = k.min(n - k);
+    let mut res = 1.0;
+    for i in 1..=k {
+        res *= (n - k + i) as f64 / (i as f64);
+    }
+    res
+}
+```
+```rust
+pub fn on_power_to_bezier_deg2(a: [f64; 3]) -> [f64; 3] {
+    let a_vec = DVector::from_column_slice(&a);
+    let mut b_vec = DVector::zeros(3);
+
+    for i in 0..=2 {
+        let mut s = 0.0;
+        for k in 0..=i {
+            let c = on_binom_f64(i, k) / on_binom_f64(2, k);
+            s += c * a_vec[k];
+        }
+        b_vec[i] = s;
+    }
+
+    [b_vec[0], b_vec[1], b_vec[2]]
+}
+```
+```rust
+pub fn on_power_to_bezier_deg4(a: [f64; 5]) -> [f64; 5] {
+    let a_vec = DVector::from_column_slice(&a);
+    let mut b_vec = DVector::zeros(5);
+
+    for i in 0..=4 {
+        let mut s = 0.0;
+        for k in 0..=i {
+            let c = on_binom_f64(i, k) / on_binom_f64(4, k);
+            s += c * a_vec[k];
+        }
+        b_vec[i] = s;
+    }
+
+    [b_vec[0], b_vec[1], b_vec[2], b_vec[3], b_vec[4]]
+}
+```
+
+## 📌 핵심 유지 사항
+
+| 항목 구분         | 구조 유지 여부 | 설명                                           |
+|------------------|----------------|------------------------------------------------|
+| 함수 시그니처     | ✅             | 입력/출력 타입 그대로 유지 (`[f64; N]`)        |
+| on_binom_f64 사용 | ✅             | 이항 계수 계산 로직 그대로 유지                |
+| #[inline]         | ✅             | 컴파일러 최적화 힌트 유지                      |
+| DVector 활용      | ✅             | `nalgebra::DVector`로 벡터 연산 최적화         |
+
+----
+
 
 
 
