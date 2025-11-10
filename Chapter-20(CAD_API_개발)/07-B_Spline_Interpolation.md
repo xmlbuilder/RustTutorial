@@ -11,9 +11,9 @@ C(u)=\sum _{j=0}^{m-1}N_{j,p}(u)\cdot C_j
 $$
 
 - $N_{j,p}(u)$ : B-스플라인 기저 함수 (degree p, knot vector U)
-- C_j: 제어점 (control point)
-- m: 제어점 개수
-- n: 데이터 점 개수
+- $C_j$: 제어점 (control point)
+- $m$: 제어점 개수
+- $n$: 데이터 점 개수
 
 ## 🎯 목표
 - 양 끝 제어점 $C_0=P_0$, $C_{m-1}=P_{n-1}$ 고정
