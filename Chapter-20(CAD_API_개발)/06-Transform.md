@@ -23,10 +23,10 @@
 
 | 함수명                    | 수식 또는 설명                                                                 |
 |--------------------------|----------------------------------------------------------------------------------|
-| `mul(&rhs)`              | $M_{\text{result}} = M_{\text{self}} \cdot M_{\text{rhs}}$<br>4×4 행렬 곱. 행 우선 곱셈 기준. |
+| `mul(&rhs)`              | $M_{\text{result}} = M_{\text{self}} \cdot M_{\text{rhs}}$ <br>4×4 행렬 곱. 행 우선 곱셈 기준. |
 | `invert()`               | $M^{-1}$ — 행렬의 역행렬. 존재하지 않으면 `None` 반환.                      |
 | `inverse_transpose3x3()` | $(M^{-1})^T_{3×3}$ — 상단 3×3 블록의 역전치. 법선 벡터 변환에 사용.         |
-| `then(next)`             | $M_{\text{then}} = M_{\text{next}} \cdot M_{\text{self}}$<br>우→좌 순서의 합성. |
+| `then(next)`             | $M_{\text{then}} = M_{\text{next}} \cdot M_{\text{self}}$ <br>우→좌 순서의 합성. |
 
 ### 📌 참고
 - mul()과 then()은 행렬 곱의 순서에 따라 결과가 달라지므로, 우선 적용되는 변환이 오른쪽에 위치합니다.
@@ -39,14 +39,14 @@
 
 | 함수명                  | 수식 또는 설명                                                                 |
 |------------------------|----------------------------------------------------------------------------------|
-| `transform_point2d(p)` | $\vec{p}' = \text{proj3}(M \cdot [x, y, 0, 1]^T)$<br>2D 점의 동차 좌표 변환 후 투영 |
-| `transform_vector2d(v)`| $\vec{v}' = \text{proj3}(M \cdot [x, y, 0, 0]^T)$<br>2D 벡터의 선형 변환         |
-| `transform_point3d(p)` | $\vec{p}' = \text{proj3}(M \cdot [x, y, z, 1]^T)$<br>3D 점의 동차 좌표 변환 후 투영 |
-| `transform_vector3d(v)`| $\vec{v}' = \text{proj3}(M \cdot [x, y, z, 0]^T)$<br>3D 벡터의 선형 변환         |
-| `transform_point4d(h)`| $\vec{p}' = M \cdot [x, y, z, w]^T$<br>4D 점의 직접 변환                        |
-| `transform_normal(n)` | $\vec{n}' = \text{normalize}((M^{-1})^T_{3×3} \cdot \vec{n})$<br>법선 벡터의 역전치 변환 |
-| `apply_point(p)`       | $\vec{p}' = \frac{p \cdot M}{w}$<br>row-vector 방식. w ≈ 1이면 생략 가능       |
-| `apply_vector(v)`      | $\vec{v}' = v \cdot M \quad (w = 0)$<br>row-vector 방식의 벡터 선형 변환       |
+| `transform_point2d(p)` | $\vec{p}' = \text{proj3}(M \cdot [x, y, 0, 1]^T)$ <br>2D 점의 동차 좌표 변환 후 투영 |
+| `transform_vector2d(v)`| $\vec{v}' = \text{proj3}(M \cdot [x, y, 0, 0]^T)$ <br>2D 벡터의 선형 변환         |
+| `transform_point3d(p)` | $\vec{p}' = \text{proj3}(M \cdot [x, y, z, 1]^T)$ <br>3D 점의 동차 좌표 변환 후 투영 |
+| `transform_vector3d(v)`| $\vec{v}' = \text{proj3}(M \cdot [x, y, z, 0]^T)$ <br>3D 벡터의 선형 변환         |
+| `transform_point4d(h)`| $\vec{p}' = M \cdot [x, y, z, w]^T$ <br>4D 점의 직접 변환                        |
+| `transform_normal(n)` | $\vec{n}' = \text{normalize}((M^{-1})^T_{3×3} \cdot \vec{n})$ <br>법선 벡터의 역전치 변환 |
+| `apply_point(p)`       | $\vec{p}' = \frac{p \cdot M}{w}$ <br>row-vector 방식. w ≈ 1이면 생략 가능       |
+| `apply_vector(v)`      | $\vec{v}' = v \cdot M \quad (w = 0)$ <br>row-vector 방식의 벡터 선형 변환       |
 
 ### 📌 참고
 - transform_* 함수들은 모두 column-vector 기준으로 동차 좌표를 적용한 후 proj3()로 투영합니다.
@@ -58,14 +58,14 @@
 
 | 함수명                        | 수식 또는 설명                                                                 |
 |------------------------------|----------------------------------------------------------------------------------|
-| `basis_x/y/z()`              | $\vec{x} = M_{0:2,0},\ \vec{y} = M_{0:2,1},\ \vec{z} = M_{0:2,2}$<br>각 축 방향 벡터 추출 |
-| `scale_factor_x/y/z()`       | $s_i = \|\vec{basis}_i\|$<br>각 축의 스케일 크기                            |
+| `basis_x/y/z()`              | $\vec{x} = M_{0:2,0},\ \vec{y} = M_{0:2,1},\ \vec{z} = M_{0:2,2}$ <br>각 축 방향 벡터 추출 |
+| `scale_factor_x/y/z()`       | $s_i = \|\vec{basis}_i\|$ <br>각 축의 스케일 크기                            |
 | `scale_factors()`            | $(s_x, s_y, s_z)$<br>모든 축의 스케일 크기 튜플 반환                        |
-| `is_uniform_scale(eps)`      | $\|s_x - s_y\|\ < \varepsilon,\ \|s_y - s_z\| < \varepsilon$<br>모든 축이 동일한 스케일인지 확인 |
-| `is_plane_uniform_scale(eps)`| $\|s_x - s_y\|\ < \varepsilon$<br>X-Y 평면 기준 스케일 일치 여부 확인           |
-| `shear_xy/yz/zx()`           | $\text{shear}_{ij} = \hat{i} \cdot \hat{j}$<br>단위 벡터 간 내적 (전단 계수) |
-| `shear_factors()`            | $(\text{shear}_{xy}, \text{shear}_{yz}, \text{shear}_{zx})$<br>전단 계수 튜플 반환 |
-| `is_orthogonal_basis(eps)`   | $|\text{shear}_{ij}| < \varepsilon$<br>축 간 직교 여부 확인                 |
+| `is_uniform_scale(eps)`      | $\|s_x - s_y\|\ < \varepsilon,\ \|s_y - s_z\| < \varepsilon$ <br>모든 축이 동일한 스케일인지 확인 |
+| `is_plane_uniform_scale(eps)`| $\|s_x - s_y\|\ < \varepsilon$ <br>X-Y 평면 기준 스케일 일치 여부 확인           |
+| `shear_xy/yz/zx()`           | $\text{shear}_{ij} = \hat{i} \cdot \hat{j}$ <br>단위 벡터 간 내적 (전단 계수) |
+| `shear_factors()`            | $(\text{shear}_{xy}, \text{shear}_{yz}, \text{shear}_{zx})$ <br>전단 계수 튜플 반환 |
+| `is_orthogonal_basis(eps)`   | $|\text{shear}_{ij}| < \varepsilon$ <br>축 간 직교 여부 확인                 |
 
 ### 📌 참고
 - basis_*()는 행렬의 열 벡터를 추출하여 각 축 방향을 나타냅니다.
@@ -77,10 +77,10 @@
 
 | 타입 × Transform           | 트레이트 | 수식 또는 설명                                                                 |
 |---------------------------|----------|----------------------------------------------------------------------------------|
-| `Point * Transform`       | `Mul`    | $\vec{p}' = \frac{M \cdot [x, y, z, 1]^T}{w}$<br>점에 대한 동차 좌표 변환 후 투영 |
-| `Vector * Transform`      | `Mul`    | $\vec{v}' = M \cdot [x, y, z, 0]^T$<br>벡터는 w=0으로 선형 변환만 적용           |
-| `Point2 * Transform`      | `Mul`    | $\vec{p}' = \frac{M \cdot [x, y, 0, 1]^T}{w}$<br>2D 점을 3D로 확장 후 변환         |
-| `Vector2 * Transform`     | `Mul`    | $\vec{v}' = M \cdot [x, y, 0, 0]^T$<br>2D 벡터를 3D로 확장 후 선형 변환           |
+| `Point * Transform`       | `Mul`    | $\vec{p}' = \frac{M \cdot [x, y, z, 1]^T}{w}$ <br>점에 대한 동차 좌표 변환 후 투영 |
+| `Vector * Transform`      | `Mul`    | $\vec{v}' = M \cdot [x, y, z, 0]^T$ <br>벡터는 w=0으로 선형 변환만 적용           |
+| `Point2 * Transform`      | `Mul`    | $\vec{p}' = \frac{M \cdot [x, y, 0, 1]^T}{w}$ <br>2D 점을 3D로 확장 후 변환         |
+| `Vector2 * Transform`     | `Mul`    | $\vec{v}' = M \cdot [x, y, 0, 0]^T$ <br>2D 벡터를 3D로 확장 후 선형 변환           |
 
 
 ### 📌 참고
