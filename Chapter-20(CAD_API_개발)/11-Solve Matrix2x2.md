@@ -8,8 +8,8 @@
 
 $$
 \begin{aligned}
-a\,x + b\,y &= e,\\
-c\,x + d\,y &= f
+ax + by &= e,\\
+cx + dy &= f
 \end{aligned}
 $$
 
