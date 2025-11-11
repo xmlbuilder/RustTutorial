@@ -7,7 +7,10 @@
 다음과 같은 연립방정식을 풀고자 합니다:  
 
 $$
-\left\{ \, \begin{array}{l}\textstyle a\cdot x+b\cdot y=e\\ \textstyle c\cdot x+d\cdot y=f\end{array}\right.
+\begin{bmatrix} a & b \\ c & d \end{bmatrix}
+\begin{bmatrix} x \\ y \end{bmatrix}
+=
+\begin{bmatrix} e \\ f \end{bmatrix}
 $$
 
 이를 행렬 형태로 표현하면:  
@@ -83,5 +86,10 @@ $$
 | 활용 추천      | 빠른 판별, 단순 계산용      | 정밀 계산, 디버깅 및 로그 분석용    | 목적에 따라 선택 가능                      |
 
 ---
+
+## 소스 코드
+```rust
+
+```
 
 
