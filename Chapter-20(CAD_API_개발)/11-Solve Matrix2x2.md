@@ -89,7 +89,145 @@ $$
 
 ## 소스 코드
 ```rust
+#[derive(Copy, Clone, Debug)]
+pub struct Solve2x2Result {
+    pub rank: i32,
+    pub x: f64,
+    pub y: f64,
+    pub pivot_ratio: f64,
+}
+```
+```rust
+pub fn on_solve_2x2(
+    mut m00: f64,
+    mut m01: f64,
+    mut m10: f64,
+    mut m11: f64,
+    mut d0: f64,
+    mut d1: f64,
+) -> Solve2x2Result {
+    use core::mem;
 
+    // pivot 선택 (최대 절댓값)
+    let mut which = 0usize;
+    let mut vmax = m00.abs();
+    let v01 = m01.abs();
+    if v01 > vmax {
+        vmax = v01;
+        which = 1;
+    }
+    let v10 = m10.abs();
+    if v10 > vmax {
+        vmax = v10;
+        which = 2;
+    }
+    let v11 = m11.abs();
+    if v11 > vmax {
+        vmax = v11;
+        which = 3;
+    }
+
+    let mut x = 0.0;
+    let mut y = 0.0;
+    let mut pivot_ratio = 0.0;
+
+    if vmax == 0.0 {
+        return Solve2x2Result {
+            rank: 0,
+            x,
+            y,
+            pivot_ratio,
+        };
+    }
+
+    // val5=max pivot, val6=min pivot (초기값은 vmax)
+    let mut val5 = vmax;
+    let mut val6 = vmax;
+
+    // 열 스왑?
+    let mut swapped_cols = false;
+    if which % 2 == 1 {
+        swapped_cols = true;
+        mem::swap(&mut m00, &mut m01);
+        mem::swap(&mut m10, &mut m11);
+    }
+    // 행 스왑?
+    if which > 1 {
+        mem::swap(&mut d0, &mut d1);
+        mem::swap(&mut m00, &mut m10);
+        mem::swap(&mut m01, &mut m11);
+    }
+
+    // 첫 피벗으로 정규화
+    let inv = 1.0 / m00;
+    m01 *= inv;
+    d0 *= inv;
+
+    // 소거
+    if m10 != 0.0 {
+        m11 -= m10 * m01;
+        d1 -= m10 * d0;
+    }
+
+    // 두 번째 피벗 체크 (정확 비교)
+    if m11 == 0.0 {
+        return Solve2x2Result {
+            rank: 1,
+            x,
+            y,
+            pivot_ratio: 0.0,
+        };
+    }
+
+    // pivot ratio 갱신
+    let v = m11.abs();
+    if v > val5 {
+        val5 = v;
+    } else if v < val6 {
+        val6 = v;
+    }
+    pivot_ratio = val6 / val5;
+
+    // back substitution
+    d1 /= m11;
+    if m01 != 0.0 {
+        d0 -= m01 * d1;
+    }
+
+    if !swapped_cols {
+        x = d0;
+        y = d1;
+    } else {
+        y = d0;
+        x = d1;
+    }
+
+    Solve2x2Result {
+        rank: 2,
+        x,
+        y,
+        pivot_ratio,
+    }
+}
+```
+```rust
+pub fn solve_2x2_fast(a: f64, b: f64, c: f64, d: f64, e: f64, f: f64) -> Option<(f64, f64)> {
+    let scale = a
+        .abs()
+        .max(b.abs())
+        .max(c.abs())
+        .max(d.abs())
+        .max(e.abs())
+        .max(f.abs())
+        .max(1.0);
+    let det = a * d - b * c;
+    if det.abs() < ON_TOL12 * scale {
+        return None;
+    }
+    let s = (e * d - b * f) / det;
+    let t = (a * f - e * c) / det;
+    Some((s, t))
+}
 ```
 
 
