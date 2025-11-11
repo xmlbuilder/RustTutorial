@@ -16,7 +16,7 @@ $$
 이를 행렬 형태로 표현하면:  
 
 $$
-\left[ \begin{matrix}a&b\\ c&d\end{matrix}\right] \cdot \left[ \begin{matrix}x\\ y\end{matrix}\right] =\left[ \begin{matrix}e\\ f\end{matrix}\right]
+\left[ \begin{matrix}a&b&c&d\end{matrix}\right] \cdot \left[ \begin{matrix}x\\ y\end{matrix}\right] =\left[ \begin{matrix}e\\ f\end{matrix}\right]
 $$
 
 
