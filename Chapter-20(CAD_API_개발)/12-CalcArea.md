@@ -417,7 +417,7 @@ world_xx = xx / 12
 - 이 수식은 다음을 근사합니다:
 
 $$
-I_{xx}=\int _Ax^2\, dA\approx \sum A_i\cdot \left( \frac{x_1^2+x_2^2+x_3^2+(x_1+x_2+x_3)^2}{4}\right)
+I_{xx}=\int _Ax^2 dA\approx \sum A_i\cdot \left( \frac{x_1^2+x_2^2+x_3^2+(x_1+x_2+x_3)^2}{4}\right)
 $$
 
 - 코드에서는 12로 나누어 평균화
