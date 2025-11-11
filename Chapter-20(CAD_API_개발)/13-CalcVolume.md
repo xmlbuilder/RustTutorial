@@ -92,8 +92,10 @@ world_xx = xx / 120, world_yy = yy / 120, world_zz = zz / 120
 - 수학적으로:  
 
 $$
-I_{xx}=\int _Vx^2\, dV- 테트라 기준 근사 계수 \frac{1}{120}
+I_{xx}=\int _Vx^2\, dV
 $$
+
+- 테트라 기준 근사 계수 $\frac{1}{120}$
 
 - ✅ 정확한 근사 수식입니다.
 
