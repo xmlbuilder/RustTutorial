@@ -7,10 +7,10 @@
 다음과 같은 연립방정식을 풀고자 합니다:  
 
 $$
-\begin{bmatrix} a & b \\ c & d \end{bmatrix}
-\begin{bmatrix} x \\ y \end{bmatrix}
-=
-\begin{bmatrix} e \\ f \end{bmatrix}
+\begin{aligned}
+a\,x + b\,y &= e,\\
+c\,x + d\,y &= f
+\end{aligned}
 $$
 
 이를 행렬 형태로 표현하면:  
