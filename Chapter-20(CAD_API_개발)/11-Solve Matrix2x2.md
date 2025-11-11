@@ -229,5 +229,174 @@ pub fn solve_2x2_fast(a: f64, b: f64, c: f64, d: f64, e: f64, f: f64) -> Option<
     Some((s, t))
 }
 ```
+---
+## ✅ 2x2 선형 시스템 테스트 케이스 요약
+| 테스트 이름                            | 행렬 유형           | RHS 일관성 | 기대 rank | fast 결과     | 검증 목적 요약                                               |
+|----------------------------------------|----------------------|-------------|------------|----------------|--------------------------------------------------------------|
+| zero_matrix_zero_rhs_rank0             | 영행렬               | 일관        | 0          | None           | 모든 계수가 0일 때 rank=0, 해 없음                           |
+| singular_inconsistent_rhs_still_rank1_cpp | 특이행렬 (종속)   | 불일관      | 1          | None           | 해가 존재하지 않는 특이 행렬 (C++ 기준 rank=1 유지)         |
+| singular_consistent_rhs_rank1_cpp      | 특이행렬 (종속)      | 일관        | 1          | None           | 무한 해가 존재하는 특이 행렬 (C++ 기준 rank=1 유지)         |
+| regular_no_swaps_unique_solution_rank2 | 정칙행렬 (대각)      | 일관        | 2          | Some((2,3))    | 스왑 없이 해가 명확히 존재하는 경우                          |
+| regular_requires_column_swap_rank2     | 정칙행렬             | 일관        | 2          | Some((1,1))    | 열 스왑이 필요한 경우에도 정확한 해 계산                     |
+| regular_requires_row_swap_rank2        | 정칙행렬             | 일관        | 2          | Some((1,1))    | 행 스왑이 필요한 경우에도 정확한 해 계산                     |
+| swapped_cols_and_rows_combined         | 정칙행렬             | 일관        | 2          | Some((3.08,0.96)) | 행+열 스왑이 동시에 필요한 복합 케이스                       |
+| negative_coefficients_solution         | 정칙행렬 (음수 포함) | 일관        | 2          | Some((-1,-3))  | 음수 계수 포함 시에도 정확한 해 계산                         |
+| near_singular_but_nonzero_det          | 거의 특이한 행렬     | 일관        | 2          | Some           | det ≈ 0인 경우에도 수치적으로 안정적인 해 계산 가능 여부 확인 |
+| fast_solver_none_when_det_zero         | 특이행렬             | 불일관      | -          | None           | fast solver가 det=0일 때 None 반환하는지 확인               |
+| fast_solver_some_when_det_nonzero      | 정칙행렬             | 일관        | -          | Some((0,2.5))  | fast solver가 정확한 해를 계산하는지 확인                   |
 
+
+```rust
+#[cfg(test)]
+mod tests_solve2x2 {
+    use nurbslib::core::maths::{on_solve_2x2, on_solve_2x2_fast};
+```
+```rust
+    #[test]
+    fn zero_matrix_zero_rhs_rank0() {
+        // A = 0, b = 0  → C++ 규약상 rank = 0
+        let r = on_solve_2x2(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        assert_eq!(
+            r.rank, 0,
+            "zero matrix should return rank=0 (C++ semantics)"
+        );
+        assert_eq!(r.x, 0.0);
+        assert_eq!(r.y, 0.0);
+        assert_eq!(r.pivot_ratio, 0.0);
+
+        // fast solver: det = 0 → None
+        let f = on_solve_2x2_fast(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        assert!(f.is_none());
+    }
+```
+```rust
+    #[test]
+    fn singular_inconsistent_rhs_still_rank1_cpp() {
+        // A가 특이: [[1,2],[2,4]]  → C++ on_solve_2x2는 항상 rank=1 (불일치/무한해 구분 안함)
+        let r = on_solve_2x2(1.0, 2.0, 2.0, 4.0, 5.0, 11.0);
+        assert_eq!(
+            r.rank, 1,
+            "C++ impl returns 1 for singular A regardless of RHS consistency"
+        );
+        // fast solver: det = 0 → None
+        let f = on_solve_2x2_fast(1.0, 2.0, 2.0, 4.0, 5.0, 11.0);
+        assert!(f.is_none());
+    }
+```
+```rust
+    #[test]
+    fn singular_consistent_rhs_rank1_cpp() {
+        // A 특이 + 일관 RHS (두 식이 배수관계)
+        //  x + 2y = 4
+        // 2x + 4y = 8
+        let r = on_solve_2x2(1.0, 2.0, 2.0, 4.0, 4.0, 8.0);
+        assert_eq!(
+            r.rank, 1,
+            "singular but consistent should still be rank=1 per C++"
+        );
+        let f = on_solve_2x2_fast(1.0, 2.0, 2.0, 4.0, 4.0, 8.0);
+        assert!(f.is_none()); // det=0
+    }
+```
+```rust
+    #[test]
+    fn regular_no_swaps_unique_solution_rank2() {
+        // 대각 행렬: 2x = 4, 3y = 9  → (x,y)=(2,3)
+        let r = on_solve_2x2(2.0, 0.0, 0.0, 3.0, 4.0, 9.0);
+        assert_eq!(r.rank, 2);
+        assert!((r.x - 2.0).abs() < 1e-12 && (r.y - 3.0).abs() < 1e-12);
+        assert!(r.pivot_ratio > 0.0 && r.pivot_ratio <= 1.0);
+
+        let f = on_solve_2x2_fast(2.0, 0.0, 0.0, 3.0, 4.0, 9.0).unwrap();
+        assert!((f.0 - 2.0).abs() < 1e-12 && (f.1 - 3.0).abs() < 1e-12);
+    }
+```
+```rust
+    #[test]
+    fn regular_requires_column_swap_rank2() {
+        // m01이 최댓값인 경우(열 스왑 발생):
+        // x + 10y = 11
+        //      y = 1  → (x,y)=(1,1)
+        let r = on_solve_2x2(1.0, 10.0, 0.0, 1.0, 11.0, 1.0);
+        assert_eq!(r.rank, 2, "column swap path must still solve correctly");
+        assert!((r.x - 1.0).abs() < 1e-12 && (r.y - 1.0).abs() < 1e-12);
+        assert!(r.pivot_ratio > 0.0 && r.pivot_ratio <= 1.0);
+
+        let f = on_solve_2x2_fast(1.0, 10.0, 0.0, 1.0, 11.0, 1.0).unwrap();
+        assert!((f.0 - 1.0).abs() < 1e-12 && (f.1 - 1.0).abs() < 1e-12);
+    }
+```
+```rust
+    #[test]
+    fn regular_requires_row_swap_rank2() {
+        // m10이 최댓값인 경우(행 스왑 발생):
+        // x         = 1
+        // 10x +  y  = 11  → (x,y)=(1,1)
+        let r = on_solve_2x2(1.0, 0.0, 10.0, 1.0, 1.0, 11.0);
+        assert_eq!(r.rank, 2, "row swap path must still solve correctly");
+        assert!((r.x - 1.0).abs() < 1e-12 && (r.y - 1.0).abs() < 1e-12);
+        assert!(r.pivot_ratio > 0.0 && r.pivot_ratio <= 1.0);
+
+        let f = on_solve_2x2_fast(1.0, 0.0, 10.0, 1.0, 1.0, 11.0).unwrap();
+        assert!((f.0 - 1.0).abs() < 1e-12 && (f.1 - 1.0).abs() < 1e-12);
+    }
+```
+```rust
+    #[test]
+    fn fast_solver_none_when_det_zero() {
+        // det = ad - bc = 0
+        assert!(on_solve_2x2_fast(1.0, 2.0, 2.0, 4.0, 7.0, 3.0).is_none());
+    }
+```
+```rust
+    #[test]
+    fn fast_solver_some_when_det_nonzero() {
+        // 3x + 2y = 5
+        // 1x + 2y = 5  → x=0, y=2.5
+        let sol = on_solve_2x2_fast(3.0, 2.0, 1.0, 2.0, 5.0, 5.0).unwrap();
+        assert!(sol.0.abs() < 1e-12 && (sol.1 - 2.5).abs() < 1e-12);
+    }
+```
+```rust
+    #[test]
+    fn near_singular_but_nonzero_det() {
+        // det ≈ 0이지만 정확히 0은 아님 → rank=2, 해 존재
+        let eps = 1e-10;
+        let r = on_solve_2x2(1.0, 1.0, 1.0, 1.0 + eps, 2.0, 2.0 + eps);
+        assert_eq!(r.rank, 2, "near-singular matrix should still be rank=2");
+        assert!(r.pivot_ratio > 0.0 && r.pivot_ratio <= 1.0);
+
+        let f = on_solve_2x2_fast(1.0, 1.0, 1.0, 1.0 + eps, 2.0, 2.0 + eps);
+        assert!(f.is_some(), "fast solver should return Some for nonzero det");
+    }
+```
+```rust
+    #[test]
+    fn swapped_cols_and_rows_combined() {
+        // (x,y) = (1,2) 가 되도록 우변을 203으로
+        let r = on_solve_2x2(1.0, 2.0, 3.0, 100.0, 5.0, 203.0);
+        assert_eq!(r.rank, 2);
+        assert!((r.x - 1.0).abs() < 1e-12 && (r.y - 2.0).abs() < 1e-12);
+
+        let f = on_solve_2x2_fast(1.0, 2.0, 3.0, 100.0, 5.0, 203.0).unwrap();
+        assert!((f.0 - 1.0).abs() < 1e-12 && (f.1 - 2.0).abs() < 1e-12);
+    }
+```
+```rust
+
+    #[test]
+    fn negative_coefficients_solution() {
+        let r = on_solve_2x2(-2.0, 1.0, 1.0, -1.0, -1.0, 2.0);
+        assert_eq!(r.rank, 2);
+        assert!((r.x + 1.0).abs() < 1e-12);
+        assert!((r.y + 3.0).abs() < 1e-12);
+
+        let f = on_solve_2x2_fast(-2.0, 1.0, 1.0, -1.0, -1.0, 2.0).unwrap();
+        assert!((f.0 + 1.0).abs() < 1e-12);
+        assert!((f.1 + 3.0).abs() < 1e-12);
+    }
+}
+```
+
+---
 
