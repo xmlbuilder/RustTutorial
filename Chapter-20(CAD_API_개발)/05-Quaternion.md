@@ -151,6 +151,7 @@ pub fn from_euler_angles(roll: f64, pitch: f64, yaw: f64) -> Quaternion {
 - 회전 순서: X → Y → Z
 - 쿼터니언 조합: $q=q_z\cdot q_y\cdot q_x$
 
+### Euler Angle Matrix
 ![Euler Angle Matrix](/image/euler_angle.png)
 
 #### ✅ from_bryant_angles (ZYX 순서)
