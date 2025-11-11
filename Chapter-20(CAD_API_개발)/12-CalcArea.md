@@ -461,6 +461,155 @@ $$
 - 정확하고 실무에 적합한 구현입니다.
 
 ---
+## ✅ CalcArea 함수 테스트 커버리지 요약
+| 함수 이름               | 기능 설명                                                                 | 테스트 필요성 | 현재 테스트 포함 여부 | 추천 테스트 시나리오 예시                         |
+|------------------------|---------------------------------------------------------------------------|----------------|------------------------|--------------------------------------------------|
+| tri_area               | 삼각형 면적 계산 (벡터 외적 기반)                                         | 높음           | ✅ 내부적으로 사용됨     | 단일 삼각형 면적 정확성 검증                     |
+| add_triangle           | 삼각형 하나 추가 및 면적/모멘트 누적                                     | 높음           | ✅ 포함됨               | 다양한 삼각형 입력에 대한 누적 결과 확인         |
+| add_triangle_f32       | f32 버전 삼각형 추가                                                      | 중간           | ❌ 미포함               | f32 → f64 변환 후 정확성 유지 확인               |
+| add_line               | 선분을 XY 평면 기준 삼각형으로 간주해 면적 기여                           | 높음           | ✅ 포함됨 (수정 필요)   | 선분 3개로 삼각형 구성 후 면적/중심 확인         |
+| add_triangles          | MeshFace 배열 기반 삼각형/사각형 추가                                     | 높음           | ✅ 포함됨               | 사각형 → 삼각형 분할 정확성 확인                 |
+| add_triangles_f32      | f32 버전 MeshFace 처리                                                    | 중간           | ❌ 미포함               | f32 정점 기반 메시 처리 정확성 확인              |
+| area                   | 누적 면적 반환                                                            | 높음           | ✅ 포함됨               | 다양한 입력에 대한 면적 검증                     |
+| centroid               | 면적 기반 중심점 반환                                                     | 높음           | ✅ 포함됨               | 정규 삼각형/사각형 중심 좌표 확인                |
+| mass                   | area()와 동일                                                             | 낮음           | ✅ 포함됨               | area()와 값 일치 여부 확인                       |
+| with_result            | MassProperties에 결과 기록                                                | 높음           | ✅ 포함됨               | 모든 속성 필드가 정확히 채워졌는지 확인          |
+
+
+| 테스트 함수 이름                        | 검증 대상 함수         | 입력 유형           | 기대 결과 요약                                      | 상태 |
+|----------------------------------------|------------------------|---------------------|-----------------------------------------------------|------|
+| area_two_tris_make_square              | add_triangles          | 사각형(2 삼각형)     | 면적 = 1.0, 중심 = (0.5, 0.5, 0.0)                  | ✅ 완료 |
+| area_single_triangle                   | add_triangle           | 단일 삼각형          | 면적 = 0.5, 중심 = (1/3, 1/3, 0.0)                  | ✅ 완료 |
+| area_nonplanar_triangle                | add_triangle           | Z축 포함 삼각형      | 면적 = 0.5, 중심 = (1/3, 0.0, 1/3)                  | ✅ 완료 |
+| area_quad_split_into_tris             | add_triangles          | 사각형(4점)          | 면적 = 2.0, 중심 = (1.0, 0.5, 0.0)                  | ✅ 완료 |
+| area_from_line_segment_with_origin     | add_line               | 선분 3개 + 원점      | 면적 = 0.5, 중심 = (1/3, 1/3, 0.0)                  | ✅ 완료 |
+
+
+## 테스트 코드
+``` rust
+#[cfg(test)]
+mod tests {
+    use nurbslib::core::calc_area::CalcArea;
+    use nurbslib::core::mass_properties::MassProperties;
+    use nurbslib::core::maths::on_are_equal;
+    use nurbslib::core::mesh::MeshFace;
+    use nurbslib::core::prelude::Point;
+    use nurbslib::core::types::ON_TOL9;
+```
+```rust
+    #[test]
+    fn area_single_triangle() {
+        let verts = vec![
+            Point { x: 0.0, y: 0.0, z: 0.0 },
+            Point { x: 1.0, y: 0.0, z: 0.0 },
+            Point { x: 0.0, y: 1.0, z: 0.0 },
+        ];
+        let faces = vec![MeshFace::new_tri(0, 1, 2)];
+        let mut acc = CalcArea::default();
+        acc.add_triangles(&verts, &faces);
+        assert!(on_are_equal(acc.area(), 0.5, ON_TOL9));
+        let c = acc.centroid();
+        assert!(on_are_equal(c.x, 1.0 / 3.0, ON_TOL9));
+        assert!(on_are_equal(c.y, 1.0 / 3.0, ON_TOL9));
+        assert!(on_are_equal(c.z, 0.0, ON_TOL9));
+    }
+```
+```rust
+    #[test]
+    fn area_nonplanar_triangle() {
+        let verts = vec![
+            Point { x: 0.0, y: 0.0, z: 0.0 },
+            Point { x: 1.0, y: 0.0, z: 0.0 },
+            Point { x: 0.0, y: 0.0, z: 1.0 },
+        ];
+        let faces = vec![MeshFace::new_tri(0, 1, 2)];
+        let mut acc = CalcArea::default();
+        acc.add_triangles(&verts, &faces);
+        assert!(on_are_equal(acc.area(), 0.5, ON_TOL9));
+        let c = acc.centroid();
+        assert!(on_are_equal(c.x, 1.0 / 3.0, ON_TOL9));
+        assert!(on_are_equal(c.y, 0.0, ON_TOL9));
+        assert!(on_are_equal(c.z, 1.0 / 3.0, ON_TOL9));
+    }
+```
+```rust
+    #[test]
+    fn area_quad_split_into_tris() {
+        let verts = vec![
+            Point { x: 0.0, y: 0.0, z: 0.0 },
+            Point { x: 2.0, y: 0.0, z: 0.0 },
+            Point { x: 2.0, y: 1.0, z: 0.0 },
+            Point { x: 0.0, y: 1.0, z: 0.0 },
+        ];
+        let faces = vec![MeshFace::new_quad(0, 1, 2, 3)];
+        let mut acc = CalcArea::default();
+        acc.add_triangles(&verts, &faces);
+        assert!(on_are_equal(acc.area(), 2.0, ON_TOL9));
+        let c = acc.centroid();
+        assert!(on_are_equal(c.x, 1.0, ON_TOL9));
+        assert!(on_are_equal(c.y, 0.5, ON_TOL9));
+        assert!(on_are_equal(c.z, 0.0, ON_TOL9));
+    }
+```
+```rust
+    #[test]
+    fn area_from_line_segment_with_origin() {
+        let mut acc = CalcArea::default();
+        let origin = Point { x: 0.0, y: 0.0, z: 0.0 };
+        let p1 = Point { x: 1.0, y: 0.0, z: 0.0 };
+        let p2 = Point { x: 0.0, y: 1.0, z: 0.0 };
+
+        // 삼각형 (0,0)-(1,0)-(0,1) → 면적 = 0.5
+        acc.add_line(origin, p1);
+        acc.add_line(p1, p2);
+        acc.add_line(p2, origin);
+
+        assert!(on_are_equal(acc.area(), 0.5, ON_TOL9));
+        let c = acc.centroid();
+        assert!(on_are_equal(c.x, 1.0 / 3.0, ON_TOL9));
+        assert!(on_are_equal(c.y, 1.0 / 3.0, ON_TOL9));
+        assert!(on_are_equal(c.z, 0.0, ON_TOL9));
+    }
+```
+```rust
+    #[test]
+    fn area_two_tris_make_square() {
+        // two triangles forming 1x1 square
+        let verts = vec![
+            Point {
+                x: 0.0,
+                y: 0.0,
+                z: 0.0,
+            }, //0
+            Point {
+                x: 1.0,
+                y: 0.0,
+                z: 0.0,
+            }, //1
+            Point {
+                x: 1.0,
+                y: 1.0,
+                z: 0.0,
+            }, //2
+            Point {
+                x: 0.0,
+                y: 1.0,
+                z: 0.0,
+            }, //3
+        ];
+        let faces = vec![MeshFace::new_tri(0, 1, 2), MeshFace::new_tri(0, 2, 3)];
+        let mut acc = CalcArea::default();
+        acc.add_triangles(&verts, &faces);
+        assert!(on_are_equal(acc.area(), 1.0, ON_TOL9));
+        let c = acc.centroid();
+        assert!(on_are_equal(c.x, 0.5, ON_TOL9) && on_are_equal(c.y, 0.5, ON_TOL9) && on_are_equal(c.z, 0.0, ON_TOL9));
+        let mut mp = MassProperties::default();
+        assert!(acc.write_result(&mut mp));
+        assert!(on_are_equal(mp.mass, 1.0, ON_TOL9));
+    }
+}
+```
+---
 
 
 
