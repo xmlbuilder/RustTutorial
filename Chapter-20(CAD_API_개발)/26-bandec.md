@@ -68,7 +68,10 @@ b_k:=b_k-L_{j,k-j-1}\cdot b_j\quad \mathrm{for\  }k=j+1\dots j+m_1
 $$
 
 - 후진 대입 (Backward Substitution)
-- $x_j:=\left( b_j-\sum _{k=1}^{m_2}U_{j,k}\cdot x_{j+k}\right) /U_{j,0}$
+
+$$
+x_j:=\left( b_j-\sum _{k=1}^{m_2}U_{j,k}\cdot x_{j+k}\right) /U_{j,0}
+$$
 
 ### ✅ 수학적 타당성
 - 전형적인 LU 분해 기반 선형 시스템 해법
