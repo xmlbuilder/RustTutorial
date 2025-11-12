@@ -9,8 +9,13 @@
 기저 함수는 재귀적으로 정의됩니다:
 
 $$
-N_{i,0}(t)=\left\{ \, \begin{array}{ll}\textstyle 1&\textstyle \mathrm{if\  }u_i\leq t<u_{i+1}\\ \textstyle 0&\textstyle \mathrm{otherwise}\end{array}\right.
+N_{i,0}(t) =
+\begin{cases}
+1 & \text{if } u_i \leq t < u_{i+1} \\
+0 & \text{otherwise}
+\end{cases}
 $$
+
 
 $$
 N_{i,p}(t)=\frac{t-u_i}{u_{i+p}-u_i}N_{i,p-1}(t)+\frac{u_{i+p+1}-t}{u_{i+p+1}-u_{i+1}}N_{i+1,p-1}(t)
