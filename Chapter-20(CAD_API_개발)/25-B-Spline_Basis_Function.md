@@ -2,7 +2,7 @@
 
 ## 🔹 1. basis_funs(span, t, p)
 ### 📐 목적
-- B-spline 기저 함수 N_{i,p}(t) 계산
+- B-spline 기저 함수 $N_{i,p}(t)$ 계산
 - Piegl & Tiller의 Algorithm A2.2에 해당
 
 ### 🧮 수식 정의
