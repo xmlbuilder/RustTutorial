@@ -113,5 +113,171 @@ $$
 - 벡터 연산과 내적 기반: Bézier 곡선의 정의에 부합
 
 ---
+## 소스 크드
+```rust
+pub fn on_make_frame_plane(
+    p0: Point,
+    p2: Point,
+    p: Point,
+) -> Option<(Point, Vector, Vector, Vector)> {
+    let origin = p0;
 
+    // a = P0->P2, b = P0->P
+    let a = (p2 - p0).to_vector();
+    let b = (p - p0).to_vector();
+
+    // z = a × b
+    let mut z_axis = a.cross(&b);
+    z_axis = z_axis.unitize();
+
+    // x = unit(a)
+    let mut x_axis = a;
+    x_axis = x_axis.unitize();
+
+    // y = z × x
+    let mut y_axis = z_axis.cross(&x_axis);
+    y_axis = y_axis.unitize();
+
+    Some((origin, x_axis, y_axis, z_axis))
+}
+```
+```rust
+// ---- Intersect two 2D lines: A + t*U and B + s*V ----
+// returns None if parallel
+pub fn on_intersect_lines_2d(
+    a: Point2,
+    u: Point2,
+    b: Point2,
+    v: Point2,
+) -> Option<(f64, f64, Point2)> {
+    let det = u.x * v.y - u.y * v.x;
+    let eps = 1e-15;
+    if det.abs() <= eps {
+        return None;
+    }
+    let w = b + a;
+    let t = (w.x * v.y - w.y * v.x) / det;
+    let s = (w.x * u.y - w.y * u.x) / det;
+    let int_pt = a + u * t;
+    Some((t, s, int_pt))
+}
+```
+```rust
+fn on_project_vec_2d(v: Vector, x_axis: Vector, y_axis: Vector) -> Point2 {
+    Point2::new(v.dot(&x_axis), v. dot(&y_axis))
+}
+```
+```rust
+fn on_project_point_2d(p: Point, origin: Point, x_axis: Vector, y_axis: Vector) -> Point2 {
+    let v = (p - origin).to_vector();
+    Point2::new(v.dot(&x_axis), v.dot(&y_axis))
+}
+```
+```rust
+pub fn on_make_bezier_conic_arc(
+    p0: Point,
+    t0: Vector,
+    p2: Point,
+    t2: Vector,
+    p: Point,
+) -> Option<(Point, Real)> {
+    // 1) build a local plane frame
+    let (o, x_axis, y_axis, _z_axis) = on_make_frame_plane(p0, p2, p)?;
+
+    // 2) project to 2D
+    let p0_2 = on_project_point_2d(p0, o, x_axis, y_axis);
+    let p2_2 = on_project_point_2d(p2, o, x_axis, y_axis);
+    let pp_2 = on_project_point_2d(p, o, x_axis, y_axis);
+
+    let t0_2 = on_project_vec_2d(t0, x_axis, y_axis);
+    let t2_2 = on_project_vec_2d(t2, x_axis, y_axis);
+
+    // 3) try intersection of tangents (non-parallel case)
+    if let Some((_tau0, _tau2, p1_2)) = on_intersect_lines_2d(p0_2, t0_2, p2_2, t2_2) {
+        // Intersect segment p0-p2 with line (p1 -- p)
+        let seg = p2_2 - p0_2;
+        let dir = pp_2 - p1_2;
+
+        if let Some((tseg, _tl, _m)) = on_intersect_lines_2d(p0_2, seg, p1_2, dir) {
+            let eps = 1e-15;
+            if tseg < -1e-12 || tseg > 1.0 + 1e-12 {
+                return None;
+            }
+            if (1.0 - tseg).abs() <= eps {
+                return None;
+            }
+
+            let a = (tseg / (1.0 - tseg)).sqrt();
+            let u = a / (1.0 + a);
+
+            // vectors for dot products
+            let v0 = pp_2 - p0_2;
+            let v1 = p1_2 - pp_2;
+            let v2 = pp_2 - p2_2;
+
+            let alf = v0.dot(&v1);
+            let bet = v1.dot(&v2);
+            let gam = v1.dot(&v1);
+
+            let a_ = (1.0 - u) * (1.0 - u);
+            let b_ = u * u;
+            let c_ = 2.0 * u * (1.0 - u);
+
+            let num = a_ * alf + b_ * bet;
+            let den = c_ * gam;
+            if den.abs() <= eps {
+                return None;
+            }
+            let w1 = num / den;
+
+            // lift p1 back to 3D
+            let p1 = o + (x_axis * p1_2.x + y_axis * p1_2.y).to_point();
+            return Some( (p1, w1 ));
+        }
+        return None;
+    }
+
+    // 4) parallel tangents → parabola branch
+    // Intersect line L = (P, T0) with segment S = (P0 -> P2)
+    {
+        let a = pp_2;
+        let u = t0_2;
+        let b = p0_2;
+        let v = p2_2 - p0_2;
+
+        if let Some((tt, ts, _x)) = on_intersect_lines_2d(a, u, b, v) {
+            let eps = 1e-15;
+            if (1.0 - ts).abs() <= eps {
+                return None;
+            }
+            if ts < -1e-12 || ts > 1.0 + 1e-12 {
+                return None;
+            }
+
+            let aa = (ts / (1.0 - ts)).sqrt();
+            let u = aa / (1.0 + aa);
+            let b = 2.0 * u * (1.0 - u);
+
+            let num = -tt * (1.0 - b);
+            if b.abs() <= eps {
+                return None;
+            }
+            let scale = num / b;
+
+            // w1 = 0, and p1 encodes a 3D vector along T0 (no origin)
+            let mut t0u = t0;
+            if t0u.length_squared() > 0.0 {
+                // keep original scale (do not normalize)
+                let v3 = t0u * scale;
+                let p1_as_vec = Point::new(v3.x, v3.y, v3.z);
+                return Some((p1_as_vec, 0.0 ));
+            } else {
+                return Some((Point::new(0.0, 0.0, 0.0), 0.0 ));
+            }
+        }
+    }
+
+    None
+}
+```
 
