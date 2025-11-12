@@ -64,7 +64,7 @@ $$
 - p1과 p2 사이를 보간하며, p0과 p3는 곡률 제어
 
 ## 🧠 5. Lagrange Interpolation
-###📌 수식
+### 📌 수식
 
 $$
 L_i(x)=\prod _{j=0,j\neq i}^n\frac{x-x_j}{x_i-x_j}\\ y(x)=\sum _{i=0}^ny_i\cdot L_i(x)
