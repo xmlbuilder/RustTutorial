@@ -44,7 +44,7 @@ on_hermite_spline_2d(p0, t0, p1, t1, t)
 ```
 
 $$
-\begin{aligned}h_{00}&=2t^3-3t^2+1\\ h_{10}&=t^3-2t^2+t\\ h_{01}&=-2t^3+3t^2\\ h_{11}&=t^3-t^2\\ P(t)&=h_{00}p_0+h_{10}t_0+h_{01}p_1+h_{11}t_1\end{aligned}
+\begin{aligned}h_{00}=2t^3-3t^2+1 & h_{10}=t^3-2t^2+t & h_{01}=-2t^3+3t^2 & h_{11}=t^3-t^2 & P(t)=h_{00}p_0+h_{10}t_0+h_{01}p_1+h_{11}t_1\end{aligned}
 $$
 
 ## 🌈 RGB Hermite 보간
