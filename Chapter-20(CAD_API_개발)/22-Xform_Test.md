@@ -654,3 +654,199 @@ mod tests {
 - 특히 회전, 스케일, 평행이동, 법선 변환, 동차 좌표 투영 등은 컴퓨터 그래픽스 및 CAD 시스템에서 핵심적인 수학적 연산입니다.
 - 테스트는 단위 행렬, 역행렬, 행렬식, 연산자 오버로드까지 포괄적으로 검증하고 있어 구현 신뢰성이 높습니다.
 
+---
+```rust
+#[inline]
+fn p3_eq(p: Point, q: Point, eps: f64) -> bool {
+    feq(p.x, q.x, eps) && feq(p.y, q.y, eps) && feq(p.z, q.z, eps)
+}
+```
+```rust
+#[inline]
+fn v3_eq(u: Vector, v: Vector, eps: f64) -> bool {
+    feq(u.x, v.x, eps) && feq(u.y, v.y, eps) && feq(u.z, v.z, eps)
+}
+
+```
+```rust
+#[inline]
+fn p2_eq(p: Point2, q: Point2, eps: f64) -> bool {
+    feq(p.x, q.x, eps) && feq(p.y, q.y, eps)
+}
+
+```
+```rust
+#[inline]
+fn v2_eq(u: Vector2, v: Vector2, eps: f64) -> bool {
+    feq(u.x, v.x, eps) && feq(u.y, v.y, eps)
+}
+```
+```rust
+
+/* ================= Rotation tests ================= */
+
+#[test]
+fn rotation_axis_z_90_deg_vector() {
+    // 90° rotation around the Z-axis: (1, 0, 0) → (0, 1, 0)
+    let axis = Vector::new(0.0, 0.0, 1.0);
+    let r = Xform::rotation_axis(FRAC_PI_2, &axis);
+
+    let v = Vector::new(1.0, 0.0, 0.0);
+    // Operator overload: Vector * Xform
+    let v_rot = v * r;
+
+    assert!(v3_eq(v_rot, Vector::new(0.0, 1.0, 0.0), 1e-12));
+}
+```
+```rust
+#[test]
+fn rotation_about_point_z_90_deg_point() {
+    // Rotate point P = (11, 0, 0) around center C = (10, 0, 0) by 90° about the z-axis → result: (10, 1, 0)
+    let c = Point::new(10.0, 0.0, 0.0);
+    let axis = Vector::new(0.0, 0.0, 1.0);
+    let r = Xform::rotation(FRAC_PI_2, &axis, &c);
+
+    let p = Point::new(11.0, 0.0, 0.0);
+    // Operator overload: Point * Xform
+    let p_rot = p * r;
+
+    assert!(p3_eq(p_rot, Point::new(10.0, 1.0, 0.0), 1e-12));
+}
+```
+```rust
+#[test]
+fn rotation_sc_matches_angle_version() {
+    // Check whether the sin/cos input version and the angle input version produce the same matrix
+    let axis = Vector::new(1.0, 2.0, 3.0); // 임의 축
+    let angle = 0.3;
+    let r1 = Xform::rotation_axis(angle, &axis);
+
+    let (s, c) = angle.sin_cos();
+    let r2 = Xform::rotation_sc(s, c, &axis, &Point::new(0.0, 0.0, 0.0));
+
+    let eps = 1e-12;
+    for i in 0..4 {
+        for j in 0..4 {
+            assert!(
+                feq(r1.m[i][j], r2.m[i][j], eps),
+                "mismatch at ({},{}) : {} vs {}",
+                i,
+                j,
+                r1.m[i][j],
+                r2.m[i][j]
+            );
+        }
+    }
+}
+```
+```rust
+/* ================= Point/Vector × Xform tests (3D) ================= */
+
+#[test]
+fn Point_times_translation() {
+    let p = Point::new(1.0, 2.0, 3.0);
+    let t = Xform::translation(10.0, -5.0, 2.0);
+
+    let p2 = p * t;
+    assert!(p3_eq(p2, Point::new(11.0, -3.0, 5.0), 1e-12));
+}
+```
+```rust
+#[test]
+fn Vector_times_translation_ignores_translation() {
+    let v = Vector::new(1.0, 2.0, 3.0);
+    let t = Xform::translation(10.0, -5.0, 2.0);
+
+    let v2 = v * t;
+    // 평행이동 무시 → 동일
+    assert!(v3_eq(v2, v, 1e-12));
+}
+```
+```rust
+#[test]
+fn Point_times_rotation_axis() {
+    let p = Point::new(2.0, 0.0, 0.0);
+    let r = Xform::rotation_axis(PI, &Vector::new(0.0, 0.0, 1.0));
+
+    let p2 = p * r;
+    assert!(p3_eq(p2, Point::new(-2.0, 0.0, 0.0), 1e-12));
+}
+```
+```rust
+#[test]
+fn Vector_times_rotation_axis() {
+    let v = Vector::new(0.0, 3.0, 0.0);
+    let r = Xform::rotation_axis(PI, &Vector::new(1.0, 0.0, 0.0));
+
+    let v2 = v * r;
+    assert!(v3_eq(v2, Vector::new(0.0, -3.0, 0.0), 1e-12));
+}
+```
+```rust
+/* ================= 2D × Xform (2D → homogeneous 4×4 extension) ================= */
+#[test]
+fn Point2_times_translation() {
+    let p = Point2::new(-4.0, 1.5);
+    let t = Xform::translation(10.0, -3.0, 0.0);
+
+    let p2 = p * t;
+    assert!(p2_eq(p2, Point2::new(6.0, -1.5), 1e-12));
+}
+```
+```rust
+#[test]
+fn Vector2_times_translation_ignores_translation() {
+    let v = Vector2::new(2.0, -2.0);
+    let t = Xform::translation(10.0, 20.0, 0.0);
+
+    let v2 = v * t;
+    assert!(v2_eq(v2, v, 1e-12));
+}
+```
+```rust
+/* ================= Homogeneous (w) behavior ================= */
+#[test]
+fn Point_perspective_division() {
+    // Simple perspective: w' = z + 1
+    // m3][2] = 1, m3][3] = 1 (all other elements are identity)
+    let mut pmat = Xform::identity();
+    pmat.m[3][2] = 1.0; // w' = z*1 + 1*1
+
+    let p = Point::new(2.0, 0.0, 1.0); // z=1 → w' = 2
+    let p2 = p * pmat;
+
+    // x'/w' = 2/2 = 1, y'/w' = 0, z'/w' = 1/2
+    assert!(p3_eq(p2, Point::new(1.0, 0.0, 0.5), 1e-12));
+}
+```
+```rust
+#[test]
+fn Vector_ignores_perspective_row() {
+    // For vectors, w = 0 → w-row has no effect in the same matrix
+    let mut pmat = Xform::identity();
+    pmat.m[3][2] = 1.0;
+
+    let v = Vector::new(2.0, 0.0, 1.0);
+    let v2 = v * pmat;
+
+    // Linear part is identity → leave as is
+    assert!(v3_eq(v2, v, 1e-12));
+}
+```
+```rust
+/* ================= Regression: rotation_about_point and operator together ================= */
+#[test]
+fn rotate_point_then_compare_with_transform_point() {
+    // Point * Xform 오버로드와 Xform::transform_point 결과 일치 여부
+    let c = Point::new(1.0, 2.0, 3.0);
+    let axis = Vector::new(0.0, 0.0, 1.0);
+    let r = Xform::rotation(0.25, &axis, &c);
+
+    let p = Point::new(2.0, 3.0, 3.0);
+
+    let p_op = p * r;
+    let p_fn = r.transform_point(p);
+
+    assert!(p3_eq(p_op, p_fn, 1e-12));
+}
+```
