@@ -11,7 +11,7 @@
 let x = ex.unitize();
 ```
 $$
-- \mathbf{x}=\frac{\mathbf{e_{\mathnormal{x}}}}{\| \mathbf{e_{\mathnormal{x}}}\| }
+\mathbf{x}=\frac{\mathbf{e_{\mathnormal{x}}}}{\| \mathbf{e_{\mathnormal{x}}}\| }
 $$
 
 ### 2. Y축 정규화 (X축에 수직 성분만 남김)
