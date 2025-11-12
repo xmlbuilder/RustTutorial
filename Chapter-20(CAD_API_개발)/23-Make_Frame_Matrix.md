@@ -74,7 +74,7 @@ Transform::from_cols(
 - 최종 행렬:
 
 $$
-M=\left[ \begin{matrix}x_x&y_x&z_x&o_x,& \\ x_y&y_y&z_y&o_y,& \\ x_z&y_z&z_z&o_z,& \\ 0&0&0&1\end{matrix}\right]
+M=\left[ \begin{matrix}x_x&y_x&z_x&o_x\\,& x_y&y_y&z_y&o_y \\,& x_z&y_z&z_z&o_z \\,& 0&0&0&1\end{matrix}\right]
 $$
 
 - 이 행렬은 기준점 o를 원점으로 하고, x, y, z 축을 열 벡터로 갖는 좌표계 변환 행렬입니다.
