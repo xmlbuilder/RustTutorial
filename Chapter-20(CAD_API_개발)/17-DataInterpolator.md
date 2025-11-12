@@ -44,7 +44,7 @@ y(t)=at^3+bt^2+ct+d
 $$
 
 $$
-\begin{aligned}a&=-0.5p_0+1.5p_1-1.5p_2+0.5p_3\\ b&=p_0-2.5p_1+2p_2-0.5p_3\\ c&=-0.5p_0+0.5p_2\\ d&=p_1\end{aligned}
+\begin{aligned}a&=-0.5p_0+1.5p_1-1.5p_2+0.5p_3\quad b&=p_0-2.5p_1+2p_2-0.5p_3\quad c&=-0.5p_0+0.5p_2\quad d&=p_1\end{aligned}
 $$
 
 ### 🧠 설명
@@ -65,6 +65,7 @@ $$
 
 ## 🧠 5. Lagrange Interpolation
 ###📌 수식
+
 $$
 L_i(x)=\prod _{j=0,j\neq i}^n\frac{x-x_j}{x_i-x_j}\\ y(x)=\sum _{i=0}^ny_i\cdot L_i(x)
 $$
