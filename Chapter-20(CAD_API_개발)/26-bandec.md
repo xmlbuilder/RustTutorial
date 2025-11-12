@@ -390,6 +390,7 @@ A=\left[ \begin{matrix}4&1&0\\ 1&4&1\\ 0&1&4\end{matrix}\right]
 $$
 
 - 해 x:
+
 $$
 x=\left[ \begin{matrix}1\\ 2\\ 3\end{matrix}\right]
 $$ 
