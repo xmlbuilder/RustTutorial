@@ -69,7 +69,7 @@ $$
 ### 🔁 10. Quaternion → Rotation Matrix
 
 $$
-R(q)=\left[ \begin{matrix}1-2y^2-2z^2&2xy-2zw&2xz+2yw\\ 2xy+2zw&1-2x^2-2z^2&2yz-2xw\\ 2xz-2yw&2yz+2xw&1-2x^2-2y^2\end{matrix}\right]
+R(q)=\left[ \begin{matrix}1-2y^2-2z^2,&2xy-2zw,&2xz+2yw,\\ 2xy+2zw,&1-2x^2-2z^2,&2yz-2xw,\\ 2xz-2yw,&2yz+2xw,&1-2x^2-2y^2\end{matrix}\right]
 $$
 
 
