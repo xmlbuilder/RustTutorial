@@ -7,7 +7,7 @@ Xform 구조체는 3D 그래픽 및 기하학에서 자주 사용되는 4×4 변
 
 | 함수 이름                     | 수식 또는 원리                                                                 |
 |------------------------------|----------------------------------------------------------------------------------|
-| `transform_point(p)`         | $\mathbf{p}' = \frac{M \cdot \begin{bmatrix}x\\ y\\ z\\ 1\end{bmatrix}}{w}$ |
+| `transform_point(p)`         | $\mathbf{p}' = \frac{M \cdot \begin{bmatrix} x \\ y \\ z \\ 1 \end{bmatrix}}{w}$ |
 | `transform_vector(v)`        | $\mathbf{v}' = M_{3×3} \cdot \mathbf{v}$                                   |
 | `transform_normal(n)`        | $\mathbf{n}' = (M^{-1})_{3×3}^T \cdot \mathbf{n}$                          |
 | `translation(dx, dy, dz)`    | $\mathbf{T} = \begin{bmatrix}1&0&0&dx\\ 0&1&0&dy\\ 0&0&1&dz\\ 0&0&0&1\end{bmatrix}$ |
