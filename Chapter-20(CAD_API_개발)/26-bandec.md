@@ -397,7 +397,7 @@ $$
 - 우변 b=Ax:
 
 $$
-b=\left[ \begin{matrix}4\cdot 1+1\cdot 2=6\\ 1\cdot 1+4\cdot 2+1\cdot 3=12\\ 1\cdot 2+4\cdot 3=14\end{matrix}\right] \Rightarrow b=\left[ \begin{matrix}6\\ 12\\ 14\end{matrix}\right] 
+b=\left[ \begin{matrix}4\cdot 1+1\cdot 2=6\\ ; 1\cdot 1+4\cdot 2+1\cdot 3=12\\ ; 1\cdot 2+4\cdot 3=14\end{matrix}\right] \Rightarrow b=\left[ \begin{matrix}6\\ ; 12\\ ;14\end{matrix}\right] 
 $$
 
 ### 🔧 Step 1: bandec — LU 분해
@@ -405,11 +405,11 @@ $$
 LU 분해 결과:
 
 $$
-( L = \begin{bmatrix} 1 & 0 & 0 \\ 0.25 & 1 & 0 \\ 0 & 0.2667 & 1 \end{bmatrix} )
+( L = \begin{bmatrix} 1 & 0 & 0 \\ ; 0.25 & 1 & 0 \\ ; 0 & 0.2667 & 1 \end{bmatrix} )
 $$
 
 $$
-( U = \begin{bmatrix} 4 & 1 & 0 \\ 0 & 3.75 & 1 \\ 0 & 0 & 3.7333 \end{bmatrix} )
+( U = \begin{bmatrix} 4 & 1 & 0 \\ ; 0 & 3.75 & 1 \\ ; 0 & 0 & 3.7333 \end{bmatrix} )
 $$
 
 - 피벗 index: [1, 2, 3] (1-based, no row swaps needed)
