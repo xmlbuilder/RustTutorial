@@ -405,11 +405,11 @@ $$
 LU 분해 결과:
 
 $$
-( L = \begin{bmatrix} 1 & 0 & 0 \ 0.25 & 1 & 0 \ 0 & 0.2667 & 1 \end{bmatrix} )
+( L = \begin{bmatrix} 1 & 0 & 0 \\ 0.25 & 1 & 0 \\ 0 & 0.2667 & 1 \end{bmatrix} )
 $$
 
 $$
-( U = \begin{bmatrix} 4 & 1 & 0 \ 0 & 3.75 & 1 \ 0 & 0 & 3.7333 \end{bmatrix} )
+( U = \begin{bmatrix} 4 & 1 & 0 \\ 0 & 3.75 & 1 \\ 0 & 0 & 3.7333 \end{bmatrix} )
 $$
 
 - 피벗 index: [1, 2, 3] (1-based, no row swaps needed)
