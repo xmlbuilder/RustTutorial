@@ -10,7 +10,7 @@ Xform 구조체는 3D 그래픽 및 기하학에서 자주 사용되는 4×4 변
 | `transform_point(p)`         | $\mathbf{p}'=\dfrac{M,[x\ y\ z\ 1]^T}{w}$ |
 | `transform_vector(v)`        | $\mathbf{v}' = M_{3×3} \cdot \mathbf{v}$                                   |
 | `transform_normal(n)`        | $\mathbf{n}' = (M^{-1})_{3×3}^T \cdot \mathbf{n}$                          |
-| `translation(dx, dy, dz)`    | $\mathbf{T}=\begin{bmatrix}1&0&0&dx\0&1&0&dy\0&0&1&dz\0&0&0&1\end{bmatrix}$ |
+| `translation(dx, dy, dz)`    | $T = [[1,0,0,dx],[0,1,0,dy],[0,0,1,dz],[0,0,0,1]]$ |
 | `scale_xyz(sx, sy, sz)`      | $\mathbf{S} = \mathrm{diag}(sx, sy, sz, 1)$                                |
 | `rotation_about_axis(c, \vec{u}, \theta)` | $\mathbf{T}(c) \cdot \mathbf{R}(\vec{u}, \theta) \cdot \mathbf{T}(-c)$ |
 | `rotation_from_to(c, \vec{a}, \vec{b})`   | $\mathbf{R} = \mathrm{Rodrigues}(\vec{a} \times \vec{b}, \arctan2(\|\vec{a} \times \vec{b}\|, \vec{a} \cdot \vec{b}))$ |
