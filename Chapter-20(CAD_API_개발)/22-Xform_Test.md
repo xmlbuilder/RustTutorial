@@ -618,3 +618,39 @@ mod tests {
     }
 }
 ```
+
+---
+
+# Rotation 테스트
+
+
+📐 Xform 테스트 수학 요약표
+| 테스트 이름                                     | 수학적 목적                  | 수식 표현                                                                 | 수학적 타당성 |
+|--------------------------------------------------|-------------------------------|---------------------------------------------------------------------------|----------------|
+| `extract_translation_matrix3`                   | 평행이동과 스케일 분리       | $T = \begin{bmatrix}1&0&0&dx\\ 0&1&0&dy\\ 0&0&1&dz\\ 0&0&0&1\end{bmatrix},\quad S = \mathrm{diag}(sx, sy, sz)$ | ✅ |
+| `extract_rotation_polar`                        | 회전 추출 (polar 분해)       | $R = A \cdot (A^T A)^{-1/2}$                                          | ✅ |
+| `extract_translation_and_rotation3`             | 복합 행렬에서 T, R 분리      | $M = T \cdot S \cdot R \Rightarrow \text{extract } T, R$              | ✅ |
+| `identity_round_trip`                           | 항등 행렬 확인               | $M = I \Rightarrow M \cdot p = p$                                     | ✅ |
+| `translation_works`                             | 평행이동 적용                | $p' = p + t$                                                          | ✅ |
+| `scale_and_rotation`                            | 스케일 + 회전 적용           | $p' = S \cdot R \cdot p$                                              | ✅ |
+| `det_inverse`                                   | 행렬식 및 역행렬 확인        | $\det(M) = sx \cdot sy \cdot sz,\quad M \cdot M^{-1} = I$             | ✅ |
+| `normal_transform`                              | 법선 벡터 변환               | $n' = (M^{-1})^T \cdot n$                                             | ✅ |
+| `rotation_axis_z_90_deg_vector`                | Z축 90° 회전 벡터 확인       | $R_z(90^\circ) \cdot (1,0,0) = (0,1,0)$                               | ✅ |
+| `rotation_about_point_z_90_deg_point`          | 점 기준 회전                 | $p' = T(c) \cdot R_z \cdot T(-c) \cdot p$                             | ✅ |
+| `rotation_sc_matches_angle_version`            | sin/cos 기반 회전 비교       | $R(\theta) = R(\sin\theta, \cos\theta)$                               | ✅ |
+| `point3d_times_translation`                     | 점에 평행이동 적용           | $p' = p + t$                                                          | ✅ |
+| `vector3d_times_translation_ignores_translation`| 벡터는 이동 무시             | $v' = v$                                                              | ✅ |
+| `point3d_times_rotation_axis`                   | 점에 회전 적용               | $p' = R \cdot p$                                                      | ✅ |
+| `vector3d_times_rotation_axis`                  | 벡터에 회전 적용             | $v' = R \cdot v$                                                      | ✅ |
+| `point2d_times_translation`                     | 2D 점에 평행이동 적용        | $p' = p + t_{xy}$                                                     | ✅ |
+| `vector2d_times_translation_ignores_translation`| 2D 벡터는 이동 무시           | $v' = v$                                                              | ✅ |
+| `point3d_perspective_division`                  | 동차 좌표 분할               | $p' = \frac{M \cdot p}{w}$                                            | ✅ |
+| `vector3d_ignores_perspective_row`              | 벡터는 투영 영향 없음        | $v' = M_{3 \times 3} \cdot v$                                         | ✅ |
+| `rotate_point_then_compare_with_transform_point`| 연산자 vs 함수 비교           | $p * R = R.\text{transform}(p)$                                       | ✅ |
+
+
+✅ 종합 평가
+- 모든 테스트는 기하학적으로 타당한 수식 기반으로 구성되어 있으며, 수치 오차 허용 범위 내에서 정확한 결과를 검증합니다.
+- 특히 회전, 스케일, 평행이동, 법선 변환, 동차 좌표 투영 등은 컴퓨터 그래픽스 및 CAD 시스템에서 핵심적인 수학적 연산입니다.
+- 테스트는 단위 행렬, 역행렬, 행렬식, 연산자 오버로드까지 포괄적으로 검증하고 있어 구현 신뢰성이 높습니다.
+
