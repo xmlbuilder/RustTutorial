@@ -12,7 +12,6 @@
 
 $$
 y=y_1\cdot (1-t)+y_2\cdot t\quad \mathrm{where}\quad t=\frac{x-x_1}{x_2-x_1}
-
 $$
 
 ### 📦 구현
