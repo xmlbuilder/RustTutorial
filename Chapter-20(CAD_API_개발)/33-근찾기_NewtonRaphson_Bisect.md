@@ -73,7 +73,7 @@ $$
 | `on_polynomial_newton_root`         | Newton-Raphson 근 찾기                   |$u_{k+1} = u_k - \frac{f(u_k)}{f'(u_k)}$                 |
 | `on_bisection_root`                 | 이분법 근 찾기                           |$u_c = \frac{u_l + u_r}{2}$                              |
 | `on_find_sign_change_brackets`      | 부호 변화 구간 탐색                      |$f(u_k) \cdot f(u_{k+1}) < 0$                            |
-| `initial_guess_from_bracket`     | 브래킷 기반 초기 추정값 계산             | 선형 보간 또는$u_0 = \frac{u_l + u_r}{2}$               |
+| `initial_guess_from_bracket`     | 브래킷 기반 초기 추정값 계산             | 선형 보간 또는 $u_0 = \frac{u_l + u_r}{2}$               |
 | `on_polynomial_auto_bracket_and_newton` | 자동 브래킷팅 + Newton + 이분법 통합 | 부호 변화 탐색 → 초기 추정 → Newton → 실패 시 이분법       |
 
 
