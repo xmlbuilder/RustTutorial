@@ -8,7 +8,7 @@ $$
 z=(b-a)\times (q-a)=(b_x-a_x)(q_y-a_y)-(b_y-a_y)(q_x-a_x)\]
 $$
 
-- → z>0: Left, z<0: Right
+- → $z>0: Left, z<0: Right$
 
 - on_line_point_side_xy / on_line_point_side:  
     3D 점을 XY 또는 임의 평면에 투영 후 위 수식으로 방향 판별
