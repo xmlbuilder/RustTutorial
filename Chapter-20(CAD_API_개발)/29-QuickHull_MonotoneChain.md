@@ -364,8 +364,104 @@ pub fn on_monotone_chain_2d(mut v: Vec<Point2>) -> Vec<Point2> {
 ---
 ## 테스트
 ```rust
-```
+#[cfg(test)]
+mod tests {
+    use nurbslib::core::geom::Point2;
+    use nurbslib::core::polygon2d::{on_monotone_chain_2d, on_quick_hull_2d};
 
+    #[test]
+    fn test_quickhull_and_monotone_chain() {
+        // Square with interior points
+        let pts = vec![
+            Point2::new(0.0, 0.0),
+            Point2::new(1.0, 0.0),
+            Point2::new(1.0, 1.0),
+            Point2::new(0.0, 1.0),
+            Point2::new(0.5, 0.2),
+            Point2::new(0.3, 0.7),
+            Point2::new(0.6, 0.6),
+        ];
+
+        let hull_qh = on_quick_hull_2d(pts.clone());
+        let hull_mc = on_monotone_chain_2d(pts.clone());
+
+        // 두 알고리즘 모두 외곽 4개 꼭짓점만 반환해야 함(순서는 다를 수 있음)
+        let mut hq = hull_qh.clone();
+        hq.sort_by(|a, b| {
+            a.x.partial_cmp(&b.x)
+                .unwrap()
+                .then(a.y.partial_cmp(&b.y).unwrap())
+        });
+        let mut hm = hull_mc.clone();
+        hm.sort_by(|a, b| {
+            a.x.partial_cmp(&b.x)
+                .unwrap()
+                .then(a.y.partial_cmp(&b.y).unwrap())
+        });
+        let mut expected = vec![Point2::new(0.0, 0.0), Point2::new(0.0, 1.0), Point2::new(1.0, 0.0), Point2::new(1.0, 1.0)];
+        expected.sort_by(|a, b| {
+            a.x.partial_cmp(&b.x)
+                .unwrap()
+                .then(a.y.partial_cmp(&b.y).unwrap())
+        });
+
+        assert_eq!(hq, expected);
+        assert_eq!(hm, expected);
+    }
+```
+```rust
+    #[test]
+    fn test_quickhull_square() {
+        let points = vec![
+            Point2 { x: 0.0, y: 0.0 },
+            Point2 { x: 1.0, y: 0.0 },
+            Point2 { x: 1.0, y: 1.0 },
+            Point2 { x: 0.0, y: 1.0 },
+            Point2 { x: 0.5, y: 0.5 }, // 내부 점
+        ];
+
+        let hull = on_quick_hull_2d(points);
+
+        let expected = vec![
+            Point2 { x: 0.0, y: 0.0 },
+            Point2 { x: 1.0, y: 0.0 },
+            Point2 { x: 1.0, y: 1.0 },
+            Point2 { x: 0.0, y: 1.0 },
+        ];
+
+        for p in expected {
+            assert!(hull.contains(&p), "Hull should contain {:?}", p);
+        }
+
+        assert_eq!(hull.len(), 4);
+    }
+```
+```rust
+    #[test]
+    fn test_monotone_chain_triangle() {
+        let points = vec![
+            Point2 { x: 0.0, y: 0.0 },
+            Point2 { x: 1.0, y: 0.0 },
+            Point2 { x: 0.5, y: 1.0 },
+            Point2 { x: 0.5, y: 0.5 }, // 내부 점
+        ];
+
+        let hull = on_monotone_chain_2d(points);
+
+        let expected = vec![
+            Point2 { x: 0.0, y: 0.0 },
+            Point2 { x: 1.0, y: 0.0 },
+            Point2 { x: 0.5, y: 1.0 },
+        ];
+
+        for p in expected {
+            assert!(hull.contains(&p), "Hull should contain {:?}", p);
+        }
+
+        assert_eq!(hull.len(), 3);
+    }
+}
+```
 ---
 
 
