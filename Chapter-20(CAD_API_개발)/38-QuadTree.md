@@ -18,7 +18,7 @@ $$
 - 두 사각형 B_1과 B_2가 교차하는 조건:
 
 $$
-- ( B_2.x_{\min} > B_1.x_{\max} \vee 
+\neg ( B_2.x_{\min} > B_1.x_{\max} \vee 
        B_2.x_{\max} < B_1.x_{\min} \vee 
        B_2.y_{\min} > B_1.y_{\max} \vee 
        B_2.y_{\max} < B_1.y_{\min} )
