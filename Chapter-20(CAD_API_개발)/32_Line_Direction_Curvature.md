@@ -52,7 +52,7 @@ $$
 C'(t)=\sum _{i=1}^nia_it^{i-1}
 $$
 
-- on_eval_curve_power4d_deriv:
+- on_eval_curve_power4d_deriv:  
     -Rational 도함수:
 
 $$
