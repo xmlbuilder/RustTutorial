@@ -122,7 +122,14 @@ $$
 - 거리 제곱 계산 방식:
 
 $$
-d^2=\sum _{i=x,y,z}\left\{ \, \begin{array}{ll}\textstyle (\min _i-c_i)^2&\textstyle \mathrm{if\  }c_i<\min _i\\ \textstyle (c_i-\max _i)^2&\textstyle \mathrm{if\  }c_i>\max _i\\ \textstyle 0&\textstyle \mathrm{otherwise}\end{array}\right.
+d^2 = \sum_{i = x, y, z}
+\Bigg\{
+  \begin{array}{ll}
+    (\min_i - c_i)^2 & \text{if } c_i < \min_i \\
+    (c_i - \max_i)^2 & \text{if } c_i > \max_i \\
+    0 & \text{otherwise}
+  \end{array}
+\Bigg.
 $$
 
 - → 정확한 구-박스 교차 판정
