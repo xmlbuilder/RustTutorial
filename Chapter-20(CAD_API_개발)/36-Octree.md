@@ -981,7 +981,14 @@ $$
 ### 4. 구-박스 교차 판정
 
 $$
-\sum _{i=x,y,z}\left\{ \, \begin{array}{ll}\textstyle (\min _i-c_i)^2&\textstyle \mathrm{if\  }c_i<\min _i\\ \textstyle (c_i-\max _i)^2&\textstyle \mathrm{if\  }c_i>\max _i\\ \textstyle 0&\textstyle \mathrm{otherwise}\end{array}\right. \leq r^2
+\mathrm{거리\ 제곱} = \sum_{i=x,y,z} 
+\{
+  \begin{array}{ll}
+    (\min_i - c_i)^2 & \text{if } c_i < \min_i \\
+    (c_i - \max_i)^2 & \text{if } c_i > \max_i \\
+    0 & \text{otherwise}
+  \end{array}
+\}.
 $$
 
 ### 5. 삼각형 AABB 계산
