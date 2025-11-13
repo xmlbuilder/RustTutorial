@@ -66,7 +66,7 @@ h_{\mathrm{new}}=h\cdot \mathrm{safety}\cdot \left( \frac{\mathrm{tol}}{\mathrm{
 $$
 
 ## 🧮 2D 적분 함수
-### 1. simpson_2d(f, u_0, u_1, v_0, v_1)
+### 1. simpson_2d($f$, $u_0$, $u_1$, $v_0$, $v_1$)
 - 텐서형 Simpson Rule (3×3 샘플)
 
 $$
@@ -75,7 +75,7 @@ $$
 
 - 가중치 행렬: [1,4,1;4,16,4;1,4,1]
 
-### 2. simpson_adaptive_2d(f, u_0, u_1, v_0, v_1, \varepsilon, d_{\max})
+### 2. simpson_adaptive_2d($f$, $u_0$, $u_1$, $v_0$, $v_1$, $\varepsilon, d_{\max}$)
 - 적응형 2D Simpson Rule (사분할)
 - 4개 영역으로 분할:
 
@@ -85,7 +85,7 @@ $$
 
 - 오차 기준: $|s_4-s_0|<15\cdot \varepsilon$ 
 
-### 3. gauss_legendre_2d(f, u_0, u_1, v_0, v_1)
+### 3. gauss_legendre_2d($f$, $u_0$, $u_1$, $v_0$, $v_1$)
 - 24×24 Gauss–Legendre 텐서 적분
 
 $$
