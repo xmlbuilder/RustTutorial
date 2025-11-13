@@ -48,7 +48,13 @@ if z > mid_z { oct |= 1; }
 - AABB vs Sphere 교차 여부:
 
 $$
-\mathrm{거리\  제곱}=\sum _{i=x,y,z}\left\{ \, \begin{array}{ll}\textstyle (\min _i-c_i)^2&\textstyle \mathrm{if\  }c_i<\min _i\\ \textstyle (c_i-\max _i)^2&\textstyle \mathrm{if\  }c_i>\max _i\\ \textstyle 0&\textstyle \mathrm{otherwise}\end{array}\right.
+\mathrm{거리\ 제곱} = \sum_{i=x,y,z} \left\{
+  \begin{array}{ll}
+    (\min_i - c_i)^2 & \text{if } c_i < \min_i \\
+    (c_i - \max_i)^2 & \text{if } c_i > \max_i \\
+    0 & \text{otherwise}
+  \end{array}
+\right.
 $$ 
 - 이 값이 $r^2$ 이하이면 교차
 
