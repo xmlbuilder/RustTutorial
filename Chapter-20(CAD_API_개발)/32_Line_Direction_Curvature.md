@@ -2,7 +2,7 @@
 
 ## 📐 수학적 설명 요약
 ### 1. 방향 판별 (2D/3D)
-- on_line_point_side_2d:  
+- `on_line_point_side_2d`:  
 
 $$
 z=(b-a)\times (q-a)=(b_x-a_x)(q_y-a_y)-(b_y-a_y)(q_x-a_x)\]
@@ -10,7 +10,7 @@ $$
 
 - → $z>0: Left, z<0: Right$
 
-- on_line_point_side_xy / on_line_point_side:  
+- `on_line_point_side_xy` / `on_line_point_side`:  
     3D 점을 XY 또는 임의 평면에 투영 후 위 수식으로 방향 판별
 
 ### 2. 거리 및 회전 각도- on_point_distance:
@@ -26,40 +26,40 @@ $$
 $$
 
 ### 3. 곡선/곡면 평가 (Power Basis)
-- on_eval_curve_power3d:
+- `on_eval_curve_power3d`:
 
 $$
 C(t)=\sum _{i=0}^na_it^i
 $$
 
-- on_eval_curve_power4d:
+- `on_eval_curve_power4d`:
     - Rational curve:
 
 $$
 C(t)=\frac{\sum a_it^i}{w(t)}\quad \mathrm{where\  }w(t)=\sum w_it^i
 $$
 
-- on_eval_surface_power3d / power4d:
+- `on_eval_surface_power3d` / `power4d`:
 
 $$
 S(u,v)=\sum _{i=0}^n\sum _{j=0}^ma_{ij}u^iv^j
 $$
 
 ### 4. 도함수 계산
-- on_eval_curve_power3d_deriv:
+- `on_eval_curve_power3d_deriv`:
 
 $$
 C'(t)=\sum _{i=1}^nia_it^{i-1}
 $$
 
-- on_eval_curve_power4d_deriv:  
+- `on_eval_curve_power4d_deriv`:  
     - Rational 도함수:
 
 $$
 C'(t)=\frac{w\cdot C'-C\cdot w'}{w^2}
 $$
 
-- on_eval_surface_power3d_d1:
+- `on_eval_surface_power3d_d1`:
 
 $$
 \frac{\partial S}{\partial u} ,\quad \frac{\partial S}{\partial v}
@@ -71,7 +71,7 @@ $$
 \kappa =\frac{\| d_1\times d_2\| }{\| d_1\| ^3}
 $$
 
-- on_surface_curvature:
+- `on_surface_curvature`:
     - First fundamental form: 
 
 $$
@@ -105,13 +105,13 @@ $$
 
 ### 7. 평면 관련- on_plane_eval:
 - 평면 방정식 $ax+by+cz+d=0$ 에 점 대입
-- on_intersect_line_plane / on_shoot_to_plane:
+- `on_intersect_line_plane` / `on_shoot_to_plane`:
 
 $$
 t=\frac{-(n\cdot p_0+d)}{n\cdot \vec {dir}}\Rightarrow p=p_0+t\cdot \vec {dir}
 $$
 
-- on_pass_plane_side:  
+- `on_pass_plane_side`:  
     평면 평가값 s에 따라 Side 판별
 
 ## 📊 기능별 정리 표
