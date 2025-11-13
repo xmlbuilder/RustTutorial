@@ -9,21 +9,21 @@
 - 텍스처 좌표용
 ### CoonsMesh
 - Coons 패치 결과를 담는 메쉬 구조체
-- vertices: 정점 리스트
-- faces: 면 리스트 ([u32; 4] → 삼각형은 마지막 인덱스를 중복)
-- v_normals: 정점 노멀
-- tex_coords: 텍스처 좌표
+          - `vertices`: 정점 리스트
+          - `faces`: 면 리스트 ([u32; 4] → 삼각형은 마지막 인덱스를 중복)
+          - `v_normals`: 정점 노멀
+          - `tex_coords`: 텍스처 좌표
 ### TriStyle
 - 삼각형 분할 방식
 - AlignLeft, AlignRight, UnionJack
 ### CoonsOptions
 - 패치 생성 옵션
-- quad_mesh: 사각형 메쉬 여부
-- tri_style: 삼각형 분할 방식
-- build_normals: 노멀 생성 여부
-- build_tex_coord: 텍스처 좌표 생성 여부
-- use_arc_len_sampling: 경계 파라미터를 호장 기반으로 할지 여부
-- force_corner_match: 코너 정렬 강제 여부
+          - `quad_mesh`: 사각형 메쉬 여부
+          - `tri_style:` 삼각형 분할 방식
+          - `build_normals`: 노멀 생성 여부
+          - `build_tex_coord`: 텍스처 좌표 생성 여부
+          - `use_arc_len_sampling`: 경계 파라미터를 호장 기반으로 할지 여부
+          - `force_corner_match`: 코너 정렬 강제 여부
 ### CoonsBoundaryMaps
 - 경계 파라미터 맵 (UV 및 원곡선 파라미터)
 
