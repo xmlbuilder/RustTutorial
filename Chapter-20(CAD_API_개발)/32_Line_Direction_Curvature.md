@@ -29,10 +29,11 @@ $$
 - on_eval_curve_power3d:
 
 $$
-C(t)=\sum _{i=0}^na_it^i- on_eval_curve_power4d:
+C(t)=\sum _{i=0}^na_it^i
 $$
 
-- Rational curve:
+- on_eval_curve_power4d:
+    - Rational curve:
 
 $$
 C(t)=\frac{\sum a_it^i}{w(t)}\quad \mathrm{where\  }w(t)=\sum w_it^i
