@@ -75,13 +75,13 @@ $$
     - First fundamental form: 
 
 $$
-E=\vec {s}_u\cdot \vec {s}_u \\,\  F=\vec {s}_u\cdot \vec {s}_v \\,\  G=\vec {s}_v\cdot \vec {s}_v
+E=\vec {s}_u\cdot \vec {s}_u \quad \  F=\vec {s}_u\cdot \vec {s}_v \quad \  G=\vec {s}_v\cdot \vec {s}_v
 $$
 
     - Second form: 
 
 $$
-e=\vec {n}\cdot \vec {s}_{uu} \\,\  f=\vec {n}\cdot \vec {s}_{uv} \\,\  g=\vec {n}\cdot \vec {s}_{vv}
+e=\vec {n}\cdot \vec {s}_{uu} \quad \  f=\vec {n}\cdot \vec {s}_{uv} \quad \  g=\vec {n}\cdot \vec {s}_{vv}
 $$
 
 - Gaussian:
