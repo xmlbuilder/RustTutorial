@@ -18,7 +18,7 @@ $$
 
 ### 2. simpson_adaptive(f, a, b, \varepsilon, d_{\max})
 - 적응형 Simpson Rule (재귀 분할)
-    - 오차 기준: \mathrm{error}<15\cdot \varepsilon 
+    - 오차 기준: $\mathrm{error}<15\cdot \varepsilon$
     - Richardson 보정 포함:
 
 $$
