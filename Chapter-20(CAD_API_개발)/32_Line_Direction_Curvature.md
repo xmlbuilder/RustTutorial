@@ -53,7 +53,7 @@ C'(t)=\sum _{i=1}^nia_it^{i-1}
 $$
 
 - on_eval_curve_power4d_deriv:  
-    -Rational 도함수:
+    - Rational 도함수:
 
 $$
 C'(t)=\frac{w\cdot C'-C\cdot w'}{w^2}
