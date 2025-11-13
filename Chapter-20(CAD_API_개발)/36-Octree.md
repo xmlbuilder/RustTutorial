@@ -123,13 +123,13 @@ $$
 
 $$
 d^2 = \sum_{i = x, y, z}
-\Bigg\{
+\{
   \begin{array}{ll}
     (\min_i - c_i)^2 & \text{if } c_i < \min_i \\
     (c_i - \max_i)^2 & \text{if } c_i > \max_i \\
     0 & \text{otherwise}
   \end{array}
-\Bigg.
+\}.
 $$
 
 - → 정확한 구-박스 교차 판정
