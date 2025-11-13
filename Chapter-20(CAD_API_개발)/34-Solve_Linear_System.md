@@ -77,10 +77,10 @@ $$
 
 | 함수 이름                          | 입력 형태                     | 기능 요약                            | 수학적 핵심 수식 또는 처리 흐름                        |
 |-----------------------------------|-------------------------------|-------------------------------------|--------------------------------------------------------|
-| `on_solve_linear_system_vec`      | `Matrix`, `Vec<f64>`          | in-place LU 분해 + 전진/후진 대입   | $ A = LU,\ Ly = b,\ Ux = y$                         |
-| `on_solve_linear_system_dense_mut`| `Vec<Vec<f64>>`, `Vec<f64>`   | 일반 벡터 기반 in-place 해법        | $ A = LU,\ Ly = b,\ Ux = y$                         |
+| `on_solve_linear_system_vec`      | `Matrix`, `Vec<f64>`          | in-place LU 분해 + 전진/후진 대입   | $A = LU,\ Ly = b,\ Ux = y$                         |
+| `on_solve_linear_system_dense_mut`| `Vec<Vec<f64>>`, `Vec<f64>`   | 일반 벡터 기반 in-place 해법        | $A = LU,\ Ly = b,\ Ux = y$                         |
 | `on_solve_linear_system_dense`    | `&[Vec<f64>]`, `&[f64]`       | 복사 기반 안전한 해법               | 내부 복사 후 dense_mut 호출                           |
-| `on_lu_solve_multiple_rhs`        | `Matrix`, `Vec<f64>`          | 다중 RHS 해법 (행우선 저장)         | $ A = LU,\ Pb \rightarrow y \rightarrow x$         |
+| `on_lu_solve_multiple_rhs`        | `Matrix`, `Vec<f64>`          | 다중 RHS 해법 (행우선 저장)         | $A = LU,\ Pb \rightarrow y \rightarrow x$         |
 
 
 
