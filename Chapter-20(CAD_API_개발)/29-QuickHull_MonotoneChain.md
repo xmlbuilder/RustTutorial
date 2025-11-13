@@ -223,4 +223,152 @@ upper: [p5, …]
  
 ---
 
+## 소스 코드
+```rust
+fn on_is_left_of(a: &Point2, b: &Point2) -> bool {
+    a.x < b.x || (a.x == b.x && a.y < b.y)
+}
+```
+```rust
+pub fn on_quick_hull_2d(v: Vec<Point2>) -> Vec<Point2> {
+    if v.len() <= 3 {
+        return v;
+    }
+
+    let a = *v
+        .iter()
+        .min_by(|p, q| {
+            on_is_left_of(p, q)
+                .then_some(std::cmp::Ordering::Less)
+                .unwrap_or(std::cmp::Ordering::Greater)
+        })
+        .unwrap();
+    let b = *v
+        .iter()
+        .max_by(|p, q| {
+            on_is_left_of(p, q)
+                .then_some(std::cmp::Ordering::Less)
+                .unwrap_or(std::cmp::Ordering::Greater)
+        })
+        .unwrap();
+
+    fn dist(a: Point2, b: Point2, p: Point2) -> f64 {
+        ((b.x - a.x) * (a.y - p.y) - (b.y - a.y) * (a.x - p.x)).abs() / ((b - a).length())
+    }
+    fn farthest(a: Point2, b: Point2, vv: &[Point2]) -> usize {
+        let mut idx = 0usize;
+        let mut dm = dist(a, b, vv[0]);
+        for (i, &pt) in vv.iter().enumerate().skip(1) {
+            let d = dist(a, b, pt);
+            if d > dm {
+                dm = d;
+                idx = i;
+            }
+        }
+        idx
+    }
+    fn side(a: Point2, b: Point2, p: Point2) -> Real {
+        on_cross_vec_2d(a, b, p)
+    }
+    fn recurse(vv: Vec<Point2>, a: Point2, b: Point2, hull: &mut Vec<Point2>) {
+        if vv.is_empty() {
+            return;
+        }
+        let idx = farthest(a, b, &vv);
+        let f = vv[idx];
+
+        let mut left = Vec::new();
+        for &p in &vv {
+            if side(a, f, p) > 0.0 {
+                left.push(p);
+            }
+        }
+        recurse(left, a, f, hull);
+
+        hull.push(f);
+
+        let mut right = Vec::new();
+        for &p in &vv {
+            if side(f, b, p) > 0.0 {
+                right.push(p);
+            }
+        }
+        recurse(right, f, b, hull);
+    }
+
+    // 좌/우 분리
+    let mut left = Vec::new();
+    let mut right = Vec::new();
+    for &p in &v {
+        if side(a, b, p) > 0.0 {
+            left.push(p);
+        } else {
+            right.push(p);
+        }
+    }
+
+    let mut hull = Vec::new();
+    hull.push(a);
+    recurse(left, a, b, &mut hull);
+    hull.push(b);
+    recurse(right, b, a, &mut hull);
+    hull
+}
+```
+```rust
+pub fn on_monotone_chain_2d(mut v: Vec<Point2>) -> Vec<Point2> {
+    if v.len() <= 1 {
+        return v;
+    }
+    v.sort_by(|a, b| {
+        if on_is_left_of(a, b) {
+            std::cmp::Ordering::Less
+        } else {
+            std::cmp::Ordering::Greater
+        }
+    });
+
+    let mut lower: Vec<Point2> = Vec::new();
+    for &p in &v {
+        while lower.len() >= 2 {
+            let n = lower.len();
+            if on_cross_vec_2d(lower[n - 2], lower[n - 1], p) >= 0.0 {
+                lower.pop();
+            } else {
+                break;
+            }
+        }
+        lower.push(p);
+    }
+
+    let mut upper: Vec<Point2> = Vec::new();
+    for &p in v.iter().rev() {
+        while upper.len() >= 2 {
+            let n = upper.len();
+            if on_cross_vec_2d(upper[n - 2], upper[n - 1], p) >= 0.0 {
+                upper.pop();
+            } else {
+                break;
+            }
+        }
+        upper.push(p);
+    }
+
+    lower.pop();
+    upper.pop();
+    lower.extend(upper);
+    lower
+}
+```
+
+---
+## 테스트
+```rust
+```
+
+---
+
+
+
+
   
