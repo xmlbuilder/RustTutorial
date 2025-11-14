@@ -73,6 +73,89 @@ pub fn run_binary(&mut self, mesh: &Mesh) -> Result<()>
 - Binary STL은 공간 효율이 높고 빠르지만, ASCII STL은 사람이 읽기 쉬운 형식입니다
 
 ---
+## 소스 코드
+```rust
+use std::fs::File;
+use std::io::{Result, Write};
+use crate::core::mesh::Mesh;
+
+pub struct StlWriter {
+    path: String,
+    binary: bool,
+}
+```
+```rust
+impl StlWriter {
+    pub fn run(path: &str, mesh: &Mesh, binary: bool) -> Result<()> {
+        let mut writer = StlWriter::new(path, binary)?;
+        match writer.binary {
+            true => { Ok(writer.run_binary(mesh)?) },
+            false => { Ok(writer.run_ascii(mesh)?) },
+        }
+    }
+}
+```
+```rust
+impl StlWriter {
+    pub fn new(path: &str, binary: bool) -> Result<Self> {
+        Ok(Self {
+            path: path.to_string(),
+            binary,
+        })
+    }
+
+    pub fn run_ascii(&mut self, mesh: &Mesh) -> Result<()> {
+        let mut file = File::create(&self.path)?;
+        writeln!(file, "solid mesh")?;
+
+        for face in &mesh.faces {
+            let v0 = mesh.vertices[face[0] as usize];
+            let v1 = mesh.vertices[face[1] as usize];
+            let v2 = mesh.vertices[face[2] as usize];
+            let n = (v1 - v0).cross_pt(&(v2 - v0)).unitize();
+
+            writeln!(file, "  facet normal {} {} {}", n.x, n.y, n.z)?;
+            writeln!(file, "    outer loop")?;
+            writeln!(file, "      vertex {} {} {}", v0.x, v0.y, v0.z)?;
+            writeln!(file, "      vertex {} {} {}", v1.x, v1.y, v1.z)?;
+            writeln!(file, "      vertex {} {} {}", v2.x, v2.y, v2.z)?;
+            writeln!(file, "    endloop")?;
+            writeln!(file, "  endfacet")?;
+        }
+        writeln!(file, "endsolid mesh")?;
+        Ok(())
+    }
+```
+```rust
+    pub fn run_binary(&mut self, mesh: &Mesh) -> Result<()> {
+        use byteorder::{LittleEndian, WriteBytesExt};
+
+        let mut file = File::create(&self.path)?;
+        let header = [0u8; 80];
+        file.write_all(&header)?;
+        file.write_u32::<LittleEndian>(mesh.faces.len() as u32)?;
+
+        for face in &mesh.faces {
+            let v0 = mesh.vertices[face[0] as usize];
+            let v1 = mesh.vertices[face[1] as usize];
+            let v2 = mesh.vertices[face[2] as usize];
+            let n = (v1 - v0).cross_pt(&(v2 - v0)).unitize();
+
+            for val in &[n.x, n.y, n.z] {
+                file.write_f32::<LittleEndian>(*val as f32)?;
+            }
+            for v in &[v0, v1, v2] {
+                file.write_f32::<LittleEndian>(v.x as f32)?;
+                file.write_f32::<LittleEndian>(v.y as f32)?;
+                file.write_f32::<LittleEndian>(v.z as f32)?;
+            }
+            file.write_u16::<LittleEndian>(0)?; // attribute byte count
+        }
+        Ok(())
+    }
+}
+```
+---
 
 ## 테스트 코드 
 ```rust
