@@ -81,6 +81,158 @@ StlReader::run("model.stl", &mut mesh)?;
 - 자동으로 법선 벡터까지 계산됨
 
 ---
+## 소스 코드
+```rust
+use byteorder::{LittleEndian, ReadBytesExt};
+use std::collections::HashMap;
+use std::fs::File;
+use std::io::{BufRead, BufReader, Read};
+use crate::core::boundingbox::BoundingBox;
+use crate::core::mesh::Mesh;
+use crate::core::prelude::Point3D;
+
+pub struct StlReader;
+```
+```rust
+impl StlReader {
+    pub fn run(path: &str, mesh: &mut Mesh) -> std::io::Result<()> {
+        let mut file = File::open(path)?;
+        let mut header = [0u8; 128];
+        file.read_exact(&mut header)?;
+
+        let is_binary = header.iter().any(|&b| b > 127);
+        drop(file);
+
+        if is_binary {
+            Self::read_binary(path, mesh)
+        } else {
+            Self::read_ascii(path, mesh)
+        }
+    }
+```
+```rust
+    fn read_binary(path: &str, mesh: &mut Mesh) -> std::io::Result<()> {
+        let mut file = File::open(path)?;
+        let mut header = [0u8; 80];
+        file.read_exact(&mut header)?;
+        let tri_count = file.read_u32::<LittleEndian>()?;
+
+        let mut raw_facets = Vec::new();
+        for _ in 0..tri_count {
+            let mut normal = [0.0f32; 3];
+            file.read_f32_into::<LittleEndian>(&mut normal)?;
+
+            let mut facet = [[0.0f32; 3]; 3];
+            for i in 0..3 {
+                file.read_f32_into::<LittleEndian>(&mut facet[i])?;
+            }
+
+            let _ = file.read_u16::<LittleEndian>()?;
+            raw_facets.push(facet);
+        }
+        Self::build_mesh(mesh, raw_facets);
+        Ok(())
+    }
+```
+```rust
+    fn read_ascii(path: &str, mesh: &mut Mesh) -> std::io::Result<()> {
+        let file = BufReader::new(File::open(path)?);
+        let mut raw_facets = Vec::new();
+        let mut current_facet = [[0.0f32; 3]; 3];
+        let mut vertex_idx = 0;
+
+        for line in file.lines() {
+            let line = line?;
+            let tokens: Vec<&str> = line.trim().split_whitespace().collect();
+
+            if tokens.get(0) == Some(&"vertex") && tokens.len() >= 4 {
+                for i in 0..3 {
+                    current_facet[vertex_idx][i] = tokens[i + 1].parse::<f32>().unwrap_or(0.0);
+                }
+                vertex_idx += 1;
+            }
+
+            if tokens.get(0) == Some(&"endfacet") {
+                if vertex_idx == 3 {
+                    raw_facets.push(current_facet);
+                }
+                vertex_idx = 0;
+            }
+        }
+        Self::build_mesh(mesh, raw_facets);
+        Ok(())
+    }
+```
+```rust
+    fn build_mesh(mesh: &mut Mesh, raw_facets: Vec<[[f32; 3]; 3]>) {
+        let mut vertices = Vec::new();
+        let mut faces = Vec::new();
+        let mut spatial_map: HashMap<[i32; 3], Vec<usize>> = HashMap::new();
+
+        let bb =
+            raw_facets
+                .iter()
+                .flat_map(|f| f.iter())
+                .fold(BoundingBox::empty(), |mut bb, p| {
+                    bb.set(p[0] as f64, p[1] as f64, p[2] as f64);
+                    bb
+                });
+
+        let tol = bb.diagonal_length() * f64::EPSILON.sqrt();
+
+        for facet in raw_facets {
+            let mut face = [0u32; 4];
+            for (j, p) in facet.iter().enumerate() {
+                let key = [
+                    (p[0] as f64 / tol).round() as i32,
+                    (p[1] as f64 / tol).round() as i32,
+                    (p[2] as f64 / tol).round() as i32,
+                ];
+
+                let idx = spatial_map
+                    .get(&key)
+                    .and_then(|list| {
+                        list.iter().find(|&&i| {
+                            let v: Point3D = vertices[i];
+                            (v.x - p[0] as f64).powi(2)
+                                + (v.y - p[1] as f64).powi(2)
+                                + (v.z - p[2] as f64).powi(2)
+                                < tol * tol
+                        })
+                    })
+                    .copied();
+
+                let vi = match idx {
+                    Some(i) => i,
+                    None => {
+                        let i = vertices.len();
+                        vertices.push(Point3D::new(p[0] as f64, p[1] as f64, p[2] as f64));
+                        spatial_map.entry(key).or_default().push(i);
+                        i
+                    }
+                };
+                face[j] = vi as u32;
+            }
+            face[3] = face[2];
+            if face[0] != face[1] && face[0] != face[2] && face[1] != face[2] {
+                faces.push(face);
+            }
+        }
+
+        let offset = mesh.vertices.len();
+        mesh.vertices.extend(vertices);
+        for mut f in faces {
+            for v in &mut f {
+                *v += offset as u32;
+            }
+            mesh.faces.push(f);
+        }
+        mesh.compute_normals();
+    }
+}
+```
+
+---
 
 ## 테스트 코드
 
