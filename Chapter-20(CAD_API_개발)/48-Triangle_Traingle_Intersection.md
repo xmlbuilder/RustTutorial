@@ -1276,7 +1276,8 @@ $$
 #[cfg(test)]
 mod test {
     use nurbslib::core::prelude::Point3D;
-    use nurbslib::core::tri_tri_intersection::{on_tri_tri_intersect, on_tri_tri_intersect_with_isectline, on_tri_tri_overlap_test_3d};
+    use nurbslib::core::tri_tri_intersection::{on_tri_tri_intersect,
+        on_tri_tri_intersect_with_isectline, on_tri_tri_overlap_test_3d};
 
 ```
 ```rust
@@ -1407,7 +1408,8 @@ mod test {
 ```rust
 #[cfg(test)]
 mod tri_tri_tests {
-    use nurbslib::core::tri_tri_intersection::{on_tri_tri_intersect, on_tri_tri_intersect_no_div, on_tri_tri_intersect_with_isectline, on_tri_tri_intersect_with_isectline_ex};
+    use nurbslib::core::tri_tri_intersection::{on_tri_tri_intersect, on_tri_tri_intersect_no_div,
+        on_tri_tri_intersect_with_isectline, on_tri_tri_intersect_with_isectline_ex};
 
     const E: f64 = 1e-6;
 
