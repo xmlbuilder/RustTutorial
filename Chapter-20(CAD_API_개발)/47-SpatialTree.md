@@ -42,7 +42,7 @@ $$
 ### 리프당 평균 객체 수:
 
 $$
-\mathrm{avg\_ objs\_ per\_ leaf}=\frac{\mathrm{objects}}{\mathrm{leaves}}
+\mathrm{avg\\_ objs\\_ per\\_ leaf}=\frac{\mathrm{objects}}{\mathrm{leaves}}
 $$
 
 ## 3. Ray-AABB 교차 판정
