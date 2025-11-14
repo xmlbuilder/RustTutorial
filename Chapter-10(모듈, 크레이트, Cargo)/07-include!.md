@@ -1,5 +1,5 @@
 # include!
-Rust의 include! 매크로와 함께 concat!, env!를 사용하는 방식으로 외부 파일의 내용을 컴파일 타임에 코드로 삽입하는 구조.  
+Rust의 `include!` 매크로와 함께 concat!, env!를 사용하는 방식으로 외부 파일의 내용을 컴파일 타임에 코드로 삽입하는 구조.  
 아래에 이 코드가 어떻게 동작하는지 단계별로 설명.
 
 ## 🔍 코드 분석
@@ -9,10 +9,10 @@ const CUBE_TABLES: [[i32;16];256] = include!(concat!(env!("CARGO_MANIFEST_DIR"),
 
 ### 1. env!("CARGO_MANIFEST_DIR")
 - 이 매크로는 현재 프로젝트의 루트 디렉토리 경로를 문자열로 반환.
-- 예: /home/junghwan/my_project
+- 예: `/home/junghwan/my_project`
 ### 2. concat!(...)
 - 문자열을 컴파일 타임에 연결해줍니다.
-- 결과: "/home/junghwan/my_project/tables/mc_tri_table.incl.rs"
+- 결과: `"/home/junghwan/my_project/tables/mc_tri_table.incl.rs"`
 ### 3. include!(...)
 - 해당 경로의 파일 내용을 그대로 현재 위치에 코드로 삽입합니다.
 - 즉, mc_tri_table.incl.rs 파일의 내용이 include! 위치에 복사된 것처럼 처리됨
@@ -25,7 +25,7 @@ const CUBE_TABLES: [[i32;16];256] = include!(concat!(env!("CARGO_MANIFEST_DIR"),
 ]
 ```
 
-- 이 파일은 [[i32; 16]; 256] 타입의 데이터를 정의한 정적 테이블
+- 이 파일은 `[[i32; 16]; 256]` 타입의 데이터를 정의한 정적 테이블
 - 보통 마칭 큐브(Marching Cubes) 알고리즘에서 삼각형 인덱스를 저장하는 데 사용됨
 
 ## 🧠 전체 동작 흐름
@@ -41,7 +41,6 @@ const CUBE_TABLES: [[i32;16];256] = include!(concat!(env!("CARGO_MANIFEST_DIR"),
 | 컴파일 타임 포함          | 런타임 로딩이 아닌 컴파일 타임에 코드로 포함되어 성능과 안정성 확보       |
 | 경로 유연성 확보          | `env!`, `concat!`을 통해 경로를 동적으로 구성하여 다양한 환경에서 유연하게 대응 |
 | 코드 재사용 및 모듈화     | 테이블이나 설정 파일을 여러 모듈에서 재사용 가능                         |
-
 
 ---
 
@@ -62,14 +61,14 @@ const TABLE: [[i32; 16]; 256] = include!("mc_tri_table.incl.rs");
 - mc_tri_table.incl.rs는 Rust 코드 형식의 배열을 정의한 파일
 - 컴파일 타임에 코드로 삽입됨
 
-### 2. include_str!
+### 2. `include_str!`
 ```rust
 const HTML: &str = include_str!("template.html");
 ```
 - template.html의 내용을 문자열로 읽어옴
 - HTML, Markdown, JSON 등 텍스트 기반 파일에 적합
 
-### 3. include_bytes!
+### 3. `include_bytes!`
 ```rust
 const LOGO: &[u8] = include_bytes!("logo.png");
 ```
@@ -130,6 +129,8 @@ include!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/mc_tri_table.incl.rs"));
 | 같은 디렉토리의 파일 포함               | `include!("filename.rs")`                          |
 | 상위 또는 다른 디렉토리의 파일 포함     | `include!("../path/to/file.rs")`                   |
 | 프로젝트 루트 기준으로 절대 경로 구성   | `include!(concat!(env!("CARGO_MANIFEST_DIR"), "..."))` |
+
+---
 
 
 
