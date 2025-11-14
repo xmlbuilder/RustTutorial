@@ -174,3 +174,50 @@ mod tests {
 - normalize()는 단위 벡터로 변환
 
 ---
+
+## 실전 테스트
+
+```rust
+#[cfg(test)]
+mod float_scalar_tests {
+    use nurbslib::core::scalar::FloatScalar;
+
+    #[derive(Debug, Clone, Copy)]
+    struct Vec2<T: FloatScalar> {
+        x: T,
+        y: T,
+    }
+```
+```rust
+    impl<T: FloatScalar> Vec2<T> {
+        fn length(&self) -> T {
+            (self.x * self.x + self.y * self.y).sqrt()
+        }
+
+        fn normalize(&self) -> Self {
+            let len = self.length();
+            Vec2 {
+                x: self.x / len,
+                y: self.y / len,
+            }
+        }
+    }
+```
+```rust
+    #[test]
+    fn test_length_f32() {
+        let v = Vec2 { x: 3.0f32, y: 4.0f32 };
+        let len = v.length();
+        assert!((len - 5.0).abs() < 1e-6);
+    }
+```
+```rust
+    #[test]
+    fn test_normalize_f64() {
+        let v = Vec2 { x: 0.0f64, y: 2.0f64 };
+        let norm = v.normalize();
+        assert!((norm.x - 0.0).abs() < 1e-12);
+        assert!((norm.y - 1.0).abs() < 1e-12);
+    }
+}
+```
