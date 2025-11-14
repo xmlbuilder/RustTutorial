@@ -194,6 +194,37 @@ HashMap<String, String>에서 String은 heap에 있지만, 생명 주기 명시�
 HashMap이 drop될 때 함께 안전하게 drop됩니다.
 
 ---
+# 실전 예시
+
+## 🧪 HashMap + get + and_then 예제
+
+```rust
+use std::collections::HashMap;
+
+fn main() {
+    let mut scores: HashMap<&str, Option<u32>> = HashMap::new();
+    scores.insert("Alice", Some(90));
+    scores.insert("Bob", None);
+    scores.insert("Charlie", Some(75));
+
+    let name = "Alice";
+
+    let result = scores.get(name).and_then(|opt| opt.map(|score| score + 10));
+
+    match result {
+        Some(new_score) => println!("{}의 보너스 점수: {}", name, new_score),
+        None => println!("{}의 점수를 계산할 수 없습니다.", name),
+    }
+}
+```
+
+
+## 🧾 설명
+- scores.get(name)은 Option<&Option<u32>>를 반환합니다.
+- and_then은 내부의 Option<u32>를 꺼내서 map을 통해 점수에 10점을 추가합니다.
+- 결과적으로 Option<u32>가 반환되며, 존재할 경우 보너스 점수를 출력합니다.
+
+---
 
 
 
