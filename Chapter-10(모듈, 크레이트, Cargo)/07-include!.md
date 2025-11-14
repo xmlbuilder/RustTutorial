@@ -87,7 +87,7 @@ const LOGO: &[u8] = include_bytes!("logo.png");
 ## 🧠 보너스 팁
 - 세 매크로 모두 컴파일 타임에 포함되므로 런타임 I/O가 필요 없음
 - 파일 경로는 상대 경로 또는 concat!(env!(...))로 동적 구성 가능
-- include_str!과 include_bytes!는 파일 내용을 그대로 포함하지만, include!는 코드로 해석됨
+- `include_str!`과 `include_bytes!`는 `파일 내용을 그대로 포함` 하지만, `include!` 는 `코드로 해석` 됨
 
 ## ✅ 같은 디렉토리에서 include! 사용하는 방법
 ### 📁 예시 디렉토리 구조
@@ -131,6 +131,7 @@ include!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/mc_tri_table.incl.rs"));
 | 프로젝트 루트 기준으로 절대 경로 구성   | `include!(concat!(env!("CARGO_MANIFEST_DIR"), "..."))` |
 
 ---
+
 
 
 
