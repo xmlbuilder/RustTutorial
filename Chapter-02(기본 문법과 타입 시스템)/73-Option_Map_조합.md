@@ -35,7 +35,7 @@ let result = scores.get("Alice").and_then(|opt| opt.map(|score| score + 10));
 |------|------------|
 | `opt.map(f)` | `opt`가 `Some(x)`일 때 `f(x)`를 적용하여 `Some(f(x))` 반환. `None`이면 그대로 `None` |
 | `None.map(f)` | 아무 것도 하지 않고 `None` 반환 |
-| `and_then(|opt| opt.map(...))` | 중첩된 `Option<Option<T>>`에서 내부 `Option<T>`를 꺼내고 `map`으로 처리. 최종적으로 `Option<U>` 반환 |
+| `and_then(\|opt\| opt.map(...))` | 중첩된 `Option<Option<T>>`에서 내부 `Option<T>`를 꺼내고 `map`으로 처리. 최종적으로 `Option<U>` 반환 |
 
 ---
 
