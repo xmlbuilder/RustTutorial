@@ -100,6 +100,9 @@ $$
 \left[ \begin{matrix}S_{xx}&S_{xy}\\ S_{xy}&S_{yy}\end{matrix}\right] \left[ \begin{matrix}a\\ b\end{matrix}\right] =\frac{1}{2}\left[ \begin{matrix}S_{x^3}+S_{xy^2}\\ S_{x^2y}+S_{y^3}\end{matrix}\right]
 $$
 
+
+$\mathbf{u}_i = \mathrm{project\\_{plane}}(\mathbf{p}_i)$ 
+
 #### 중심 및 반지름 계산 
  
 - ④ 3D 복원  $\mathbf{c_{\mathnormal{3D}}}=\mathrm{plane.point_at}(a,b)$  2D 중심을 3D로 복원   
