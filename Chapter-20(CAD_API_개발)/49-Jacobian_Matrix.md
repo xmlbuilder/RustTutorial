@@ -8,7 +8,7 @@ mesh_jacobian 모듈의 주요 함수들을 수학적으로 해석하고 검증�
 ### 🔧 정의:
 
 $$
-\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ ; \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right]
+\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ ; \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ ; \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right]
 $$
 
 - 이 행렬은 요소의 기하학적 왜곡, 뒤집힘 여부, 품질 평가에 사용됩니다.
@@ -105,7 +105,7 @@ $$
 Jacobian 행렬은 **기준 좌표계(ξ, η, ζ)** 에서 **실제 좌표계(x, y, z)** 로의 변환을 나타냅니다:
 
 $$
-\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right] 
+\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ ; \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ ; \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right] 
 $$
 
 ## ✅ 왜 det(J) ≈ 1이 이상적인가?
@@ -192,7 +192,7 @@ $$
 - 이 미분들을 모은 행렬이 바로 Jacobian 행렬입니다:
 
 $$
-\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right] =\sum _{i=1}^n\vec {x}_i\otimes \nabla N_i
+\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ ; \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ ; \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right] =\sum _{i=1}^n\vec {x}_i\otimes \nabla N_i
 $$
 
 
@@ -219,7 +219,7 @@ $$
 - Jacobian:
 
 $$
-\mathbf{J}=\sum _{i=1}^4\vec {x}_i\otimes \nabla N_i\Rightarrow \mathbf{J}=\left[ \begin{matrix}x_2-x_1&x_3-x_1&x_4-x_1\\ y_2-y_1&y_3-y_1&y_4-y_1\\ z_2-z_1&z_3-z_1&z_4-z_1\end{matrix}\right] 
+\mathbf{J}=\sum _{i=1}^4\vec {x}_i\otimes \nabla N_i\Rightarrow \mathbf{J}=\left[ \begin{matrix}x_2-x_1&x_3-x_1&x_4-x_1\\ ; y_2-y_1&y_3-y_1&y_4-y_1\\ ; z_2-z_1&z_3-z_1&z_4-z_1\end{matrix}\right] 
 $$
 
 - 즉, 기준점에서의 edge 벡터로 구성된 행렬
@@ -267,7 +267,7 @@ $$
 - Jacobian 행렬은 다음과 같이 정의됩니다:
 
 $$
-\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right] =\sum _{i=1}^8\vec {x}_i\otimes \nabla N_i
+\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ ; \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ ; \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right] =\sum _{i=1}^8\vec {x}_i\otimes \nabla N_i
 $$
 
 -여기서:
@@ -334,7 +334,7 @@ $$
 Jacobian은 3×3 행렬로 구성됩니다:
 
 $$
-\mathbf{J}=\left[ \begin{matrix}J_{x,\xi }&J_{x,\eta }&J_{x,\zeta }\\ J_{y,\xi }&J_{y,\eta }&J_{y,\zeta }\\ J_{z,\xi }&J_{z,\eta }&J_{z,\zeta }\end{matrix}\right]
+\mathbf{J}=\left[ \begin{matrix}J_{x,\xi }&J_{x,\eta }&J_{x,\zeta }\\ ; J_{y,\xi }&J_{y,\eta }&J_{y,\zeta }\\ ; J_{z,\xi }&J_{z,\eta }&J_{z,\zeta }\end{matrix}\right]
 $$
 
 
