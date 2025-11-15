@@ -24,13 +24,6 @@ $$
 S = \sum_{i=1}^{n} (\mathbf{p}_i - \mathbf{c})(\mathbf{p}_i - \mathbf{c})^T \quad \text{(3×3 대칭 행렬)}
 $$
 
-####  직선 끝점 계산
-
-$$
-\mathbf{start} = \mathbf{c} + t_{\min} \cdot \vec{d} \\ \quad \mathbf{end} = \mathbf{c} + t_{\max} \cdot \vec{d}
-$$
-
-
 $$
 S=\sum _{i=1}^n(\mathbf{p_{\mathnormal{i}}}-\mathbf{c})(\mathbf{p_{\mathnormal{i}}}-\mathbf{c})^T\quad \mathrm{(3×3\  대칭\  행렬)}
 $$
