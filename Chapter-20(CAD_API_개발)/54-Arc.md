@@ -544,15 +544,15 @@ impl Arc {
 ## 🧪 Arc & Circle 테스트 함수 정리 및 수식 검토
 | 테스트 함수 이름                          | 대상 구조체 | 검증 함수/기능                     | 수식 사용 여부 | 수학적 검토 결과 및 설명                                               |
 |-------------------------------------------|-------------|------------------------------------|----------------|------------------------------------------------------------------------|
-| circle_param_length_round_trip            | Circle      | `get_param_from_length`, `get_length_from_param` | ✅ 있음         | $t = t_0 + \frac{l}{r}$, $l = \|t - t_0\| \cdot r$ — 정확함       |
-| circle_param_length_out_of_range          | Circle      | `get_param_from_length`, `get_length_from_param` | ✅ 있음         | 유효 범위 밖 입력에 대한 예외 처리 확인. 수식 및 처리 모두 정확함     |
-| arc_param_length_round_trip               | Arc         | `get_param_from_length`, `get_length_from_param` | ✅ 있음         | 원호 길이 ↔ 파라미터 변환. 선형 관계 수식 기반으로 정확함             |
-| arc_param_length_reverse_direction        | Arc         | `get_param_from_length`, `get_length_from_param` | ✅ 있음         | t₀ > t₁인 경우 방향 반전 및 정규화 확인. 수식 적용 정확함              |
-| arc_param_endpoint_tolerance_snap         | Arc         | `get_param_from_length`, `get_length_from_param` | ✅ 있음         | 끝점 근접 시 스냅 및 역변환 안정성 확인. 수치 오차 허용 범위 적절함   |
+| circle_param_length_round_trip            | Circle      | `get_param_from_length`,  <br> `get_length_from_param` | ✅ 있음         | $t = t_0 + \frac{l}{r}$, $l = \|t - t_0\| \cdot r$ — 정확함       |
+| circle_param_length_out_of_range          | Circle      | `get_param_from_length`,  <br> `get_length_from_param` | ✅ 있음         | 유효 범위 밖 입력에 대한 예외 처리 확인. 수식 및 처리 모두 정확함     |
+| arc_param_length_round_trip               | Arc         | `get_param_from_length`,  <br> `get_length_from_param` | ✅ 있음         | 원호 길이 ↔ 파라미터 변환. 선형 관계 수식 기반으로 정확함             |
+| arc_param_length_reverse_direction        | Arc         | `get_param_from_length`,  <br> `get_length_from_param` | ✅ 있음         | t₀ > t₁인 경우 방향 반전 및 정규화 확인. 수식 적용 정확함              |
+| arc_param_endpoint_tolerance_snap         | Arc         | `get_param_from_length`,  <br> `get_length_from_param` | ✅ 있음         | 끝점 근접 시 스냅 및 역변환 안정성 확인. 수치 오차 허용 범위 적절함   |
 | arc_to_nurbs                              | Arc         | `to_nurbs`                         | ✅ 있음         | NURBS 변환 시 가중치 $w = \cos(\Delta \theta / 2)$ 적용. 정확함    |
-| arc_split_at_midpoint                     | Arc         | `split_at`, `length`, `end_point`  | ✅ 있음         | 두 원호 길이 합 = 전체 길이. 접점 일치 확인. 수학적 일관성 확보        |
+| arc_split_at_midpoint                     | Arc         | `split_at`, `length`,  <br> `end_point`  | ✅ 있음         | 두 원호 길이 합 = 전체 길이. 접점 일치 확인. 수학적 일관성 확보        |
 | arc_trim_at_start                         | Arc         | `trim_at`, `length`                | ✅ 있음         | 절단 후 길이 = 반지름 × 각도. 수식 적용 정확함                         |
-| arc_sub_curve_full_circle                 | Arc         | `sub_curve`, `length`, `start_point`, `end_point` | ✅ 있음         | 전체 원호에서 부분 곡선 추출. 길이 및 위치 일치 확인. 수식 정확함     |
+| arc_sub_curve_full_circle                 | Arc         | `sub_curve`, `length`, <br> `start_point`, `end_point` | ✅ 있음         | 전체 원호에서 부분 곡선 추출. 길이 및 위치 일치 확인. 수식 정확함     |
 
 
 ## 📐 Arc 관련 수식 요약
