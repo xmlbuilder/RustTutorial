@@ -92,10 +92,7 @@ S = \sum_{i=1}^{n} (\mathbf{p}_i - \mathbf{c})(\mathbf{p}_i - \mathbf{c})^T \qua
 $$
 
 #### 2D 원 적합 (Kåsa 방식)
-```
-[ S_xx   S_xy ] [ a ]   =   (1/2) [ S_x^3    + S_x y^2 ]
-[ S_xy   S_yy ] [ b ]             [ S_x^2 y  + S_y^3   ]
-```
+
 $$
 \left[ \begin{matrix}S_{xx}&S_{xy}\\ S_{xy}&S_{yy}\end{matrix}\right] \left[ \begin{matrix}a\\ b\end{matrix}\right] =\frac{1}{2}\left[ \begin{matrix}S_{x^3}+S_{xy^2}\\ S_{x^2y}+S_{y^3}\end{matrix}\right]
 $$
