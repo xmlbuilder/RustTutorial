@@ -955,6 +955,69 @@ pub mod mesh_jacobian {
 
 ## 테스트 코드
 
+
+
+
+
+
+## 📘 테스트 코드 문서화 및 수식 정리
+### 📐 Jacobian Quality란?
+유한요소 해석에서 요소의 품질은 Jacobian 행렬의 행렬식(detJ)을 기반으로 평가됩니다. 일반적으로:
+- $detJ > 0$: 요소가 정방향(정상)
+- $detJ = 0$: 요소가 붕괴됨 (degenerate)
+- $detJ < 0$: 요소가 뒤집힘 (inverted)
+- Jacobian Quality는 보통 다음과 같이 정의됩니다:
+
+$$
+Q=\min _i\left( \frac{\det (J_i)}{\max _j\det (J_j)}\right)
+$$
+
+- 단, detJ가 음수인 경우 $Q = 0$ 으로 처리합니다.
+
+### 🔺 Tetrahedron (4-node)
+- 정칙 사면체: tet_regular_quality_is_one
+- 이상적인 정사면체의 품질은 1.0이어야 함
+- 슬리버 요소: tet_sliver_quality_decreases_but_positive
+- 거의 평면에 가까운 슬리버 요소는 detJ가 작지만 양수 → $Q ≠ 0$
+- 뒤집힌 요소: tet_inverted_returns_zero
+- 노드 순서 변경으로 $detJ < 0 → Q = 0$
+
+### 🧊 Hexahedron (8-node)
+- 전단된 육면체: hexa_sheared_quality_between_0_and_1
+- 전단 변형 후에도 $detJ > 0 → Q ∈ (0, 1)$
+- 일부 가우스점에서 뒤집힘: hexa_inverted_at_some_gauss_point_returns_zero
+- 한 노드의 z값을 크게 변경하여 일부 영역 detJ < 0 → Q = 0
+
+### 🧱 Wedge / Prism (6-node)
+- 약간의 비틀림: wedge_mild_twist_is_positive
+- 상하 삼각형이 약간 비틀림 → $Q ∈ (0, 1)$
+- 거의 붕괴된 요소: wedge_near_collapse_returns_small_or_zero
+- 상하 삼각형이 거의 겹침 → $detJ ≈ 0 또는 < 0 → Q ≈ 0$
+
+### 🔺 Pyramid (5-node)
+- Apex가 중심에서 벗어난 경우: pyramid_apex_off_center_quality_between_0_and_1
+- Apex의 위치가 살짝 오프셋 → Q ∈ (0, 1)
+- 뒤집힌 피라미드: pyramid_inverted_returns_zero
+- 밑면 일부를 위로 올려 뒤틀림 유도 → $detJ < 0 → Q = 0$
+
+### ◼️ Quadrilateral (4-node, 2D)
+- 전단된 사각형: quad_sheared_quality_between_0_and_1
+- 한 꼭짓점만 이동 → 비정칙한 평면 사각형 → $Q ∈ (0, 1)$
+- 교차된 사각형: quad_crossed_returns_zero
+- 노드 순서가 꼬여 교차 발생 → 일부 가우스점 $detJ < 0 → Q = 0$
+
+### 📊 수식 요약
+- Jacobian 행렬 J: 요소의 좌표 변환을 나타내는 행렬
+- 행렬식 $\det (J)$: 요소의 부피/면적을 나타냄
+- Jacobian 품질 지표 Q:
+
+$$
+Q=\left\{ \, \begin{array}{ll}\textstyle \min _i\left( \frac{\det (J_i)}{\max _j\det (J_j)}\right) ,&\textstyle \mathrm{if\  }\det (J_i)>0\mathrm{\  for\  all\  }i\\ \textstyle 0,&\textstyle \mathrm{otherwise}\end{array}\right.
+$$ 
+
+
+
+
 ```rust
 #[cfg(test)]
 mod tests {
