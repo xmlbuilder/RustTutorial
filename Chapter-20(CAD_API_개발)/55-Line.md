@@ -773,8 +773,7 @@ $$
 | 중심점 계산                  | $\mathbf{c} = \frac{1}{n} \sum \mathbf{p}_i$ — 평균 좌표 계산. 정확함 ✅     |
 | 산포 행렬 구성               | $S_{uv} = \sum (p_i^u - c^u)(p_i^v - c^v)$ — 공분산 기반. 정확함 ✅         |
 | SVD → 주성분 방향 추출       | 최대 특이값에 대응하는 eigenvector 선택. PCA 방식으로 타당함 ✅                |
-| 투영값 계산 및 끝점 결정     | $t_i = (\mathbf{p}_i - \mathbf{c}) \cdot \vec{d}$,  
-  $\mathbf{p} = \mathbf{c} + t \vec{d}$ — 직선 방정식 기반. 정확함 ✅ |
+| 투영값 계산 및 끝점 결정     | $t_i = (\mathbf{p}_i - \mathbf{c}) \cdot \vec{d}$, <br>  $\mathbf{p} = \mathbf{c} + t \vec{d}$ — 직선 방정식 기반. 정확함 ✅ |
 | 직선 생성                    | 시작점과 끝점으로 구성된 선분 반환. 최소자승 적합 방식으로 타당함 ✅           |
 
 
