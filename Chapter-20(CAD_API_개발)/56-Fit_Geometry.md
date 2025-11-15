@@ -81,7 +81,7 @@ $$
 | ④ 평면 정의 | $\text{Plane}(\mathbf{c}, \vec{n})$                                 | 중심과 법선으로 평면 정의 |
 | ⑤ 2D 투영 | $\mathbf{u}_i = \mathrm{project_{plane}}(\mathbf{p}_i)$               | 3D 점을 평면 좌표계로 투영 (2D 점 생성) |
 | ⑥ 2D 원 적합 (Kåsa 방식) 2D 원 중심 <br> $(a, b)$ 및 반지름 $r$ 계산 |                                                |
-| ⑦ 3D 중심 복원 | $\mathbf{c}_{3D} = \text{plane.point\_at}(a, b)$                     | 2D 중심을 평면 위 3D 점으로 복원 |
+| ⑦ 3D 중심 복원 | $\mathbf{c}_{3D} = \text{plane.point\\_at}(a, b)$                     | 2D 중심을 평면 위 3D 점으로 복원 |
 | ⑧ 평면 재정의 | $\text{Plane}(\mathbf{c}_{3D}, \vec{n})$                             | 중심 기준으로 평면 재정의 |
 | ⑨ 원 생성 | $\text{Circle}(\text{plane}, r)$                                         |                       |                                  
 
