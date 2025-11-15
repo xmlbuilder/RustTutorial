@@ -1012,9 +1012,12 @@ $$
 - Jacobian 품질 지표 Q:
 
 $$
-Q=\left\{ \, \begin{array}{ll}\textstyle \min _i\left( \frac{\det (J_i)}{\max _j\det (J_j)}\right) ,&\textstyle \mathrm{if\  }\det (J_i)>0\mathrm{\  for\  all\  }i\\ \textstyle 0,&\textstyle \mathrm{otherwise}\end{array}\right.
-$$ 
-
+Q =
+\begin{cases}
+\displaystyle \min_i \left( \frac{\det(J_i)}{\max_j \det(J_j)} \right), & \text{if } \det(J_i) > 0 \text{ for all } i,\\[6pt]
+0, & \text{otherwise.}
+\end{cases}
+$$
 
 
 
