@@ -24,10 +24,6 @@ $$
 S = \sum_{i=1}^{n} (\mathbf{p}_i - \mathbf{c})(\mathbf{p}_i - \mathbf{c})^T \quad \text{(3×3 대칭 행렬)}
 $$
 
-$$
-S=\sum _{i=1}^n(\mathbf{p_{\mathnormal{i}}}-\mathbf{c})(\mathbf{p_{\mathnormal{i}}}-\mathbf{c})^T\quad \mathrm{(3×3\  대칭\  행렬)}
-$$
-
 #### 공분산 기반 산포 행렬   
 - ③ SVD 분해  $S=U\Sigma V^T$  최소 고유값에 대응하는 고유벡터 선택   
 - ④ 법선 벡터  $\vec {n}=\mathrm{eigenvector_{\mathnormal{\min }}}$  평면의 법선 벡터   
