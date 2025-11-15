@@ -211,6 +211,8 @@ plt.savefig(output_path)
 print("Created visualization comparing five numerical integration methods and saved as integration_methods_comparison.png")
 ```
 
+![Integration Methods Comparison](/image/integration_methods_comparison.png)
+
 
 ## 📘 테스트 코드의 목적 요약
 
