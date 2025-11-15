@@ -99,9 +99,9 @@ $$
 
 #### 중심 및 반지름 계산 
  
-- ④ 3D 복원  \mathbf{c_{\mathnormal{3D}}}=\mathrm{plane.point_at}(a,b)  2D 중심을 3D로 복원   
-- ⑤ 평면 재정의  \mathrm{Plane}(\mathbf{c_{\mathnormal{3D}}},\vec {n})  중심 기준으로 평면 재정의   
-- ⑥ 원 생성  \mathrm{Circle}(\mathrm{plane},r)  최종 원 생성 
+- ④ 3D 복원  $\mathbf{c_{\mathnormal{3D}}}=\mathrm{plane.point_at}(a,b)$  2D 중심을 3D로 복원   
+- ⑤ 평면 재정의  $\mathrm{Plane}(\mathbf{c_{\mathnormal{3D}}},\vec {n})$  중심 기준으로 평면 재정의   
+- ⑥ 원 생성  $\mathrm{Circle}(\mathrm{plane},r)$  최종 원 생성 
 
 ### 수학적 검토 ✅
 - 평면 법선 정합도 > 0.999999
