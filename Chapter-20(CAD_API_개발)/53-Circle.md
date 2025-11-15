@@ -39,7 +39,7 @@ Circle 구조체의 전체 함수 목록과 관련 수식 정리, 그리고 수�
 | 접선 벡터 (`tangent_at`)   | $T(t) = -r \sin t \cdot X + r \cos t \cdot Y$                          |
 | 보간 계수 계산             | $t = \frac{z - z_0}{z_1 - z_0}$                                        |
 | 길이 → 파라미터 변환       | $t = t_0 + \frac{\text{length}}{r}$                                    |
-| 파라미터 → 길이 변환       | $\text{length} = |t - t_0| \cdot r$                                    |
+| 파라미터 → 길이 변환       | $\text{length} = \|t - t_0\| \cdot r$                                    |
 
 
 ## ✅ 1. 2D 원 적합 수식 (Kåsa 방식)
@@ -76,7 +76,7 @@ $$
 | 원 위 점 계산 (`point_at`)   | $P(t) = C + r \cos t \cdot X + r \sin t \cdot Y$ — 원의 매개변수화로 정확함. |
 | 접선 벡터 (`tangent_at`)     | $T(t) = -r \sin t \cdot X + r \cos t \cdot Y$ — 미분 기반으로 정확함.        |
 | 길이 → 파라미터 변환         | $t = t_0 + \frac{\text{length}}{r}$ — 선형 관계로 정확함.                    |
-| 파라미터 → 길이 변환         | $\text{length} = |t - t_0| \cdot r$ — 반지름 기반 거리 계산.                 |
+| 파라미터 → 길이 변환         | $\text{length} = \|t - t_0\| \cdot r$ — 반지름 기반 거리 계산.                 |
 | 보간 계수 계산               | $t = \frac{z - z_0}{z_1 - z_0}$ — 선형 보간 공식으로 정확함.                 |
 | 2D 원 적합 (`fit_circle_2d`) | Kåsa 방식 선형 근사. 특이행렬 처리 포함. 수학적으로 타당하고 안정적.             |
 | NURBS 변환 (`to_nurbs`)      | 8분할 원 근사. 가중치 및 노드 배치 모두 표준 방식 따름.                         |
