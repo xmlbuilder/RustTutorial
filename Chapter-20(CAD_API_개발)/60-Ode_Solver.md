@@ -18,15 +18,13 @@ $$
 \mathrm{오차}=\left( \frac{1}{n}\sum _{i=1}^n\left( \frac{y_i^{(5)}-y_i^{(4)}}{\mathrm{scale_{\mathnormal{i}}}}\right) ^2\right) ^{1/2}
 $$
 
-- 여기서,
-
 $$
 \mathrm{scale_{\mathnormal{i}}}=a_{\mathrm{tol}}+r_{\mathrm{tol}}\cdot \max (|y_i|,|y_i^{(5)}|)
 $$
 
-    - $y^{(5)}$: 5차 근사 해
-    - $y^{(4)}$: 4차 근사 해
-    - $a_{\mathrm{tol}},r_{\mathrm{tol}}$: 절대/상대 허용 오차
+- $y^{(5)}$: 5차 근사 해
+- $y^{(4)}$: 4차 근사 해
+- $a_{\mathrm{tol}},r_{\mathrm{tol}}$: 절대/상대 허용 오차
 
 - 스텝 크기 조정:
 
