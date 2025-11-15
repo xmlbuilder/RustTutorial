@@ -88,29 +88,14 @@ $$
 #### ② 산포 행렬 구성
 
 $$
-S = \sum_{i=1}^{n} (\mathbf{p}_i - \mathbf{c})(\mathbf{p}_i - \mathbf{c})^T
-\quad \text{(3×3 대칭 행렬)}
+S = \sum_{i=1}^{n} (\mathbf{p}_i - \mathbf{c})(\mathbf{p}_i - \mathbf{c})^T \quad \text{(3×3 대칭 행렬)}
 $$
 
 #### 2D 원 적합 (Kåsa 방식)
-
-$$
-\begin{bmatrix}
-S_{xx} & S_{xy} \\
-S_{xy} & S_{yy}
-\end{bmatrix}
-\begin{bmatrix}
-a \\
-b
-\end{bmatrix}
-=
-\frac{1}{2}
-\begin{bmatrix}
-S_{x^3} + S_{xy^2} \\
-S_{x^2y} + S_{y^3}
-\end{bmatrix}
-$$
-
+```
+[ S_xx   S_xy ] [ a ]   =   (1/2) [ S_x^3    + S_x y^2 ]
+[ S_xy   S_yy ] [ b ]             [ S_x^2 y  + S_y^3   ]
+```
 $$
 \left[ \begin{matrix}S_{xx}&S_{xy}\\ S_{xy}&S_{yy}\end{matrix}\right] \left[ \begin{matrix}a\\ b\end{matrix}\right] =\frac{1}{2}\left[ \begin{matrix}S_{x^3}+S_{xy^2}\\ S_{x^2y}+S_{y^3}\end{matrix}\right]
 $$
