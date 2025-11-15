@@ -378,10 +378,10 @@ pub fn on_draw_diag(img: &mut Image, val: u8) {
 ✅ VolumeRendering 테스트 정리표
 | 테스트 함수 이름               | 검증 대상 함수             | 수식 사용 여부 | 관련 수식 또는 처리 방식                                      |
 |-------------------------------|----------------------------|----------------|---------------------------------------------------------------|
-| `gen_volume_rendering`        | `set_slices`, `render_mip`, `render_xray`, `interpolated_slice` | ✅ 있음         | MIP: $I(x,y) = \max_k I_k(x,y)$ <br> Xray: $I(x,y) = \frac{1}{N} \sum_k I_k(x,y)$ <br> 보간: $I = (1 - t) I_0 + t I_1$, $t = \frac{z - z_0}{z_1 - z_0}$ |
-| `test_extract_and_render_mip` | `set_slices`, `render_mip` | ✅ 있음         | $I(x,y) = \max_k I_k(x,y)$                                |
+| `gen_volume_rendering`        | `set_slices`,  `render_mip`, <br> `render_xray`, `interpolated_slice` | ✅ 있음 | MIP: $I(x,y) = \max_k I_k(x,y)$ <br> Xray: $I(x,y) = \frac{1}{N} \sum_k I_k(x,y)$ <br> 보간: $I = (1 - t) I_0 + t I_1$, $t = \frac{z - z_0}{z_1 - z_0}$ |
+| `test_extract_and_render_mip` | `set_slices`, <br> `render_mip` | ✅ 있음         | $I(x,y) = \max_k I_k(x,y)$                                |
 | `test_set_slices_and_ordering`| `set_slices`               | ✅ 있음        | 슬라이스 정렬만 수행                                          |
-| `test_extract_slice`          | `extract_slice`            | ✅ 내부 거리 계산 | $\min |z_i - z_{\text{target}}|$                           |
+| `test_extract_slice`          | `extract_slice`            | ✅ 내부 거리 계산 | $\min \|z_i - z_{\text{target}}\|$                           |
 | `test_voxel_intensity`        | `voxel_intensity`          | ✅ 있음         | 단일 픽셀 강도 조회                                           |
 | `test_invalid_voxel_access`   | `voxel_intensity`          | ✅ 있음         | 인덱스 범위 및 유효성 검사                                    |
 
