@@ -82,7 +82,7 @@ $$
 | ② 산포 행렬 구성 <br>  PCA 기반 평면 적합을 위한 산포 행렬 |                                                     |
 | ③ 평면 법선 추출 | $\vec{n} = \mathrm{eigenvector}_{\min}(S)$                        | 최소 고유값에 대응하는 고유벡터 = 평면 법선 |
 | ④ 평면 정의 | $\text{Plane}(\mathbf{c}, \vec{n})$                                 | 중심과 법선으로 평면 정의 |
-| ⑤ 2D 투영 | $u_i = project\\_plane(pi)$                                           | 3D 점을 평면 좌표계로 투영 (2D 점 생성) |
+| ⑤ 2D 투영 | $u_i = project\\_plane(p_i)$                                           | 3D 점을 평면 좌표계로 투영 (2D 점 생성) |
 | ⑥ 2D 원 적합 (Kåsa 방식) 2D 원 중심 <br> $(a, b)$ 및 반지름 $r$ 계산 |                                                |
 | ⑦ 3D 중심 복원 | $\mathbf{c}_{3D} = \text{plane.point\\_at}(a, b)$                     | 2D 중심을 평면 위 3D 점으로 복원 |
 | ⑧ 평면 재정의 | $\text{Plane}(\mathbf{c}_{3D}, \vec{n})$                             | 중심 기준으로 평면 재정의 |
