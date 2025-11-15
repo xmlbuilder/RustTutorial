@@ -127,7 +127,7 @@ fn test_extract_and_render_mip() {
 | `draw_ring(img, cx, cy, r0, r1, val)` | ✅ 있음      | $r_0^2 \leq dx^2 + dy^2 \leq r_1^2$ — 링 영역 판별                            |
 | `draw_diag(img, val)`             | ✅ 있음         | $x = y$ — 대각선 픽셀 설정                                                     |
 | `set_slices()`                    | ✅ 있음           | 슬라이스 정렬만 수행                                                       |
-| `find_closest_slice(z_mm)`       | ✅ 있음         | $\min |z_i - z_{\text{target}}|$ — Z 위치 거리 최소화                         |
+| `find_closest_slice(z_mm)`       | ✅ 있음         | $\min \|z_i - z_{\text{target}}\|$ — Z 위치 거리 최소화                         |
 | `extract_slice(z_mm)`            |  ✅ 있음           | 가장 가까운 슬라이스 반환                                                  |
 | `render_mip()`                   | ✅ 있음         | $I(x, y) = \max_k I_k(x, y)$ — 최대 강도 투영                                 |
 | `render_xray()`                  | ✅ 있음         | $I(x, y) = \frac{1}{N} \sum_k I_k(x, y)$ — 평균 투영                          |
