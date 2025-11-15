@@ -494,8 +494,8 @@ impl Line {
 
 | 함수 이름               | 수학적 정의 및 설명                                                                 |
 |-------------------------|--------------------------------------------------------------------------------------|
-| `is_degenerate()`       | $|\vec{d}| < \varepsilon$ — 선분의 길이가 매우 짧은 경우 (거의 점에 가까움)         |
-| `angle_with(other)`     | $\theta = \cos^{-1}\left( \frac{\vec{d}_1 \cdot \vec{d}_2}{|\vec{d}_1||\vec{d}_2|} \right)$ — 두 선분 사이의 방향 각도 |
+| `is_degenerate()`       | $\|\vec{d}\| < \varepsilon$ — 선분의 길이가 매우 짧은 경우 (거의 점에 가까움)         |
+| `angle_with(other)`     | $\theta = \cos^{-1}\left( \frac{\vec{d}_1 \cdot \vec{d}_2}{\|\vec{d}_1\|\|\vec{d}_2\|} \right)$ — 두 선분 사이의 방향 각도 |
 | `intersects_with(other)`| 두 선분이 3D 공간에서 교차하는지 판별. 최소 거리 계산 기반 (정확한 수식은 구현에 따라 다름) |
 | `extend(amount)`        | $A' = A - \hat{d} \cdot a,\quad B' = B + \hat{d} \cdot a$ — 선분을 양방향으로 연장     |
 | `sample_uniform(n)`     | $P_i = A + \frac{i}{n} \cdot (B - A)$ — 선분을 `n`등분하여 점 샘플링                 |
