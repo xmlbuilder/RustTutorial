@@ -254,3 +254,93 @@ Random choice: apple
 - sample()은 distributions 모듈에서 제공하는 분포 기반 샘플링입니다.
 
 ---
+
+# 테스트 코드
+
+## 🧪 랜덤 테스트 함수 요약
+
+| 테스트 함수       | 기능 설명                                                   | 사용된 API                          |
+|------------------|------------------------------------------------------------|-------------------------------------|
+| `rand_gen()`     | `u8`와 `bool` 타입의 랜덤 값 생성                           | `rng.gen()`                         |
+| `rand_gen_range()` | 지정된 범위 내에서 랜덤 숫자 생성 (`1..10`)               | `rng.gen_range(start..end)`        |
+| `rand_sample()`  | 알파벳/숫자 중 하나를 랜덤으로 선택                         | `rng.sample(Alphanumeric)`         |
+| `rand_shuffle()` | 벡터의 요소들을 랜덤하게 섞음                               | `items.shuffle(&mut rng)`          |
+| `rand_change()`  | 벡터에서 하나의 요소를 랜덤하게 선택                        | `items.choose(&mut rng)`           |
+
+
+##  🔍 각 함수 설명
+
+### 1️⃣ rand_gen()
+- rng.gen()을 사용해 기본 타입의 랜덤 값을 생성
+- u8: 0~255 범위
+- bool: true 또는 false
+  
+### 2️⃣ rand_gen_range()
+- rng.gen_range(1..10)은 1 이상 10 미만의 정수 생성
+- 범위는 start..end 형식으로 지정
+
+### 3️⃣ rand_sample()
+- Alphanumeric 타입에서 하나의 u8 값을 샘플링
+- 결과는 ASCII 문자 코드로 출력됨
+
+### 4️⃣ rand_shuffle()
+- Vec<T>의 요소들을 무작위로 섞음
+- shuffle()은 제자리에서 변경
+
+### 5️⃣ rand_change()
+- Vec<T>에서 하나의 요소를 무작위로 선택
+- choose()는 Option<&T>를 반환
+```rust
+#[cfg(test)]
+mod tests {
+    use rand::Rng;
+    use rand::distributions::Alphanumeric;
+    use rand::seq::SliceRandom;
+```
+```rust
+    #[test]
+    fn rand_gen() {
+        let mut rng = rand::thread_rng();
+        let random_u8: u8 = rng.r#gen(); // 0~255 사이의 랜덤 u8
+        let random_bool: bool = rng.r#gen(); // true 또는 false
+        println!("Random u8: {}", random_u8);
+        println!("Random bool: {}", random_bool);
+    }
+```
+```rust
+    #[test]
+    fn rand_gen_range() {
+        let mut rng = rand::thread_rng();
+        let number = rng.gen_range(1..10); // 1 이상 10 미만
+        println!("Random number in range 1..10: {}", number);
+    }
+```
+```rust
+    #[test]
+    fn rand_sample() {
+        let mut rng = rand::thread_rng();
+        let c: u8 = rng.sample(Alphanumeric);
+        println!("Random alphanumeric character: {}", c);
+    }
+```
+```rust
+    #[test]
+    fn rand_shuffle() {
+        let mut rng = rand::thread_rng();
+        let mut items = vec![1, 2, 3, 4, 5];
+        items.shuffle(&mut rng);
+        println!("Shuffled items: {:?}", items);
+    }
+```
+```rust
+    #[test]
+    fn rand_change() {
+        let mut rng = rand::thread_rng();
+        let items = vec!["apple", "banana", "cherry"];
+        if let Some(choice) = items.choose(&mut rng) {
+            println!("Random choice: {}", choice);
+        }
+    }
+}
+```
+---
