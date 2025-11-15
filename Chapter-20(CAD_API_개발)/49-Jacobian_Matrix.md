@@ -8,7 +8,7 @@ mesh_jacobian 모듈의 주요 함수들을 수학적으로 해석하고 검증�
 ### 🔧 정의:
 
 $$
-\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right]
+\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ ; \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right]
 $$
 
 - 이 행렬은 요소의 기하학적 왜곡, 뒤집힘 여부, 품질 평가에 사용됩니다.
