@@ -1014,7 +1014,7 @@ $$
 $$
 Q =
 \begin{cases}
-\displaystyle \min_i \left( \frac{\det(J_i)}{\max_j \det(J_j)} \right), & \text{if } \det(J_i) > 0 \text{ for all } i,\\[6pt]
+\displaystyle \min_i \left( \frac{\det(J_i)}{\max_j \det(J_j)} \right), & \text{if } \det(J_i) > 0 \text{ for all } i,\\ 
 0, & \text{otherwise.}
 \end{cases}
 $$
