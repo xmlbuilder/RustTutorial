@@ -559,9 +559,9 @@ impl Arc {
 
 | 기능 또는 맥락             | 수식 표현                                      |
 |----------------------------|-----------------------------------------------|
-| 원호 길이                  | $L = |\Delta \theta| \cdot r$             |
+| 원호 길이                  | $L = \|\Delta \theta\| \cdot r$             |
 | 길이 → 파라미터 변환       | $t = t_0 + \frac{\text{length}}{r}$       |
-| 파라미터 → 길이 변환       | $\text{length} = |t - t_0| \cdot r$       |
+| 파라미터 → 길이 변환       | $\text{length} = \|t - t_0\| \cdot r$       |
 | NURBS 가중치               | $w = \cos\left( \frac{\Delta \theta}{2} \right)$ |
 
 
