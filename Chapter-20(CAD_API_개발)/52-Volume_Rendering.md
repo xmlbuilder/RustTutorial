@@ -395,7 +395,7 @@ pub fn on_draw_diag(img: &mut Image, val: u8) {
 | X-ray 렌더링 (`render_xray`)     | $I(x, y) = \frac{1}{N} \sum_k I_k(x, y)$                               |
 | 보간 슬라이스 (`interpolated_slice`) | $I(x, y) = (1 - t) I_0(x, y) + t I_1(x, y)$                             |
 | 보간 계수 t 계산                 | $t = \frac{z - z_0}{z_1 - z_0}$                                        |
-| 슬라이스 거리 비교 (`find_closest_slice`) | $\min |z_i - z_{\text{target}}|$                              |
+| 슬라이스 거리 비교 (`find_closest_slice`) | $\min \|z_i - z_{\text{target}}\|$                              |
 | 원형 그리기 (`draw_disk`)       | $dx^2 + dy^2 \leq r^2$                                                 |
 | 링 그리기 (`draw_ring`)         | $r_0^2 \leq dx^2 + dy^2 \leq r_1^2$                                    |
 | 대각선 그리기 (`draw_diag`)     | $x = y$                                                                |
