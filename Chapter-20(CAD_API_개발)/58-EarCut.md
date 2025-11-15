@@ -38,10 +38,10 @@ let dimensions = 2;
 
 let triangles = earcutr::earcut(&vertices, &holes, dimensions);
 ```
-- vertices: [x0, y0, x1, y1, x2, y2, ...] 형태의 꼭짓점 좌표
-- holes: 폴리곤 내의 구멍 시작 인덱스 (없으면 빈 벡터)
-- dimensions: 2D 폴리곤이므로 2
-- triangles: 삼각형 인덱스 결과 (예: [1, 0, 3, 3, 2, 1] → 두 개의 삼각형)
+- `vertices`: [x0, y0, x1, y1, x2, y2, ...] 형태의 꼭짓점 좌표
+- `holes`: 폴리곤 내의 구멍 시작 인덱스 (없으면 빈 벡터)
+- `dimensions`: 2D 폴리곤이므로 2
+- `triangles`: 삼각형 인덱스 결과 (예: [1, 0, 3, 3, 2, 1] → 두 개의 삼각형)
 
 ## 📌 Earcut의 장점
 - 빠름: 대부분의 경우 O(n^2) 또는 더 빠름
@@ -54,7 +54,8 @@ let triangles = earcutr::earcut(&vertices, &holes, dimensions);
 ```rust
 #[cfg(test)]
 mod test {
-    use nurbslib::core::ear_cut::{on_triangulate_polygon, on_triangulate_with_holes, on_triangulate_polygon_to_mesh, on_triangulate_with_holes_to_mesh};
+    use nurbslib::core::ear_cut::{on_triangulate_polygon, on_triangulate_with_holes,
+        on_triangulate_polygon_to_mesh, on_triangulate_with_holes_to_mesh};
     use nurbslib::core::geom::Point2D;
 ```
 ```rust
