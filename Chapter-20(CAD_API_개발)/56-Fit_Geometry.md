@@ -101,7 +101,9 @@ $$
 $$
 
 
-$\mathbf{u}_i = \mathrm{project\\_{plane}}(\mathbf{p}_i)$ 
+$$
+\mathbf{u}_i = \mathrm{project\\_{plane}}(\mathbf{p}_i)
+$$ 
 
 #### 중심 및 반지름 계산 
  
