@@ -49,10 +49,10 @@ $$
 - 정확도: 4차 (오차 $O(h^5)$ )
 - 검증 방법: 해석적 해 $y(t)$ 와 수치 해 $y_n$ 의 절대 오차 비교
 - 예: $y'=y,y(0)=1\Rightarrow y(t)=e^t$
-    - RK4로 y(1)\approx e를 계산하고 |y_{\mathrm{RK4}}-e|<\varepsilon  확인
+    - RK4로 $y(1)\approx e$ 를 계산하고 $|y_{\mathrm{RK4}}-e|<\varepsilon$  확인
 
 ### 2️⃣ RK45 (Dormand-Prince 5(4)) 방법
-- RK45는 5차 근사 y^{(5)}와 4차 근사 y^{(4)}를 동시에 계산하여 오차를 추정:
+- RK45는 5차 근사 $y^{(5)}$ 와 4차 근사 $y^{(4)}$ 를 동시에 계산하여 오차를 추정:
 
 $$
 \mathrm{오차}=\left( \frac{1}{n}\sum _{i=1}^n\left( \frac{y_i^{(5)}-y_i^{(4)}}{a_{\mathrm{tol}}+r_{\mathrm{tol}}\cdot \max (|y_i|,|y_i^{(5)}|)}\right) ^2\right) ^{1/2}
@@ -63,7 +63,7 @@ $$
 - 검증 예:
 - $y'=y\Rightarrow y(1)=e$
 - $y'=-ky\Rightarrow y(t)=e^{-kt}$
-    - RK45로 계산한 y(t)와 해석적 해 비교
+    - RK45로 계산한 $y(t)$ 와 해석적 해 비교
 
 ## ✅ 수치 검증 방식
 - 절대 오차: $|y_{\mathrm{num}}-y_{\mathrm{exact}}|$
