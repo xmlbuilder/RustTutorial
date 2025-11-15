@@ -518,6 +518,8 @@ plt.savefig("/mnt/data/hexa8_jacobian_determinant.png")
 print("Computed Jacobian determinant at 8 Gauss points and visualized as 3D heatmap.")
 ```
 
+![Hexa Jacobian Determinant](/image/hexa8_jacobian_determinant.png)
+
 ## 📍 Gauss 포인트 위치 (±1/√3)
 총 8개 포인트:
 - $(\pm g,\pm g,\pm g), where g=\frac{1}{\sqrt{3}}\approx 0.577$
