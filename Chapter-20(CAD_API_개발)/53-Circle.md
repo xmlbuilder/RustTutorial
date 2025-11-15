@@ -27,7 +27,7 @@ Circle 구조체의 전체 함수 목록과 관련 수식 정리, 그리고 수�
 | `on_fit_from_points(points)`            | ✅ 있음         | 위와 동일. 중복 구현.                                                                |
 | `fit_circle_2d(points)`                  | ✅ 있음         | Kåsa 방식 선형 근사. 2차 모멘트 기반 중심 및 반지름 계산.                           |
 | `project(point, &mut t)`                 | ✅ 있음         | $t = \tan^{-1}\left(\frac{tt}{s}\right)$ — 평면 투영 후 각도 계산.               |
-| `is_linear(tol)`                         | ✅ 있음         | 항상 false 반환. 선형성 판단 없음.                                                   |
+| `is_linear(tol)`                         | ✅ 있음         | 라인이 아니므로 항상 false 반환.                                                    |
 
 
 ## 📐 Circle 관련 수식 정리표
