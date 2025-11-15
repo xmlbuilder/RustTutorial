@@ -4,7 +4,7 @@
 - 고정 스텝 h를 사용하여 다음 상태 y_{n+1}를 계산:
 
 $$
-\begin{aligned}k_1&=f(t_n,y_n)\\ k_2&=f\left( t_n+\frac{h}{2},y_n+\frac{h}{2}k_1\right) \\ k_3&=f\left( t_n+\frac{h}{2},y_n+\frac{h}{2}k_2\right) \\ k_4&=f(t_n+h,y_n+hk_3)\\ y_{n+1}&=y_n+\frac{h}{6}(k_1+2k_2+2k_3+k_4)\end{aligned}
+\begin{aligned}k_1&=f(t_n,y_n)\\ \quad k_2&=f\left( t_n+\frac{h}{2},y_n+\frac{h}{2}k_1\right) \\ \quad k_3&=f\left( t_n+\frac{h}{2},y_n+\frac{h}{2}k_2\right) \\ \quad k_4&=f(t_n+h,y_n+hk_3)\\ \quad y_{n+1}&=y_n+\frac{h}{6}(k_1+2k_2+2k_3+k_4)\end{aligned}
 $$
 
     - 정확도: 4차
