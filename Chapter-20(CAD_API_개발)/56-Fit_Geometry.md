@@ -61,11 +61,6 @@ $$
 \mathbf{start} = \mathbf{c} + t_{\min} \cdot \vec{d} \\ \quad \mathbf{end} = \mathbf{c} + t_{\max} \cdot \vec{d}
 $$
 
-
-$$
-\mathbf{start}=\mathbf{c}+t_{\min }\cdot \vec {d}\\ \mathbf{end}=\mathbf{c}+t_{\max }\cdot \vec {d}
-$$
-
 - 직선 양 끝점 정의 
 
 ### 수학적 검토 ✅
