@@ -845,8 +845,8 @@ fn main() {
 ---
 
 ## 📘 Marching Squares & Cubes 테스트 문서
-## 🟩 Marching Squares 테스트
-### 1️⃣ ms_segments_from_scalar_field
+### 🟩 Marching Squares 테스트
+#### 1️⃣ ms_segments_from_scalar_field
 - 목적: 스칼라 필드 $f(x,y)=x+y$ 에서 iso=2.5 등고선 추출
 - 격자: 4×4, 셀 크기 1.0
 - 수식 원리:
@@ -859,7 +859,7 @@ $$
     - segs.len() <= 12 → 과도한 분할 없음
     - 모든 점이 격자 내에 있음: 0.0\leq x,y\leq 4.0
 
-### 2️⃣ ms_from_byte_matrix
+#### 2️⃣ ms_from_byte_matrix
 - 목적: 바이트 행렬 기반 필드에서 수직 등고선 추출
 - 입력: 6×6 행렬, 왼쪽 절반 0, 오른쪽 절반 255
     - iso level: 127.5 → 경계에서 등고선 생성
@@ -867,8 +867,8 @@ $$
     - segs.len() > 0 → 경계에서 등고선 존재
     - 모든 점이 격자 내에 있음: 0.0\leq x,y\leq 6.0
 
-## 🧊 Marching Cubes 테스트
-### 3️⃣ mc_empty_when_iso_out_of_range
+### 🧊 Marching Cubes 테스트
+#### 3️⃣ mc_empty_when_iso_out_of_range
 - 목적: 스칼라 필드 없음, iso=1.0 → 모든 값 0 → 교차 없음
 - 원리:
 
@@ -878,11 +878,11 @@ $$
 
 - 기대 결과: mesh.triangle_count() == 0
 
-### 4️⃣ mc_filled_grid_but_iso_empty
+#### 4️⃣ mc_filled_grid_but_iso_empty
 - 목적: 스칼라 필드 있음 $f(x,y,z)=x+y+z$, iso 매우 작음 → 교차 없음
 - 기대 결과: mesh.triangle_count() == 0
 
-### 5️⃣ mc_generates_triangles_when_table_present
+#### 5️⃣ mc_generates_triangles_when_table_present
 - 목적: 구 형태 스칼라 필드에서 iso-surface 추출
 - 스칼라 필드:
 
@@ -894,7 +894,7 @@ $$
 - iso level: 0.0 → 구 표면
 - 기대 결과: mesh.triangle_count() > 0
 
-## 📌 핵심 수식 요약
+### 📌 핵심 수식 요약
 | 설명                         | 수식 |
 |------------------------------|------|
 | 등치선/등치면 보간 계수      | $t = \frac{\mathrm{iso} - v_1}{v_2 - v_1}$ |
