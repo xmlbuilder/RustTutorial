@@ -4,7 +4,7 @@
 ### 1. 셀 인덱스 계산
 
 $$
-clamp\_floor\_index(coord, min, axis)
+clamp\\_floor\\_index(coord, min, axis)
 = \min\big( \max( \lfloor (coord - min) / cell\_size \rfloor, 0 ),\; cell\_counts[axis] - 1 \big)
 $$
 
