@@ -11,7 +11,7 @@ $$
 ### 2. 셀 위치 → 풀 인덱스
 
 $$
-get\_cell\_index(x_i, y_i)
+get\\_cell\\_index(x_i, y_i)
 = x_i \cdot cell\_counts[1] + y_i
 $$
 
