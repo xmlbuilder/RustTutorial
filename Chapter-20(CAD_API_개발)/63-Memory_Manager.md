@@ -824,10 +824,9 @@ fn test_safe_mem_mgr_ex_tagged() {
 
 # Geom 과 연계
 
-MemoryManager를 Geom의 구조체들과 함께 사용하는 목적은 Point3D, Vector3D, Point4D 같은 수치 구조체들을 빠르게 생성하고 관리하면서 메모리 할당 비용을 줄이고,  
-객체 추적 및 해제를 안전하게 처리하기 위함입니다.
-아래는 SafeMemMgr를 활용하여 Point3D와 Vector3D 객체를 생성하고,  
-연산 후 안전하게 해제하는 실전 예제 코드입니다.
+MemoryManager를 Geom의 구조체들과 함께 사용하는 목적은 Point3D, Vector3D, Point4D 같은  
+수치 구조체들을 빠르게 생성하고 관리하면서 메모리 할당 비용을 줄이고, 객체 추적 및 해제를 안전하게 처리하기 위함입니다.  
+아래는 SafeMemMgr를 활용하여 Point3D와 Vector3D 객체를 생성하고, 연산 후 안전하게 해제하는 실전 예제 코드입니다.  
 
 ## 🧪 Geom + MemoryManager 연동 샘플
 
