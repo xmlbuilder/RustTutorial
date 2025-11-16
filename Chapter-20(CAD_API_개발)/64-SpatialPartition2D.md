@@ -11,8 +11,7 @@ $$
 ### 2. 셀 위치 → 풀 인덱스
 
 $$
-get\\_cell\\_index(x_i, y_i)
-= x_i \cdot cell\\_counts[1] + y_i
+\mathrm{index}=x_i\cdot \mathrm{cell\\_ counts}[1]+y_i
 $$
 
 ### 3. 선분 vs AABB 교차 (slab 방식)
@@ -81,7 +80,7 @@ $$
 - 수식:
 
 $$
-\mathrm{index}=x_i\cdot \mathrm{cell\_ counts}[1]+y_i
+\mathrm{index}=x_i\cdot \mathrm{cell\\_ counts}[1]+y_i
 $$
 
 - 검증:
