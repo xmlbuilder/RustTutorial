@@ -5,14 +5,14 @@
 
 $$
 clamp\\_floor\\_index(coord, min, axis)
-= \min\big( \max( \lfloor (coord - min) / cell\_size \rfloor, 0 ),\; cell\_counts[axis] - 1 \big)
+= \min\big( \max( \lfloor (coord - min) / cell\\_size \rfloor, 0 ),\; cell\\_counts[axis] - 1 \big)
 $$
 
 ### 2. 셀 위치 → 풀 인덱스
 
 $$
 get\\_cell\\_index(x_i, y_i)
-= x_i \cdot cell\_counts[1] + y_i
+= x_i \cdot cell\\_counts[1] + y_i
 $$
 
 ### 3. 선분 vs AABB 교차 (slab 방식)
