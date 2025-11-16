@@ -706,7 +706,7 @@ Allocated pointers: 0x1c57d4be540, 0x1c57d4be500
 #### ✅ 결론
 - FixedSizeMemMgr는 내부적으로 연속된 메모리 블록을 64바이트 단위로 관리합니다.
 - alloc_raw()는 다음 사용 가능한 블록을 반환하므로, 주소 차이가 정확히 64바이트 나는 것이 맞습니다.
-- 이건 오히려 메모리 풀이 정확하게 정렬되고 최적화되어 있다는 증거예요.
+- 이건 오히려 메모리 풀이 정확하게 정렬되고 최적화되어 있다는 증거.
 
 
 ## 🧱 2. FixedSizeSafeMemMgr 샘플
@@ -1096,8 +1096,6 @@ fn test_high_dimensional_transform_and_array_alloc() {
     }
 }
 ```
-
-
 ### 📌 요약
 
 | 기능                          | 설명                                                                 |
@@ -1286,8 +1284,6 @@ fn test_i32_f64_array_allocation() {
     f64_mgr.free_all_objects();
 }
 ```
-
-
 ### 📌 요약
 
 | 기능                          | 설명                                                                 |
