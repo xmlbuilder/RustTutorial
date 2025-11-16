@@ -4,7 +4,8 @@
 ### 1. 셀 인덱스 계산
 
 $$
-\mathrm{clamp\_ floor\_ index}(coord,min,axis)=\min \left( \max \left( \left\lfloor \frac{coord-min}{cell\_ size}\right\rfloor ,0\right) ,cell\_ counts[axis]-1\right) 
+clamp\_floor\_index(coord, min, axis)
+= \min\big( \max( \lfloor (coord - min) / cell\_size \rfloor, 0 ),\; cell\_counts[axis] - 1 \big)
 $$
 
 ### 2. 셀 위치 → 풀 인덱스
