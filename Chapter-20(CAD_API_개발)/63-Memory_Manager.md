@@ -659,7 +659,7 @@ String 내용: Hello world
 ```
 
 ## 🧠 결론
-이 메모리 매니저는 C++의 low-level allocator 패턴을 Rust의 안전성과 타입 시스템에 맞게 훌륭히 재현한 구조입니다.
+이 메모리 매니저는 C++의 low-level allocator 패턴을 Rust의 안전성과 타입 시스템에 맞게 훌륭히 재현한 구조입니다.  
 free-list, chunked allocation, placement new, drop tracking, tag-based grouping까지 모두 구현되어 있어 실전에서도 충분히 활용 가능합니다.
 
 --- 
