@@ -18,7 +18,7 @@ $LU$ 분해를 수행하며 스케일된 부분 피벗 선택을 적용합니다
 - 입력:
   - a: 제자리에서 LU로 변형될 정방행렬
   - aidx: 행 교환 이력을 저장할 인덱스 배열
-  - policy: 피벗 정책 (CppCompatible 또는 Strict { tol })
+  - policy: 피벗 정책 (Compatible 또는 Strict { tol })
 - 동작:
   - 각 행의 최대 절대값으로 스케일링
   - 피벗 선택 시 스케일된 값 기준으로 최대값 행을 선택
@@ -37,7 +37,7 @@ $LU$ 분해된 행렬과 피벗 인덱스를 사용해 벡터 $b$ 를 해 $x$ �
 
 ### 3. on_solve_equation_vec_cpp / on_solve_equation_vec_strict
 $LU$ 분해 + 벡터 해 구하기를 한 번에 수행합니다.
-- CppCompatible: pivot이 0이면 EPS로 대체
+- Compatible: pivot이 0이면 EPS로 대체
 - Strict: pivot이 작으면 실패 반환
 
 ### 4. lu_solve_in_place_mat
@@ -49,7 +49,7 @@ $LU$ 분해된 행렬과 피벗 인덱스를 사용해 행렬 $B$ 의 각 열을
 - 동작: 각 열에 대해 lu_solve_inplace_vec와 동일한 방식 적용
 
 ### 5. on_solve_equation_mat
-#LU# 분해 + 행렬 해 구하기를 한 번에 수행합니다.
+&LU& 분해 + 행렬 해 구하기를 한 번에 수행합니다.
 
 ## 🧪 API 사용 예제
 ```rust
@@ -278,7 +278,7 @@ $$
 이 수식은 코드의 on_lu_solve_in_place_vec 및 on_lu_solve_in_place_mat 함수에서 정확히 구현되어 있습니다.
 
 ### 5. 특이 행렬 처리
-- CppCompatible: pivot이 0이면 $\varepsilon$ 로 대체 → 수치적 안정성 확보
+- Compatible: pivot이 0이면 $\varepsilon$ 로 대체 → 수치적 안정성 확보
 - Strict: pivot이 $\leq \mathrm{tol}$ 이면 실패 → 수학적으로 특이 행렬로 간주
 이는 LU 분해의 실패 조건을 수학적으로 올바르게 처리한 것입니다.
 
