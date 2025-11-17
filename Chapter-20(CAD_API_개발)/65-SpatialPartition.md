@@ -1193,7 +1193,7 @@ $$
 - 경계 제외 조건 (inclusive = false):
 
 $$
-x_{\mathrm{min}}<x<x_{\mathrm{max}},\quad y_{\mathrm{min}}<y<y_{\mathrm{max}},\quad z_{\mathrm{min}}<z<z_{\mathrm{max}}
+x_{\mathrm{min}} < x < x_{\mathrm{max}} \quad \text{is equivalent to} \quad x \in (x_{\mathrm{min}}, x_{\mathrm{max}})
 $$
 
 
