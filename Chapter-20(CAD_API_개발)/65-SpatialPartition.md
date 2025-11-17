@@ -1175,7 +1175,7 @@ fn test_bbox_includes_point()
 
 | 함수 이름                      | 설명                                                                 |
 |-------------------------------|----------------------------------------------------------------------|
-| `BoundingBox::includes_point(p)` | 주어진 점 `p`가 AABB(BoundingBox) 내부에 포함되는지 확인합니다. 기본적으로 경계 포함 여부는 `false`일 경우 경계 제외, `true`일 경우 경계 포함으로 동작합니다. |
+| `BoundingBox::includes_point(p)` | 주어진 점 `p`가 AABB(BoundingBox) 내부에 포함되는지 확인합니다. <br> 기본적으로 경계 포함 여부는 `false`일 경우 경계 제외, `true`일 경우 경계 포함으로 동작합니다. |
 
 
 ### 📐 수식 기반 검증
@@ -1232,7 +1232,7 @@ fn test_spatial_partition_bounds()
 
 
 ### 📐 수식 기반 검증
-begin(pt) 내부 동작:
+#### begin(pt) 내부 동작:
 - 셀 인덱스 계산:
 
 $$
@@ -1242,7 +1242,7 @@ $$
 - 셀 풀 인덱스:
 
 $$
-\mathrm{index}=(i\cdot cell\_ counts[1]+j)\cdot cell\_ counts[2]+k
+\mathrm{index}=(i\cdot cell\\_ counts[1]+j)\cdot cell\\_ counts[2]+k
 $$
 
 - 반환: 해당 셀의 연결 리스트를 순회하는 SpatialPartitionIterator
@@ -1252,8 +1252,9 @@ $$
     - 단, contains(index, data)가 false일 때만 증가
     - 즉, 중복된 데이터는 카운트되지 않음
 
-수식 기반:
+### 수식 기반:
 - 셀 인덱스 계산:
+
 $$
 \left\lfloor \frac{coord-pt_{min}}{cell\_ size}\right\rfloor 
 $$
@@ -1309,17 +1310,17 @@ $$
 
 - 반환: 해당 셀의 연결 리스트를 순회하는 SpatialPartitionIterator
 
-####🔹 item_count()
+#### 🔹 item_count()
 - 삽입 시마다 item_count += 1
 - 단, contains(index, id)가 false일 때만 증가
 - 즉, 중복된 데이터는 카운트되지 않음
 
 
-#### 수식 기반:
+### 수식 기반:
 - 셀 범위:
 
 $$
-s=\left\lfloor \frac{pt-tol-pt_{min}}{cell\_ size}\right\rfloor ,\quad e=\left\lfloor \frac{pt+tol-pt_{min}}{cell\_ size}\right\rfloor 
+s=\left\lfloor \frac{pt-tol-pt_{min}}{cell\\_ size}\right\rfloor ,\quad e=\left\lfloor \frac{pt+tol-pt_{min}}{cell\\_ size}\right\rfloor 
 $$
 
 ### 테스트 코드
@@ -1442,7 +1443,7 @@ $$
 - HashSet으로 중복 제거 후 정렬된 Vec<usize> 반환
 
 
-#### 수식 기반:
+### 수식 기반:
 - slab 방식 교차 판정:
 
 $$
@@ -1526,12 +1527,12 @@ $$
 - 각 셀의 연결 리스트 순회 → id 수집
 - HashSet으로 중복 제거 후 정렬된 Vec<usize> 반환
 
-#### 수식 기반:
+### 수식 기반:
 - SAT 방식 교차 판정:
 - 삼각형 edge × AABB 축 → 13개 축에 대해 프로젝션
 - AABB 반경과 삼각형 프로젝션 범위 비교
 
-### 테스트 코드
+### 코드
 ```rust
 #[test]
 fn insert_triangle_and_hit_cells() {
@@ -1588,7 +1589,7 @@ $$
 - 셀 풀 인덱스:
 
 $$
-\mathrm{index}=(i\cdot cell\_ counts[1]+j)\cdot cell\_ counts[2]+k
+\mathrm{index}=(i\cdot cell\\_ counts[1]+j)\cdot cell\\_ counts[2]+k
 $$
 
 - 반환값: 해당 셀의 연결 리스트를 순회하는 SpatialPartitionIterator
@@ -1658,14 +1659,14 @@ $$
 
 - 최종적으로 HashSet을 통해 유일한 ID만 수집하여 정확한 결과 확보
 
-#### 수식 기반:
+### 수식 기반:
 - 전체 박스 범위:
 
 $$
 tol=2\cdot \max (pt_{max}-pt_{min})
 $$
 
-### 테스트 코드
+### 코드
 ```rust
 // --- 유틸 ---
 fn mk_pt(x: f64, y: f64, z: f64) -> Point3D {
