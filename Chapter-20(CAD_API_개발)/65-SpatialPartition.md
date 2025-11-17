@@ -37,7 +37,7 @@ $$
 
 $$
 t_{\mathrm{entry}}=\max _{ax}\left( \frac{bmin[ax]-start[ax]}{end[ax]-start[ax]}\right) ,\quad t_{\mathrm{exit}}=\min _{ax}\left( \frac{bmax[ax]-start[ax]}{end[ax]-start[ax]}\right) 
-조건: t_{\mathrm{entry}}\leq t_{\mathrm{exit}}
+\quad 조건: t_{\mathrm{entry}}\leq t_{\mathrm{exit}}
 $$
 
 ### 6. 삼각형 vs AABB 교차 (SAT 방식)
