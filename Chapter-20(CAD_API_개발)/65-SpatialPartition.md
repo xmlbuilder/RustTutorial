@@ -1293,7 +1293,7 @@ fn duplicate_point_is_not_duplicated()
 - 셀 인덱스 범위 계산:
 
 $$
-s_i=\left\lfloor \frac{pt_i-tol-pt_{\mathrm{min},i}}{cell\_ size}\right\rfloor ,\quad e_i=\left\lfloor \frac{pt_i+tol-pt_{\mathrm{min},i}}{cell\_ size}\right\rfloor 
+s_i=\left\lfloor \frac{pt_i-tol-pt_{\mathrm{min},i}}{cell\\_ size}\right\rfloor ,\quad e_i=\left\lfloor \frac{pt_i+tol-pt_{\mathrm{min},i}}{cell\\_ size}\right\rfloor 
 $$
 
 - 각 셀에 대해:
@@ -1643,7 +1643,7 @@ fn iterator_scans_entire_grid_and_finds_everything()
 - 셀 인덱스 범위 계산:
 
 $$
-s_i=\left\lfloor \frac{center_i-tol-pt_{\mathrm{min},i}}{cell\_ size}\right\rfloor ,\quad e_i=\left\lfloor \frac{center_i+tol-pt_{\mathrm{min},i}}{cell\_ size}\right\rfloor
+s_i=\left\lfloor \frac{center_i-tol-pt_{\mathrm{min},i}}{cell\\_ size}\right\rfloor ,\quad e_i=\left\lfloor \frac{center_i+tol-pt_{\mathrm{min},i}}{cell\\_ size}\right\rfloor
 $$
 
 - 셀 인덱스 범위 [s_0..e_0],[s_1..e_1],[s_2..e_2]를 순회하며 각 셀의 연결 리스트를 순회
