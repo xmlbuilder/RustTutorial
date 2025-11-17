@@ -1415,14 +1415,14 @@ fn insert_line_and_find_in_range()
 - AABB 인덱스 범위 계산:
 
 $$
-s_i=\left\lfloor \frac{\min (a_i,b_i)-tol-pt_{\mathrm{min},i}}{cell\_ size}\right\rfloor ,\quad e_i=\left\lfloor \frac{\max (a_i,b_i)+tol-pt_{\mathrm{min},i}}{cell\_ size}\right\rfloor
+s_i=\left\lfloor \frac{\min (a_i,b_i)-tol-pt_{\mathrm{min},i}}{cell\\_ size}\right\rfloor ,\quad e_i=\left\lfloor \frac{\max (a_i,b_i)+tol-pt_{\mathrm{min},i}}{cell\\_ size}\right\rfloor
 $$
 
 - 각 셀에 대해:
 - 셀 AABB 계산:
 
 $$
-bmin_i=i\cdot cell\_ size+pt_{\mathrm{min},i}-tol,\quad bmax_i=(i+1)\cdot cell\_ size+pt_{\mathrm{min},i}+tol
+bmin_i=i\cdot cell\\_ size+pt_{\mathrm{min},i}-tol,\quad bmax_i=(i+1)\cdot cell\\_ size+pt_{\mathrm{min},i}+tol
 $$
 
 - slab 방식 교차 판정:
@@ -1435,7 +1435,7 @@ $$
 - 박스 인덱스 범위 계산:
 
 $$
-s_i=\left\lfloor \frac{center_i-tol-pt_{\mathrm{min},i}}{cell\_ size}\right\rfloor ,\quad e_i=\left\lfloor \frac{center_i+tol-pt_{\mathrm{min},i}}{cell\_ size}\right\rfloor
+s_i=\left\lfloor \frac{center_i-tol-pt_{\mathrm{min},i}}{cell\\_ size}\right\rfloor ,\quad e_i=\left\lfloor \frac{center_i+tol-pt_{\mathrm{min},i}}{cell\\_ size}\right\rfloor
 $$
 
 
@@ -1493,7 +1493,7 @@ fn insert_triangle_and_hit_cells()
 - AABB 인덱스 범위 계산:
 
 $$
-s_i=\left\lfloor \frac{\min (p1_i,p2_i,p3_i)-tol-pt_{\mathrm{min},i}}{cell\_ size}\right\rfloor ,\quad e_i=\left\lfloor \frac{\max (p1_i,p2_i,p3_i)+tol-pt_{\mathrm{min},i}}{cell\_ size}\right\rfloor 
+s_i=\left\lfloor \frac{\min (p1_i,p2_i,p3_i)-tol-pt_{\mathrm{min},i}}{cell\\_ size}\right\rfloor ,\quad e_i=\left\lfloor \frac{\max (p1_i,p2_i,p3_i)+tol-pt_{\mathrm{min},i}}{cell\\_ size}\right\rfloor 
 $$
 
 
@@ -1501,13 +1501,13 @@ $$
 - 셀 중심 계산:
 
 $$
-center_i=i\cdot cell\_ size+pt_{\mathrm{min},i}+\frac{cell\_ size}{2}
+center_i=i\cdot cell\\_ size+pt_{\mathrm{min},i}+\frac{cell\\_ size}{2}
 $$
 
 - 셀 반경:
 
 $$
-half_i=\frac{cell\_ size}{2}+tol
+half_i=\frac{cell\\_ size}{2}+tol
 $$
 
 - 교차 판정: `tri_box_overlap(center, half, triangle)`
@@ -1520,7 +1520,7 @@ $$
 - 박스 인덱스 범위 계산:
 
 $$
-s_i=\left\lfloor \frac{center_i-tol-pt_{\mathrm{min},i}}{cell\_ size}\right\rfloor ,\quad e_i=\left\lfloor \frac{center_i+tol-pt_{\mathrm{min},i}}{cell\_ size}\right\rfloor
+s_i=\left\lfloor \frac{center_i-tol-pt_{\mathrm{min},i}}{cell\\_ size}\right\rfloor ,\quad e_i=\left\lfloor \frac{center_i+tol-pt_{\mathrm{min},i}}{cell\\_ size}\right\rfloor
 $$
 
 
@@ -1598,7 +1598,7 @@ $$
 - 셀 인덱스:
 
 $$
-i=\left\lfloor \frac{pt_x-pt_{min,x}}{cell\_ size}\right\rfloor
+i=\left\lfloor \frac{pt_x-pt_{min,x}}{cell\\_ size}\right\rfloor
 $$
 
 ### 코드
