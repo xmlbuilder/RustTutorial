@@ -1236,7 +1236,7 @@ fn test_spatial_partition_bounds()
 - 셀 인덱스 계산:
 
 $$
-i=\left\lfloor \frac{pt_x-pt_{min,x}}{cell\_ size}\right\rfloor ,\quad j=\left\lfloor \frac{pt_y-pt_{min,y}}{cell\_ size}\right\rfloor ,\quad k=\left\lfloor \frac{pt_z-pt_{min,z}}{cell\_ size}\right\rfloor
+i=\left\lfloor \frac{pt_x-pt_{min,x}}{cell\\_ size}\right\rfloor ,\quad j=\left\lfloor \frac{pt_y-pt_{min,y}}{cell\\_ size}\right\rfloor ,\quad k=\left\lfloor \frac{pt_z-pt_{min,z}}{cell\\_ size}\right\rfloor
 $$
 
 - 셀 풀 인덱스:
@@ -1256,7 +1256,7 @@ $$
 - 셀 인덱스 계산:
 
 $$
-\left\lfloor \frac{coord-pt_{min}}{cell\_ size}\right\rfloor 
+\left\lfloor \frac{coord-pt_{min}}{cell\\_ size}\right\rfloor 
 $$
 
 ### 테스트 코드
@@ -1305,7 +1305,7 @@ $$
 - 단일 셀 인덱스 계산:
 
 $$
-i=\left\lfloor \frac{pt_x-pt_{\mathrm{min},x}}{cell\_ size}\right\rfloor ,\quad j=\left\lfloor \frac{pt_y-pt_{\mathrm{min},y}}{cell\_ size}\right\rfloor ,\quad k=\left\lfloor \frac{pt_z-pt_{\mathrm{min},z}}{cell\_ size}\right\rfloor 
+i=\left\lfloor \frac{pt_x-pt_{\mathrm{min},x}}{cell\\_ size}\right\rfloor ,\quad j=\left\lfloor \frac{pt_y-pt_{\mathrm{min},y}}{cell\\_ size}\right\rfloor ,\quad k=\left\lfloor \frac{pt_z-pt_{\mathrm{min},z}}{cell\\_ size}\right\rfloor 
 $$
 
 - 반환: 해당 셀의 연결 리스트를 순회하는 SpatialPartitionIterator
@@ -1583,7 +1583,7 @@ fn begin_returns_only_current_cell_items()
 - 셀 인덱스 계산:
 
 $$
-i=\left\lfloor \frac{pt_x-pt_{\mathrm{min},x}}{cell\_ size}\right\rfloor ,\quad j=\left\lfloor \frac{pt_y-pt_{\mathrm{min},y}}{cell\_ size}\right\rfloor ,\quad k=\left\lfloor \frac{pt_z-pt_{\mathrm{min},z}}{cell\_ size}\right\rfloor
+i=\left\lfloor \frac{pt_x-pt_{\mathrm{min},x}}{cell\\_ size}\right\rfloor ,\quad j=\left\lfloor \frac{pt_y-pt_{\mathrm{min},y}}{cell\\_ size}\right\rfloor ,\quad k=\left\lfloor \frac{pt_z-pt_{\mathrm{min},z}}{cell\\_ size}\right\rfloor
 $$
 
 - 셀 풀 인덱스:
