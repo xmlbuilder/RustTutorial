@@ -23,7 +23,7 @@ $$
 ### 3. 셀 중심 좌표
 
 $$
-\mathrm{cell\\_ center}(i,j,k)=\left[ i\cdot cell\_ size+\frac{cell\\_ size}{2}+pt_{min,x},j\cdot cell\_ size+\frac{cell\\_ size}{2}+pt_{min,y},k\cdot cell\\_ size+\frac{cell\\_ size}{2}+pt_{min,z}\right] 
+\mathrm{cell\\_ center}(i,j,k)=\left[ i\cdot cell\\_ size+\frac{cell\\_ size}{2}+pt_{min,x},j\cdot cell\\_ size+\frac{cell\\_ size}{2}+pt_{min,y},k\cdot cell\\_ size+\frac{cell\\_ size}{2}+pt_{min,z}\right] 
 $$
 
 ### 4. 셀 AABB 경계
