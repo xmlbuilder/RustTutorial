@@ -6965,6 +6965,7 @@ V = [
 - $\lambda _1=4.879$
 - $v_1=[0.8440,0.4491,0.2931]$
 - 계산:
+
 $$
 A\cdot v_1\approx \left[ \begin{matrix}4.0&1.0&1.0\\ 1.0&3.0&0.0\\ 1.0&0.0&2.0\end{matrix}\right] \cdot \left[ \begin{matrix}0.8440\\ 0.4491\\ 0.2931\end{matrix}\right] \approx 4.879\cdot v_1
 $$
