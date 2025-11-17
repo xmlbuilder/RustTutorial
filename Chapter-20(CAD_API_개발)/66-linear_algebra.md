@@ -254,8 +254,8 @@ $$
 
 $$
 l_{ji}=\frac{a_{ji}}{u_{ii}},\quad \mathrm{for\  }j>i
-
 $$
+
 이 연산은 Doolittle 방식의 LU 분해와 동일하며, 수학적으로 정당합니다.
 
 ### 4. 전진/후진 대입 검증
