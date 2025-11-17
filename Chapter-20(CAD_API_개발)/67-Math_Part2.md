@@ -2,7 +2,8 @@
 
 ```rust
 use crate::approx_eq;
-use crate::core::basis::{bernstein_der_3, on_basis_func, on_binomial, on_find_span_index};
+use crate::core::basis::{bernstein_der_3, on_basis_func, on_binomial,
+on_find_span_index};
 use crate::core::geom::{Point2D, Point4D, Vector2D};
 use crate::core::matrix::{DenseMat, Matrix};
 use crate::core::plane::Plane;
@@ -13,7 +14,9 @@ use crate::core::prelude::{Degree, Interval, Point3D, Vector3D};
 use crate::core::segment2d::{Segment2D, SegmentIntersectionType};
 use crate::core::segment3d::Segment3D;
 use crate::core::transform::Transform;
-use crate::core::types::{Matrix3x3, ON_TOL9, ON_TOL12, ON_TOL14, Real, ON_EPSILON, ON_UNSET_VALUE, ON_RADIANS_TO_DEGREES, ON_UNSET_POSITIVE_VALUE, ON_DEGREES_TO_RADIANS, ON_SQRT2, ON_SQRT3, ON_SQRT_EPSILON, SQRT_EPS};
+use crate::core::types::{Matrix3x3, ON_TOL9, ON_TOL12, ON_TOL14, Real, ON_EPSILON,
+ON_UNSET_VALUE, ON_RADIANS_TO_DEGREES, ON_UNSET_POSITIVE_VALUE, ON_DEGREES_TO_RADIANS,
+ON_SQRT2, ON_SQRT3, ON_SQRT_EPSILON, SQRT_EPS};
 use nalgebra::{Cholesky, DMatrix, DVector};
 use std::f64::consts::{PI, TAU};
 use std::mem::swap;
