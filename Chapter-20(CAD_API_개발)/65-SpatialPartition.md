@@ -1428,8 +1428,10 @@ $$
 - slab 방식 교차 판정:
 
 $$
-t_{\mathrm{entry}}\leq t_{\mathrm{exit}}\Rightarrow 교차- 교차 시 contains(cell, id)가 false이면 삽입
+t_{\mathrm{entry}}\leq t_{\mathrm{exit}}\Rightarrow 교차
 $$
+
+- 교차 시 contains(cell, id)가 false 이면 삽입
 
 #### 🔹 collect_box_ids(center, tol)
 - 박스 인덱스 범위 계산:
