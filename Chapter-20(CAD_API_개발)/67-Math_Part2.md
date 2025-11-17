@@ -3848,7 +3848,8 @@ pub fn on_evaluate_quotient_rule2(
 
             // 4) n>=3 일반식
             // 각 차수 n에서 (i,j) with i+j=n, 블록 F_{i,j} 갱신:
-            // F_{i,j} += - sum_{ii=0..i} sum_{jj=0..j} [ (ii||jj)? 1 : 0 ] * C(ii, i-ii)*C(jj, j-jj) * (W_{ii,jj}/W) * F_{i-ii, j-jj}
+            // F_{i,j} += - sum_{ii=0..i} sum_{jj=0..j} [ (ii||jj)? 1 : 0 ] * C(ii, i-ii)
+            // * C(jj, j-jj) * (W_{ii,jj}/W) * F_{i-ii, j-jj}
             for n in 3..=der_count {
                 for jtot in 0..=n {
                     let itot = n - jtot;
