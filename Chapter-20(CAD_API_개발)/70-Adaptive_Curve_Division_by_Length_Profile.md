@@ -516,7 +516,7 @@ $$
 - $\ell _s$: 시작 구간 세그먼트 길이
 - $\ell _m$: 중간 plateau 구간 세그먼트 길이
 - $\ell _e$: 끝 구간 세그먼트 길이
-- $a=\frac{1-\mathrm{plateau\_ fraction}}{2}$: 전이 구간의 길이
+- $a=\frac{1-\mathrm{plateau\\_ fraction}}{2}$: 전이 구간의 길이
 - $F_{\mathrm{left}}(x),F_{\mathrm{right}}(x)$: 지수 전이 함수
 지수 전이 함수
 
