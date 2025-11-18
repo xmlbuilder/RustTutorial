@@ -499,7 +499,17 @@ $$
 곡선 상의 정규화된 위치 $s\in [0,1]$ 에 대해 세그먼트 길이 함수 $\ell (s)$ 는 다음과 같이 정의됩니다:
 
 $$
-\ell (s)=\left\{ \, \begin{array}{ll}\textstyle \ell _s+(\ell _m-\ell _s)\cdot F_{\mathrm{left}}\left( \frac{s}{a}\right) ,&\textstyle 0\leq s<a\\ \textstyle \ell _m,&\textstyle a\leq s\leq 1-a\\ \textstyle \ell _e+(\ell _m-\ell _e)\cdot F_{\mathrm{right}}\left( \frac{1-s}{a}\right) ,&\textstyle 1-a<s\leq 1\end{array}\right.
+\ell(s) =
+\begin{cases}
+\ell_s + (\ell_m - \ell_s)\, F_{\text{L}}\bigl(s/a\bigr),
+& 0 \le s < a,
+\\
+\ell_m,
+& a \le s \le 1 - a,
+\\
+\ell_e + (\ell_m - \ell_e)\, F_{\text{R}}\bigl((1 - s)/a\bigr),
+& 1 - a < s \le 1.
+\end{cases}
 $$
 
 여기서:
