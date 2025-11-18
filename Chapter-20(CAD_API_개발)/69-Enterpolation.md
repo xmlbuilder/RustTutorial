@@ -97,12 +97,18 @@ pub fn on_linear_interpolate<T: Interpolatable + Debug>(
 ```
 ## 📐 수학적 설명
 ### 1️⃣ Bezier Curve
-- 정의: $B(t)=\sum _{i=0}^nB_i^n(t)\cdot P_i$
+- 정의:
+
+$$
+B(t)=\sum _{i=0}^nB_i^n(t)\cdot P_i
+$$
+
 - 베르스타인 기저함수:
 
 $$
 B_i^n(t)={n \choose i}(1-t)^{n-i}t^i
 $$
+
 - 특징:
     - 제어점 P_i에 의해 곡선이 형성됨
     - $t\in [0,1]$ 에서 정의됨
