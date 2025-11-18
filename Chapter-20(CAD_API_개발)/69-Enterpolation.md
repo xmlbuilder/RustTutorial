@@ -115,8 +115,16 @@ $$
     - 전체 곡선은 제어점의 볼록 껍질(convex hull) 안에 존재
 
 ### 2️⃣ B-Spline Curve
-- 정의: $S(t)=\sum _{i=0}^nN_{i,k}(t)\cdot P_i$
-  - $N_{i,k}(t)$: B-Spline 기저함수 (degree k)
+- 정의:
+
+  $$
+  S(t)=\sum _{i=0}^nN_{i,k}(t)\cdot P_i
+  $$
+  
+  $$
+  N_{i,k}(t)$: B-Spline 기저함수 (degree k)
+  $$
+  
 - 특징:
   - knots 배열에 따라 곡선의 형태가 결정됨
   - 국소 제어 가능 (local control)
