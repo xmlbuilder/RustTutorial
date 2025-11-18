@@ -4,7 +4,8 @@
 아래에 코드를 정리하고, 각 보간 방식의 수학적 원리를 설명.
 
 ## ✅ 코드 구조 정리
-````rust
+
+```rust
 use crate::core::geom::Point2D;
 use crate::core::prelude::{Point3D, Vector3D};
 use enterpolation::Curve;
