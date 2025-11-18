@@ -489,7 +489,7 @@ mod tests {
 이 알고리즘은 다음 조건을 만족합니다:  
 
 $$
-\sum _{k=0}^{N-1}\mathrm{segment\_ length_{\mathnormal{k}}}=L
+\sum _{k=0}^{N-1}\mathrm{segment\\_ length_{\mathnormal{k}}}=L
 $$
 
 - $\ell (s)$ 는 구간별로 다르게 정의된 길이 프로파일
