@@ -6421,13 +6421,23 @@ pub fn on_dist_to_plane(p: &Point3D, pl: &Plane) -> f64 {
 
 ## ✅ 3. 평면과 삼각형 절단
 ### 🔹 tri_plane_cut
-- 평면 방정식: $ax+by+cz+d=0$
+- 평면 방정식:
+
+$$
+ax+by+cz+d=0
+$$
+
 - 교차점 계산: 선형 보간 비율 $r=\frac{f_j}{a\cdot dx+b\cdot dy+c\cdot dz}$
 - 검증: Constructive Solid Geometry(CSG)에서 표준 절단 알고리즘
 
 ## ✅ 4. 야코비안 및 법선 도함수
 ### 🔹 on_ev_jacobian(E, F, G)
-- 계산: $\det J=EG-F^2$
+- 계산:
+
+$$
+\det J=EG-F^2
+$$
+
 - 의미: 표면의 면적 요소, 야코비안 행렬의 행렬식
 - 검증: 미분기하학에서 널리 사용되는 정의
 ### 🔹 on_ev_normal_partials(ds, dt, dss, dst, dtt)
@@ -6441,8 +6451,20 @@ $$
 
 ## ✅ 5. 접선 및 곡률
 ### 🔹 on_ev_tangent(d1, d2)
-- 정상: $T=\frac{d1}{|d1|}$
-- 퇴화: $T\approx \pm \frac{d2}{|d2|}$
+- 정상:
+
+$$
+T=\frac{d1}{|d1|}
+$$
+
+
+- 퇴화:
+
+$$
+T\approx \pm \frac{d2}{|d2|}
+$$
+
+
 - 검증: 병렬 벡터의 극한 근사로서 L'Hôpital의 원리 적용
 ### 🔹 on_ev_curvature(d1, d2)
 - 계산:
@@ -6478,7 +6500,12 @@ $$
 
 ## ✅ 8. Pullback (벡터를 파라미터 공간으로 끌어오기)
 ### 🔹 pullback_3d_vector(vector, distance, ds, dt, dss, dst, dtt)
-- 계산: $\vec {v}\approx \alpha \cdot ds+\beta \cdot dt$ 또는 보정된 기저
+- 계산:
+
+$$
+\vec {v}\approx \alpha \cdot ds+\beta \cdot dt
+$$
+
 - 검증: 표면 위의 벡터를 파라미터 공간으로 투영하는 표준 방식
 
 ## ✅ 결론
