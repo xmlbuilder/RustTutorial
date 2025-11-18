@@ -129,7 +129,12 @@ $$
   - 연속성과 부드러움 조절 가능 (degree에 따라 C^k 연속)
 
 ### 3️⃣ Linear Interpolation
-- 정의: $L(t)=(1-r)\cdot P_i+r\cdot P_{i+1}, where r=\frac{t-t_i}{t_{i+1}-t_i}$
+- 정의:
+
+$$
+L(t)=(1-r)\cdot P_i+r\cdot P_{i+1}, where r=\frac{t-t_i}{t_{i+1}-t_i}
+$$
+
 - 특징:
   - 두 점 사이를 직선으로 연결
   - 가장 단순하고 빠른 보간 방식
