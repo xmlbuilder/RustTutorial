@@ -121,9 +121,7 @@ $$
   S(t)=\sum _{i=0}^nN_{i,k}(t)\cdot P_i
 $$
   
-$$
-  N_{i,k}(t)$: B-Spline 기저함수 (degree k)
-$$
+- $N_{i,k}(t)$: B-Spline 기저함수 (degree k)
   
 - 특징:
   - knots 배열에 따라 곡선의 형태가 결정됨
