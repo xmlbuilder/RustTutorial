@@ -481,6 +481,98 @@ mod tests {
 
 ```
 ---
+# 검증 문서
+## 📐 Adaptive Curve Division by Length Profile 
+– 수학적 해설 및 검증 문서
+### 1. 목적
+곡선의 전체 길이 L를 보존하면서, 시작·중간·끝 구간에서 서로 다른 세그먼트 길이 $\ell (s)$ 를 갖도록 u-파라미터 분포 $\{ u_k\}$ 를 생성하는 알고리즘입니다.
+이 알고리즘은 다음 조건을 만족합니다:
+- $\sum _{k=0}^{N-1}\mathrm{segment\_ length_{\mathnormal{k}}}=L$
+- $\ell (s)$ 는 구간별로 다르게 정의된 길이 프로파일
+- $s(u)$ 는 정규화된 아크 길이 함수로, $s(0)=0$, $s(1)=1$, 단조 증가
+
+### 2. 길이 프로파일 함수 $\ell (s)$
+곡선 상의 정규화된 위치 $s\in [0,1]$ 에 대해 세그먼트 길이 함수 $\ell (s)$ 는 다음과 같이 정의됩니다:
+
+$$
+\ell (s)=\left\{ \, \begin{array}{ll}\textstyle \ell _s+(\ell _m-\ell _s)\cdot F_{\mathrm{left}}\left( \frac{s}{a}\right) ,&\textstyle 0\leq s<a\\ \textstyle \ell _m,&\textstyle a\leq s\leq 1-a\\ \textstyle \ell _e+(\ell _m-\ell _e)\cdot F_{\mathrm{right}}\left( \frac{1-s}{a}\right) ,&\textstyle 1-a<s\leq 1\end{array}\right.
+$$
+
+여기서:
+- $\ell _s$: 시작 구간 세그먼트 길이
+- $\ell _m$: 중간 plateau 구간 세그먼트 길이
+- $\ell _e$: 끝 구간 세그먼트 길이
+- $a=\frac{1-\mathrm{plateau\_ fraction}}{2}$: 전이 구간의 길이
+- $F_{\mathrm{left}}(x),F_{\mathrm{right}}(x)$: 지수 전이 함수
+지수 전이 함수
+
+$$
+F(x;r)=\left\{ \, \begin{array}{ll}\textstyle x,&\textstyle |r|<\varepsilon \\ \textstyle \frac{e^{rx}-1}{e^r-1},&\textstyle \mathrm{otherwise}\end{array}\right.
+$$
+
+- $r>0$: 점진적 전이
+- $r\rightarrow 0$: 선형 전이
+
+### 3. 세그먼트 개수 계산
+세그먼트 밀도 함수 w(s)는 다음과 같이 정의됩니다:  
+
+$$
+w(s)=\frac{L}{\ell (s)}
+$$
+
+누적 함수 W(s)는:  
+
+$$
+W(s)=\int _0^sw(t)\, dt
+$$
+
+총 세그먼트 수 N은 다음과 같이 근사합니다:  
+
+$$
+N=\mathrm{round}(W(1))
+$$
+
+### 4. 역 매핑 (Inverse Mapping)
+균등한 누적 분포 \frac{k}{N}에 대해 s_k를 찾습니다:  
+
+$$
+W(s_k)=\frac{k}{N}\cdot W(1)
+$$
+
+
+이때 W(s)는 수치 적분으로 구한 누적 배열이므로, 이분법으로 $s_k$ 를 찾습니다.
+
+### 5. u-파라미터 역변환
+정규화된 아크 길이 함수 s(u)에 대해:  
+
+$$
+s(u_k)=s_k
+$$
+
+이 조건을 만족하는 $u_k$ 를 이분법으로 찾습니다.
+$s(u)$ 는 단조 증가 함수이므로 역함수가 존재하며, 수치적으로 안정적으로 계산 가능합니다.
+
+### 6. 출력 결과
+- $\{ u_k\} _{k=0}^N$: u-분할점 (0에서 1까지)
+- $\mathrm{segment\_ length_{\mathnormal{k}}}=(s_{k+1}-s_k)\cdot L$
+- $\sum \mathrm{segment\_ length_{\mathnormal{k}}}=L$ (수치 오차 허용 범위 내에서)
+
+### 7. 수학적 정당성 요약
+| 수학 조건 또는 성질             | 관련 함수 또는 개념             | 설명 또는 의미                                      |
+|-------------------------------|-------------------------------|----------------------------------------------------|
+| ℓ(s) > 0                      | w(s)                          | 세그먼트 길이가 항상 양수 → 밀도 함수 정의 가능       |
+| s(u) 단조 증가                | uₖ                            | 역함수 존재 → u 분할점 계산 가능                     |
+| W(s) 연속 증가                | sₖ                            | 누적 분포로부터 s 분할점 계산 가능                   |
+| ∑ segₖ = L                   |                                | 전체 세그먼트 길이 합이 정확히 total_length와 일치   |
+
+
+### 8. 예제 시각화 (설명)
+- 시작 구간: 짧은 세그먼트 → 곡선의 세밀한 제어
+- 중간 구간: 긴 세그먼트 → 효율적 분할
+- 끝 구간: 다시 짧아짐 → 끝단 정밀도 확보
+이러한 분포는 곡선의 시작/끝에서 더 많은 제어점을 필요로 하는 경우 (예: Bezier, NURBS)에서 매우 유용합니다.
+
+---
 
 
 
