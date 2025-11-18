@@ -132,7 +132,7 @@ $$
 - 정의:
 
 $$
-L(t)=(1-r)\cdot P_i+r\cdot P_{i+1}, where r=\frac{t-t_i}{t_{i+1}-t_i}
+L(t)=(1-r)\cdot P_i+r\cdot P_{i+1}, \quad where \quad r=\frac{t-t_i}{t_{i+1}-t_i}
 $$
 
 - 특징:
