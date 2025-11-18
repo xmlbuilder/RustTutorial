@@ -501,13 +501,13 @@ $$
 $$
 \ell(s) =
 \begin{cases}
-\ell_s + (\ell_m - \ell_s)\, F_{\text{L}}\bigl(s/a\bigr),
+\ell_s + (\ell_m - \ell_s) F_{\text{L}}\bigl(s/a\bigr),
 & 0 \le s < a,
 \\
 \ell_m,
 & a \le s \le 1 - a,
 \\
-\ell_e + (\ell_m - \ell_e)\, F_{\text{R}}\bigl((1 - s)/a\bigr),
+\ell_e + (\ell_m - \ell_e) F_{\text{R}}\bigl((1 - s)/a\bigr),
 & 1 - a < s \le 1.
 \end{cases}
 $$
@@ -524,7 +524,7 @@ $$
 F(x; r) =
 \begin{cases}
 x, & |r| < \varepsilon, \\
-\dfrac{e^{\,r x} - 1}{\,e^{\,r} - 1\,}, & \text{otherwise}.
+\dfrac{e^{r x} - 1}{e^{r} - 1}, & \text{otherwise}.
 \end{cases}
 $$
 - $r>0$: 점진적 전이
@@ -540,7 +540,7 @@ $$
 누적 함수 W(s)는:  
 
 $$
-W(s)=\int _0^sw(t)\, dt
+W(s)=\int _0^sw(t) dt
 $$
 
 총 세그먼트 수 $N$ 은 다음과 같이 근사합니다:  
