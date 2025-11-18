@@ -427,7 +427,7 @@ arc_len_norm(u)만 정의하면 즉시 활용할 수 있습니다.
 
 
 ## 11. 결과 가시화
-
+![Bias Curve Divide](/image/bias_divide_result.png)
 
 ---
 
