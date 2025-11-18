@@ -521,9 +521,12 @@ $$
 지수 전이 함수
 
 $$
-F(x;r)=\left\{ \, \begin{array}{ll}\textstyle x,&\textstyle |r|<\varepsilon \\ \textstyle \frac{e^{rx}-1}{e^r-1},&\textstyle \mathrm{otherwise}\end{array}\right.
+F(x; r) =
+\begin{cases}
+x, & |r| < \varepsilon, \\
+\dfrac{e^{\,r x} - 1}{\,e^{\,r} - 1\,}, & \text{otherwise}.
+\end{cases}
 $$
-
 - $r>0$: 점진적 전이
 - $r\rightarrow 0$: 선형 전이
 
