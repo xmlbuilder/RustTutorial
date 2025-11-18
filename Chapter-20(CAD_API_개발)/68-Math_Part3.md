@@ -6427,7 +6427,13 @@ $$
 ax+by+cz+d=0
 $$
 
-- 교차점 계산: 선형 보간 비율 $r=\frac{f_j}{a\cdot dx+b\cdot dy+c\cdot dz}$
+- 교차점 계산: 선형 보간 비율
+
+$$
+r=\frac{f_j}{a\cdot dx+b\cdot dy+c\cdot dz}
+$$
+
+
 - 검증: Constructive Solid Geometry(CSG)에서 표준 절단 알고리즘
 
 ## ✅ 4. 야코비안 및 법선 도함수
