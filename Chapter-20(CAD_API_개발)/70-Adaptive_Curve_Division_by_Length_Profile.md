@@ -554,8 +554,8 @@ $s(u)$ 는 단조 증가 함수이므로 역함수가 존재하며, 수치적으
 
 ### 6. 출력 결과
 - $\{ u_k\} _{k=0}^N$: u-분할점 (0에서 1까지)
-- $\mathrm{segment\_ length_{\mathnormal{k}}}=(s_{k+1}-s_k)\cdot L$
-- $\sum \mathrm{segment\_ length_{\mathnormal{k}}}=L$ (수치 오차 허용 범위 내에서)
+- $\mathrm{segment\\_ length_{\mathnormal{k}}}=(s_{k+1}-s_k)\cdot L$
+- $\sum \mathrm{segment\\_ length_{\mathnormal{k}}}=L$ (수치 오차 허용 범위 내에서)
 
 ### 7. 수학적 정당성 요약
 | 수학 조건 또는 성질             | 관련 함수 또는 개념             | 설명 또는 의미                                      |
