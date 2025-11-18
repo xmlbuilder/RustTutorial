@@ -5,7 +5,12 @@
 
 ## 🧮 1. 거리 및 중복 제거
 ### 🔹 on_distance_square(a, b)
-- 계산: $\sqrt{(x_a-x_b)^2+(y_a-y_b)^2+(z_a-z_b)^2}$
+- 계산:
+  
+$$
+\sqrt{(x_a-x_b)^2+(y_a-y_b)^2+(z_a-z_b)^2}
+$$
+
 - 검증: 유클리드 거리 공식이며, 정확함
 ### 🔹 on_remove_duplicate_points
 - 원리: 인접 점 간 거리 누적 → 상대/절대 오차 기준으로 중복 제거
@@ -23,12 +28,22 @@
 ## 🧭 3. 평면과 삼각형 절단
 ### 🔹 tri_plane_cut
 - 원리: 평면 방정식 $ax+by+cz+d=0$ 에 대해 삼각형의 절단
-- 교차점 계산: 선형 보간 $r=\frac{f_j}{a\cdot dx+b\cdot dy+c\cdot dz}$
+- 교차점 계산: 선형 보간
+
+$$
+r=\frac{f_j}{a\cdot dx+b\cdot dy+c\cdot dz}
+$$
+
 - 검증: 절단 알고리즘은 Constructive Solid Geometry(CSG)에서 표준
 
 ## 🧠 4. 야코비안 및 법선 도함수
 ### 🔹 on_ev_jacobian(E, F, G)
-- 계산: $\det J=EG-F^2$
+- 계산:
+  
+$$
+\det J=EG-F^2
+$$
+
 - 검증: 표면의 면적 요소로서 야코비안은 정확한 정의
 ### 🔹 on_ev_normal_partials(ds, dt, dss, dst, dtt)
 - 계산: 단위 법선 $N=\frac{ds\times dt}{|ds\times dt|}$ 의 도함수
@@ -36,11 +51,24 @@
 
 ## 🧭 5. 곡률 및 접선
 ### 🔹 on_ev_tangent(d1, d2)
-- 정상: $T=\frac{d1}{|d1|}$
-- 퇴화: $T\approx \pm \frac{d2}{|d2|}$
+- 정상:
+
+$$
+  T=\frac{d1}{|d1|}
+$$
+
+- 퇴화:
+$$
+T\approx \pm \frac{d2}{|d2|}
+$$
+
 - 검증: 병렬 벡터의 극한 근사로서 L'Hôpital의 원리 적용
 ### 🔹 on_ev_curvature(d1, d2)
-- 계산: $K=\frac{d2-(d2\cdot T)T}{|d1|^2}$
+- 계산:
+$$
+K=\frac{d2-(d2\cdot T)T}{|d1|^2}
+$$
+
 - 검증: 곡률 벡터의 표준 정의이며, 정당함
 
 ## 🔄 6. 파라미터 언랩 및 공차
@@ -48,7 +76,13 @@
 - 원리: 주기 함수의 연속성 보존을 위한 언랩
 - 검증: 각도/위상 처리에서 널리 사용되는 방식
 ### 🔹 get_parameter_tolerance(t0, t1, t)
-- 계산: $dt=8\sqrt{\epsilon }(t1-t0)+\epsilon (|t0|+|t1|)$
+- 계산:
+
+$$
+dt=8\sqrt{\epsilon }(t1-t0)+\epsilon (|t0|+|t1|)
+$$
+
+
 - 검증: IEEE-754 기반 수치 안정성 고려
 
 ```rust
