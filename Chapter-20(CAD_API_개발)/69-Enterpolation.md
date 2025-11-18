@@ -101,12 +101,12 @@ pub fn on_linear_interpolate<T: Interpolatable + Debug>(
 - 베르스타인 기저함수:
 
 $$
-B_i^n(t)={n \choose i}(1-t)^{n-i}t^i- 특징:
+B_i^n(t)={n \choose i}(1-t)^{n-i}t^i
 $$
-
-- 제어점 P_i에 의해 곡선이 형성됨
-- $t\in [0,1]$ 에서 정의됨
-- 전체 곡선은 제어점의 볼록 껍질(convex hull) 안에 존재
+- 특징:
+    - 제어점 P_i에 의해 곡선이 형성됨
+    - $t\in [0,1]$ 에서 정의됨
+    - 전체 곡선은 제어점의 볼록 껍질(convex hull) 안에 존재
 
 ### 2️⃣ B-Spline Curve
 - 정의: $S(t)=\sum _{i=0}^nN_{i,k}(t)\cdot P_i$
