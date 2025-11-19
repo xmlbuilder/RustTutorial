@@ -142,6 +142,11 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [70-from_str_radix](./Chapter-02(기본%20문법과%20타입%20시스템)/70-from_str_radix.md)
 - [71-into_boxed_slice](./Chapter-02(기본%20문법과%20타입%20시스템)/71-into_boxed_slice.md)
 - [72-dedup_dedup_by](./Chapter-02(기본%20문법과%20타입%20시스템)/72-dedup_dedup_by.md)
+- [73-Option_Map_조합](./Chapter-02(기본%20문법과%20타입%20시스템)/73-Option_Map_조합.md)
+- [74-swap_with_slice](./Chapter-02(기본%20문법과%20타입%20시스템)/74-swap_with_slice.md)
+- [75-Min_Max구하기](./Chapter-02(기본%20문법과%20타입%20시스템)/75-Min_Max구하기.md)
+- [76-Peekable](./Chapter-02(기본%20문법과%20타입%20시스템)/76-Peekable.md)
+- [77-참조를_값으로](./Chapter-02(기본%20문법과%20타입%20시스템)/77-참조를_값으로.md)
 
 
 🔼 [맨 위로](#-목차)
@@ -214,6 +219,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [41-to_owned](./Chapter-04(소유권과%20참조)/41-to_owned.md)
 - [42-to_string](./Chapter-04(소유권과%20참조)/42-to_string.md)
 - [43-Path_PathBuf](./Chapter-04(소유권과%20참조)/43-Path_PathBuf.md)
+- [44-unwrap_소유권_고찰](./Chapter-04(소유권과%20참조)/44-unwrap_소유권_고찰.md)
 
 🔼 [맨 위로](#-목차)
 
@@ -227,8 +233,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [07-PatternMatching_Eum_Struct](./Chapter-05(패턴%20매칭과%20분해)/07-PatternMatching_Eum_Struct.md)
 - [08-배열_중첩패턴](./Chapter-05(패턴%20매칭과%20분해)/08-배열_중첩패턴.md)
 - [09-Reverse_패턴매칭](./Chapter-05(패턴%20매칭과%20분해)/09-Reverse_패턴매칭.md)
-- [10-Box::from_raw](./Chapter-05(패턴%20매칭과%20분해)/10-Box::from_raw.md)
-- [11-core::mem](./Chapter-05(패턴%20매칭과%20분해)/11-core::mem.md)
+
 
 🔼 [맨 위로](#-목차)
 
@@ -261,12 +266,14 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [26-trait_Iterator](./Chapter-06(트레잇과%20제네릭)/26-trait_Iterator.md)
 - [27-RwLock_RwLockWriteGuard](./Chapter-06(트레잇과%20제네릭)/27-RwLock_RwLockWriteGuard.md)
 - [28-제네릭_제약조건](./Chapter-06(트레잇과%20제네릭)/28-제네릭_제약조건.md)
-- [29-Sized_trait](./Chapter-06(트레잇과%20제네릭)/29-Sized_trait.md)
+- [29-01-Sized_Trait_기본](./Chapter-06(트레잇과%20제네릭)/29-01-Sized_Trait_기본.md)
+- [29-02-Sized_trait](./Chapter-06(트레잇과%20제네릭)/29-02-Sized_trait.md)
 - [30-Borrow](./Chapter-06(트레잇과%20제네릭)/30-Borrow.md)
 - [31-Parse_Trait](./Chapter-06(트레잇과%20제네릭)/31-Parse_Trait.md)
 - [32-Where_Trait](./Chapter-06(트레잇과%20제네릭)/32-Where_Trait.md)
 - [33-Eq_Hash_Trait](./Chapter-06(트레잇과%20제네릭)/33-Eq_Hash_Trait.md)
 - [34-Any](./Chapter-06(트레잇과%20제네릭)/34-Any.md)
+- [35-Interpolation](./Chapter-06(트레잇과%20제네릭)/35-Interpolation.md)
 
 🔼 [맨 위로](#-목차)
 
@@ -381,7 +388,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [07-FFI래퍼_샘플](./Chapter-12(Unsafe와%20FFI)/07-FFI래퍼_샘플.md)
 - [08-Android와연동](./Chapter-12(Unsafe와%20FFI)/08-Android와연동.md)
 - [09-Rust에서_만든_library_c에서_연동](./Chapter-12(Unsafe와%20FFI)/09-Rust에서_만든_library_c에서_연동.md)
-
+- [10-Box::from_raw](./Chapter-12(Unsafe와%20FFI)/10-Box::from_raw.md)
+- [11-core::mem](./Chapter-12(Unsafe와%20FFI)/11-core::mem.md)
 
 🔼 [맨 위로](#-목차)
 
@@ -450,7 +458,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [17-ArrayPool](./Chapter-15%28SmartPointers_and_MemoryModels%29/17-ArrayPool.md)
 - [18-MutexGuard](./Chapter-15%28SmartPointers_and_MemoryModels%29/18-MutexGuard.md)
 - [19-Smart_Pointer_순서](./Chapter-15%28SmartPointers_and_MemoryModels%29/19-Smart_Pointer_순서.md)
-
+- [20-Allocator](./Chapter-15%28SmartPointers_and_MemoryModels%29/20-Allocator.md)
 
 🔼 [맨 위로](#-목차)
 
@@ -523,6 +531,11 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [46-TextParser](./Chapter-17(실전%20예제와%20프로젝트)/46-TextParser.md)
 - [47-THash_구조_설명](./Chapter-17(실전%20예제와%20프로젝트)/47-THash_구조_설명)
 - [48-TMatrix_소스_설명](./Chapter-17(실전%20예제와%20프로젝트)/48-TMatrix_소스_설명.md)
+- [49-KeyValuePool](./Chapter-17(실전%20예제와%20프로젝트)/49-KeyValuePool.md)
+- [50-Excel_Read_Writer_Test](./Chapter-17(실전%20예제와%20프로젝트)/50-Excel_Read_Writer_Test.md)
+- [51-fs_watcher](./Chapter-17(실전%20예제와%20프로젝트)/51-fs_watcher.md)
+- [52-Fixed_Format_Writer](./Chapter-17(실전%20예제와%20프로젝트)/52-Fixed_Format_Writer.md)
+
 
 🔼 [맨 위로](#-목차)
   
