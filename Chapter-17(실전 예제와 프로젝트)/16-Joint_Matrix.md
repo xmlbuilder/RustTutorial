@@ -666,11 +666,71 @@ mod tests {
     }
 }
 ```
+
 ---
+## 추가적인 테스트 코드
+```rust
+#[test]
+fn test_calc_joint_free_non_unit_quaternion() {
+    // 비정규화된 쿼터니언 → 회전 행렬이 왜곡됨을 확인
+    let q = [1.0, 1.0, 1.0, 1.0]; // |q|^2 = 4
+    let t = [0.0, 0.0, 0.0];
+    let m = JointMatrix::calc_joint_free(q, t);
 
+    // 회전 행렬이 단위 행렬과 다름을 확인
+    let identity = Xform::identity();
+    assert!(m.m != identity.m);
+}
+```
+```rust
+#[test]
+fn test_calc_joint_sphere_vs_free_rotation_only() {
+    // 동일한 쿼터니언으로 sphere와 free의 회전 부분 비교
+    let q = [2.0_f64.sqrt(), 0.0, 0.0, 0.0];
+    let t = [0.0, 0.0, 0.0];
+    let m1 = JointMatrix::calc_joint_sphere(q);
+    let m2 = JointMatrix::calc_joint_free(q, t);
 
+    for i in 0..3 {
+        for j in 0..3 {
+            assert!((m1.m[i][j] - m2.m[i][j]).abs() < 1.0e-12);
+        }
+    }
+}
+```
+```rust
+#[test]
+fn test_calc_joint_cylinder_rotation_only() {
+    let q = std::f64::consts::PI;
+    let t = 0.0;
+    let m = JointMatrix::calc_joint_cylinder(q, t);
 
+    // x축 회전 180도 → y,z 축 반전
+    assert!((m.m[1][1] + 1.0).abs() < 1.0e-12);
+    assert!((m.m[2][2] + 1.0).abs() < 1.0e-12);
+}
+```
+```rust
+#[test]
+fn test_calc_joint_planar_translation_only() {
+    let q = 0.0;
+    let t = [3.0, -2.0];
+    let m = JointMatrix::calc_joint_planar(q, t);
 
+    assert!((m.m[1][3] - 3.0).abs() < 1.0e-12);
+    assert!((m.m[2][3] + 2.0).abs() < 1.0e-12);
+}
+```
+```rust
+#[test]
+fn test_calc_joint_trans_revo_vs_revo_trans() {
+    let q = std::f64::consts::FRAC_PI_2;
+    let t = 1.0;
+    let m1 = JointMatrix::calc_joint_trans_revo(q, t);
+    let m2 = JointMatrix::calc_joint_revo_trans(q, t);
 
-
-
+    // 병진 위치가 다르므로 행렬이 달라야 함
+    assert!(m1.m != m2.m);
+}
+```
+---
