@@ -14,10 +14,21 @@ Trajectory calculation from measured accelerations and angular velocities
 - 각속도 
 - 적분된 각도 변화량:
 - 회전 행렬 업데이트 (소각 근사):
+- 3차원 벡터 $\mathbf{v}=[v_x,v_y,v_z]^T$ 에 대해, 그 벡터의 외적을 행렬 곱으로 표현하기 위해 사용하는 것이 스큐-대칭 행렬입니다.  
 
-여기서 $[\cdot ]_{\times }$ 는 벡터의 스큐 대각 행렬 (skew-symmetric matrix)
+$$
+[\mathbf{v}]_{\times }=\left[ \begin{matrix}0&-v_z&v_y\\ v_z&0&-v_x\\ -v_y&v_x&0\end{matrix}\right]
+$$
+- 이 행렬은 다음과 같은 성질을 가집니다:
+
+$$
+[\mathbf{v}]_{\times }\cdot \mathbf{w}=\mathbf{v}\times \mathbf{w}
+$$
+
+- 즉, 외적을 행렬 곱으로 표현한 형태입니다.
 
 
+- 설명 이미지
 ![step1](/image/step1.png)
 
 ### 📌 Step 2: COG 가속도 보정
@@ -30,6 +41,7 @@ $$
 $$
 
 
+- 설명 이미지
 ![step2](/image/step2.png)
 
 ### 📌 Step 3: g 보정
@@ -41,6 +53,7 @@ $$
 \begin{aligned}a_x'&=a_x+g\cdot (R_k[2,0]-R_0[2,0])\\ a_y'&=a_y+g\cdot (R_k[2,1]-R_0[2,1])\\ a_z'&=a_z+g\cdot (R_k[2,2]-R_0[2,2])\end{aligned}
 $$
 
+- 설명 이미지
 ![step3](/image/step3.png)
 
 ### 📌 Step 4: 글로벌 가속도 변환
@@ -58,7 +71,7 @@ $$
 - $\mathbf{R_{\mathnormal{k}}}$: 시간 k에서의 회전 행렬
 - $\mathbf{a_{\mathnormal{k}}^{\mathrm{global}}}$: 글로벌 좌표계 기준 가속도
 
-
+- 설명 이미지
 ![step4](/image/step4.png)
 
 #### 📌 Step 5: 속도 및 위치 적분
@@ -76,7 +89,7 @@ $$
 p_{k+1}=p_k+v_k\cdot \Delta t+\frac{1}{2}\Delta v_k\cdot \Delta t
 $$
 
-
+- 설명 이미지
 ![step5](/image/step5.png)
 
 
