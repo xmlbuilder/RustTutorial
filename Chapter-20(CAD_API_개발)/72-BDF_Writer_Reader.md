@@ -165,7 +165,7 @@ BdfReader는 .bdf 파일을 읽어 Mesh 구조체로 파싱합니다.
 | `new(path: &str)`     | `Result<Self>`| 지정된 경로로 BdfReader 인스턴스를 생성                             |
 | `run(&mut self, &mut Mesh)` | `Result<()>` | `.bdf` 파일을 읽어 `Mesh`에 정점 및 요소 데이터를 채움               |
 | `parse_grid(&str, &mut Mesh, &mut HashMap)` | `Result<()>` | 일반 `GRID` 카드 파싱                                               |
-| `parse_grid_long(&mut Peekable<Lines>, &mut Mesh, &mut HashMap)` | `Result<()>` | 연장된 `GRID*` 카드 파싱 (다음 줄까지 읽음)                         |
+| `parse_grid_long(&mut Peekable<Lines>, &mut Mesh, &mut HashMap)` | `Result<()>` | 연장된 `GRID*` 카드 파싱 (다음 줄까지 읽음)   |
 | `parse_ctria3(&str, &mut Mesh, &HashMap)` | `Result<()>` | 삼각형 요소 `CTRIA3` 카드 파싱 및 정점 인덱스 매핑                  |
 
 
@@ -261,7 +261,8 @@ impl BdfReader {
     }
 ```
 ```rust
-    fn parse_grid_long(&self, line: &str, lines: &mut std::iter::Peekable<Lines<BufReader<File>>>, mesh: &mut Mesh, node_map: &mut HashMap<u32, u32>) -> Result<()> {
+    fn parse_grid_long(&self, line: &str, lines: &mut std::iter::Peekable<Lines<BufReader<File>>>, mesh: &mut Mesh,
+        node_map: &mut HashMap<u32, u32>) -> Result<()> {
 
         let id = parse_field(&line, 8, 24);
         let x = parse_field(&line, 40, 56);
