@@ -425,6 +425,146 @@ arc_len_norm(u)만 정의하면 즉시 활용할 수 있습니다.
 
 
 ## 11. 결과 가시화
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+class LengthProfileParams:
+    def __init__(self, ls=5.0, lm=10.0, le=3.0, plateau=0.6, rl=2.0, rr=2.0):
+        self.len_start = ls
+        self.len_mid = lm
+        self.len_end = le
+        self.plateau_fraction = plateau
+        self.r_left = rl
+        self.r_right = rr
+
+def length_profile(s, p: LengthProfileParams):
+    ls = p.len_start
+    lm = p.len_mid
+    le = p.len_end
+    a = 0.5 * (1.0 - p.plateau_fraction)
+    b = a
+
+    if s <= 0.0:
+        return ls
+    if s >= 1.0:
+        return le
+
+    if s < a:
+        x = s / a
+        k = p.r_left
+        if abs(k) < 1e-8:
+            f = x
+        else:
+            ek = np.exp(k)
+            ekx = np.exp(k * x)
+            f = (ekx - 1.0) / (ek - 1.0)
+        return ls + (lm - ls) * f
+    elif s <= 1.0 - b:
+        return lm
+    else:
+        x = (1.0 - s) / b
+        k = p.r_right
+        if abs(k) < 1e-8:
+            f = x
+        else:
+            ek = np.exp(k)
+            ekx = np.exp(k * x)
+            f = (ekx - 1.0) / (ek - 1.0)
+        return le + (lm - le) * f
+
+def divide_curve_by_length_profile(total_length, params: LengthProfileParams):
+    # 샘플: arc_len_norm(u) = u
+    def arc_len_norm(u: float) -> float:
+        u = max(0.0, min(1.0, u))
+        return u
+
+    samples = 1024
+    s_samples = np.linspace(0.0, 1.0, samples + 1)
+    w_samples = np.zeros_like(s_samples)
+
+    for i, s in enumerate(s_samples):
+        Lseg = length_profile(s, params)
+        if Lseg <= 0.0:
+            Lseg = 1e-6
+        w_samples[i] = total_length / Lseg
+
+    W_cum = np.zeros_like(s_samples)
+    for i in range(1, samples + 1):
+        ds = s_samples[i] - s_samples[i - 1]
+        wavg = 0.5 * (w_samples[i] + w_samples[i - 1])
+        W_cum[i] = W_cum[i - 1] + wavg * ds
+
+    W_total = W_cum[-1]
+    if W_total <= 0.0:
+        return None, None, None
+
+    N = int(round(W_total))
+    if N < 1:
+        N = 1
+
+    point_count = N + 1
+    s_breaks = np.zeros(point_count)
+    s_breaks[0] = 0.0
+    s_breaks[-1] = 1.0
+
+    for k in range(1, point_count - 1):
+        target = W_total * k / N
+        lo, hi = 0, samples
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if W_cum[mid] < target:
+                lo = mid + 1
+            else:
+                hi = mid
+        idx = max(lo, 0)
+        if idx == 0:
+            s_breaks[k] = s_samples[0]
+        else:
+            W0, W1 = W_cum[idx - 1], W_cum[idx]
+            t = 0.0
+            if W1 > W0:
+                t = (target - W0) / (W1 - W0)
+            t = max(0.0, min(1.0, t))
+            s0, s1 = s_samples[idx - 1], s_samples[idx]
+            s_breaks[k] = s0 + (s1 - s0) * t
+
+    u_breaks = s_breaks.copy()
+    seg_lengths = (u_breaks[1:] - u_breaks[:-1]) * total_length
+    seg_centers = 0.5 * (u_breaks[1:] + u_breaks[:-1])
+
+    return u_breaks, seg_centers, seg_lengths
+
+if __name__ == "__main__":
+    params = LengthProfileParams(
+        ls=5.0,
+        lm=10.0,
+        le=3.0,
+        plateau=0.6,
+        rl=2.0,
+        rr=2.0
+    )
+    total_length = 100.0
+
+    u_breaks, seg_centers, seg_lengths = divide_curve_by_length_profile(total_length, params)
+
+    print("Segment count N =", len(u_breaks) - 1)
+    print("Sum of segment lengths =", np.sum(seg_lengths))
+
+    plt.figure()
+    plt.plot(seg_centers, seg_lengths, marker='o')
+    plt.xlabel('u (segment center)')
+    plt.ylabel('segment length')
+    plt.title('Segment length vs u (length profile 5 → 10 → 3, plateau=60%)')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+```
+
+
+
+
 ![Bias Curve Divide](/image/bias_divide_result.png)
 
 ---
