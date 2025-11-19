@@ -17,7 +17,7 @@ Trajectory calculation from measured accelerations and angular velocities
 - 3차원 벡터 $\mathbf{v}=[v_x,v_y,v_z]^T$ 에 대해, 그 벡터의 외적을 행렬 곱으로 표현하기 위해 사용하는 것이 스큐-대칭 행렬입니다.  
 
 $$
-[\mathbf{v}]_{\times }=\left[ \begin{matrix}0&-v_z&v_y\\ v_z&0&-v_x\\ -v_y&v_x&0\end{matrix}\right]
+[\mathbf{v}]_{\times }=\left[ \begin{matrix}0&-v_z&v_y\\ ; \quad v_z&0&-v_x\\ ; \quad v -v_y&v_x&0\end{matrix}\right]
 $$
 - 이 행렬은 다음과 같은 성질을 가집니다:
 
