@@ -165,7 +165,7 @@ BdfReader는 .bdf 파일을 읽어 Mesh 구조체로 파싱합니다.
 | `new(path: &str)`     | `Result<Self>`| 지정된 경로로 BdfReader 인스턴스를 생성                             |
 | `run(&mut self, &mut Mesh)` | `Result<()>` | `.bdf` 파일을 읽어 `Mesh`에 정점 및 요소 데이터를 채움               |
 | `parse_grid(&str, &mut Mesh, &mut HashMap)` | `Result<()>` | 일반 `GRID` 카드 파싱                                               |
-| `parse_grid_star(&mut Peekable<Lines>, &mut Mesh, &mut HashMap)` | `Result<()>` | 연장된 `GRID*` 카드 파싱 (다음 줄까지 읽음)                         |
+| `parse_grid_long(&mut Peekable<Lines>, &mut Mesh, &mut HashMap)` | `Result<()>` | 연장된 `GRID*` 카드 파싱 (다음 줄까지 읽음)                         |
 | `parse_ctria3(&str, &mut Mesh, &HashMap)` | `Result<()>` | 삼각형 요소 `CTRIA3` 카드 파싱 및 정점 인덱스 매핑                  |
 
 
@@ -176,12 +176,12 @@ BdfReader는 .bdf 파일을 읽어 Mesh 구조체로 파싱합니다.
     - .bdf 파일을 읽어 Mesh에 정점과 면을 채움
     - 내부적으로 다음 단계로 구성됨:
     - parse_grid() – 일반 GRID 카드 파싱
-    - parse_grid_star() – 연장된 GRID* 카드 파싱
+    - parse_grid_long() – 연장된 GRID* 카드 파싱
     - parse_ctria3() – CTRIA3 카드 파싱
     - mesh.compute_normals() 호출
 - parse_grid(line, mesh, node_map)
     - 8자리 필드 기반 GRID 카드 파싱
--parse_grid_star(lines, mesh, node_map)
+-parse_grid_long(lines, mesh, node_map)
     - 16자리 필드 기반 GRID* 카드 파싱 (다음 줄까지 읽음)
 -parse_ctria3(line, mesh, node_map)
     - 삼각형 요소 CTRIA3 파싱 및 정점 인덱스 매핑
