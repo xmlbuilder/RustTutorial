@@ -37,7 +37,7 @@ $$
 - 센서가 COG 외부에 있을 경우, 원심 가속도 보정:  
 
 $$
-\begin{aligned}a_x^{\mathrm{COG}}&=a_x+(\omega _y^2+\omega _z^2)\cdot \Delta x\\ a_y^{\mathrm{COG}}&=a_y+(\omega _x^2+\omega _z^2)\cdot \Delta y\\ a_z^{\mathrm{COG}}&=a_z+(\omega _x^2+\omega _y^2)\cdot \Delta z\end{aligned}
+\begin{aligned}a_x^{\mathrm{COG}}&=a_x+(\omega _y^2+\omega _z^2)\cdot \Delta x\\ ; \quad a_y^{\mathrm{COG}}&=a_y+(\omega _x^2+\omega _z^2)\cdot \Delta y\\ ; \quad a_z^{\mathrm{COG}}&=a_z+(\omega _x^2+\omega _y^2)\cdot \Delta z\end{aligned}
 $$
 
 
@@ -52,7 +52,7 @@ $$
 - 초기 회전 행렬 R_0 기준으로 중력 방향 변화량 보정:
 
 $$
-\begin{aligned}a_x'&=a_x+g\cdot (R_k[2,0]-R_0[2,0])\\ a_y'&=a_y+g\cdot (R_k[2,1]-R_0[2,1])\\ a_z'&=a_z+g\cdot (R_k[2,2]-R_0[2,2])\end{aligned}
+\begin{aligned}a_x'&=a_x+g\cdot (R_k[2,0]-R_0[2,0])\\  ; \quad a_y'&=a_y+g\cdot (R_k[2,1]-R_0[2,1])\\ ; \quad a_z'&=a_z+g\cdot (R_k[2,2]-R_0[2,2])\end{aligned}
 $$
 
 - 설명 이미지
