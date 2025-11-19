@@ -22,7 +22,7 @@
 ### ✅ Quaternion 기반 회전 행렬
 
 $$
-R=\left[ \begin{matrix}q_0^2+q_1^2-1&q_1q_2-q_0q_3&q_1q_3+q_0q_2\\ \quad q_1q_2+q_0q_3&q_0^2+q_2^2-1&q_2q_3-q_0q_1\\ \quad q_1q_3-q_0q_2&q_2q_3+q_0q_1&q_0^2+q_3^2-1\end{matrix}\right]
+R=\left[ \begin{matrix}q_0^2+q_1^2-1&q_1q_2-q_0q_3&q_1q_3+q_0q_2\\ ; \quad q_1q_2+q_0q_3&q_0^2+q_2^2-1&q_2q_3-q_0q_1\\ ; \quad q_1q_3-q_0q_2&q_2q_3+q_0q_1&q_0^2+q_3^2-1\end{matrix}\right]
 $$
 
 
@@ -667,6 +667,7 @@ mod tests {
 }
 ```
 ---
+
 
 
 
