@@ -129,15 +129,15 @@ mod tests{
 
 ### 출력
 ```
-result, result_val=           , 0.0000000000
-result, result_val=     1.2345, 1.2345670000
-result, result_val=    -1.2345, -1.2345670000
-result, result_val= 1.23456789, 12345678.9000000004
-result, result_val= -9.8765432, -9876543.2100000009
-result, result_val=     0.0000, 0.0000001235
-result, result_val=    -0.0000, -0.0000009876
-result, result_val=   999.9999, 999.9999990000
-result, result_val=  -999.9999, -999.9999990000
+result, result_val=      0.0, 0.0000000000
+result, result_val= 1.234567, 1.2345670000
+result, result_val= -1.235e0, -1.2350000000
+result, result_val= 1.2346e7, 12346000.0000000000
+result, result_val= -9.877e6, -9877000.0000000000
+result, result_val= 0.000000, 0.0000000000
+result, result_val= -9.88e-7, -0.0000009880
+result, result_val= 1.0000e3, 1000.0000000000
+result, result_val= -1.000e3, -1000.0000000000
 ```
 
 ```rust
