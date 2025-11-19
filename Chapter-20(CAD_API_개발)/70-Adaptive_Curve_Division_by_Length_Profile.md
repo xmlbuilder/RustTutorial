@@ -592,5 +592,347 @@ $s(u)$ 는 단조 증가 함수이므로 역함수가 존재하며, 수치적으
 
 ---
 
+## C++ 코드
+```cpp
+#pragma once
+
+#include <functional>
+#include <vector>
+#include <optional>
+
+struct LengthProfileParams {
+    double len_start = 5.0;
+    double len_mid = 10.0;
+    double len_end = 3.0;
+    double plateau_fraction = 0.6;
+    double r_left = 2.0;
+    double r_right = 2.0;
+
+    LengthProfileParams() = default;
+    LengthProfileParams(double ls, double lm, double le, double pf, double rl, double rr)
+        : len_start(ls), len_mid(lm), len_end(le),
+          plateau_fraction(pf), r_left(rl), r_right(rr) {}
+};
+
+double length_profile(double s, const LengthProfileParams& p);
+
+std::optional<std::pair<std::vector<double>, std::vector<double>>> divide_curve_by_length_profile(
+    const std::function<double(double)>& arc_len_norm,
+    double total_length,
+    const LengthProfileParams& params
+);
+```
+```cpp
+#include "main.h"
+#include <algorithm>
+
+double length_profile(double s, const LengthProfileParams& p) {
+    double ls = p.len_start;
+    double lm = p.len_mid;
+    double le = p.len_end;
+
+    double a = std::clamp(0.5 * (1.0 - p.plateau_fraction), 0.0, 0.5);
+
+    if (s <= 0.0) return ls;
+    if (s >= 1.0) return le;
+
+    if (s < a) {
+        double x = s / a;
+        double k = p.r_left;
+        double f = std::abs(k) < 1e-8 ? x : (std::exp(k * x) - 1.0) / (std::exp(k) - 1.0);
+        return ls + (lm - ls) * f;
+    } else if (s <= 1.0 - a) {
+        return lm;
+    } else {
+        double x = (1.0 - s) / a;
+        double k = p.r_right;
+        double f = std::abs(k) < 1e-8 ? x : (std::exp(k * x) - 1.0) / (std::exp(k) - 1.0);
+        return le + (lm - le) * f;
+    }
+}
+```
+```cpp
+std::optional<std::pair<std::vector<double>, std::vector<double>>> divide_curve_by_length_profile(
+    const std::function<double(double)>& arc_len_norm,
+    double total_length,
+    const LengthProfileParams& params
+) {
+    if (total_length <= 0.0) return std::nullopt;
+
+    const int samples = 1024;
+    std::vector<double> s_samples(samples + 1);
+    std::vector<double> w_samples(samples + 1);
+    std::vector<double> w_cum(samples + 1);
+
+    for (int i = 0; i <= samples; ++i) {
+        double s = static_cast<double>(i) / samples;
+        s_samples[i] = s;
+        double l_seg = std::max(length_profile(s, params), 1e-6);
+        w_samples[i] = total_length / l_seg;
+    }
+
+    w_cum[0] = 0.0;
+    for (int i = 1; i <= samples; ++i) {
+        double ds = s_samples[i] - s_samples[i - 1];
+        double wavg = 0.5 * (w_samples[i] + w_samples[i - 1]);
+        w_cum[i] = w_cum[i - 1] + wavg * ds;
+    }
+
+    double w_total = w_cum[samples];
+    if (w_total <= 0.0) return std::nullopt;
+
+    int n_seg = std::max(1, static_cast<int>(std::round(w_total)));
+    int point_count = n_seg + 1;
+
+    std::vector<double> s_breaks(point_count);
+    s_breaks[0] = 0.0;
+    s_breaks[point_count - 1] = 1.0;
+
+    for (int k = 1; k < point_count - 1; ++k) {
+        double target = w_total * k / n_seg;
+        int lo = 0, hi = samples;
+        while (lo < hi) {
+            int mid = (lo + hi) / 2;
+            if (w_cum[mid] < target) lo = mid + 1;
+            else hi = mid;
+        }
+
+        int idx = lo;
+        double s0 = s_samples[std::max(0, idx - 1)];
+        double s1 = s_samples[idx];
+        double w0 = w_cum[std::max(0, idx - 1)];
+        double w1 = w_cum[idx];
+        double t = (w1 > w0) ? std::clamp((target - w0) / (w1 - w0), 0.0, 1.0) : 0.0;
+        s_breaks[k] = s0 + (s1 - s0) * t;
+    }
+
+    std::vector<double> u_breaks(point_count);
+    for (int k = 0; k < point_count; ++k) {
+        double s_target = s_breaks[k];
+        double u_lo = 0.0, u_hi = 1.0, u_mid = 0.0;
+        for (int iter = 0; iter < 60; ++iter) {
+            u_mid = 0.5 * (u_lo + u_hi);
+            double s_mid = arc_len_norm(u_mid);
+            if (s_mid < s_target) u_lo = u_mid;
+            else u_hi = u_mid;
+        }
+        u_breaks[k] = u_mid;
+    }
+
+    u_breaks.front() = 0.0;
+    u_breaks.back() = 1.0;
+
+    std::vector<double> seg_lengths;
+    seg_lengths.reserve(n_seg);
+    for (int i = 0; i < n_seg; ++i) {
+        double s0 = arc_len_norm(u_breaks[i]);
+        double s1 = arc_len_norm(u_breaks[i + 1]);
+        seg_lengths.push_back((s1 - s0) * total_length);
+    }
+
+    return std::make_pair(u_breaks, seg_lengths);
+}
+```
+```cpp
+bool divide_curve_by_length_profile(
+    const std::function<double(double)>& arc_len_norm,
+    double total_length,
+    const LengthProfileParams& params,
+    std::vector<double>& out_u,
+    std::vector<double>* out_seg_lengths /*= nullptr*/
+)
+{
+    out_u.clear();
+    if (total_length <= 0.0)
+        return false;
+
+    const int samples = 1024;
+    std::vector<double> s_samples(samples + 1);
+    std::vector<double> w_samples(samples + 1);
+    std::vector<double> W_cum(samples + 1);
+
+    for (int i = 0; i <= samples; ++i)
+    {
+        double s = static_cast<double>(i) / static_cast<double>(samples);
+        s_samples[i] = s;
+
+        double Lseg = length_profile(s, params); // 원하는 세그먼트 길이
+        if (Lseg <= 0.0)
+            Lseg = 1.0e-6; // 방어
+
+        w_samples[i] = total_length / Lseg;      // 단위 s 당 세그먼트 개수
+    }
+
+    // 2) 사다리꼴 적분으로 누적 W(s) 계산
+    W_cum[0] = 0.0;
+    for (int i = 1; i <= samples; ++i)
+    {
+        double ds   = s_samples[i] - s_samples[i - 1];
+        double wavg = 0.5 * (w_samples[i] + w_samples[i - 1]);
+        W_cum[i]    = W_cum[i - 1] + wavg * ds;
+    }
+    double W_total = W_cum[samples];
+    if (W_total <= 0.0)
+        return false;
+
+    // 3) 예상 세그먼트 개수 N = round(W_total)
+    int N = static_cast<int>(std::round(W_total));
+    if (N < 1) N = 1;
+
+    const int point_count = N + 1;
+    std::vector<double> s_breaks(point_count);
+
+    s_breaks[0]             = 0.0;
+    s_breaks[point_count-1] = 1.0;
+
+    // 4) k=1..N-1 에 대해 W(s_k) = W_total * (k/N) 을 만족하는 s_k 찾기
+    for (int k = 1; k < point_count - 1; ++k)
+    {
+        double target = W_total * static_cast<double>(k) / static_cast<double>(N);
+
+        int lo = 0;
+        int hi = samples;
+        while (lo < hi)
+        {
+            int mid = (lo + hi) / 2;
+            if (W_cum[mid] < target)
+                lo = mid + 1;
+            else
+                hi = mid;
+        }
+
+        int idx = (lo > 0) ? lo : 0;
+        if (idx == 0)
+        {
+            s_breaks[k] = s_samples[0];
+        }
+        else
+        {
+            double W0 = W_cum[idx - 1];
+            double W1 = W_cum[idx];
+            double t  = 0.0;
+            if (W1 > W0)
+                t = (target - W0) / (W1 - W0);
+
+            if (t < 0.0) t = 0.0;
+            if (t > 1.0) t = 1.0;
+
+            double s0 = s_samples[idx - 1];
+            double s1 = s_samples[idx];
+            s_breaks[k] = s0 + (s1 - s0) * t;
+        }
+    }
+
+    // 5) 각 s_k 에 대해 arc_len_norm(u) = s_k 를 이분법으로 풀어서 u_k 찾기
+    out_u.resize(point_count);
+    for (int k = 0; k < point_count; ++k)
+    {
+        double s_target = s_breaks[k];
+
+        double u_lo = 0.0;
+        double u_hi = 1.0;
+        double u_mid = 0.0;
+
+        for (int it = 0; it < 60; ++it)
+        {
+            u_mid = 0.5 * (u_lo + u_hi);
+            double s_mid = arc_len_norm(u_mid);
+
+            if (s_mid < s_target)
+                u_lo = u_mid;
+            else
+                u_hi = u_mid;
+        }
+
+        out_u[k] = u_mid;
+    }
+
+    // 정확하게 끝단 고정
+    out_u.front() = 0.0;
+    out_u.back()  = 1.0;
+
+    // 옵션: 세그먼트 길이 계산
+    if (out_seg_lengths)
+    {
+        out_seg_lengths->clear();
+        out_seg_lengths->reserve(N);
+        for (int i = 0; i < N; ++i)
+        {
+            double u0 = out_u[i];
+            double u1 = out_u[i+1];
+
+            double s0 = arc_len_norm(u0);
+            double s1 = arc_len_norm(u1);
+            double seg_len = (s1 - s0) * total_length; // 실제 길이
+
+            out_seg_lengths->push_back(seg_len);
+        }
+    }
+    return true;
+}
+```
+```cpp
+int main()
+{
+    // 예시: arc_len_norm(u) = u (직선이고 0..1이 정규화 길이)
+    auto arc_len_norm = [](double u) -> double {
+        if (u <= 0.0) return 0.0;
+        if (u >= 1.0) return 1.0;
+        return u;
+    };
+
+    double total_length = 100.0;
+    LengthProfileParams params(
+        5.0,   // len_start
+        10.0,  // len_mid
+        3.0,   // len_end
+        0.6,   // plateau_fraction
+        2.0,   // r_left
+        2.0    // r_right
+    );
+
+    std::vector<double> u_breaks;
+    std::vector<double> seg_lengths;
+
+    bool ok = divide_curve_by_length_profile(
+        arc_len_norm,
+        total_length,
+        params,
+        u_breaks,
+        &seg_lengths
+    );
+
+    if (!ok)
+    {
+        std::printf("divide_curve_by_length_profile failed.\n");
+        return 1;
+    }
+
+    int N = static_cast<int>(u_breaks.size()) - 1;
+    std::printf("Segment count N = %d\n", N);
+
+    double sum_len = 0.0;
+    for (int i = 0; i < N; ++i)
+    {
+        double u0 = u_breaks[i];
+        double u1 = u_breaks[i+1];
+        double L  = seg_lengths[i];
+        sum_len += L;
+
+        double uc = 0.5 * (u0 + u1);
+        std::printf("i=%2d: u0=%.6f, u1=%.6f, uc=%.6f, seg_len=%.6f\n",
+                    i, u0, u1, uc, L);
+    }
+    std::printf("Sum of segment lengths = %.6f (should be ~ %.6f)\n",
+                sum_len, total_length);
+
+    return 0;
+}
+
+```
+
+---
+
+
 
 
