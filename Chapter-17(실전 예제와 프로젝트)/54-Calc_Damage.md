@@ -902,4 +902,12 @@ fn parse_minimal_h350_rad_s2() {
     println!("AIS 1+ Risk: {:?}, AIS 2+ Risk: {:?}, AIS 4+ Risk:  {:?}", ubric_risk[0], ubric_risk[1], ubric_risk[2]);
 }
 ```
+## 출력 결과
+```
+Damage : 0.242018
+AIS 1+ Risk: 14.1812, AIS 2+ Risk: 8.87355, AIS 4+ Risk: 0.308964
+UBRIC: 0.21062
+AIS 1+ Risk: 7.12238, AIS 2+ Risk: 4.54828, AIS 4+ Risk: 0.105092
+``
+
 ---
