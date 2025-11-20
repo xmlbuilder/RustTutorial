@@ -3,7 +3,7 @@
 - 입력:
 - 시간 배열 $t$
 - 벡터 데이터 $\vec {y}(t)$: 속도 또는 가속도
-- 단위 변환 벡터 $\mathrm{unit}=[\mathrm{time\_ scale},\mathrm{flag},\mathrm{scale}]$
+- 단위 변환 벡터 $\mathrm{unit}=[\mathrm{time\\_ scale},\mathrm{flag},\mathrm{scale}]$
 - 단위 변환 수행:
 
 $$
