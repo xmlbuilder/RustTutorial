@@ -65,6 +65,3 @@ fn substr_unicode(s: &str, offset: usize, len: usize) -> String {
 
 ---
 
-
----
-
