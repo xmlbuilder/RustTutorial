@@ -1005,7 +1005,7 @@ mod tests {
 
 # Projected Gradient Descent (PGD)
 
-이번엔 **Projected Gradient Descent (PGD)** 를 다항식 함수에 적용한 샘플 코드를 만들어 봄. 
+이번엔 **Projected Gradient Descent (PGD)** 를 다항식 함수에 적용한 샘플 코드를 만들어 봄.   
 PGD는 제약 조건이 있는 최적화 문제에서 유용하게 쓰입니다.
 
 ## 🎯 문제 정의: 제약 조건이 있는 다항식 최소화
