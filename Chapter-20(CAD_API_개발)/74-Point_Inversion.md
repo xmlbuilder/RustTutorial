@@ -68,7 +68,8 @@ $$
 ## ✅ 5. 개선된 구조 제안
 
 ```rust
-pub fn point_inversion_projected(&self, p: Point3D, u0: f64, max_iter: usize, tol: f64) -> Option<(f64, Vector3D)> {
+pub fn point_inversion_projected(&self, p: Point3D, u0: f64, max_iter: usize, tol: f64)
+    -> Option<(f64, Vector3D)> {
     let mut u = u0.clamp(self.kv.knots[self.degree as usize], self.kv.knots[self.ctrl.len()]);
     let mut step = 1.0;
     for _ in 0..max_iter {
@@ -165,7 +166,8 @@ pub fn eval_tangent(&self, u: f64) -> Option<Vector3D> {
 
 ### 2. point_inversion_gauss_newton(p: Point3D, u0: f64)
 ```rust
-pub fn point_inversion_gauss_newton(&self, p: Point3D, u0: f64, max_iter: usize, tol: f64) -> Option<(bool, f64, Vector3D, Vector3D)> {
+pub fn point_inversion_gauss_newton(&self, p: Point3D, u0: f64, max_iter: usize, tol: f64)
+    -> Option<(bool, f64, Vector3D, Vector3D)> {
     let mut u = u0.clamp(self.kv.knots[self.degree as usize], self.kv.knots[self.ctrl.len()]);
     for _ in 0..max_iter {
         let c = self.eval_point(u);
@@ -313,7 +315,8 @@ $$
 
 ### 🧩 구현
 ```rust
-pub fn point_inversion_newton_with_hessian(&self, p: Point3D, u0: f64, max_iter: usize, tol: f64) -> Option<(bool, f64, Vector3D, Vector3D)> {
+pub fn point_inversion_newton_with_hessian(&self, p: Point3D, u0: f64, max_iter: usize, tol: f64)
+    -> Option<(bool, f64, Vector3D, Vector3D)> {
     let mut u = u0.clamp(self.kv.knots[self.degree as usize], self.kv.knots[self.ctrl.len()]);
     for _ in 0..max_iter {
         let c = self.eval_point(u);
