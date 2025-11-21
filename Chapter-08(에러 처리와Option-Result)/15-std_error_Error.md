@@ -2,9 +2,9 @@
 
 std::error::Error와 관련내용을 정리
 
-# Rust 에러 처리 정리 (`std::error::Error` 중심)
+## Rust 에러 처리 정리 (`std::error::Error` 중심)
 
-## 1. 에러 처리 기본 구조
+### 1. 에러 처리 기본 구조
 - Rust 표준 라이브러리에는 `std::error::Error` 트레잇이 있음
 - 모든 에러 타입(`io::Error`, `fmt::Error`, 사용자 정의 에러 등`)은 이 트레잇을 구현 가능
 - 범용적으로 에러를 다루려면 `Result<T, Box<dyn Error>>` 형태를 사용
@@ -18,7 +18,7 @@ pub trait RunCommand {
 ```
 
 
-## 2. map_err와 ? 연산자
+### 2. map_err와 ? 연산자
 - ?는 Result<T, E>에서 Err(e)를 만나면 그대로 전파
 - map_err는 Err(e)를 다른 타입으로 변환할 때 사용
 - 예시:
@@ -30,7 +30,7 @@ let writer = BdfWriter::new(&self.path)
 - 여기서 e는 BdfWriter::new가 반환한 std::io::Error
 - 변환 후 Box<dyn Error>로 상위 함수에 전파됨
 
-## 3. e의 정체
+### 3. e의 정체
 - e는 호출한 함수가 반환한 Result<T, E>의 Err 값
 - 예: File::create(path)가 실패하면 Err(e) 반환, 이때 e는 std::io::Error
 - 직접 생성도 가능:
@@ -45,7 +45,7 @@ fn new(path: &str) -> Result<BdfWriter, io::Error> {
 }
 ```
 
-## 4. 사용자 정의 에러
+### 4. 사용자 정의 에러
 - std::error::Error 트레잇을 구현하면 내가 만든 에러도 Err(e)로 던질 수 있음
 ```rust
 use std::fmt;
@@ -82,12 +82,13 @@ fn do_something(flag: bool) -> Result<(), Box<dyn Error>> {
 ```
 
 
-## 5. 요약
+### 5. 요약
 - std::error::Error는 범용 에러 인터페이스
 - Box<dyn Error>로 감싸면 다양한 에러 타입을 한꺼번에 처리 가능
 - map_err로 변환, ?로 전파
 - e는 호출한 함수가 반환한 에러 객체
 - 사용자 정의 에러도 Error 트레잇을 구현하면 동일하게 던질 수 있음
+
 ---
 
 # anyhow
@@ -123,7 +124,7 @@ fn run() -> Result<()> {
 }
 ```
 
-## 2. 에러 메시지 추가 (Context)
+### 2. 에러 메시지 추가 (Context)
 - 에러가 발생했을 때 추가 설명을 붙일 수 있음
 ```rust
 use anyhow::{Result, Context};
@@ -142,7 +143,7 @@ Caused by: No such file or directory (os error 2)
 ```
 
 
-## 3. 커스텀 에러 생성
+### 3. 커스텀 에러 생성
 - anyhow! 매크로로 간단히 에러를 만들 수 있음
 ```rust
 use anyhow::{Result, anyhow};
