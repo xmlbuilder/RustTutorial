@@ -911,9 +911,12 @@ $$
 
 - 최소값 조건:
 
-$$
-\left\{ \, \begin{array}{l}\textstyle 6x+2y-4=0\\ ; \quad \textstyle 2x+2y+5=0\end{array}\right.
-$$
+{
+\begin{array}{l}
+  6x + 2y - 4 = 0 \\
+  2x + 2y + 5 = 0
+\end{array}
+}
 
 
 ### 🧮 연립방정식 풀기
