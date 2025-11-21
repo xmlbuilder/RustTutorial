@@ -149,7 +149,7 @@ fn main() {
 - 예를 들어, 함수 f(x,y)의 Hessian은 다음과 같습니다:
 
 $$
-H(f)=\left[ \begin{matrix}\frac{\partial ^2f}{\partial x^2}&\frac{\partial ^2f}{\partial x\partial y}\\ \frac{\partial ^2f}{\partial y\partial x}&\frac{\partial ^2f}{\partial y^2}\end{matrix}\right]
+H(f)=\left[ \begin{matrix}\frac{\partial ^2f}{\partial x^2}&\frac{\partial ^2f}{\partial x\partial y}\\ ; \quad \frac{\partial ^2f}{\partial y\partial x}&\frac{\partial ^2f}{\partial y^2}\end{matrix}\right]
 $$
 
 
@@ -198,13 +198,13 @@ $$
 - Gradient:
 
 $$
-\nabla f=\left[ \begin{matrix}\frac{\partial f}{\partial u}\\ \frac{\partial f}{\partial v}\end{matrix}\right] =\left[ \begin{matrix}r\cdot S_u\\ r\cdot S_v\end{matrix}\right]
+\nabla f=\left[ \begin{matrix}\frac{\partial f}{\partial u}\\ ; \quad \frac{\partial f}{\partial v}\end{matrix}\right] =\left[ \begin{matrix}r\cdot S_u\\ ; \quad r\cdot S_v\end{matrix}\right]
 $$
 
 - Hessian:
 
 $$
-H(f)=\left[ \begin{matrix}S_u\cdot S_u+r\cdot S_{uu}&S_u\cdot S_v+r\cdot S_{uv}\\ S_v\cdot S_u+r\cdot S_{vu}&S_v\cdot S_v+r\cdot S_{vv}\end{matrix}\right]
+H(f)=\left[ \begin{matrix}S_u\cdot S_u+r\cdot S_{uu}&S_u\cdot S_v+r\cdot S_{uv}\\ ; \quad S_v\cdot S_u+r\cdot S_{vu}&S_v\cdot S_v+r\cdot S_{vv}\end{matrix}\right]
 $$
 
 - ➡️ 이 행렬을 풀어야 최적의 (u,v)를 찾을 수 있습니다.
@@ -244,14 +244,14 @@ $$
 - 📌 Gradient (1차 도함수)
 
 $$
-\nabla f=\left[ \begin{matrix}\frac{\partial f}{\partial x}\\ \frac{\partial f}{\partial y}\end{matrix}\right] =\left[ \begin{matrix}6x+2y-4\\ 2x+2y+5\end{matrix}\right] 
+\nabla f=\left[ \begin{matrix}\frac{\partial f}{\partial x}\\ ; \quad \frac{\partial f}{\partial y}\end{matrix}\right] =\left[ \begin{matrix}6x+2y-4\\ ; \quad 2x+2y+5\end{matrix}\right] 
 $$
 
 
 - 📌 Hessian (2차 도함수 행렬)
 
 $$
-H(f)=\left[ \begin{matrix}\frac{\partial ^2f}{\partial x^2}&\frac{\partial ^2f}{\partial x\partial y}\\ \frac{\partial ^2f}{\partial y\partial x}&\frac{\partial ^2f}{\partial y^2}\end{matrix}\right] =\left[ \begin{matrix}6&2\\ 2&2\end{matrix}\right]
+H(f)=\left[ \begin{matrix}\frac{\partial ^2f}{\partial x^2}&\frac{\partial ^2f}{\partial x\partial y}\\ ; \quad \frac{\partial ^2f}{\partial y\partial x}&\frac{\partial ^2f}{\partial y^2}\end{matrix}\right] =\left[ \begin{matrix}6&2\\ ; \quad2&2\end{matrix}\right]
 $$
 
 
@@ -406,20 +406,20 @@ $$
 - 🧠 Gradient (1차 도함수)
 
 $$
-\nabla f(x,y)=\left[ \begin{matrix}\frac{\partial f}{\partial x}\\ \frac{\partial f}{\partial y}\end{matrix}\right] =\left[ \begin{matrix}6x+2y-4\\ 2x+2y+5\end{matrix}\right] 
+\nabla f(x,y)=\left[ \begin{matrix}\frac{\partial f}{\partial x}\\ ; \quad \frac{\partial f}{\partial y}\end{matrix}\right] =\left[ \begin{matrix}6x+2y-4\\ ; \quad 2x+2y+5\end{matrix}\right] 
 $$
 
 
 - 🧠 Hessian (2차 도함수 행렬)
 
 $$
-H(f)=\left[ \begin{matrix}6&2\\ 2&2\end{matrix}\right]
+H(f)=\left[ \begin{matrix}6&2\\ ; \quad 2&2\end{matrix}\right]
 $$ 
 
 - 🔁 Newton 반복 수식
 
 $$
-\left[ \begin{matrix}x_{k+1}\\ y_{k+1}\end{matrix}\right] =\left[ \begin{matrix}x_k\\ y_k\end{matrix}\right] -H^{-1}\cdot \nabla f(x_k,y_k)
+\left[ \begin{matrix}x_{k+1}\\ ; \quad y_{k+1}\end{matrix}\right] =\left[ \begin{matrix}x_k\\ ; \quad y_k\end{matrix}\right] -H^{-1}\cdot \nabla f(x_k,y_k)
 $$
 
 - 이 수식이 바로 newton_step(x, y) 함수에 해당합니다.
@@ -520,13 +520,13 @@ $$
 - Gradient (1차 도함수)
 
 $$
-\nabla f(x,y)=\left[ \begin{matrix}2x+y-6\\ x+2y-9\end{matrix}\right]
+\nabla f(x,y)=\left[ \begin{matrix}2x+y-6\\ ; \quad x+2y-9\end{matrix}\right]
 $$
 
 - Hessian (2차 도함수 행렬)
 
 $$
-H(f)=\left[ \begin{matrix}2&1\\ 1&2\end{matrix}\right]
+H(f)=\left[ \begin{matrix}2&1\\ ; \quad 1&2\end{matrix}\right]
 $$
 
 
@@ -616,7 +616,7 @@ $$
 - 문제 정의
 
 $$
-r_1(x)=x^2-2\\ r_2(x)=x-1
+r_1(x)=x^2-2\\ ; \quad r_2(x)=x-1
 $$
 
 $$
@@ -629,13 +629,13 @@ $$
 - 잔차 벡터:
 
 $$
-\mathbf{r}(x)=\left[ \begin{matrix}x^2-2\\ x-1\end{matrix}\right]
+\mathbf{r}(x)=\left[ \begin{matrix}x^2-2\\ ; \quad x-1\end{matrix}\right]
 $$
 
 - Jacobian (잔차의 도함수):
 
 $$
-J(x)=\left[ \begin{matrix}2x\\ 1\end{matrix}\right]
+J(x)=\left[ \begin{matrix}2x\\ ; \quad 1\end{matrix}\right]
 $$
 
 - Gauss-Newton 업데이트:
@@ -906,13 +906,13 @@ $$
 - Gradient:
 
 $$
-\nabla f=\left[ \begin{matrix}6x+2y-4\\ 2x+2y+5\end{matrix}\right]
+\nabla f=\left[ \begin{matrix}6x+2y-4\\ ; \quad 2x+2y+5\end{matrix}\right]
 $$
 
 - 최소값 조건:
 
 $$
-\left\{ \, \begin{array}{l}\textstyle 6x+2y-4=0\\ \textstyle 2x+2y+5=0\end{array}\right.
+\left\{ \, \begin{array}{l}\textstyle 6x+2y-4=0\\ ; \quad \textstyle 2x+2y+5=0\end{array}\right.
 $$
 
 
@@ -920,7 +920,7 @@ $$
 - 두 번째 식에서 $x=-y-2.5$
 - 첫 번째 식에 대입:
 $$
-6(-y-2.5)+2y-4=0\\ \quad -6y-15+2y-4=0\\ \quad -4y=19\Rightarrow y=-4.75\\ \quad x=-(-4.75)-2.5=2.25
+6(-y-2.5)+2y-4=0\\ ; \quad \quad -6y-15+2y-4=0\\ ; \quad \quad -4y=19\Rightarrow y=-4.75\\ ; \quad \quad x=-(-4.75)-2.5=2.25
 $$
 
 - ✅ 정답: 
