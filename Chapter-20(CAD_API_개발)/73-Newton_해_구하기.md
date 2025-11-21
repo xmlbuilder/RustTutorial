@@ -1031,7 +1031,7 @@ $$
 x_{k+1}=\Pi _{\mathcal{C}}(x_k-\alpha \nabla f(x_k))
 $$
 
-- $\Pi _{\mathcal{C}}$: 제약 집합 \mathcal{C}로의 투영 연산
+- $\Pi _{\mathcal{C}}$: 제약 집합 $\mathcal{C}$ 로의 투영 연산
 - 여기선 $\Pi _{[0,2]}(x)=\min (\max (x,0),2)$
 
 
