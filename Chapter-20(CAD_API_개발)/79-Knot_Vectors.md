@@ -55,10 +55,36 @@ $$
 
 ### 도함수 (Piegl & Tiller A2.3)
 - k차 도함수:
+Piegl & Tiller의 Algorithm A2.3은 먼저 **정규화되지 않은** k차 도함수 값을 계산하고,  
+마지막에 차수 p에 대한 하강 곱(falling factorial)으로 스케일링합니다.
+
+- 즉, 오른쪽의 스케일링 인자만 남기면
 
 $$
-\frac{d^k}{du^k}N_{i,p}(u)=\mathrm{Algorithm\  A2.3\  결과}\times p(p-1)\dots (p-k+1)
+p(p-1)\cdots (p-k+1)\; =\; \frac{p!}{(p-k)!}\; =\; (p)_k
 $$
+
+이며, $k>p$ 이면 $\frac{d^k}{du^k}N_{i,p}(u)=0$ 입니다.
+
+- 간단 표기:
+
+$$
+\frac{d^k}{du^k}N_{i,p}(u)\; =\; D_{i,p}^{(k)}(u)\; \cdot \; \frac{p!}{(p-k)!},
+$$
+
+여기서 $D_{i,p}^{(k)}(u)$ 는 Algorithm A2.3으로 얻은 비스케일 값입니다.
+
+- 낙하곱(falling factorial) 표기:
+
+$$
+\frac{d^k}{du^k}N_{i,p}(u)\; =\; D_{i,p}^{(k)}(u)\; \cdot \; (p)_k,\quad (p)_k=p(p-1)\cdots (p-k+1).
+$$
+
+- 자주 헷갈리는 점
+    - 끝점 $u=U[n+1]$ 등 경계 특수값에서는 기저함수와 도함수가 특수 처리를 필요로 합니다 (예: 마지막 기저만 1).
+    - k=0이면 도함수는 원래 기저함수이며, 스케일링 인자는 1이 됩니다.
+    - k>p인 도함수는 0입니다.
+
 
 ## 2. 코드 점검 (문제 가능성)
 
