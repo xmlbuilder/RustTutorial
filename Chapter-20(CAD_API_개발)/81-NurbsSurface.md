@@ -44,7 +44,7 @@ $$
 - U 방향:
 
 $$
-Q_k(v)=\sum _jM_{j,q}(v) P_{(i=k),j},\quad S_u=\sum _kN'_{k,p}(u) Q_k(v)
+Q_k(v)=\sum _jM_{j,q}(v) P_{(i=k),j} , \quad S_u=\sum _kN'_{k,p}(u) Q_k(v)
 $$
 
 - V 방향:
