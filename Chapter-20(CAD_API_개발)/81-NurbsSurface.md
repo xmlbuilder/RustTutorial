@@ -28,8 +28,10 @@ $$
 - 라셔널 처리: 국소 스텐실 $(p+1)\times (q+1)$ 에서
 
 $$
-\begin{aligned}x_w&=\sum N_iM_j\, (x_{ij}w_{ij}),\quad y_w=\sum N_iM_j\, (y_{ij}w_{ij}),\\ z_w&=\sum N_iM_j\, (z_{ij}w_{ij}),\quad w=\sum N_iM_j\, w_{ij}\end{aligned}\mathbf{S}=\left\{ \, \begin{array}{ll}\textstyle (x_w/w,\; y_w/w,\; z_w/w),&\textstyle w\neq 0\\ \textstyle (x_w,\; y_w,\; z_w),&\textstyle w=0\mathrm{(퇴화\  예외)}\end{array}\right. 
+\begin{aligned}x_w&=\sum _i\sum _jN_{i,p}(u)\, M_{j,q}(v)\, x_{ij}\, w_{ij},\\ y_w&=\sum _i\sum _jN_{i,p}(u)\, M_{j,q}(v)\, y_{ij}\, w_{ij},\\ z_w&=\sum _i\sum _jN_{i,p}(u)\, M_{j,q}(v)\, z_{ij}\, w_{ij},\\ w&=\sum _i\sum _jN_{i,p}(u)\, M_{j,q}(v)\, w_{ij}.\end{aligned}
 $$
+
+
 
 - 비라셔널: $\sum N_iM_j\, (x_{ij},y_{ij},z_{ij})$ 로 단순 합.
 
