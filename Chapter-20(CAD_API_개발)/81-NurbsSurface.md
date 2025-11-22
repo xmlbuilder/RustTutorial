@@ -28,12 +28,12 @@ $$
 - 라셔널 처리: 국소 스텐실 $(p+1)\times (q+1)$ 에서
 
 $$
-\begin{aligned}x_w&=\sum _i\sum _jN_{i,p}(u)\, M_{j,q}(v)\, x_{ij}\, w_{ij},\\ y_w&=\sum _i\sum _jN_{i,p}(u)\, M_{j,q}(v)\, y_{ij}\, w_{ij},\\ z_w&=\sum _i\sum _jN_{i,p}(u)\, M_{j,q}(v)\, z_{ij}\, w_{ij},\\ w&=\sum _i\sum _jN_{i,p}(u)\, M_{j,q}(v)\, w_{ij}.\end{aligned}
+\begin{aligned}x_w&=\sum _i\sum _jN_{i,p}(u)\, M_{j,q}(v) x_{ij} w_{ij},\\ \quad y_w&=\sum _i\sum _jN_{i,p}(u) M_{j,q}(v) y_{ij}\, w_{ij},\\ \quad z_w&=\sum _i\sum _jN_{i,p}(u)\, M_{j,q}(v)\, z_{ij} w_{ij},\\ \quad w&=\sum _i\sum _jN_{i,p}(u) M_{j,q}(v) w_{ij}.\end{aligned}
 $$
 
 
 
-- 비라셔널: $\sum N_iM_j\, (x_{ij},y_{ij},z_{ij})$ 로 단순 합.
+- 비라셔널: $\sum N_iM_j (x_{ij},y_{ij},z_{ij})$ 로 단순 합.
 
 ### 검증 포인트:
 - 합리 표면의 동차합 유도와 일치.
@@ -44,13 +44,13 @@ $$
 - U 방향:
 
 $$
-Q_k(v)=\sum _jM_{j,q}(v)\, P_{(i=k),j},\quad S_u=\sum _kN'_{k,p}(u)\, Q_k(v)
+Q_k(v)=\sum _jM_{j,q}(v) P_{(i=k),j},\quad S_u=\sum _kN'_{k,p}(u) Q_k(v)
 $$
 
 - V 방향:
 
 $$
-R_{\ell }(u)=\sum _iN_{i,p}(u)\, P_{i,(j=\ell )},\quad S_v=\sum _{\ell }M'_{\ell ,q}(v)\, R_{\ell }(u)
+R_{\ell }(u)=\sum _iN_{i,p}(u) P_{i,(j=\ell )},\quad S_v=\sum _{\ell }M'_{\ell ,q}(v) R_{\ell }(u)
 $$
 
 ### 주의:
@@ -139,7 +139,7 @@ $$
 - 아이디어: 라셔널일 때 C,W와 그 미분을 계산해 몫의 미분을 적용.
 
 $$
-C(u,v)=\sum N_iM_j\, w_{ij}\, P_{ij}^E,\quad W(u,v)=\sum N_iM_j\, w_{ij}C_u=\sum N'_iM_j\, w_{ij}\, P_{ij}^E,\quad W_u=\sum N'_iM_j\, w_{ij}- S_u=(C_uW-CW_u)/W^2, 
+C(u,v)=\sum N_iM_j w_{ij} P_{ij}^E,\quad W(u,v)=\sum N_iM_j w_{ij}C_u=\sum N'_iM_j w_{ij} P_{ij}^E,\quad W_u=\sum N'_iM_j w_{ij}- S_u=(C_uW-CW_u)/W^2, 
 $$
 
 $S_v$ 도 동일.
