@@ -53,14 +53,14 @@ $$
 ## 📘 Basis 관련 함수 문서화 표
 | 함수명               | 설명                              | 수식/로직 요약                                 | 주의점                         |
 |----------------------|-----------------------------------|------------------------------------------------|--------------------------------|
-| basis_funs           | p차 기저함수 계산                 | Cox–de Boor 재귀 공식                          | 마지막 knot 특수 처리 필요     |
-| ders_basis_funs      | 기저함수 도함수 계산              | Piegl & Tiller A2.3 + 스케일링                 | k > p일 때 0, EPSILON 처리     |
-| find_span            | u에 대한 span 인덱스 찾기         | 이진 탐색                                      | 경계값 처리 필요               |
-| find_span_multi      | span + multiplicity 반환          | span 찾고 중복 knot 개수 계산                  | tolerance 기반 비교            |
-| find_span_multi_snap | u 근처 knot로 snap 후 span 반환   | min_knot_dist 기준으로 snap                    | snap 후 다시 span 계산         |
-| multiplicity         | 특정 knot의 중복 개수 계산        | 좌우로 동일한 값 개수 세기                     | 음수 인덱스 방지               |
-| is_clamped_with_ends | 양 끝이 clamped인지 확인          | 앞뒤 p+1개가 동일한지 검사                     | scale 기반 비교                |
-| style                | KnotVector 유형 판별              | clamped 여부 + 내부 간격 uniform 여부          | Piecewise Bézier 판별 포함     |
+| `basis_funs`           | p차 기저함수 계산                 | Cox–de Boor 재귀 공식                          | 마지막 knot 특수 처리 필요     |
+| `ders_basis_funs`      | 기저함수 도함수 계산              | Piegl & Tiller A2.3 + 스케일링                 | k > p일 때 0, EPSILON 처리     |
+| `find_span`            | u에 대한 span 인덱스 찾기         | 이진 탐색                                      | 경계값 처리 필요               |
+| `find_span_multi`      | span + multiplicity 반환          | span 찾고 중복 knot 개수 계산                  | tolerance 기반 비교            |
+| `find_span_multi_snap` | u 근처 knot로 snap 후 span 반환   | min_knot_dist 기준으로 snap                    | snap 후 다시 span 계산         |
+| `multiplicity`         | 특정 knot의 중복 개수 계산        | 좌우로 동일한 값 개수 세기                     | 음수 인덱스 방지               |
+| `is_clamped_with_ends` | 양 끝이 clamped인지 확인          | 앞뒤 p+1개가 동일한지 검사                     | scale 기반 비교                |
+| `style`                | KnotVector 유형 판별              | clamped 여부 + 내부 간격 uniform 여부          | Piecewise Bézier 판별 포함     |
 
 
 ## ✨ 추가 설명이 필요한 항목
@@ -85,19 +85,19 @@ pub struct KnotVector {
 ```
 
 - Knot 벡터는 B-spline/NURBS 정의에 필요한 파라미터 분할점 집합
-- 항상 비감소(non-decreasing) 순서여야 함
-- 길이: m+1=n+p+2
+- 항상 `비감소(non-decreasing)` 순서여야 함
+- 길이: $m+1=n+p+2$
 
 ### 🔧 KnotVector 주요 메서드
 
 | 메서드명                  | 설명                         | 반환값         |
 |---------------------------|------------------------------|----------------|
-| new(knots)                | Knot 벡터 생성               | Result<Self>   |
-| len()                     | Knot 개수 반환               | Index          |
-| first(), last()           | 첫/마지막 knot 값 반환       | Real           |
-| is_non_decreasing()       | 비감소 여부 확인             | bool           |
-| check_degree_vs_cp(p,n)   | 차수와 제어점 수 일치 검사   | Result<()>     |
-| as_slice()                | 내부 벡터 참조 반환          | &[Real]        |
+| `new(knots)`                | Knot 벡터 생성               | Result<Self>   |
+| `len()`                     | Knot 개수 반환               | Index          |
+| `first()`, `last()`           | 첫/마지막 knot 값 반환       | Real           |
+| `is_non_decreasing()`       | 비감소 여부 확인             | bool           |
+| `check_degree_vs_cp(p,n)`   | 차수와 제어점 수 일치 검사   | Result<()>     |
+| `as_slice()`                | 내부 벡터 참조 반환          | &[Real]        |
 
 
 
@@ -105,38 +105,38 @@ pub struct KnotVector {
 
 | 메서드명                     | 설명                                      |
 |------------------------------|-------------------------------------------|
-| find_span(n, p, u)           | 주어진 u 값에 해당하는 span 인덱스 반환    |
-| find_span_multi(u, p)        | span 인덱스와 해당 knot의 중복 개수 반환   |
-| find_span_multi_snap(u, p, d)| u를 근접 knot 값으로 snap 후 span 반환     |
-| multiplicity(i)              | 특정 knot 인덱스의 중복 개수 계산          |
-| style(p, n)                  | KnotVector 유형 판별 (Clamped/Uniform 등) |
-| is_clamped(p, n)             | KnotVector가 양 끝에서 clamped인지 확인   |
+| `find_span(n, p, u)`           | 주어진 u 값에 해당하는 span 인덱스 반환    |
+| `find_span_multi(u, p)`        | span 인덱스와 해당 knot의 중복 개수 반환   |
+| `find_span_multi_snap(u, p, d)`| u를 근접 knot 값으로 snap 후 span 반환     |
+| `multiplicity(i)`              | 특정 knot 인덱스의 중복 개수 계산          |
+| `style(p, n)`                  | KnotVector 유형 판별 (Clamped/Uniform 등) |
+| `is_clamped(p, n)`             | KnotVector가 양 끝에서 clamped인지 확인   |
 
 ### 🔁 조정 및 변형
 
 | 메서드명            | 설명                                   |
 |---------------------|----------------------------------------|
-| offset(delta)       | 모든 knot 값에 delta를 더해 이동        |
-| scale(factor)       | 모든 knot 값에 factor를 곱해 크기 조정  |
-| normalize()         | knot 벡터를 [0,1] 구간으로 정규화       |
-| reverse_in_place()  | knot 벡터를 반전하여 역순으로 변환      |
+| `offset(delta)`       | 모든 knot 값에 delta를 더해 이동        |
+| `scale(factor)`       | 모든 knot 값에 factor를 곱해 크기 조정  |
+| `normalize()`         | knot 벡터를 [0,1] 구간으로 정규화       |
+| `reverse_in_place()`  | knot 벡터를 반전하여 역순으로 변환      |
 
 
 ### 🧪 Basis 관련 함수
 
 | 함수명                          | 설명                          | 수식/로직 요약                          | 주의점                          |
 |---------------------------------|-------------------------------|-----------------------------------------|---------------------------------|
-| basis_funs(span, u, p)          | p차 B-spline 기저함수 계산    | Cox–de Boor 재귀 공식                   | 마지막 knot 특수 처리 필요, EPSILON 분모 안정화 |
-| ders_basis_funs(span, u, p, n)  | 기저함수 도함수 계산 (최대 n차)| Piegl & Tiller Algorithm A2.3 + 스케일링 | k > p일 때 0, 경계값 처리 필요   |
+| `basis_funs(span, u, p)`          | p차 B-spline 기저함수 계산    | Cox–de Boor 재귀 공식                   | 마지막 knot 특수 처리 필요, EPSILON 분모 안정화 |
+| `ders_basis_funs(span, u, p, n)`  | 기저함수 도함수 계산 (최대 n차)| Piegl & Tiller Algorithm A2.3 + 스케일링 | k > p일 때 0, 경계값 처리 필요   |
 
 ### 📁 기타 유틸리티 함수
 
 | 함수명                                   | 설명                                      |
 |------------------------------------------|-------------------------------------------|
-| on_chord_length_params(points)           | 점 간 거리 기반 파라미터 (0..1 정규화)     |
-| on_uniform_length_params(points)         | 균일 간격 파라미터 생성                   |
-| on_averaging_internal_curve_knots(params,p) | Averaging formula 기반 내부 knot 생성   |
-| on_clamped_uniform_knot_vector(p,n)      | Clamped uniform knot 벡터 생성             |
+| `on_chord_length_params(points)`           | 점 간 거리 기반 파라미터 (0..1 정규화)     |
+| `on_uniform_length_params(points)`         | 균일 간격 파라미터 생성                   |
+| `on_averaging_internal_curve_knots(params,p)` | Averaging formula 기반 내부 knot 생성   |
+| `on_clamped_uniform_knot_vector(p,n)`      | Clamped uniform knot 벡터 생성             |
 
 ---
 
@@ -203,7 +203,7 @@ fn ders_basis_funs(&self, span: usize, u: f64, p: usize, n: usize) -> Vec<Vec<f6
 ```
 
 #### 적용 수식
-- Piegl & Tiller Algorithm A2.3을 구현
+- `Piegl & Tiller Algorithm A2.3` 을 구현
 - 먼저 ndu 테이블을 만들어서 기저함수와 도함수의 중간 값을 저장
 - 마지막에 스케일링:
 
