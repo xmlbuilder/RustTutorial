@@ -7,7 +7,11 @@ B-spline Basis Function 관련 수식들을 정리하고, 수학적으로 올바
 
 
 $$
-N_{i,0}(u)=\left\{ \, \begin{array}{ll}\textstyle 1&\textstyle \mathrm{if\  }u_i\leq u<u_{i+1},\\ \textstyle 0&\textstyle \mathrm{otherwise}\end{array}\right.
+N_{i,0}(u) =
+\begin{cases}
+1 & \text{if } u_i \le u < u_{i+1}, \\
+0 & \text{otherwise}
+\end{cases}
 $$
 
 - 정의역은 $[u_i,u_{i+1})$
