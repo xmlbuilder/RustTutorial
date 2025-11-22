@@ -231,7 +231,7 @@ fn find_span(&self, n: usize, p: usize, u: f64) -> usize {
 - Span 찾기 알고리즘:
 
 $$
-\mathrm{FindSpan}(u)=\max \{ i\mid u_i\leq u<u_{i+1}\}
+\mathrm{FindSpan}(u) = \max_{i} \{\, i \mid u_i \le u < u_{i+1} \,\}
 $$
 
 
@@ -258,8 +258,9 @@ fn multiplicity(&self, mut knot_index: isize) -> usize {
 - Knot 중복 개수:
 
 $$
-m(u_i)=\# \{ j\mid u_j=u_i\}
+m(u_i) = \lvert \{\, j \mid u_j = u_i \,\} \rvert
 $$
+
 
 
 #### Multiplicity definition clarified
@@ -295,7 +296,7 @@ $$
 | `basis_funs(span,u,p)`   | Cox–de Boor 재귀 공식                       | p차 기저함수 계산                      |
 | `ders_basis_funs(span,u,p,n)` | Piegl & Tiller Algorithm A2.3 + 스케일링 | 기저함수 도함수 계산                   |
 | `find_span(n,p,u)`       | $FindSpan(u) = max{i \| u_i ≤ u < u_{i+1}}$    | u에 해당하는 span 인덱스 찾기          |
-| `multiplicity(i)`        | $m(u_i) = # { j \| u_j = u_i }$                | 특정 knot의 중복 개수 계산             |
+| `multiplicity(i)`        | $m(u_i) = \lvert \{ j \mid u_j = u_i \} \rvert$                | 특정 knot의 중복 개수 계산             |
 
 - 👉 이렇게 보면 함수 소스가 교과서적 수식 정의와 정확히 매핑되어 있음을 알 수 있습니다.
 
