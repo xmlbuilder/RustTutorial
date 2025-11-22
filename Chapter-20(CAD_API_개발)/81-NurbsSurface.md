@@ -44,13 +44,13 @@ $$
 - U 방향:
 
 $$
-Q_k(v)=\sum _jM_{j,q}(v) P_{(i=k),j} , \quad S_u=\sum _kN'_{k,p}(u) Q_k(v)
+Q_k(v)=\sum _jM_{j,q}(v) P_{(i=k),j} \quad S_u=\sum _kN'_{k,p}(u) Q_k(v)
 $$
 
 - V 방향:
 
 $$
-R_{\ell }(u)=\sum _iN_{i,p}(u) P_{i,(j=\ell )},\quad S_v=\sum _{\ell }M'_{\ell ,q}(v) R_{\ell }(u)
+R_{\ell }(u)=\sum _iN_{i,p}(u) P_{i,(j=\ell )} \quad S_v=\sum _{\ell }M'_{\ell ,q}(v) R_{\ell }(u)
 $$
 
 ### 주의:
@@ -58,7 +58,7 @@ $$
 라셔널에서는 몫의 미분(quotient rule) 필요:  
 
 $$
-S=\frac{C}{W},\quad S_u=\frac{C_uW-CW_u}{W^2},\quad S_v=\frac{C_vW-CW_v}{W^2}
+S=\frac{C}{W}, \quad S_u=\frac{C_uW-CW_u}{W^2}, \quad S_v=\frac{C_vW-CW_v}{W^2}
 $$
 
 - 현재 `evaluate_derivative_u/v` 는 가중치 미분항을 포함하지 않아 라셔널에는 근사입니다.  
