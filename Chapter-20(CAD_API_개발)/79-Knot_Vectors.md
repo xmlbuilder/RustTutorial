@@ -48,6 +48,8 @@ N_{i,0}(u)=
 \end{cases}
 $$
 
+-
+
 $$
 N_{i,p}(u)=
 \frac{u-u_i}{u_{i+p}-u_i}\,N_{i,p-1}(u)
