@@ -61,7 +61,7 @@ Piegl & Tiller의 Algorithm A2.3은 먼저 **정규화되지 않은** k차 도�
 - 즉, 오른쪽의 스케일링 인자만 남기면
 
 $$
-p(p-1)\cdots (p-k+1)\; =\; \frac{p!}{(p-k)!}\; =\; (p)_k
+p(p-1)\cdots (p-k+1) = \frac{p!}{(p-k)!} = (p)_k
 $$
 
 이며, $k>p$ 이면 $\frac{d^k}{du^k}N_{i,p}(u)=0$ 입니다.
@@ -69,7 +69,7 @@ $$
 - 간단 표기:
 
 $$
-\frac{d^k}{du^k}N_{i,p}(u)\; =\; D_{i,p}^{(k)}(u)\; \cdot \; \frac{p!}{(p-k)!},
+\frac{d^k}{du^k}N_{i,p}(u) = D_{i,p}^{(k)}(u) \cdot  \frac{p!}{(p-k)!},
 $$
 
 여기서 $D_{i,p}^{(k)}(u)$ 는 Algorithm A2.3으로 얻은 비스케일 값입니다.
@@ -77,7 +77,7 @@ $$
 - 낙하곱(falling factorial) 표기:
 
 $$
-\frac{d^k}{du^k}N_{i,p}(u)\; =\; D_{i,p}^{(k)}(u)\; \cdot \; (p)_k,\quad (p)_k=p(p-1)\cdots (p-k+1).
+\frac{d^k}{du^k}N_{i,p}(u) = D_{i,p}^{(k)}(u) \cdot  (p)_k,\quad (p)_k=p(p-1)\cdots (p-k+1).
 $$
 
 - 자주 헷갈리는 점
