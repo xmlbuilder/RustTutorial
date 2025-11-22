@@ -25,7 +25,7 @@ N_{i,p}(u)=\frac{u-u_i}{u_{i+p}-u_i}\cdot N_{i,p-1}(u)+\frac{u_{i+p+1}-u}{u_{i+p
 $$
 
 - 두 항 모두 분모가 0일 수 있으므로, 코드에서는 EPSILON으로 안정화 처리
-- 정의역은 [u_i,u_{i+p+1})
+- 정의역은 $[u_i,u_{i+p+1})$
 
 ## 3️⃣ 도함수 $\frac{d^k}{du^k}N_{i,p}(u)$
 - Piegl & Tiller Algorithm A2.3 기반
