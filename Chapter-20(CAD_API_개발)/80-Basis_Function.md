@@ -231,7 +231,7 @@ fn find_span(&self, n: usize, p: usize, u: f64) -> usize {
 - Span 찾기 알고리즘:
 
 $$
-\mathrm{FindSpan}(u) = \max_{i} \{\, i \mid u_i \le u < u_{i+1} \,\}
+\mathrm{FindSpan}(u) = \max_{i} \{ i \mid u_i \le u < u_{i+1} \}
 $$
 
 
@@ -258,7 +258,7 @@ fn multiplicity(&self, mut knot_index: isize) -> usize {
 - Knot 중복 개수:
 
 $$
-m(u_i) = \lvert \{\, j \mid u_j = u_i \,\} \rvert
+m(u_i) = \lvert \{ j \mid u_j = u_i \} \rvert
 $$
 
 
