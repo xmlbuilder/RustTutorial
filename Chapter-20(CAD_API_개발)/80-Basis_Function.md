@@ -274,11 +274,11 @@ $$
     - 인덱스 i를 중심으로 좌우로 같은 값이 연속되는 길이를 더합니다.
 
 $$
-m(i)\; =\; r_{\mathrm{left}}(i)\; +\; r_{\mathrm{right}}(i)\; +\; 1
+m(i) = r_{\mathrm{left}}(i) + r_{\mathrm{right}}(i) + 1
 $$
 
 $$
-r_{\mathrm{left}}(i)=\max \{ \, r\geq 0\; |\; u_{i-r}=u_i\, \} ,\quad r_{\mathrm{right}}(i)=\max \{ \, r\geq 0\; |\; u_{i+r}=u_i\, \}
+r_{\mathrm{left}}(i)=\max \{ \, r\geq 0 | u_{i-r}=u_i\, \} ,\quad r_{\mathrm{right}}(i)=\max \{ \, r\geq 0 | u_{i+r}=u_i\, \}
 $$
 
 
