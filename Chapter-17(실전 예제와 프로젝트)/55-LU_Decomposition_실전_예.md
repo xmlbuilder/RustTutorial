@@ -153,23 +153,20 @@ $$
 
 $$
 Ly=b
-$$
+$$  
 
-    - 전진 대입으로 y 구함.
-
-- 그 다음
+- 전진 대입으로 y 구하고 그 다음
 
 $$
 Ux=y
 $$
 
-    - 후진 대입으로 x 구함.
+- 후진 대입으로 x 구함.
 
 ## ✨ 정리된 흐름- `on_m_ludcmp_full` → 행렬 `A` 를 `LU` 로 분해
 - `on_lu_solve` → LU를 이용해 $Ax=b$ 를 푼다
 - Forward substitution $(Ly=b)$
 - Backward substitution $(Ux=y)$
-
 
 ---
 
