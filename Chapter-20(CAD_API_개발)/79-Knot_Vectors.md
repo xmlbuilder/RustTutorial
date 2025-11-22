@@ -88,16 +88,16 @@ $$
 
 ## 2. 코드 점검 (문제 가능성)
 
-- is_clamped_full:
-self.last().unwrap() 호출 → Vec<f64> slice에는 last()가 없음. self[self.len()-1]로 수정 필요.
-- split_mid / split_at_value:
-index 처리 주의 필요. 특히 multiplicity 계산 시 underflow 위험.
-- basis_funs:
-denom = right[r+1] + left[j-r] → Piegl & Tiller 공식과 동일. 단, EPSILON 처리 적절.
-- ders_basis_funs:
-Piegl & Tiller A2.3 구현. scaling factor 적용도 올바름. 다만 인덱스 변환 부분에서 rk+j 음수 가능성 주의.
-- on_averaging_internal_surface_knots:
-averaging formula 구현은 맞음. 단, params가 단조 증가하지 않으면 잘못된 knot 생성 가능.
+- is_clamped_full:  
+    self.last().unwrap() 호출 → Vec<f64> slice에는 last()가 없음. self[self.len()-1]로 수정 필요.
+- split_mid / split_at_value:  
+    index 처리 주의 필요. 특히 multiplicity 계산 시 underflow 위험.
+- basis_funs:  
+    denom = right[r+1] + left[j-r] → Piegl & Tiller 공식과 동일. 단, EPSILON 처리 적절.
+- ders_basis_funs:  
+    Piegl & Tiller A2.3 구현. scaling factor 적용도 올바름. 다만 인덱스 변환 부분에서 rk+j 음수 가능성 주의.
+- on_averaging_internal_surface_knots:  
+    averaging formula 구현은 맞음. 단, params가 단조 증가하지 않으면 잘못된 knot 생성 가능.
 
 
 ## 3. 함수 문서화 표
