@@ -28,7 +28,7 @@ $$
 - 라셔널 처리: 국소 스텐실 $(p+1)\times (q+1)$ 에서
 
 $$
-\begin{aligned}x_w&=\sum _i\sum _jN_{i,p}(u)\, M_{j,q}(v) x_{ij} w_{ij},\\ \quad y_w&=\sum _i\sum _jN_{i,p}(u) M_{j,q}(v) y_{ij}\, w_{ij},\\ \quad z_w&=\sum _i\sum _jN_{i,p}(u)\, M_{j,q}(v)\, z_{ij} w_{ij},\\ \quad w&=\sum _i\sum _jN_{i,p}(u) M_{j,q}(v) w_{ij}.\end{aligned}
+\begin{aligned}x_w&=\sum _i\sum _jN_{i,p}(u) M_{j,q}(v) x_{ij} w_{ij},\\ \quad y_w&=\sum _i\sum _jN_{i,p}(u) M_{j,q}(v) y_{ij} w_{ij},\\ \quad z_w&=\sum _i\sum _jN_{i,p}(u) M_{j,q}(v) z_{ij} w_{ij},\\ \quad w&=\sum _i\sum _jN_{i,p}(u) M_{j,q}(v) w_{ij}.\end{aligned}
 $$
 
 
