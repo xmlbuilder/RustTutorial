@@ -148,7 +148,8 @@ $S_v$ 도 동일.
 - $\lambda =\alpha \cdot \mathrm{trace}(J^TJ)$ 로 시작 $(\alpha \approx 10^{-6})$.
 - 적응: 스텝 후 목적값 감소 시 $\alpha \leftarrow 0.2\alpha$ , 실패 시 $\alpha \leftarrow 5\alpha$ 로 키움.
 - 효과: 특이/비선형 구간에서 안정.
-### 3) 백트래킹 라인서치- (du,dv) 스텝 시도 후 f가 증가하면 절반씩 줄여 최대 5회 재시도.
+### 3) 백트래킹 라인서치
+- (du,dv) 스텝 시도 후 f가 증가하면 절반씩 줄여 최대 5회 재시도.
 - 효과: 과도한 스텝 방지, 수렴 가속.
 ### 4) 파라미터 허용오차 스케일링- 고정 1e-10 대신
 
@@ -171,8 +172,9 @@ $$
 - 최근 M회(예: 5) 동안 개선량 < $\epsilon _f$ 면 plateau로 종료.
 - 조건수 악화 감지 시 종료/댐핑 증가.
 
+---
 
-
+## 소스 코드
 
 ```rust
 use crate::core::basis::{on_basis_func, on_find_span_index};
@@ -200,14 +202,16 @@ use std::collections::{BTreeSet, VecDeque};
 use std::fmt;
 use std::fs::File;
 use std::io::Write;
-
+```
+```rust
 #[derive(Debug, Clone)]
 pub struct NurbsIsoCurveData {
     pub degree: Degree,
     pub ctrl: Vec<Point4D>, // NURBS control points (x,y,z,w)
     pub knot: KnotVector,
 }
-
+```
+```rust
 #[derive(Debug, Clone, Copy)]
 pub struct LoftOptions {
     /// Loft(섹션 방향) smoothing 수행 여부
@@ -224,7 +228,8 @@ pub struct LoftOptions {
     /// corner 판정 시 무시할 최소 segment 길이 (예: 모델 스케일의 1e-3 정도)
     pub corner_min_edge_length: Real,
 }
-
+```
+```rust
 impl Default for LoftOptions {
     fn default() -> Self {
         LoftOptions {
@@ -237,7 +242,8 @@ impl Default for LoftOptions {
         }
     }
 }
-
+```
+```rust
 #[derive(Debug, Clone)]
 pub struct SurfaceMesh {
     pub vertices: Vec<Point3D>,
@@ -245,7 +251,8 @@ pub struct SurfaceMesh {
     pub uvs: Vec<(Real, Real)>, // (u, v)
     pub indices: Vec<[u32; 3]>, // 삼각형 인덱스
 }
-
+```
+```rust
 impl SurfaceMesh {
     pub fn new() -> Self {
         SurfaceMesh {
@@ -256,13 +263,15 @@ impl SurfaceMesh {
         }
     }
 }
-
+```
+```rust
 #[derive(Clone, Copy, Debug)]
 struct ParamQuad {
     // UV corners: (u,v) in order [ (u0,v0), (u1,v0), (u1,v1), (u0,v1) ]
     uv: [(Real, Real); 4],
 }
-
+```
+```rust
 impl ParamQuad {
     fn uv_bbox(&self) -> (Real, Real, Real, Real) {
         let mut umin = self.uv[0].0;
@@ -286,7 +295,8 @@ impl ParamQuad {
         (umin, umax, vmin, vmax)
     }
 }
-
+```
+```rust
 // UV 좌표 한 점
 pub type UV = (Real, Real);
 
@@ -295,7 +305,8 @@ pub type UV = (Real, Real);
 pub struct FeatureCurveUV {
     pub points: Vec<UV>, // 순서대로 이어지는 polyline
 }
-
+```
+```rust
 /// Adaptive Tessellation 파라미터
 #[derive(Debug, Clone)]
 pub struct AdaptiveTessellationOptions {
@@ -323,7 +334,8 @@ pub struct AdaptiveTessellationOptions {
     /// 보존하고 싶은 feature edge (UV polyline)
     pub feature_curves: Vec<FeatureCurveUV>,
 }
-
+```
+```rust
 impl Default for AdaptiveTessellationOptions {
     fn default() -> Self {
         AdaptiveTessellationOptions {
@@ -338,7 +350,8 @@ impl Default for AdaptiveTessellationOptions {
         }
     }
 }
-
+```
+```rust
 #[derive(Debug, Clone)]
 pub struct NurbsSurface {
     pub pu: Degree,
@@ -349,7 +362,8 @@ pub struct NurbsSurface {
     pub ku: KnotVector,
     pub kv: KnotVector,
 }
-
+```
+```rust
 impl NurbsSurface {
     pub fn new(
         pu: Degree,
@@ -378,29 +392,37 @@ impl NurbsSurface {
             kv,
         })
     }
+```
+```rust
     #[inline]
     pub fn idx(&self, u: Index, v: Index) -> Index {
         v * self.nu + u
     }
+```
+```rust
     #[inline]
     pub fn idx_row_major(nu: usize, i: usize, j: usize) -> usize {
         i + nu * j
     }
-
+```
+```rust
     #[inline]
     fn infer_is_rational(ctrl: &[Point4D]) -> bool {
         ctrl.iter().any(|c| c.w.is_finite())
     }
-
+```
+```rust
     #[inline]
     fn idx_from_u(nu: usize, i: usize, j: usize) -> usize {
         i + nu * j
     }
-
+```
+```rust
     pub fn deg(&self) -> (Degree, Degree) {
         (self.pu, self.pv)
     }
-
+```
+```rust
     #[inline]
     pub fn indices(&self) -> (Index, Index, Index, Index) {
         let n = self.nu - 1; // control net in U : last index
@@ -409,17 +431,21 @@ impl NurbsSurface {
         let s = self.kv.len() as Index - 1; // knot V : last index
         (n, m, r, s)
     }
-
+```
+```rust
     #[inline]
     pub fn ctrl_ref(&self, i: usize, j: usize) -> &Point4D {
         &self.ctrl[self.idx(i, j)]
     }
+```
+```rust
     #[inline]
     pub fn ctrl_mut(&mut self, i: usize, j: usize) -> &mut Point4D {
         let k = self.idx(i, j);
         &mut self.ctrl[k]
     }
-
+```
+```rust
     pub fn euclidean_in_place(&mut self) {
         let (n, m, _, _) = self.indices();
         for i in 0..=n as usize {
@@ -441,7 +467,8 @@ impl NurbsSurface {
             }
         }
     }
-
+```
+```rust
     /// Knot 들을 사각형 [ul,ur] x [vb,vt]에 재매핑
     pub fn rescale_knots(&mut self, rect: Rectangle, dir: SurfaceDir) {
         let (p, q) = self.deg();
@@ -497,7 +524,8 @@ impl NurbsSurface {
             }
         }
     }
-
+```
+```rust
     /// 분자/분모 추출: num = (xw, yw, zw, NONE), den = w(u,v)
     pub fn numerator_denominator(&self, out_num: &mut NurbsSurface, out_den: &mut SFun) {
         let (n, m, r, s) = self.indices();
@@ -524,7 +552,6 @@ impl NurbsSurface {
                 }
             }
         }
-
         // knots 복사
         out_num.ku.copy_from(&self.ku);
         out_num.kv.copy_from(&self.kv);
@@ -533,7 +560,8 @@ impl NurbsSurface {
             out_den.kv.copy_from(&self.kv);
         }
     }
-
+```
+```rust
     pub fn coords_as_sfun(
         &self,
         wx: &mut SFun,
@@ -593,7 +621,8 @@ impl NurbsSurface {
             }
         }
     }
-
+```
+```rust
     /// U<->V 스왑 (degree / knot / net 전부 교환)
     pub fn swap_uv(&mut self) {
         let (n, m, _r, _s) = self.indices();
@@ -626,7 +655,8 @@ impl NurbsSurface {
         // nu, nv 교환
         std::mem::swap(&mut self.nu, &mut self.nv);
     }
-
+```
+```rust
     /// 압축(메모리 재적재)
     pub fn compact(&mut self) {
         // 1D 버퍼이므로 clone으로 충분
@@ -634,7 +664,8 @@ impl NurbsSurface {
         self.ku.knots = self.ku.knots.clone();
         self.kv.knots = self.kv.knots.clone();
     }
-
+```
+```rust
     /// 깊은 복사 into dst (dst 크기 자동 보정)
     pub fn copy_into(&self, dst: &mut NurbsSurface) {
         let (n, m, r, s) = self.indices();
@@ -649,7 +680,8 @@ impl NurbsSurface {
         dst.kv.copy_from(&self.kv);
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     #[inline]
     fn param_range_u(&self) -> (Real, Real) {
@@ -659,7 +691,8 @@ impl NurbsSurface {
         let umax = knots[knots.len() - p - 1];
         (umin, umax)
     }
-
+```
+```rust
     /// V 방향 파라미터 범위 [vmin, vmax]
     #[inline]
     fn param_range_v(&self) -> (Real, Real) {
@@ -669,7 +702,8 @@ impl NurbsSurface {
         let vmax = knots[knots.len() - q - 1];
         (vmin, vmax)
     }
-
+```
+```rust
     #[inline]
     fn clamp_u(&self, u: Real) -> Real {
         let (umin, umax) = self.param_range_u();
@@ -681,7 +715,8 @@ impl NurbsSurface {
             u
         }
     }
-
+```
+```rust
     #[inline]
     fn clamp_v(&self, v: Real) -> Real {
         let (vmin, vmax) = self.param_range_v();
@@ -693,7 +728,8 @@ impl NurbsSurface {
             v
         }
     }
-
+```
+```rust
     /// (u,v)에서 수치 미분으로 S_u, S_v 를 계산한다.
     /// - du, dv 는 적당히 작은 값 (도메인 길이 비례)
     fn numeric_partials(&self, u: Real, v: Real, du: Real, dv: Real) -> (Vector3D, Vector3D) {
@@ -730,7 +766,8 @@ impl NurbsSurface {
         };
         (su, sv)
     }
-
+```
+```rust
     /// (u,v)에서의 U 방향 접선 벡터 ∂S/∂u (수치)
     pub fn tangent_u_numeric(&self, u: Real, v: Real) -> Vector3D {
         let (u_min, u_max) = self.u_domain();
@@ -738,7 +775,8 @@ impl NurbsSurface {
         let (su, _) = self.numeric_partials(u, v, du_hint, du_hint);
         su
     }
-
+```
+```rust
     /// (u,v)에서의 V 방향 접선 벡터 ∂S/∂v (수치)
     pub fn tangent_v_numeric(&self, u: Real, v: Real) -> Vector3D {
         let (v_min, v_max) = self.v_domain();
@@ -746,7 +784,8 @@ impl NurbsSurface {
         let (_, sv) = self.numeric_partials(u, v, dv_hint, dv_hint);
         sv
     }
-
+```
+```rust
     /// (u,v)에서의 면적 밀도: || S_u x S_v ||.
     ///
     /// C# GSurface.ComputeSurfaceAreaDensity 의 알고리즘적 의도를
@@ -766,7 +805,8 @@ impl NurbsSurface {
 
         (cx * cx + cy * cy + cz * cz).sqrt()
     }
-
+```
+```rust
     pub fn area_gauss_legendre(&self) -> Real {
         let p = self.pu as usize;
         let q = self.pv as usize;
@@ -829,7 +869,8 @@ impl NurbsSurface {
         }
         area
     }
-
+```
+```rust
     #[inline]
     pub fn u_domain(&self) -> (Real, Real) {
         let p = self.pu as usize;
@@ -837,7 +878,8 @@ impl NurbsSurface {
         debug_assert!(knots.len() >= 2 * p + 2);
         (knots[p], knots[knots.len() - p - 1])
     }
-
+```
+```rust
     /// V 방향 파라미터 범위 [vmin, vmax]
     #[inline]
     pub fn v_domain(&self) -> (Real, Real) {
@@ -846,23 +888,27 @@ impl NurbsSurface {
         debug_assert!(knots.len() >= 2 * q + 2);
         (knots[q], knots[knots.len() - q - 1])
     }
-
+```
+```rust
     /// (u,v)에서 U 방향 속도: ||∂S/∂u||
     pub fn speed_u_numeric(&self, u: Real, v: Real) -> Real {
         let t = self.evaluate_derivative_u(u, v);
         (t.x * t.x + t.y * t.y + t.z * t.z).sqrt()
     }
-
+```
+```rust
     /// (u,v)에서 V 방향 속도: ||∂S/∂v||
     pub fn speed_v_numeric(&self, u: Real, v: Real) -> Real {
         let t = self.evaluate_derivative_v(u, v);
         (t.x * t.x + t.y * t.y + t.z * t.z).sqrt()
     }
-
+```
+```rust
     fn multiplicity(knot: &[f64], t: f64, tol: f64) -> usize {
         knot.iter().filter(|&&x| (x - t).abs() <= tol).count()
     }
-
+```
+```rust
     pub fn find_span(knot: &[f64], p: usize, u: f64, n: usize) -> usize {
         if u <= knot[p] {
             return p;
@@ -882,7 +928,8 @@ impl NurbsSurface {
         }
         mid
     }
-
+```
+```rust
     pub fn basis_funs(knot: &[f64], p: usize, span: usize, u: f64, out: &mut [f64]) {
         debug_assert!(out.len() >= p + 1);
         out.fill(0.0);
@@ -906,35 +953,42 @@ impl NurbsSurface {
             out[j] = saved;
         }
     }
-
+```
+```rust
     pub fn find_span_u(&self, u: f64) -> usize {
         Self::find_span(&self.ku.knots, self.pu as usize, u, self.nu - 1)
     }
-
+```
+```rust
     pub fn find_span_v(&self, v: f64) -> usize {
         Self::find_span(&self.kv.knots, self.pv as usize, v, self.nv - 1)
     }
-
+```
+```rust
     pub fn basis_functions_u(&self, span: usize, u: f64) -> Vec<f64> {
         let mut out = vec![0.0; self.pu as usize + 1];
         Self::basis_funs(&self.ku.knots, self.pu as usize, span, u, &mut out);
         out
     }
-
+```
+```rust
     pub fn basis_functions_v(&self, span: usize, v: f64) -> Vec<f64> {
         let mut out = vec![0.0; self.pv as usize + 1];
         Self::basis_funs(&self.kv.knots, self.pv as usize, span, v, &mut out);
         out
     }
-
+```
+```rust
     pub fn basis_functions_derivative_u(&self, span: usize, u: f64) -> Vec<Vec<f64>> {
         on_ders_basis_func(&self.ku.knots, span, u, self.pu as usize, 1)
     }
-
+```
+```rust
     pub fn basis_functions_derivative_v(&self, span: usize, v: f64) -> Vec<Vec<f64>> {
         on_ders_basis_func(&self.kv.knots, span, v, self.pv as usize, 1)
     }
-
+```
+```rust
     pub fn evaluate_derivative_u(&self, u: f64, v: f64) -> Vector3D {
         let su = self.find_span_u(u);
         let sv = self.find_span_v(v);
@@ -965,7 +1019,8 @@ impl NurbsSurface {
         }
         du
     }
-
+```
+```rust
     pub fn evaluate_derivative_v(&self, u: f64, v: f64) -> Vector3D {
         let su = self.find_span_u(u);
         let sv = self.find_span_v(v);
@@ -996,7 +1051,8 @@ impl NurbsSurface {
         }
         dv
     }
-
+```
+```rust
     /// V = v_fixed 에서 U 방향으로 전체 길이(근사)를 구한다.
     ///
     /// - segments: 적분 구간 분할 수 (짝수로 자동 맞춰짐)
@@ -1004,21 +1060,26 @@ impl NurbsSurface {
         let (umin, umax) = self.u_domain();
         on_simpson_uniform(|u| self.speed_u_numeric(u, v_fixed), umin, umax, segments)
     }
-
+```
+```rust
     /// U = u_fixed 에서 V 방향으로 전체 길이(근사)를 구한다.
     pub fn length_along_v_numeric(&self, u_fixed: Real, segments: usize) -> Real {
         let (vmin, vmax) = self.v_domain();
         on_simpson_uniform(|v| self.speed_v_numeric(u_fixed, v), vmin, vmax, segments)
     }
-
+```
+```rust
     /// U/V 방향 open 구간의 균일 파라미터
     pub fn uniform_params_u(&self, n_seg: usize) -> Vec<Real> {
         on_uniform_params_in_open_range(&self.ku.knots, self.pu, n_seg)
     }
+```
+```rust
     pub fn uniform_params_v(&self, n_seg: usize) -> Vec<Real> {
         on_uniform_params_in_open_range(&self.kv.knots, self.pv, n_seg)
     }
-
+```
+```rust
     /// NURBS 표면 평가: (u,v) -> 3D 점
     pub fn point_at(&self, u: Real, v: Real) -> Point3D {
         let pu = self.pu as usize;
@@ -1086,7 +1147,8 @@ impl NurbsSurface {
             Point3D { x, y, z }
         }
     }
-
+```
+```rust
     /// 균일 (u_count x v_count) 그리드 샘플 (row-major: iu + u_count * jv)
     pub fn sample_grid3d(&self, u_count: usize, v_count: usize) -> Vec<Point3D> {
         if u_count == 0 || v_count == 0 {
@@ -1110,11 +1172,13 @@ impl NurbsSurface {
         }
         out
     }
-
+```
+```rust
     pub fn get_interval(&self) -> (Interval, Interval) {
         (self.get_interval_u(), self.get_interval_v())
     }
-
+```
+```rust
     pub fn get_interval_u(&self) -> Interval {
         let n = self.ku.len() - 1;
         Interval {
@@ -1122,7 +1186,8 @@ impl NurbsSurface {
             t1: self.ku.knots[n],
         }
     }
-
+```
+```rust
     pub fn get_interval_v(&self) -> Interval {
         let m = self.kv.len() - 1;
         Interval {
@@ -1130,7 +1195,8 @@ impl NurbsSurface {
             t1: self.kv.knots[m],
         }
     }
-
+```
+```rust
     pub fn surface_area(&self) -> f64 {
         let (u_dom, v_dom) = self.get_interval();
 
@@ -1153,7 +1219,8 @@ impl NurbsSurface {
         )
     }
 }
-
+```
+```rust
 fn ensure_surface_shape(
     out_surf: &mut NurbsSurface,
     n: Index,
@@ -1197,7 +1264,8 @@ fn ensure_surface_shape(
         out_surf.kv.resize_len(ss, 0.0);
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// C의 U_KILSUR: 표면을 초기 상태로 리셋 (메모리 해제 효과)
     pub fn clear(&mut self) {
@@ -1209,7 +1277,8 @@ impl NurbsSurface {
         self.nu = 0;
         self.nv = 0; // 사이즈 0
     }
-
+```
+```rust
     /// U_OUTSUR: 표면 하나를 텍스트 파일로 덤프
     pub fn write_to_file(&self, filename: &str) -> std::io::Result<()> {
         let mut f = File::create(filename)?;
@@ -1242,7 +1311,8 @@ impl NurbsSurface {
         }
         Ok(())
     }
-
+```
+```rust
     /// U_MAKSU4 스타일: 스칼라장(wx, wy, wz, (옵션) w) + 공유 knot로 표면 생성
     pub fn make_surface_from_sfun(
         wx: &SFun,
@@ -1305,7 +1375,8 @@ impl NurbsSurface {
             nv,
         }
     }
-
+```
+```rust
     /// U_MAKSU1 — 이미 존재하는 구조체 포인터를 연결
     pub fn make_surface_linked(
         net_ctrl: Vec<Point4D>,
@@ -1326,7 +1397,8 @@ impl NurbsSurface {
             nv,
         }
     }
-
+```
+```rust
     /// U_MAKSU2 — 제어점과 knots로부터 새 Surface를 생성
     pub fn make_surface_from_points(
         pw: &[Vec<Point4D>],
@@ -1359,7 +1431,8 @@ impl NurbsSurface {
             nv,
         }
     }
-
+```
+```rust
     /// U_MAKSU3 — wx, wy, wz, w로부터 Surface를 생성
     pub fn make_surface_from_coords(
         wx: &[Vec<Real>],
@@ -1400,6 +1473,8 @@ impl NurbsSurface {
             nv,
         }
     }
+```
+```rust
     pub fn resize_ctrl(&mut self, new_nu: usize, new_nv: usize) {
         on_ral_c2d_row_major(
             &mut self.ctrl,
@@ -1418,7 +1493,8 @@ impl NurbsSurface {
         self.nv = new_nv as Index;
     }
 }
-
+```
+```rust
 #[derive(Debug, Clone, Default)]
 pub struct SurfaceBasisCache {
     pub last_uv: Option<(Param, Param)>,
@@ -1427,7 +1503,8 @@ pub struct SurfaceBasisCache {
     pub ders_u: Option<Vec<Vec<Real>>>,
     pub ders_v: Option<Vec<Vec<Real>>>,
 }
-
+```
+```rust
 pub fn write_surface_grid(
     surface: &NurbsSurface,
     u_count: usize,
@@ -1451,7 +1528,8 @@ pub fn write_surface_grid(
     // (원하면 up/vp도 추가로 덤프 가능)
     Ok(())
 }
-
+```
+```rust
 pub fn write_surface_array_to_file(srfs: &[NurbsSurface], filename: &str) -> std::io::Result<()> {
     let mut f = File::create(filename)?;
     writeln!(f, "count {}", srfs.len())?;
@@ -1460,11 +1538,14 @@ pub fn write_surface_array_to_file(srfs: &[NurbsSurface], filename: &str) -> std
     }
     Ok(())
 }
-
+```
+```rust
 #[inline]
 fn idx_nu(nu: usize, i: usize, j: usize) -> usize {
     i + nu * j
 }
+```
+```rust
 impl fmt::Display for NurbsSurface {
     /// 기본 출력(요약): 차수/사이즈/knots 일부/ctrl 일부
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -1530,7 +1611,8 @@ impl fmt::Display for NurbsSurface {
         write!(f, "}}")
     }
 }
-
+```
+```rust
 /// 상세 제어 가능한 Surface 덤프(표준 출력)
 pub fn dump_surface_limited(
     s: &NurbsSurface,
@@ -1595,14 +1677,16 @@ pub fn dump_surface_limited(
         println!("    ...");
     }
 }
-
+```
+```rust
 /// 간단 덤프(요약)
 #[inline]
 pub fn dump_surface(s: &NurbsSurface) {
     // 기본 요약 파라미터
     dump_surface_limited(s, 4, 4, 10, 6);
 }
-
+```
+```rust
 /// Surface의 ctrl/ku/kv를 (n,m,r,s, p,q) 관례로 리사이즈
 /// (n,m,r,s) = 마지막 인덱스 → 크기/길이는 +1
 pub fn surface_ensure_shape(
@@ -1640,12 +1724,14 @@ pub fn surface_ensure_shape(
     srf.ku.knots.resize(ru, 0.0);
     srf.kv.knots.resize(rv, 0.0);
 }
-
+```
+```rust
 fn on_eval_vector_surface(s: &NurbsSurface, u: Real, v: Real) -> Point3D {
     // (x,y,z)만 쓰는 벡터 필드로 가정 (w는 무시)
     s.point_at(u, v)
 }
-
+```
+```rust
 fn on_simpson_uniform<F>(mut f: F, a: Real, b: Real, mut n: usize) -> Real
 where
     F: FnMut(Real) -> Real,
@@ -1673,7 +1759,8 @@ where
 
     sum * h / 3.0
 }
-
+```
+```rust
 impl NurbsSurface {
     /// 로컬 B-spline 보간으로 격자 점 Q[i,j] 를 통과하는 NurbsSurface 생성.
     ///
@@ -1860,7 +1947,8 @@ impl NurbsSurface {
 
         NurbsSurface::new(pu, pv, nu_i, nv_i, ctrl, ku, kv)
     }
-
+```
+```rust
     pub fn local_interpolation_from_grid_chord_base(
         pts: &[Point3D],
         nu: usize,
@@ -2009,7 +2097,8 @@ impl NurbsSurface {
             kv: KnotVector { knots: v_knots },
         })
     }
-
+```
+```rust
     /// U, V 양 끝에서 degree+1 개를 초과해서 중복된 knot 들을
     /// 제거하고, 그에 맞게 control net 도 잘라내는 함수입니다.
     ///
@@ -2103,7 +2192,8 @@ impl NurbsSurface {
         self.nu = new_nu as Index;
         self.ctrl = new_ctrl;
     }
-
+```
+```rust
     /// V 방향 끝단에서 불필요한 중복 knot 제거 + control point 행(열) 정리
     pub fn trim_excess_end_knots_v(&mut self, tol: Real) {
         let p = self.pv as usize;
@@ -2188,7 +2278,8 @@ impl NurbsSurface {
         self.ctrl = new_ctrl;
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// U 방향 스킨:
     ///   - strips[k] : k번째 U-방향 프로파일 곡선을 따라 샘플링한 점들
@@ -2243,7 +2334,8 @@ impl NurbsSurface {
         // 이미 구현한 LocalInterpolation 이용
         NurbsSurface::local_interpolation_from_grid_chord_base(&pts, nu, nv, pu, pv)
     }
-
+```
+```rust
     /// V 방향 스킨:
     ///   - strips[k] : k번째 V-방향 프로파일 곡선을 따라 샘플링한 점들
     ///   - strips.len() = nv (V 방향 곡선 개수)
@@ -2298,7 +2390,8 @@ impl NurbsSurface {
 
         NurbsSurface::local_interpolation_from_grid_chord_base(&pts, nu, nv, pu, pv)
     }
-
+```
+```rust
     pub fn sample_curves_to_point_strips<C, FDom, FEval>(
         curves: &[C],
         sample_count: usize,
@@ -2339,7 +2432,8 @@ impl NurbsSurface {
         strips
     }
 }
-
+```
+```rust
 fn on_build_bspline_interpolation_lu(
     params: &[Real],
     p: Degree,
@@ -2391,7 +2485,8 @@ fn on_build_bspline_interpolation_lu(
     let lu = on_m_lu_decmp_full(a, ludt)?;
     Some((knots, lu))
 }
-
+```
+```rust
 pub fn on_sample_nurbs_curves_uniform(
     curves: &[NurbsCurve],
     sample_count: usize,
@@ -2414,7 +2509,8 @@ pub fn on_sample_nurbs_curves_uniform(
         },
     )
 }
-
+```
+```rust
 impl NurbsSurface {
     /// U 방향으로 여러 개의 knot 를 삽입한다.
     /// new_knots 는 비감소 순서라고 가정한다.
@@ -2532,7 +2628,8 @@ impl NurbsSurface {
 
         r + 1 // 삽입된 knot 개수 = new_knots.len()
     }
-
+```
+```rust
     /// V 방향으로 여러 개의 knot 를 삽입한다.
     /// new_knots 는 비감소 순서라고 가정한다.
     pub fn insert_knot_v(&mut self, new_knots: &[Real]) -> usize {
@@ -2643,7 +2740,8 @@ impl NurbsSurface {
         r + 1
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// U 방향 분할: 현재 row-major ctrl(u + nu * v) 형식에 맞춘 버전
     pub fn split_u(&self, t: Real) -> (NurbsSurface, NurbsSurface) {
@@ -2735,7 +2833,8 @@ impl NurbsSurface {
 
         (left, right)
     }
-
+```
+```rust
     /// V 방향 분할 (현재 row-major ctrl 배열 기준)
     pub fn split_v(&self, t: Real) -> (NurbsSurface, NurbsSurface) {
         let q = self.pv as usize;
@@ -2827,7 +2926,8 @@ impl NurbsSurface {
         (bottom, top)
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     pub fn new_basic_patch() -> Self {
         let pu = 3;
@@ -2864,7 +2964,8 @@ impl NurbsSurface {
         s
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// SkinU + splitAtCorners:
     ///   - strips: U 방향 프로파일 곡선 샘플들
@@ -2914,7 +3015,8 @@ impl NurbsSurface {
 
         Ok(result)
     }
-
+```
+```rust
     /// SkinV + splitAtCorners:
     ///   - strips: V 방향 프로파일 곡선 샘플들
     pub fn skin_v_with_corner_split_from_point_strips(
@@ -2953,7 +3055,8 @@ impl NurbsSurface {
         Ok(result)
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// Loft surface 생성:
     ///
@@ -3014,7 +3117,8 @@ impl NurbsSurface {
 
         NurbsSurface::local_interpolation_from_grid(&pts, nu, nv, pu, pv)
     }
-
+```
+```rust
     pub fn ruled_from_two_point_sections(
         sec0: &[Point3D],
         sec1: &[Point3D],
@@ -3041,7 +3145,8 @@ impl NurbsSurface {
         NurbsSurface::loft_from_point_sections(&sections, pu, pv)
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// Loft + 옵션(평활화, end tangent 자연 정렬, corner split) 지원 버전.
     ///
@@ -3131,7 +3236,8 @@ impl NurbsSurface {
         Ok(surfaces)
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// 4개의 코너 점으로부터 bilinear planar NURBS 표면 생성
     ///
@@ -3176,7 +3282,8 @@ impl NurbsSurface {
         }
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// (u,v)에서의 점, U/V 방향 수치 미분 tangent, 법선 벡터를 계산
     fn eval_frame_numeric(&self, u: Real, v: Real) -> (Point3D, Vector3D, Vector3D, Vector3D) {
@@ -3233,7 +3340,8 @@ impl NurbsSurface {
 
         (p, su, sv, n)
     }
-
+```
+```rust
     /// Offset Surface용 U/V 파라미터 리스트 생성
     ///
     /// - knot: KnotVector.knots (superfluous 포함)
@@ -3277,7 +3385,8 @@ impl NurbsSurface {
 
         params
     }
-
+```
+```rust
     /// Offset NURBS Surface 생성
     ///
     /// - `amount` : offset 거리 (법선 방향으로 +amount)
@@ -3355,7 +3464,8 @@ impl NurbsSurface {
         self.build_offset_surface(amount, tol)
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// Sweep Surface:
     ///
@@ -3429,7 +3539,8 @@ impl NurbsSurface {
         Ok(srf)
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// knot 벡터에서 "길이가 있는" 구간(span)들을 뽑아낸다.
     ///
@@ -3475,7 +3586,8 @@ impl NurbsSurface {
 
         spans
     }
-
+```
+```rust
     /// 현재 NurbsSurface를 U/V knot span 에 따라 Patch 들로 분해한다.
     ///
     /// - `eps` : knot 구간 길이를 판단할 때 사용할 tolerance
@@ -3523,7 +3635,8 @@ impl NurbsSurface {
 
         patches
     }
-
+```
+```rust
     /// Patch 의 로컬 파라미터 (0..1, 0..1) 를 global UV 로 맵핑해서 평가하는 편의 함수
     pub fn eval_on_patch(&self, patch: &SurfacePatch, u_hat: Real, v_hat: Real) -> Point3D {
         let u = patch.rect.ul + (patch.rect.ur - patch.rect.ul) * u_hat;
@@ -3531,7 +3644,8 @@ impl NurbsSurface {
         self.point_at(u, v)
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// U 방향 파라미터 도메인 (현재 구현에서는 knot[0]..knot[last])
     pub fn domain_u(&self) -> (Real, Real) {
@@ -3544,7 +3658,8 @@ impl NurbsSurface {
         let kv = &self.kv.knots;
         (kv[0], *kv.last().unwrap())
     }
-
+```
+```rust
     /// Point inversion: 주어진 3D 점 p 에 가장 가까운 (u,v) 를 찾는다.
     ///
     /// - p            : 대상 점
@@ -3669,7 +3784,8 @@ impl NurbsSurface {
         (false, u, v, last_q, last_dev.to_vector())
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// U = const 인 Iso curve 를 V 방향으로 샘플링
     ///
@@ -3696,7 +3812,8 @@ impl NurbsSurface {
         }
         pts
     }
-
+```
+```rust
     /// V = const 인 Iso curve 를 U 방향으로 샘플링
     pub fn sample_iso_curve_v(&self, mut v: Real, n_samples: usize) -> Vec<Point3D> {
         if n_samples < 2 {
@@ -3717,7 +3834,8 @@ impl NurbsSurface {
         pts
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// U = const 인 NURBS IsoCurve 데이터 (V 방향 곡선)
     ///
@@ -3803,7 +3921,8 @@ impl NurbsSurface {
             knot: knot_v,
         })
     }
-
+```
+```rust
     pub fn iso_curve_v_data(&self, mut v: Real) -> Result<NurbsIsoCurveData> {
         // 1) V 도메인 클램프
         let (vmin, vmax) = self.domain_v();
@@ -3878,19 +3997,22 @@ impl NurbsSurface {
             knot: curve_kv,
         })
     }
-
+```
+```rust
     pub fn from_iso_u(surface: &NurbsSurface, u: Real) -> Result<NurbsCurve> {
         let data = surface.iso_curve_u_data(u)?;
         // 여기에서 실제 프로젝트의 생성자 시그니처에 맞게 수정
         NurbsCurve::new(data.degree, data.ctrl, data.knot)
     }
-
+```
+```rust
     pub fn from_iso_v(surface: &NurbsSurface, v: Real) -> Result<NurbsCurve> {
         let data = surface.iso_curve_v_data(v)?;
         NurbsCurve::new(data.degree, data.ctrl, data.knot)
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// 점 p 를 Surface 위로 Project.
     ///
@@ -3937,7 +4059,8 @@ impl NurbsSurface {
         Ok((u, v, q, n))
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// 선분을 Surface 위에 Project 해서, Surface 위 polyline(점 + uv)을 반환.
     ///
@@ -3989,7 +4112,8 @@ impl NurbsSurface {
         Ok(result)
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// 균일 Tessellation (U×V 그리드)
     ///
@@ -4047,7 +4171,8 @@ impl NurbsSurface {
         Ok(mesh)
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// 한 Quad가 충분히 평탄한지 체크.
     ///
@@ -4082,7 +4207,8 @@ impl NurbsSurface {
         (dist2 <= tol * tol, pts, p_c)
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     /// Quad 하나에 대해:
     ///  - corner 4점과 center 점 평가
@@ -4147,7 +4273,8 @@ impl NurbsSurface {
 
         (deviation, max_angle, max_edge_len, pts, p_c)
     }
-
+```
+```rust
     fn subdivide_quad(quad: &ParamQuad) -> [ParamQuad; 4] {
         let (u0, v0) = quad.uv[0];
         let (u1, v1) = quad.uv[2];
@@ -4170,7 +4297,8 @@ impl NurbsSurface {
         [q0, q1, q2, q3]
     }
 }
-
+```
+```rust
 impl NurbsSurface {
     fn should_subdivide_quad(
         &self,
@@ -4220,7 +4348,8 @@ impl NurbsSurface {
 
         false
     }
-
+```
+```rust
     pub fn tessellate_adaptive_with_options(
         &self,
         opts: &AdaptiveTessellationOptions,
@@ -4270,7 +4399,8 @@ impl NurbsSurface {
 
         Ok(mesh)
     }
-
+```
+```rust
     /// 기존 간단버전 tessellate_adaptive 를 대체/래핑해서 기본 옵션으로 호출
     pub fn tessellate_adaptive(
         &self,
@@ -4286,7 +4416,8 @@ impl NurbsSurface {
         self.tessellate_adaptive_with_options(&opts)
     }
 }
-
+```
+```rust
 fn on_build_skin_u_from_curves<C, FDom, FEval>(
     curves: &[C],
     sample_count: usize,
@@ -4303,7 +4434,8 @@ where
         NurbsSurface::sample_curves_to_point_strips(curves, sample_count, get_domain, eval_point);
     NurbsSurface::skin_u_from_point_strips(&strips, pu, pv)
 }
-
+```
+```rust
 pub fn on_detect_corners_in_strip(
     points: &[Point3D],
     angle_deg_threshold: Real,
@@ -4341,7 +4473,8 @@ pub fn on_detect_corners_in_strip(
 
     result
 }
-
+```
+```rust
 /// 여러 strip 에서 corner index 를 모아서
 /// 전체에서 공통으로 쓸 수 있는 "분할 인덱스 집합"을 구한다.
 ///
@@ -4381,7 +4514,8 @@ pub fn on_collect_corner_indices_from_strips(
 
     indices.into_iter().collect()
 }
-
+```
+```rust
 pub fn on_split_point_strips_by_indices(
     strips: &[Vec<Point3D>],
     corner_indices: &[usize],
@@ -4442,7 +4576,8 @@ pub fn on_split_point_strips_by_indices(
 
     segments
 }
-
+```
+```rust
 pub fn on_loft_from_nurbs_curves(
     curves: &[NurbsCurve],
     sample_count: usize,
@@ -4463,7 +4598,8 @@ pub fn on_loft_from_nurbs_curves(
     //   strips[j][i] : j = 섹션 index, i = 섹션 위 파라미터 샘플
     NurbsSurface::loft_from_point_sections(&strips, pu, pv)
 }
-
+```
+```rust
 // NurbsCurve 두 개 → Ruled surface
 pub fn on_ruled_from_two_nurbs_curves(
     c0: &NurbsCurve,
@@ -4487,7 +4623,8 @@ pub fn on_ruled_from_two_nurbs_curves(
 
     NurbsSurface::ruled_from_two_point_sections(&strips[0], &strips[1], pu)
 }
-
+```
+```rust
 fn on_smooth_sections_along_loft_direction(
     sections: &mut [Vec<Point3D>],
     iterations: usize,
@@ -4536,7 +4673,8 @@ fn on_smooth_sections_along_loft_direction(
         }
     }
 }
-
+```
+```rust
 /// 섹션 리스트(sections[j][i]) 에 대해,
 /// Loft(섹션) 방향에서의 corner 섹션 index 집합을 찾는다.
 ///
@@ -4577,7 +4715,8 @@ fn on_collect_corner_indices_along_sections(
 
     indices.into_iter().collect()
 }
-
+```
+```rust
 /// corner index 집합을 기준으로 섹션 리스트를 분할한다.
 ///
 /// 반환:
@@ -4633,10 +4772,10 @@ fn on_split_sections_by_indices(
 
         segments.push(seg_secs);
     }
-
     segments
 }
-
+```
+```rust
 fn on_build_sweep_frames(path: &[Point3D]) -> Option<Vec<(Point3D, Vector3D, Vector3D, Vector3D)>> {
     let n = path.len();
     if n < 2 {
@@ -4717,7 +4856,8 @@ fn on_build_sweep_frames(path: &[Point3D]) -> Option<Vec<(Point3D, Vector3D, Vec
 
     Some(frames)
 }
-
+```
+```rust
 fn on_build_section_local_coords(
     section: &[Point3D],
     origin: Point3D,
@@ -4740,7 +4880,8 @@ fn on_build_section_local_coords(
 
     local
 }
-
+```
+```rust
 pub fn on_sweep_from_nurbs_curves(
     section_curve: &NurbsCurve,
     path_curve: &NurbsCurve,
@@ -4775,7 +4916,8 @@ pub fn on_sweep_from_nurbs_curves(
 
     NurbsSurface::sweep_from_section_and_path(&section_pts, &path_pts, pu, pv)
 }
-
+```
+```rust
 // polyline vs quad UV bbox 의 대략적인 교차 판정 (단순 bounding box overlap)
 fn on_uv_polyline_intersects_quad(poly: &FeatureCurveUV, quad: &ParamQuad) -> bool {
     if poly.points.is_empty() {
@@ -4802,7 +4944,8 @@ fn on_uv_polyline_intersects_quad(poly: &FeatureCurveUV, quad: &ParamQuad) -> bo
 
     false
 }
-
+```
+```rust
 /// 이 Quad 가 어떤 boundary / feature curve 에 "근접"해 있는지 대략 검사
 fn on_quad_near_feature(quad: &ParamQuad, curves: &[FeatureCurveUV]) -> bool {
     curves
