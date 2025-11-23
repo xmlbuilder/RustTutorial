@@ -1052,17 +1052,15 @@ $$
 - 이 과정을 통해 3D 공간의 점이 최종적으로 화면 픽셀 위치에 대응됩니다.
 
 ```mermaid
-lowchart LR
-    A[World space (x, y, z, 1)] -->|View * Projection| B[Clip space x_c, y_c, z_c, w]
-    B -->|Divide by w| C[NDC space x_ndc, y_ndc, z_ndc in [-1, 1])]
-    C -->|Viewport transform| D[Screen space s_x, s_y, depth]
+flowchart LR
+    A["World space<br/>(x, y, z, 1)"] -->|View * Projection| B["Clip space<br/>x_c, y_c, z_c, w"]
+    B -->|Divide by w| C["NDC space<br/>x_ndc, y_ndc, z_ndc ∈ [-1, 1]"]
+    C -->|Viewport transform| D["Screen space<br/>s_x, s_y, depth"]
 
     subgraph Formulas
-        F1[World → Clip: p_clip = P · V · p_world]
-        F2[Clip → NDC: x_ndc = x_c / w; y_ndc = y_c / w; z_ndc = z_c / w]
-        F3[NDC → Screen:
-s_x = (x_ndc * 0.5 + 0.5) * W
-s_y = (1 - (y_ndc * 0.5 + 0.5)) * H]
+        F1["World → Clip:<br/>p_clip = P · V · p_world"]
+        F2["Clip → NDC:<br/>x_ndc = x_c / w;<br/>y_ndc = y_c / w;<br/>z_ndc = z_c / w"]
+        F3["NDC → Screen:<br/>s_x = (x_ndc * 0.5 + 0.5) * W<br/>s_y = (1 - (y_ndc * 0.5 + 0.5)) * H"]
     end
 
     A -.-> F1
