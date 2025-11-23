@@ -78,10 +78,10 @@ $$
 - 개선: 세로 엣지(pj.y == pi.y)나 매우 작은 높이 차(pj.y - pi.y ≈ 0)에 대한 분모 안정화는 이미 1e-15로 처리했지만,  
     정확한 경계 포함 규칙(on-edge 포함/제외)을 명확히 처리 필요.  
     경계 포함이 필요하면 교차 판정에 등호 케이스를 별도 처리 필요.
-- Multiple trim loops and holes: point_in_any_polygon은 외곽/홀 구분 없이 **하나라도 안에 있으면** 으로 처리합니다.
-- 개선: 일반적인 트림은 **외곽 루프 안 AND 어떤 홀 루프 밖** 규칙이 필요합니다.
+- `Multiple trim loops and holes`: `on_point_in_any_polygon` 은 외곽/홀 구분 없이 **하나라도 안에 있으면** 으로 처리합니다.
+- 개선: 일반적인 트림은 **외곽 루프 안 AND 어떤 홀 루프 밖** 규칙이 필요 합니다.
 - 제안: Polygon2D에 is_outer 플래그를 둘 필요 있음.
-- inside = in_any_outer && !in_any_hole
+- `inside = in_any_outer && !in_any_hole`
 - UV normalization: 트림 루프 좌표가 절대 도메인 좌표인지, 정규화(0–1)인지 프로젝트 규약을 일관되게 맞출 필요 있음.
 
 ## Enhancements that help point inversion
