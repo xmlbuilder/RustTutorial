@@ -1067,7 +1067,7 @@ flowchart LR
     subgraph Formulas
     note1["World→Clip: p_clip = P·V·p_world"]
     note2["Clip→NDC: x_ndc, y_ndc, z_ndc = x_clip/w, y_clip/w, z_clip/w]
-    note3["NDC→Screen: s_x = (x_ndc*0.5+0.5)*W, s_y = (1-(y_ndc*0.5+0.5))*H"]
+    note3["NDC→Screen: s_x = x_ndc*0.5*W+0.5*W, s_y = H-y_ndc*0.5*H-0.5*H"]
     end
 
     A -.-> note1
