@@ -1053,8 +1053,8 @@ $$
 
 ```mermaid
 flowchart LR
-    A[World Space<br/>(x,y,z,1)] -->|View * Projection| B[Clip Space - x_clip, y_clip, z_clip, w]
-    B -->|Divide by w| C[NDC Space - x_ndc, y_ndc ,z_ndc  ∈ [-1,1]]
+    A[World Space - x, y, z, 1] -->|View * Projection| B[Clip Space - x_clip, y_clip, z_clip, w]
+    B -->|Divide by w| C[NDC Space - x_ndc, y_ndc ,z_ndc  ∈ -1,1]
     C -->|Viewport Transform| D[Screen Space - s_x, s_y, dept]
 
     %% Labels with formulas
