@@ -24,7 +24,7 @@ fn on_numeric_partials<S: ParamSurface>(
     dv: Interval,
 ) -> (Vector3D, Vector3D) { ... }
 ```
-- `첫 번째 버전`:
+### `첫 번째 버전`:
 ```rust
 fn eval_partials_numeric(&self, u: f64, v: f64) -> (Vector3D, Vector3D) {
     on_numeric_partials(self, u, v, self.domain_u(), self.domain_v())
@@ -33,7 +33,7 @@ fn eval_partials_numeric(&self, u: f64, v: f64) -> (Vector3D, Vector3D) {
 - 여기서는 self의 타입을 컴파일러가 추론해야 합니다.
 - 그런데 self가 트레이트 객체(dyn ParamSurface)일 수도 있고, 구체 타입일 수도 있어서 제네릭 인자 추론이 모호해질 수 있습니다.
 
-- `두 번째 버전`:
+### `두 번째 버전`:
 ```rust
 fn eval_partials_numeric(&self, u: f64, v: f64) -> (Vector3D, Vector3D)
 where
