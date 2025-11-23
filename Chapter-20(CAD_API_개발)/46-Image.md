@@ -75,7 +75,7 @@
 - ❗ alpha 채널을 블러링하지 않음 → 선택적 블러링 옵션 추가 가능
 ### 3. Image::save
 - ❗ 확장자가 없거나 잘못된 경우 PNG로 저장됨 → 사용자에게 경고 메시지 추가 고려
-### 4. OnPictureData<T>
+### 4. PictureData<T>
 - ✅ Arc<T>를 격자에 저장하는 구조는 병렬 처리에 적합
 - ❗ idx()에서 assert! 사용 → Result 기반 오류 처리로 변경하면 안정성 향상
 
@@ -1099,4 +1099,23 @@ mod tests {
 ```
 
 ---
+
+## 추가된 함수
+- ImageBuffer set_pixel
+```rust
+pub fn set_pixel(&mut self, x: u32, y: u32, pix: &[u8]) -> Result<(), ImgErr> {
+    if x >= self.width || y >= self.height {
+        return Err(ImgErr::OOB { x, y });
+    }
+    if pix.len() != self.channels as usize {
+        return Err(ImgErr::ChMismatch {
+            exp: self.channels,
+            got: pix.len(),
+        });
+    }
+    let i = ((y * self.width + x) * self.channels as u32) as usize;
+    self.pixels[i..i + pix.len()].copy_from_slice(pix);
+    Ok(())
+}
+```
 
