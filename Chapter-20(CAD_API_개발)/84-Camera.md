@@ -1053,9 +1053,9 @@ $$
 
 ```mermaid
 flowchart LR
-    A[World Space<br/>(x,y,z,1)] -->|View * Projection| B[Clip Space<br/>(x_clip,y_clip,z_clip,w)]
-    B -->|Divide by w| C[NDC Space<br/>(x_ndc,y_ndc,z_ndc) ∈ [-1,1]]
-    C -->|Viewport Transform| D[Screen Space<br/>(s_x, s_y, depth)]
+    A[World Space<br/>(x,y,z,1)] -->|View * Projection| B[Clip Space - x_clip, y_clip, z_clip, w]
+    B -->|Divide by w| C[NDC Space - x_ndc, y_ndc ,z_ndc  ∈ [-1,1]]
+    C -->|Viewport Transform| D[Screen Space - s_x, s_y, dept]
 
     %% Labels with formulas
     B:::formula
@@ -1067,7 +1067,7 @@ classDef formula fill=#f9f,stroke=#333,stroke-width=1px;
 %% Extra notes
     subgraph Formulas
     note1["World→Clip: p_clip = P·V·p_world"]
-    note2["Clip→NDC: (x_ndc,y_ndc,z_ndc) = (x_clip/w, y_clip/w, z_clip/w)"]
+    note2["Clip→NDC: x_ndc, y_ndc, z_ndc = x_clip/w, y_clip/w, z_clip/w]
     note3["NDC→Screen: s_x = (x_ndc*0.5+0.5)*W, s_y = (1-(y_ndc*0.5+0.5))*H"]
     end
 
