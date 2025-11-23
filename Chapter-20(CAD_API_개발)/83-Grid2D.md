@@ -56,7 +56,12 @@ let t_v = (j as f64 + eps * (j as f64).cos()) / self.nv as f64;
 - 3단계: 도함수 기반 1–3 회 뉴턴 스텝.
 - Local Newton step: 초기값을 얻은 뒤 수렴 가속.
 - 목표 함수: 
-- Gradient: $\nabla \phi =\left[ \begin{matrix}(S(u,v)-p)^{\top }S_u\\ ; \quad (S(u,v)-p)^{\top }S_v\end{matrix}\right]$ 
+- Gradient:
+
+$$
+\nabla \phi =\left[ \begin{matrix}(S(u,v)-p)^{\top }S_u\\ ; \quad (S(u,v)-p)^{\top }S_v\end{matrix}\right]
+$$
+
 - Hessian (Gauss–Newton 근사):
 
 $$
