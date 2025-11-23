@@ -35,14 +35,14 @@ $$
     - 투영 행렬:
 
 $$
-P=\left[ \begin{matrix}\frac{1}{a\tan (\frac{fov_y}{2})}&0&0&0\\ 0&\frac{1}{\tan (\frac{fov_y}{2})}&0&0\\ 0&0&\frac{f+n}{n-f}&\frac{2fn}{n-f}\\ 0&0&-1&0\end{matrix}\right] 
+P=\left[ \begin{matrix}\frac{1}{a\tan (\frac{fov_y}{2})}&0&0&0\\ ; \quad 0&\frac{1}{\tan (\frac{fov_y}{2})}&0&0\\ ; \quad 0&0&\frac{f+n}{n-f}&\frac{2fn}{n-f}\\ ; \quad 0&0&-1&0\end{matrix}\right] 
 $$
 
 - set_orthogonal(left,right,bottom,top,near,far)
     - 직교 투영 행렬:
 
 $$
-P=\left[ \begin{matrix}\frac{2}{r-l}&0&0&-\frac{r+l}{r-l}\\ 0&\frac{2}{t-b}&0&-\frac{t+b}{t-b}\\ 0&0&-\frac{2}{f-n}&-\frac{f+n}{f-n}\\ 0&0&0&1\end{matrix}\right]
+P=\left[ \begin{matrix}\frac{2}{r-l}&0&0&-\frac{r+l}{r-l}\\ ; \quad 0&\frac{2}{t-b}&0&-\frac{t+b}{t-b}\\ ; \quad 0&0&-\frac{2}{f-n}&-\frac{f+n}{f-n}\\ ; \quad 0&0&0&1\end{matrix}\right]
 $$
 
 
