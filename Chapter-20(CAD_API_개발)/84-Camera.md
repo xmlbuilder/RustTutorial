@@ -1062,7 +1062,6 @@ flowchart LR
     C:::formula
     D:::formula
 
-classDef formula fill=#f9f,stroke=#333,stroke-width=1px;
 
 %% Extra notes
     subgraph Formulas
