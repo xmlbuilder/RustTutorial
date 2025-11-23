@@ -1052,27 +1052,22 @@ $$
 - 이 과정을 통해 3D 공간의 점이 최종적으로 화면 픽셀 위치에 대응됩니다.
 
 ```mermaid
-flowchart LR
-    A[World Space - x, y, z, 1] -->|View * Projection| B[Clip Space - x_clip, y_clip, z_clip, w]
-    B -->|Divide by w| C[NDC Space - x_ndc, y_ndc ,z_ndc  ∈ -1,1]
-    C -->|Viewport Transform| D[Screen Space - s_x, s_y, dept]
+lowchart LR
+    A[World space (x, y, z, 1)] -->|View * Projection| B[Clip space x_c, y_c, z_c, w]
+    B -->|Divide by w| C[NDC space x_ndc, y_ndc, z_ndc in [-1, 1])]
+    C -->|Viewport transform| D[Screen space s_x, s_y, depth]
 
-    %% Labels with formulas
-    B:::formula
-    C:::formula
-    D:::formula
-
-
-%% Extra notes
     subgraph Formulas
-    note1["World→Clip: p_clip = P·V·p_world"]
-    note2["Clip→NDC: x_ndc, y_ndc, z_ndc = x_clip/w, y_clip/w, z_clip/w]
-    note3["NDC→Screen: s_x = x_ndc*0.5*W+0.5*W, s_y = H-y_ndc*0.5*H-0.5*H"]
+        F1[World → Clip: p_clip = P · V · p_world]
+        F2[Clip → NDC: x_ndc = x_c / w; y_ndc = y_c / w; z_ndc = z_c / w]
+        F3[NDC → Screen:
+s_x = (x_ndc * 0.5 + 0.5) * W
+s_y = (1 - (y_ndc * 0.5 + 0.5)) * H]
     end
 
-    A -.-> note1
-    B -.-> note2
-    C -.-> note3
+    A -.-> F1
+    B -.-> F2
+    C -.-> F3
 
 ```
 
