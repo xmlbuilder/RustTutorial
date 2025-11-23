@@ -992,5 +992,96 @@ mod tests {
 
 ---
 
+# NDC
 
+NDC는 Normalized Device Coordinates의 약자입니다.
+
+## 📐 의미
+- 3D 그래픽스 파이프라인에서 **클리핑 좌표(clip space)** 를 동차 좌표 w로 나눈 뒤 얻는 좌표계를 말합니다.
+- 즉,
+
+$$
+(x_{ndc},y_{ndc},z_{ndc})=\left( \frac{x_{clip}}{w},\frac{y_{clip}}{w},\frac{z_{clip}}{w}\right) 
+$$
+
+- 이 좌표는 정규화된 범위를 가집니다:
+- $x_{ndc},y_{ndc},z_{ndc}\in [-1,+1]$
+
+## 📌 활용
+- NDC 공간은 뷰포트 변환 직전 단계입니다.
+- 예:
+- x_{ndc}=-1 → 화면의 왼쪽
+- x_{ndc}=+1 → 화면의 오른쪽
+- y_{ndc}=-1 → 화면의 아래쪽
+- y_{ndc}=+1 → 화면의 위쪽
+- z_{ndc}=-1 → near plane
+- z_{ndc}=+1 → far plane
+
+## ✅ 요약:
+NDC = Normalized Device Coordinates → 클리핑 후, 화면 좌표로 매핑하기 직전의 정규화된 좌표 공간입니다.
+
+## 📐 단계별 수식
+- World → Clip
+- World 좌표를 View 행렬과 Projection 행렬로 변환:
+
+$$
+p_{clip}=P\cdot V\cdot p_{world}^{(h)}
+$$
+
+- 여기서 $p_{world}^{(h)}=(x,y,z,1)$ 은 동차 좌표.
+- Clip → NDC (Normalized Device Coordinates)
+- w로 나누어 정규화:
+
+$$
+(x_{ndc},y_{ndc},z_{ndc})=\left( \frac{x_{clip}}{w},\frac{y_{clip}}{w},\frac{z_{clip}}{w}\right) 
+$$
+
+- 범위: $[-1,1].$
+- NDC → Screen
+- 화면 픽셀 좌표로 변환:
+
+$$
+s_x=(x_{ndc}\cdot 0.5+0.5)\cdot W
+$$
+- 여기서 W,H는 뷰포트 크기.
+
+## ✅ 요약:
+- World → Clip: 행렬 변환
+- Clip → NDC: w로 나누어 정규화
+- NDC → Screen: 픽셀 좌표로 매핑
+- 이 과정을 통해 3D 공간의 점이 최종적으로 화면 픽셀 위치에 대응됩니다.
+
+```mermaid
+flowchart LR
+    A[World Space<br/>(x,y,z,1)] -->|View * Projection| B[Clip Space<br/>(x_clip,y_clip,z_clip,w)]
+    B -->|Divide by w| C[NDC Space<br/>(x_ndc,y_ndc,z_ndc) ∈ [-1,1]]
+    C -->|Viewport Transform| D[Screen Space<br/>(s_x, s_y, depth)]
+
+    %% Labels with formulas
+    B:::formula
+    C:::formula
+    D:::formula
+
+classDef formula fill=#f9f,stroke=#333,stroke-width=1px;
+
+%% Extra notes
+    subgraph Formulas
+    note1["World→Clip: p_clip = P·V·p_world"]
+    note2["Clip→NDC: (x_ndc,y_ndc,z_ndc) = (x_clip/w, y_clip/w, z_clip/w)"]
+    note3["NDC→Screen: s_x = (x_ndc*0.5+0.5)*W, s_y = (1-(y_ndc*0.5+0.5))*H"]
+    end
+
+    A -.-> note1
+    B -.-> note2
+    C -.-> note3
+
+```
+
+## ✅ 설명
+- World Space: 원래 3D 좌표 (x,y,z,1)
+- Clip Space: View 행렬과 Projection 행렬 적용 후 $(x_{clip},y_{clip},z_{clip},w)$
+- NDC Space: w로 나누어 [-1,1] 범위로 정규화
+- Screen Space: NDC를 뷰포트 크기 (W,H)에 맞게 픽셀 좌표로 변환
+
+---
 
