@@ -13,9 +13,10 @@
 - 조건:
 
 $$
-left<right,\quad bottom<top,\quad 0<near<far- → Frustum 설정.
+left<right,\quad bottom<top,\quad 0<near<far
 $$
 
+    - Frustum 설정.
 - frustum_aspect()
 
 $$
