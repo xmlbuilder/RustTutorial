@@ -10,11 +10,7 @@
 ### 2. 주요 함수 및 수식
 - Frustum 관련
     - set_frustum(left, right, bottom, top, near, far)
-- 조건:
-
-$$
-left<right,\quad bottom<top,\quad 0<near<far
-$$
+- 조건: $left < right$, $bottom < top$, $0 < near < far$
 
     - Frustum 설정.
 - frustum_aspect()
@@ -31,22 +27,24 @@ $$
 - screen_aspect()
 
 $$
-aspect=\frac{right-left}{top-bottom}World ↔ Screen 변환
+aspect=\frac{right-left}{top-bottom}
 $$
+
+- World ↔ Screen 변환
 
 - world_to_screen_scale(frustum_depth)
 - Parallel: 단순 비율.
 - Perspective:
 
 $$
-s=\frac{depth}{near},\quad scale=\frac{screen\_ width}{frustum\_ width\cdot s}
+s=\frac{depth}{near},\quad scale=\frac{screen\\_ width}{frustum\\_ width\cdot s}
 $$
 
 - world_to_screen_scale_at_point(world_point)
 - Camera position과 forward 벡터로 depth 계산:
 
 $$
-depth=(cam\_ pos-world\_ point)\cdot cam\_ forward
+depth=(cam\\_ pos-world\\_ point)\cdot cam\\_ forward
 $$
 
 - 위 scale 계산에 적용.
@@ -54,7 +52,7 @@ $$
 - camera_angle()
 
 $$
-angle=\min \left( \arctan \frac{half\_ w}{near},\  \arctan \frac{half\_ h}{near}\right) 
+angle=\min \left( \arctan \frac{half\\_ w}{near},\  \arctan \frac{half\\_ h}{near}\right) 
 $$
 
 - set_camera_angle(angle)
@@ -62,7 +60,7 @@ $$
 - camera_35mm_lens_length()
 
 $$
-lens=\frac{near\cdot film\_ r}{view\_ r}
+lens=\frac{near\cdot film\\_ r}{view\\_ r}
 $$
 
 - (film_r = 12mm, view_r = min(half_w, half_h))
@@ -72,7 +70,7 @@ $$
 - Near/Far 조정- fit_near_far_to_bbox(bbox)
     - Camera forward 방향으로 bbox corner까지의 depth 계산.
     - min/max depth → near/far로 설정.
-    - 보정: near *= 0.9375, far *= 1.0625.
+    - 보정: $near *= 0.9375$, $far *= 1.0625$.
 
 ---
 
