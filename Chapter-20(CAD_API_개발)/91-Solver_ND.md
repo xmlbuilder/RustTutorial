@@ -31,10 +31,10 @@ $$
 - 목적: $F(x)=0$ 형태의 N차원 비선형 시스템을 풀기 위한 반복 알고리즘.
 - 방법: Newton-Raphson 방식 + 자코비안 행렬을 이용한 선형 시스템 풀이.
 - 부가 기능:
-- 수렴 판정 (desired_tol, acceptable_tol)
-- 스텝 크기 제한 (trust-region 비슷한 scaling)
-- 경계(bounds) 클램프
-- 종료 이유 기록 (TerminationReason)
+    - 수렴 판정 (desired_tol, acceptable_tol)
+    - 스텝 크기 제한 (trust-region 비슷한 scaling)
+    - 경계(bounds) 클램프
+    - 종료 이유 기록 (TerminationReason)
 
 ## 📚 주요 타입 및 함수
 ### 1. EvalFunctionNd 트레이트
@@ -47,9 +47,9 @@ pub trait EvalFunctionNd {
 - 역할: 사용자가 정의하는 함수 인터페이스.
 - 입력: 현재 추정치 $x\in \mathbb{R^{\mathnormal{n}}}$.
 - 출력:
-- $f$: 함수값 F(x) (길이 n).
-- $jac$: 자코비안 행렬 J(x) (길이 n*n, row-major).
-- $converged$: 내부적으로 이미 충분히 수렴했다고 판단한 경우 true.
+    - $f$: 함수값 F(x) (길이 n).
+    - $jac$: 자코비안 행렬 J(x) (길이 n*n, row-major).
+    - $converged$: 내부적으로 이미 충분히 수렴했다고 판단한 경우 true.
 
 ### 2. NdTerminationReason 열거형
 ```rust
@@ -96,14 +96,14 @@ pub struct LocalSolveNd<F: EvalFunctionNd> {
 ```
 - 역할: N차원 뉴턴 솔버 본체.
 - 필드:
-- func: 실제 함수 구현체.
-- dim: 차원 수.
-- desired_tol: 강한 수렴 기준.
-- acceptable_tol: 느슨한 수렴 기준.
-- max_iter: 최대 반복 횟수.
-- bounds: 각 변수의 최소/최대 범위.
-- found_accuracy: 마지막 반복에서의 잔차 노름.
-- term_reason: 종료 이유.
+    - func: 실제 함수 구현체.
+    - dim: 차원 수.
+    - desired_tol: 강한 수렴 기준.
+    - acceptable_tol: 느슨한 수렴 기준.
+    - max_iter: 최대 반복 횟수.
+    - bounds: 각 변수의 최소/최대 범위.
+    - found_accuracy: 마지막 반복에서의 잔차 노름.
+    - term_reason: 종료 이유.
 
 
 ## 📌 예시
@@ -128,17 +128,17 @@ pub fn solve(&mut self, x0: &[f64]) -> Result<(bool, Vec<f64>), ()>
 - 절차:
 - 초기값을 bounds 안으로 클램프.
 - 반복 시작:
-- evaluate(x) 호출 → F(x),J(x).
-- 잔차 노름 \| F(x)\|  계산.
+    - evaluate(x) 호출 → F(x),J(x).
+    - 잔차 노름 \| F(x)\|  계산.
 - 수렴 판정:
-- desired_tol 이하 → Converged.
-- acceptable_tol 이하 → Close.
-- Newton 스텝 계산: J\cdot dx=-F(x).
-- 스텝 크기 제한: \| dx\| 가 도메인 폭의 1/4 이상이면 스케일링.
-- x\leftarrow x+dx.
-- bounds 클램프.
-- 스텝이 너무 작으면 종료.
-- 반복 횟수 초과 시 MaxIterations 종료.
+    - desired_tol 이하 → Converged.
+    - acceptable_tol 이하 → Close.
+    - Newton 스텝 계산: $J\cdot dx=-F(x)$.
+    - 스텝 크기 제한: $\| dx\|$ 가 도메인 폭의 1/4 이상이면 스케일링.
+    - $x\leftarrow x+dx$.
+    - bounds 클램프.
+    - 스텝이 너무 작으면 종료.
+    - 반복 횟수 초과 시 MaxIterations 종료.
 
 ### 5. 보조 함수
 - euclidean_norm
@@ -167,10 +167,10 @@ fn solve_linear_system_dense(jac: &[f64], rhs: &[f64], n: usize) -> Option<Vec<f
   - 수렴 기준: \| F(x)\|  ≤ desired_tol 또는 acceptable_tol.
   - 보조 기능: 스텝 제한, bounds 클램프, 종료 이유 기록.
   - 핵심 함수:
-  - evaluate: 사용자 함수 평가.
-  - solve: Newton 반복.
-  - solve_linear_system_dense: 선형 시스템 풀이.
-  - euclidean_norm, max_abs: 노름 계산.
+      - evaluate: 사용자 함수 평가.
+      - solve: Newton 반복.
+      - solve_linear_system_dense: 선형 시스템 풀이.
+      - euclidean_norm, max_abs: 노름 계산.
 
 $$
 J(x)\cdot dx=-F(x),\quad x\leftarrow x+dx
