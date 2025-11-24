@@ -15,7 +15,7 @@ zip = "0.6"
 walkdir = "2.5"
 ```
 ## 2. 주요 함수
-- (1) 디렉토리 전체 압축
+### (1) 디렉토리 전체 압축
 ```rust
 pub fn zip_directory(src_dir: &Path, dst_file: &Path) -> zip::result::ZipResult<()>
 ```
@@ -23,7 +23,7 @@ pub fn zip_directory(src_dir: &Path, dst_file: &Path) -> zip::result::ZipResult<
   - 출력: ZIP 파일 생성
   - 동작: walkdir로 디렉토리 순회 → 파일은 ZipWriter::start_file로 추가 → 디렉토리는 add_directory로 추가
 
-- (2) ZIP 파일 해제
+### (2) ZIP 파일 해제
 ```rust
 pub fn unzip_file(zip_file: &Path, dst_dir: &Path) -> zip::result::ZipResult<()>
 ```
@@ -31,7 +31,7 @@ pub fn unzip_file(zip_file: &Path, dst_dir: &Path) -> zip::result::ZipResult<()>
   - 출력: ZIP 파일 해제
   - 동작: ZipArchive로 ZIP 열기 → 각 엔트리 추출 → 디렉토리 생성 및 파일 복사
 
-- (3) 단일 파일 ZIP → 내용 읽기
+### (3) 단일 파일 ZIP → 내용 읽기
 ```rust
 pub fn read_zip_content(zip_path: &Path) -> zip::result::ZipResult<String>
 ```
@@ -39,7 +39,7 @@ pub fn read_zip_content(zip_path: &Path) -> zip::result::ZipResult<String>
   - 출력: 첫 번째 파일의 문자열 내용
   - 동작: ZipArchive::by_index(0) → read_to_string
 
-- (4) 문자열 → 단일 파일 ZIP 저장
+### (4) 문자열 → 단일 파일 ZIP 저장
 ```rust
 pub fn write_zip_content(zip_path: &Path, filename: &str, contents: &str) -> zip::result::ZipResult<()>
 ```
@@ -47,6 +47,8 @@ pub fn write_zip_content(zip_path: &Path, filename: &str, contents: &str) -> zip
   - 입력: ZIP 파일 경로, 파일명, 문자열 내용
   - 출력: ZIP 파일 생성
   - 동작: ZipWriter::start_file → write_all(contents.as_bytes())
+
+---
 
 ## 3. 테스트 코드
 ```rust
@@ -102,6 +104,7 @@ mod tests {
 - GUI/서버 환경에서 파일 업로드/다운로드, 백업, 배포에 활용 가능
 
 ---
+
 ## 소스 코드
 ```rust
 use std::fs::{File, create_dir_all};
