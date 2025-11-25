@@ -251,6 +251,10 @@ $$
 - 따라서 condition number = $||J||\cdot ||J^{-1}||\approx 0.707\times 2.828=2.0$.
 - 즉, 정사각형 Quad4 요소의 Jacobian은 스케일링 때문에 cond=2.0이 정상적인 값입니다.
 
+
+## 참고 이미지
+![Jacobian Quad](/image/jacobian_quad.png)
+
 ## 🔍 참고
 - 보통 선형 사각형 요소의 Jacobian은 **등방성(isotropic)** 일 때 cond=2.0 이 나옵니다.
 - cond=1.0은 완전히 직교/정규화된 경우(예: 단위 행렬)에서만 나옵니다.
