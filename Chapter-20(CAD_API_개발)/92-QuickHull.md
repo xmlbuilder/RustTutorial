@@ -93,6 +93,8 @@ $$
 | triangle_normal             | 세
 
 
+## 테스트 이미지
+
 ![QuickHull](/image/quick_hull_result.png)
 
 ---
