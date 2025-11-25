@@ -18,7 +18,7 @@ $$
 - 사각형: 대각선 중점 연결 길이 비율
 
 $$
-AR=\frac{L_{max\_ diag}}{L_{min\_ diag}}
+AR=\frac{L_{max\\_ diag}}{L_{min\\_ diag}}
 $$
 
 - 의미: 값이 클수록 요소가 길쭉하거나 왜곡됨.
@@ -46,7 +46,7 @@ $$
 - 계산식:
 
 $$
-Stretch=\sqrt{\frac{\sqrt{2}\cdot L_{min\_ side}}{L_{max\_ diag}}}
+Stretch=\sqrt{\frac{\sqrt{2}\cdot L_{min\\_ side}}{L_{max\\_ diag}}}
 $$
 
 - 의미: 값이 1에 가까울수록 이상적, 0에 가까우면 요소가 찌그러짐.
