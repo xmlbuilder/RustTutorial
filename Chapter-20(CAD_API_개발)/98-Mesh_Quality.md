@@ -241,13 +241,18 @@ J=\left[ \begin{matrix}0.5&0.0\\ ; \quad 0.0&0.5\end{matrix}\right]
 $$
 
 - 이 행렬의 norm은 $||J||=\sqrt{0.5^2+0.5^2}=\sqrt{0.5}\approx 0.707$.
-- 역행렬은 $J^{-1}=\left[ \begin{matrix}2.0&0.0\\ 0.0&2.0\end{matrix}\right]$ .
+- 역행렬은
+
+$$
+J^{-1}=\left[ \begin{matrix}2.0&0.0\\ ; \quad 0.0&2.0\end{matrix}\right]
+$$
+
 - 역행렬의 norm은 $||J^{-1}||=\sqrt{2^2+2^2}=\sqrt{8}\approx 2.828$.
 - 따라서 condition number = $||J||\cdot ||J^{-1}||\approx 0.707\times 2.828=2.0$.
 - 즉, 정사각형 Quad4 요소의 Jacobian은 스케일링 때문에 cond=2.0이 정상적인 값입니다.
 
 ## 🔍 참고
-- 보통 선형 사각형 요소의 Jacobian은 **등방성(isotropic)** 일 때 cond=2.0이 나옵니다.
+- 보통 선형 사각형 요소의 Jacobian은 **등방성(isotropic)** 일 때 cond=2.0 이 나옵니다.
 - cond=1.0은 완전히 직교/정규화된 경우(예: 단위 행렬)에서만 나옵니다.
 - FEM에서는 cond 값이 커질수록 요소가 왜곡되었다는 뜻이고, cond=2.0은 **정상적인 정사각형** 상태입니다.
 
