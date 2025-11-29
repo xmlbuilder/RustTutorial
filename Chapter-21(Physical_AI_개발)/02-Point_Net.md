@@ -107,4 +107,94 @@ CAD, Mesh Processing, LIDAR, SLAM 등 전 영역에 응용 가능하다.
 
 ---
 
+## 🧠 PointNet 핵심 아이디어
+- 입력: N\times 3 포인트 클라우드 (N개 점, 각 점은 (x, y, z))
+- 공통 MLP: 각 점에 동일한 MLP 적용 → 로컬 특징 추출
+- Max Pooling: 전체 점에서 글로벌 특징 추출
+- FC Layer: 분류 결과 출력
+
+
+## 🦀 Rust PointNet (tch-rs 기반)
+```rust
+use tch::{nn, nn::Module, nn::OptimizerConfig, Tensor};
+
+pub struct PointNet {
+    mlp1: nn::Sequential,
+    mlp2: nn::Sequential,
+    mlp3: nn::Sequential,
+    fc1: nn::Linear,
+    fc2: nn::Linear,
+    fc3: nn::Linear,
+}
+```
+```rust
+impl PointNet {
+    pub fn new(vs: &nn::Path, num_classes: i64) -> Self {
+        let mlp1 = nn::seq()
+            .add(nn::conv1d(vs / "conv1", 3, 64, 1, Default::default()))
+            .add(nn::batch_norm1d(vs / "bn1", 64, Default::default()))
+            .add_fn(|x| x.relu());
+
+        let mlp2 = nn::seq()
+            .add(nn::conv1d(vs / "conv2", 64, 128, 1, Default::default()))
+            .add(nn::batch_norm1d(vs / "bn2", 128, Default::default()))
+            .add_fn(|x| x.relu());
+
+        let mlp3 = nn::seq()
+            .add(nn::conv1d(vs / "conv3", 128, 1024, 1, Default::default()))
+            .add(nn::batch_norm1d(vs / "bn3", 1024, Default::default()))
+            .add_fn(|x| x.relu());
+
+        let fc1 = nn::linear(vs / "fc1", 1024, 512, Default::default());
+        let fc2 = nn::linear(vs / "fc2", 512, 256, Default::default());
+        let fc3 = nn::linear(vs / "fc3", 256, num_classes, Default::default());
+
+        Self { mlp1, mlp2, mlp3, fc1, fc2, fc3 }
+    }
+```
+```rust
+    pub fn forward(&self, xs: &Tensor) -> Tensor {
+        // 입력: [batch, num_points, 3]
+        let mut x = xs.transpose(1, 2); // [batch, 3, num_points]
+
+        x = self.mlp1.forward(&x);
+        x = self.mlp2.forward(&x);
+        x = self.mlp3.forward(&x);
+
+        // Global feature: max pooling
+        let x = x.max_dim(2, false).0; // [batch, 1024]
+
+        let x = x.apply(&self.fc1).relu();
+        let x = x.apply(&self.fc2).relu();
+        let x = x.dropout(0.3, true);
+        x.apply(&self.fc3)
+    }
+}
+```
+
+
+## 🧪 테스트 코드
+```rust
+fn main() {
+    let vs = nn::VarStore::new(tch::Device::Cpu);
+    let net = PointNet::new(&vs.root(), 5); // 클래스 5개
+
+    // 더미 입력: batch=8, num_points=1024, dim=3
+    let dummy_input = Tensor::randn(&[8, 1024, 3], (tch::Kind::Float, tch::Device::Cpu));
+    let output = net.forward(&dummy_input);
+
+    println!("Output shape: {:?}", output.size()); // [8, 5]
+}
+```
+
+## 📌 정리
+- 이 코드는 PyTorch PointNet을 Rust로 옮긴 기본 구조입니다.
+- tch-rs를 사용해 Conv1d, BatchNorm, Linear 등을 그대로 구현.
+- 입력은 [batch, num_points, 3] 형태의 포인트 클라우드.
+- 출력은 [batch, num_classes] 분류 결과.
+
+---
+
+
+
 
