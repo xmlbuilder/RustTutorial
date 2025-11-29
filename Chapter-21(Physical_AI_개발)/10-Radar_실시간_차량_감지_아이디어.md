@@ -213,7 +213,6 @@ pub struct OpsMetric {
     pub temp_c: f32,
 }
 ```
-```rust
 
 ## MySQL 테이블 DDL
 ### 운영에서 원시 RD/Angle 맵은 객체 스토리지(S3 등)에 두고, 메타만 저장합니다. 우선 핵심 테이블 4개만.
