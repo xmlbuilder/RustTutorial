@@ -65,3 +65,471 @@ SAR은 **움직이는 플랫폼(위성, 항공기 등)** 이 레이더 펄스를
 
 ---
 
+## 소스 코드
+```rust
+// sar.rs
+// SAR 영상 생성 최소 파이프라인
+// - 펄스 압축
+// - RCMC (간이 보정)
+// - 슬로우타임 윈도잉
+// - 방위(azimuth) FFT
+// - 파워 영상화 (range x azimuth)
+
+use std::f32::consts::PI;
+use crate::core::geom::Point2D;
+use crate::core::image::{Image, ImgErr};
+use crate::core::math_extensions::Complex;
+
+// -----------------------------
+// 레이더 파라미터/입력 정의 (SAR)
+// -----------------------------
+#[derive(Clone, Debug)]
+pub struct SarParams {
+    pub fs: f32,            // fast-time sampling rate
+    pub bandwidth: f32,     // chirp bandwidth
+    pub lambda: f32,        // wavelength
+    pub range_bins: usize,  // 영상 세로 (range) 크기
+    pub pulses: usize,      // 영상 가로 (azimuth) 크기
+    pub platform_speed: f32, // 플랫폼 속도 (m/s), 간이 RCMC에 사용
+    pub prf: f32,           // Pulse Repetition Frequency (Hz)
+}
+```
+```rust
+#[derive(Clone, Debug)]
+pub struct SarInput {
+    // iq[pulse][sample]: 각 펄스의 fast-time I/Q
+    pub iq: Vec<Vec<Complex>>,
+    // 펄스 압축 기준 신호 (reference chirp 등)
+    pub reference: Vec<Complex>,
+    pub params: SarParams,
+    // 선택 메타: 중심 좌표 (시각화/후처리용)
+    pub scene_center: Option<Point2D>,
+}
+```
+```rust
+// -----------------------------
+// 윈도우/정규화 유틸
+// -----------------------------
+fn hann_window(n: usize) -> Vec<f32> {
+    let mut w = vec![0.0f32; n];
+    for i in 0..n {
+        w[i] = 0.5 - 0.5 * ((2.0 * PI * i as f32) / (n as f32)).cos();
+    }
+    w
+}
+```
+```rust
+// sqrt 기반 정규화 (작은 값도 차별화)
+fn normalize_to_u8_sqrt(power: &[f32]) -> Vec<u8> {
+    let mut maxp = 0.0f32;
+    for &p in power {
+        if p > maxp { maxp = p; }
+    }
+    let maxp = maxp.max(1e-12);
+    power.iter()
+        .map(|&p| ((p / maxp).sqrt() * 255.0).clamp(0.0, 255.0) as u8)
+        .collect()
+}
+```
+```rust
+// 펄스 압축 (시간영역 매치드 필터)
+// out[pulse][range_bin]
+fn pulse_compress(iq: &[Vec<Complex>], reference: &[Complex], range_bins: usize) -> Vec<Vec<Complex>> {
+    let ref_len = reference.len();
+    let mut out = vec![vec![Complex::default(); range_bins]; iq.len()];
+    for (m, pulse) in iq.iter().enumerate() {
+        let plen = pulse.len();
+        for r in 0..range_bins {
+            let mut acc = Complex::default();
+            for k in 0..ref_len {
+                let idx = r + k;
+                if idx >= plen { break; }
+                acc = acc.add(pulse[idx].mul(reference[k].conj()));
+            }
+            out[m][r] = acc;
+        }
+    }
+    out
+}
+```
+```rust
+// -----------------------------
+// RCMC (Range Cell Migration Correction; 간이)
+// - 플랫폼 이동으로 동일 산란원이 펄스마다 range 인덱스가 약간 달라지는 현상 보정
+// - 여기서는 선형 근사로 fractional shift를 보정 (선형 보간)
+// -----------------------------
+fn rcmc_simple(profiles: &mut [Vec<Complex>], params: &SarParams) {
+    if profiles.is_empty() { return; }
+    let pulses = profiles.len();
+    let rbins = profiles[0].len();
+
+    // 간이 모델: 펄스 m에서 평균적인 range 오프셋을 계산해 정렬
+    // drift_per_pulse (샘플) ~ platform_speed / (c/2 * fs) / prf
+    // 여기서는 비례상수로 간단히 스케일만 적용 (튜닝 파라미터)
+    let c = 299_792_458.0f32;
+    let range_res = c / (2.0 * params.bandwidth);   // 대략적 range resolution (m)
+    let sample_res = range_res * params.fs / (params.bandwidth.max(1e-6)); // 간이 스케일
+    let drift_per_pulse = (params.platform_speed / range_res) / params.prf * (params.fs / params.bandwidth.max(1e-6));
+    let drift = drift_per_pulse * 0.01; // 보수적 스케일 (데이터에 맞춰 조정)
+
+    for m in 0..pulses {
+        let frac = drift * (m as f32); // 펄스 index에 비례한 fractional shift
+        if frac.abs() < 1e-6 { continue; }
+        let shift_floor = frac.floor() as isize;
+        let frac_part = frac - frac.floor();
+
+        // 정수 이동
+        let mut tmp = vec![Complex::default(); rbins];
+        if shift_floor >= 0 {
+            let s = shift_floor as usize;
+            for r in s..rbins {
+                tmp[r - s] = profiles[m][r];
+            }
+        } else {
+            let s = (-shift_floor) as usize;
+            for r in 0..(rbins - s) {
+                tmp[r + s] = profiles[m][r];
+            }
+        }
+        // 분수 이동 (선형 보간)
+        let mut corrected = vec![Complex::default(); rbins];
+        for r in 0..rbins {
+            let r0 = r as isize;
+            let r1 = (r0 + if frac >= 0.0 { 1 } else { -1 }).clamp(0, (rbins - 1) as isize) as usize;
+            let a = 1.0 - frac_part.abs();
+            let b = frac_part.abs();
+            corrected[r] = tmp[r].scale(a).add(tmp[r1].scale(b));
+        }
+        profiles[m] = corrected;
+    }
+}
+```
+```rust
+// 방위(azimuth) DFT (느린 시간축 FFT 대체)
+// 입력: profiles[pulse][range_bin] → spec[range_bin][azimuth_bin]
+fn azimuth_dft(profiles: &[Vec<Complex>]) -> Vec<Vec<Complex>> {
+    let pulses = profiles.len();
+    if pulses == 0 { return vec![]; }
+    let range_bins = profiles[0].len();
+    let mut spec = vec![vec![Complex::default(); pulses]; range_bins];
+    for r in 0..range_bins {
+        for k in 0..pulses {
+            let mut acc = Complex::default();
+            for n in 0..pulses {
+                let ang = -2.0 * PI * (k as f32) * (n as f32) / (pulses as f32);
+                let w = Complex::new(ang.cos(), ang.sin());
+                acc = acc.add(profiles[n][r].mul(w));
+            }
+            spec[r][k] = acc;
+        }
+    }
+    spec
+}
+```
+```rust
+// -----------------------------
+// 슬로우타임 윈도잉 (azimuth 사이드로브 저감)
+// -----------------------------
+fn apply_azimuth_window(profiles: &mut [Vec<Complex>]) {
+    if profiles.is_empty() { return; }
+    let pulses = profiles.len();
+    let rbins = profiles[0].len();
+    let w = hann_window(pulses);
+    for m in 0..pulses {
+        let wm = w[m];
+        for r in 0..rbins {
+            profiles[m][r] = profiles[m][r].scale(wm);
+        }
+    }
+}
+```
+```rust
+// 파워 맵 → Image (세로=range, 가로=azimuth)
+fn spectrum_to_image(spec: &[Vec<Complex>]) -> Image {
+    if spec.is_empty() { return Image::new_gray(1, 1); }
+    let height = spec.len() as u32;       // range
+    let width = spec[0].len() as u32;     // azimuth
+    let mut power = Vec::with_capacity((width * height) as usize);
+    for r in 0..height as usize {
+        for k in 0..width as usize {
+            power.push(spec[r][k].mag2());
+        }
+    }
+    let pix = normalize_to_u8_sqrt(&power);
+    let mut img = Image::new_gray(width, height);
+    img.pixels = pix;
+    img
+}
+```
+```rust
+// -----------------------------
+// 오프라인 배치 처리
+// -----------------------------
+pub fn generate_sar_image(input: &SarInput) -> Result<Image, ImgErr> {
+    let pulses = input.params.pulses;
+    let range_bins = input.params.range_bins;
+
+    // 1) 펄스 압축
+    let mut profiles = pulse_compress(&input.iq, &input.reference, range_bins);
+
+    // 2) RCMC (간이)
+    rcmc_simple(&mut profiles, &input.params);
+
+    // 3) 슬로우타임 윈도잉
+    apply_azimuth_window(&mut profiles);
+
+    // 4) 방위(azimuth) DFT
+    let spec = azimuth_dft(&profiles);
+
+    // 5) 영상화
+    Ok(spectrum_to_image(&spec))
+}
+```
+```rust
+// 테스트용 참조 신호 (Chirp)
+pub fn make_chirp_reference(len: usize, alpha: f32) -> Vec<Complex> {
+    let mut out = Vec::with_capacity(len);
+    for n in 0..len {
+        let t = n as f32 / (len as f32);
+        let phase = PI * alpha * t * t;
+        out.push(Complex::new(phase.cos(), phase.sin()));
+    }
+    out
+}
+```
+---
+## 테스트 코드
+```rust
+// 간단 테스트: 지상 산란원 격자 (가상)
+#[cfg(test)]
+mod tests {
+    use std::f32::consts::PI;
+    use rand::{Rng, SeedableRng};
+    use rand::rngs::StdRng;
+    use nurbslib::core::math_extensions::Complex;
+    use nurbslib::core::sar::{generate_sar_image, make_chirp_reference, SarInput, SarParams};
+
+    #[test]
+    fn test_sar_pipeline() {
+        let pulses = 128;
+        let range_bins = 256;
+        let params = SarParams {
+            fs: 20e6,
+            bandwidth: 10e6,
+            lambda: 0.03,
+            range_bins,
+            pulses,
+            platform_speed: 180.0, // m/s (예시)
+            prf: 1500.0,
+        };
+        let reference = make_chirp_reference(64, 0.9);
+
+        // 가상 지상 산란원: 여러 range에 산란점, 펄스별 위상은 플랫폼 이동에 의해 변한다고 가정
+        let mut iq: Vec<Vec<Complex>> = vec![vec![Complex::default(); range_bins + reference.len()]; pulses];
+        let scatterers = vec![
+            (40usize, 120.0f32),
+            (100usize, 150.0f32),
+            (180usize, 90.0f32),
+        ];
+
+        let mut rng = StdRng::seed_from_u64(777);
+        for m in 0..pulses {
+            let mut pulse = vec![Complex::default(); range_bins + reference.len()];
+            for &(rbin, amp) in &scatterers {
+                // 간이 위상: azimuth 주파수 성분
+                let phase = 2.0 * PI * (m as f32) / (pulses as f32);
+                let s = Complex::new(phase.cos(), phase.sin()).scale(amp);
+                pulse[rbin] = pulse[rbin].add(s);
+            }
+            for v in &mut pulse {
+                v.re += rng.gen_range(-0.5..0.5);
+                v.im += rng.gen_range(-0.5..0.5);
+            }
+            iq[m] = pulse;
+        }
+
+        let input = SarInput { iq, reference, params, scene_center: None };
+        let img = generate_sar_image(&input).unwrap();
+        assert_eq!(img.channels, 1);
+        assert_eq!(img.width, pulses as u32);
+        assert_eq!(img.height, range_bins as u32);
+    }
+```
+```rust
+    fn create_sar_image() -> Result<(), Box<dyn std::error::Error>> {
+        let pulses = 256;
+        let range_bins = 512;
+        let params = SarParams {
+            fs: 20e6, bandwidth: 12e6, lambda: 0.03,
+            range_bins, pulses,
+            platform_speed: 200.0, prf: 1200.0,
+        };
+        let reference = make_chirp_reference(128, 0.9);
+
+        // iq[pulse][sample] 준비 (여기서는 예시로 zero에 가까운 버퍼)
+        let iq = vec![vec![Complex::new(0.0,0.0); range_bins + reference.len()]; pulses];
+
+        let input = SarInput { iq, reference, params, scene_center: None };
+        let img = generate_sar_image(&input)?;
+        img.save("asset/sar_out.png")?;
+        Ok(())
+    }
+
+    #[test]
+    fn test_sar_pipeline_2() {
+        create_sar_image().expect("Failed to create image");
+    }
+
+}
+```
+```rust
+#[cfg(test)]
+mod sar_tests {
+    use rand::{Rng, SeedableRng};
+    use rand::rngs::StdRng;
+    use nurbslib::core::sar::{generate_sar_image, make_chirp_reference, SarInput, SarParams};
+    use nurbslib::core::math_extensions::Complex;
+    use nurbslib::core::image::Image;
+
+    // 픽셀 통계/히스토그램 출력 (디버그용)
+    fn print_image_stats(img: &Image, name: &str) {
+        let (mut minv, mut maxv) = (u8::MAX, 0u8);
+        let mut sum: u64 = 0;
+        let mut hist = [0u32; 256];
+        for &p in &img.pixels {
+            if p < minv { minv = p; }
+            if p > maxv { maxv = p; }
+            sum += p as u64;
+            hist[p as usize] += 1;
+        }
+        let mean = sum as f32 / (img.pixels.len() as f32);
+        println!("[{}] size={}x{}, min={}, max={}, mean={:.2}",
+                 name, img.width, img.height, minv, maxv, mean);
+        // 간단 히스토그램 요약
+        for b in (0..=255).step_by(32) {
+            let hi = (b+31).min(255);
+            let bucket: u32 = (b..=hi).map(|k| hist[k as usize]).sum();
+            println!("  hist[{:>3}..{:>3}] = {}", b, hi, bucket);
+        }
+    }
+
+    #[test]
+    fn test_sar_pipeline_multi_scatterers() {
+        // 파라미터 설정
+        let pulses = 192;
+        let range_bins = 384;
+        let params = SarParams {
+            fs: 20e6,
+            bandwidth: 12e6,
+            lambda: 0.03,
+            range_bins,
+            pulses,
+            platform_speed: 220.0, // m/s
+            prf: 1200.0,
+        };
+        let reference = make_chirp_reference(96, 0.9);
+
+        // 가상 산란원: (range_bin, amplitude, azimuth_freq_scale)
+        // 서로 다른 range에서 서로 다른 방위 위상 변화를 줘서 분리되게 함
+        let scatterers = vec![
+            (50usize, 140.0f32, 0.25f32),
+            (140usize, 110.0f32, 0.60f32),
+            (260usize, 90.0f32, 0.85f32),
+            (320usize, 120.0f32, 0.42f32),
+        ];
+
+        // iq[pulse][sample] 버퍼 준비
+        let mut iq: Vec<Vec<Complex>> =
+            vec![vec![Complex::default(); range_bins + reference.len()]; pulses];
+
+        let mut rng = StdRng::seed_from_u64(2025_11_30);
+        for m in 0..pulses {
+            let mut pulse = vec![Complex::default(); range_bins + reference.len()];
+            for &(rbin, amp, kscale) in &scatterers {
+                // 방위 위상: m에 따라 변화 (플랫폼 이동 효과의 간이 모델)
+                let phase = 2.0 * std::f32::consts::PI * kscale * (m as f32) / (pulses as f32);
+                let s = Complex::new(phase.cos(), phase.sin()).scale(amp);
+                pulse[rbin] = pulse[rbin].add(s);
+            }
+            // 백색 노이즈
+            for v in &mut pulse {
+                v.re += rng.gen_range(-0.35..0.35);
+                v.im += rng.gen_range(-0.35..0.35);
+            }
+            iq[m] = pulse;
+        }
+
+        let input = SarInput {
+            iq,
+            reference,
+            params,
+            scene_center: None,
+        };
+
+        let img = generate_sar_image(&input).expect("SAR image generation failed");
+        print_image_stats(&img, "SAR_multi_scatterers");
+
+        // 크기/채널 검증
+        assert_eq!(img.channels, 1);
+        assert_eq!(img.width, pulses as u32);
+        assert_eq!(img.height, range_bins as u32);
+
+        // 저장하여 시각 확인
+        img.save("asset/sar_multi_scatterers.png").expect("save failed");
+    }
+```
+```rust
+    #[test]
+    fn test_sar_pipeline_rcmc_effect() {
+        // RCMC가 없을 때와 있을 때를 비교 (간이 비교: 이미지 차이 확인)
+        let pulses = 128;
+        let range_bins = 256;
+        let params = SarParams {
+            fs: 18e6,
+            bandwidth: 10e6,
+            lambda: 0.03,
+            range_bins,
+            pulses,
+            platform_speed: 180.0,
+            prf: 1500.0,
+        };
+        let reference = make_chirp_reference(64, 0.9);
+
+        // 한 산란원을 약간의 range drift로 시뮬레이션
+        let mut iq: Vec<Vec<Complex>> =
+            vec![vec![Complex::default(); range_bins + reference.len()]; pulses];
+
+        let base_range = 120usize;
+        let drift_per_pulse = 0.08f32; // fractional drift
+
+        for m in 0..pulses {
+            let mut pulse = vec![Complex::default(); range_bins + reference.len()];
+            let r_shift = base_range as f32 + drift_per_pulse * (m as f32);
+            let r0 = r_shift.floor() as usize;
+            let frac = r_shift - (r_shift.floor());
+            let amp = 120.0f32;
+            // 분수 샘플 보간
+            let s0 = Complex::new(1.0, 0.0).scale(amp * (1.0 - frac));
+            let s1 = Complex::new(1.0, 0.0).scale(amp * frac);
+            pulse[r0] = pulse[r0].add(s0);
+            if r0 + 1 < pulse.len() { pulse[r0 + 1] = pulse[r0 + 1].add(s1); }
+
+            iq[m] = pulse;
+        }
+
+        // 파이프라인 호출
+        let input = SarInput { iq, reference, params, scene_center: None };
+        let img = generate_sar_image(&input).expect("SAR image generation failed");
+
+        print_image_stats(&img, "SAR_rcmc_effect");
+        img.save("asset/sar_rcmc_effect.png").expect("save failed");
+
+        // 최소한 포화가 아닌 분포가 나오는지 확인
+        let minp = *img.pixels.iter().min().unwrap();
+        let maxp = *img.pixels.iter().max().unwrap();
+        assert!(minp < maxp);
+    }
+}
+```
+---
+
