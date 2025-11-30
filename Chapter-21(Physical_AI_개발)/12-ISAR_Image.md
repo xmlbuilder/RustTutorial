@@ -228,5 +228,576 @@ ISAR 영상은 레이더가 수집한 **거리 프로파일 + 도플러 주파�
 - **현재 관측된 RCS/ISAR ↔ 다양한 각도 데이터베이스 비교** 는 AI의 핵심 응용 분야입니다.
 - 실제로 군사·항공 분야에서는 AI 기반 자동 표적 식별(ATR, Automatic Target Recognition) 연구가 활발히 진행되고 있음.
 
+---
+## ISAR Source
+```rust
+// isar.rs
+// ISAR 영상 생성 최소 파이프라인 (자급자족: Complex, DFT, 윈도우, 펄스 압축, 정렬, 정규화)
+// 최종 출력은 첨부 Image 타입 사용.
 
+use std::f32::consts::PI;
+use std::cmp::Ordering;
+use ndarray::{Array, Array3};
+use crate::core::geom::Point2D;
+use crate::core::image::{Image, ImgErr};
 
+// -----------------------------
+// 기본 복소 타입 및 유틸
+// -----------------------------
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Complex {
+    pub re: f32,
+    pub im: f32,
+}
+```
+```rust
+impl Complex {
+    #[inline] pub fn new(re: f32, im: f32) -> Self { Self { re, im } }
+    #[inline] pub fn conj(self) -> Self { Self::new(self.re, -self.im) }
+    #[inline] pub fn mag2(self) -> f32 { self.re * self.re + self.im * self.im }
+    #[inline] pub fn add(self, o: Self) -> Self { Self::new(self.re + o.re, self.im + o.im) }
+    #[inline] pub fn sub(self, o: Self) -> Self { Self::new(self.re - o.re, self.im - o.im) }
+    #[inline] pub fn mul(self, o: Self) -> Self {
+        Self::new(self.re * o.re - self.im * o.im, self.re * o.im + self.im * o.re)
+    }
+    #[inline] pub fn scale(self, s: f32) -> Self { Self::new(self.re * s, self.im * s) }
+}
+```
+```rust
+// e^{-j*2*pi*k/N}
+#[inline]
+fn twiddle(n: usize, k: usize, N: usize) -> Complex {
+    let ang = -2.0 * PI * (k as f32) * (n as f32) / (N as f32);
+    Complex::new(ang.cos(), ang.sin())
+}
+```
+```rust
+// -----------------------------
+// 레이더 파라미터/입력 정의
+// -----------------------------
+#[derive(Clone, Debug)]
+pub struct RadarParams {
+    // 표본 주파수, 대역폭 등은 필요 시 사용
+    pub fs: f32,          // fast-time sampling rate
+    pub bandwidth: f32,   // signal bandwidth
+    pub lambda: f32,      // wavelength
+    pub range_bins: usize,
+    pub pulses: usize,    // slow-time 길이
+}
+```
+```rust
+#[derive(Clone, Debug)]
+pub struct IsarInput {
+    // iq[pulse][sample] 형태의 원시 I/Q
+    pub iq: Vec<Vec<Complex>>,
+    // 펄스 압축용 기준 신호 (reference chirp 등)
+    pub reference: Vec<Complex>,
+    pub params: RadarParams,
+    // 메타(선택): 시선벡터, 목표물 예상 센터 등
+    pub look_vector: Option<Vector2D>,
+    pub target_center: Option<Point2D>,
+}
+```
+```rust
+// -----------------------------
+// 윈도우/정규화 유틸
+// -----------------------------
+fn hann_window(n: usize) -> Vec<f32> {
+    let mut w = vec![0.0f32; n];
+    if n <= 1 { return w; }
+    let denom = (n - 1) as f32;
+    for i in 0..n {
+        w[i] = 0.5 - 0.5 * (2.0 * PI * (i as f32) / denom).cos();
+    }
+    w
+}
+```
+```rust
+/// 파워 값 배열을 로그 스케일로 정규화하여 0..255 범위의 u8 픽셀로 변환
+fn normalize_to_u8(power: &[f32]) -> Vec<u8> {
+    let maxp = power.iter().cloned().fold(0.0, f32::max);
+    if maxp <= 0.0 {
+        return vec![0u8; power.len()];
+    }
+    let mut out = Vec::with_capacity(power.len());
+    let floor_db = -60.0f32;
+    let max_db = 0.0f32;
+
+    for &p in power {
+        let db = 10.0 * (p / maxp).max(1e-12).log10(); // -inf 방지
+        let db_clamped = db.max(floor_db).min(max_db);
+        let t = (db_clamped - floor_db) / (max_db - floor_db); // 0..1
+        out.push((t * 255.0).round() as u8);
+    }
+    out
+}
+```
+```rust
+// -----------------------------
+// 펄스 압축 (매치드 필터: reference와의 상관)
+// -----------------------------
+// out[pulse][range_bin]
+fn pulse_compress(iq: &[Vec<Complex>], reference: &[Complex], range_bins: usize) -> Vec<Vec<Complex>> {
+    let ref_len = reference.len();
+    let mut out = vec![vec![Complex::default(); range_bins]; iq.len()];
+    // 단순 시간영역 상관 (효율 < FFT, but self-contained)
+    for (m, pulse) in iq.iter().enumerate() {
+        let plen = pulse.len();
+        for r in 0..range_bins {
+            // ref를 반전/켤레 상관으로 누적
+            let mut acc = Complex::default();
+            for k in 0..ref_len {
+                let idx = r + k;
+                if idx >= plen { break; }
+                let ref_idx = ref_len - 1 - k;
+                acc = acc.add(pulse[idx].mul(reference[ref_idx].conj()));
+            }
+            out[m][r] = acc;
+        }
+    }
+    out
+}
+```
+```rust
+// -----------------------------
+// 거리 정렬 (range alignment)
+// 간단: 각 펄스의 파워 피크 위치를 기준 피크에 맞춤
+// -----------------------------
+fn range_align(profiles: &mut [Vec<Complex>]) {
+    if profiles.is_empty() { return; }
+    let ref_peak = peak_index(&profiles[0]);
+    for m in 1..profiles.len() {
+        let cur_peak = peak_index(&profiles[m]);
+        match cur_peak.cmp(&ref_peak) {
+            Ordering::Equal => {}
+            Ordering::Less => {
+                let shift = ref_peak - cur_peak; // → 오른쪽으로 shift
+                let mut shifted = vec![Complex::default(); profiles[m].len()];
+                for r in 0..profiles[m].len() {
+                    if r + shift < profiles[m].len() {
+                        shifted[r + shift] = profiles[m][r];
+                    }
+                }
+                profiles[m] = shifted;
+            }
+            Ordering::Greater => {
+                let shift = cur_peak - ref_peak; // → 왼쪽으로 shift
+                let mut shifted = vec![Complex::default(); profiles[m].len()];
+                for r in shift..profiles[m].len() {
+                    shifted[r - shift] = profiles[m][r];
+                }
+                profiles[m] = shifted;
+            }
+        }
+    }
+}
+```
+```rust
+fn peak_index(profile: &[Complex]) -> usize {
+    let mut maxp = -f32::INFINITY;
+    let mut idx = 0usize;
+    for (i, &c) in profile.iter().enumerate() {
+        let p = c.mag2();
+        if p > maxp {
+            maxp = p;
+            idx = i;
+        }
+    }
+    idx
+}
+```
+```rust
+// -----------------------------
+// 도플러 DFT (느린 시간축 FFT를 DFT로 대체)
+// 입력: profiles[pulse][range_bin] → 출력: spec[range_bin][doppler_bin]
+// -----------------------------
+fn doppler_dft(profiles: &[Vec<Complex>]) -> Vec<Vec<Complex>> {
+    let pulses = profiles.len();
+    if pulses == 0 { return vec![]; }
+    let range_bins = profiles[0].len();
+    let mut spec = vec![vec![Complex::default(); pulses]; range_bins];
+    // 각 range bin마다 느린 시간 축 DFT
+    for r in 0..range_bins {
+        for k in 0..pulses {
+            let mut acc = Complex::default();
+            for n in 0..pulses {
+                let w = twiddle(n, k, pulses);
+                acc = acc.add(profiles[n][r].mul(w));
+            }
+            spec[r][k] = acc;
+        }
+    }
+    spec
+}
+```
+```rust
+// -----------------------------
+// 파워 맵 → Image
+// spec[range][doppler] → 그레이 영상 (세로=range, 가로=doppler)
+// -----------------------------
+fn spectrum_to_image(spec: &[Vec<Complex>]) -> Image {
+    if spec.is_empty() { return Image::new_gray(1, 1); }
+    let height = spec.len() as u32;       // range
+    let width = spec[0].len() as u32;     // doppler
+    // 파워 벡터로 변환 후, 0..255 정규화
+    let mut power = Vec::with_capacity((width * height) as usize);
+    for r in 0..height as usize {
+        for k in 0..width as usize {
+            power.push(spec[r][k].mag2());
+        }
+    }
+    let pix = normalize_to_u8(&power);
+    let mut img = Image::new_gray(width, height);
+    img.pixels = pix;
+    img
+}
+```
+```rust
+// -----------------------------
+// 실시간 누적 파이프라인
+// -----------------------------
+pub struct IsarRealtime {
+    params: RadarParams,
+    reference: Vec<Complex>,
+    // 슬로우타임 버퍼 (고정 길이 circular)
+    iq_ring: Vec<Vec<Complex>>,
+    head: usize,
+    filled: usize,
+    window_slow: Vec<f32>,
+}
+```
+```rust
+impl IsarRealtime {
+    pub fn new(params: RadarParams, reference: Vec<Complex>) -> Self {
+        let iq_ring = vec![vec![Complex::default(); params.range_bins + reference.len()]; params.pulses];
+        let window_slow = hann_window(params.pulses);
+        Self { params, reference, iq_ring, head: 0, filled: 0, window_slow }
+    }
+```
+```rust
+    // 새로운 펄스 I/Q 샘플을 수신 (fast-time 길이는 적어도 range_bins + ref_len 권장)
+    pub fn push_pulse(&mut self, iq_samples: Vec<Complex>) {
+        self.iq_ring[self.head] = iq_samples;
+        self.head = (self.head + 1) % self.params.pulses;
+        if self.filled < self.params.pulses { self.filled += 1; }
+    }
+```
+```rust
+    // 충분한 펄스가 채워졌다면 ISAR 프레임 생성
+    pub fn generate_frame(&self) -> Option<Image> {
+        if self.filled < self.params.pulses { return None; }
+
+        // 슬로우타임 순서를 0..pulses로 재구성
+        let mut iq = Vec::with_capacity(self.params.pulses);
+        let mut idx = self.head;
+        for _ in 0..self.params.pulses {
+            iq.push(self.iq_ring[idx].clone());
+            idx = (idx + 1) % self.params.pulses;
+        }
+
+        // 펄스 압축
+        let mut profiles = pulse_compress(&iq, &self.reference, self.params.range_bins);
+
+        // 거리 정렬
+        range_align(&mut profiles);
+
+        // 슬로우타임 윈도(크로스-레인지 사이드로브 저감)
+        for m in 0..self.params.pulses {
+            let w = self.window_slow[m];
+            for r in 0..self.params.range_bins {
+                profiles[m][r] = profiles[m][r].scale(w);
+            }
+        }
+
+        // 느린 시간축 DFT로 도플러 스펙트럼
+        let spec = doppler_dft(&profiles);
+
+        // 영상화
+        Some(spectrum_to_image(&spec))
+    }
+}
+```
+```rust
+// -----------------------------
+// 오프라인 일괄 처리 (배치)
+// -----------------------------
+pub fn generate_isar_image(input: &IsarInput) -> Result<Image, ImgErr> {
+    let pulses = input.params.pulses;
+    let range_bins = input.params.range_bins;
+
+    // 1) 펄스 압축
+    let mut profiles = pulse_compress(&input.iq, &input.reference, range_bins);
+
+    // 2) 거리 정렬
+    range_align(&mut profiles);
+
+    // 3) 슬로우타임 윈도잉
+    let w = hann_window(pulses);
+    for m in 0..pulses {
+        for r in 0..range_bins {
+            profiles[m][r] = profiles[m][r].scale(w[m]);
+        }
+    }
+
+    // 4) 도플러 DFT
+    let spec = doppler_dft(&profiles);
+
+    // 5) 영상화
+    let img = spectrum_to_image(&spec);
+
+    Ok(img)
+}
+```
+```rust
+// -----------------------------
+// 헬퍼: 간단한 기준 신호(chirp) 생성 (테스트용)
+// s(t) ≈ exp(j*pi*alpha*t^2) 를 이산화하여 reference 생성
+// -----------------------------
+pub fn make_chirp_reference(len: usize, alpha: f32) -> Vec<Complex> {
+    let mut out = Vec::with_capacity(len);
+    for n in 0..len {
+        let t = n as f32 / (len as f32);
+        let phase = PI * alpha * t * t;
+        out.push(Complex::new(phase.cos(), phase.sin()));
+    }
+    out
+}
+```
+```rust
+/// Image → CNN 입력 텐서 (1채널, [1, height, width])
+pub fn image_to_tensor(img: &Image) -> Array3<f32> {
+    let h = img.height as usize;
+    let w = img.width as usize;
+    let mut arr = Array::zeros((1, h, w));
+    for y in 0..h {
+        for x in 0..w {
+            let idx = y * w + x;
+            let v = img.pixels[idx] as f32 / 255.0;
+            arr[[0, y, x]] = v;
+        }
+    }
+    arr
+}
+```
+```rust
+/// 밝은 픽셀을 기준으로 산란원 위치 추출
+pub fn extract_scatterers(img: &Image, threshold: u8) -> Vec<Point2D> {
+    let mut points = Vec::new();
+    let w = img.width;
+    let h = img.height;
+    for y in 0..h {
+        for x in 0..w {
+            let idx = (y * w + x) as usize;
+            let v = img.pixels[idx];
+            if v >= threshold {
+                points.push(Point2D {
+                    x: x as f64,
+                    y: y as f64,
+                });
+            }
+        }
+    }
+    points
+}
+```
+---
+
+## 테스트 코드
+```rust
+#[cfg(test)]
+mod tests {
+    use std::f32::consts::PI;
+    use rand::prelude::StdRng;
+    use rand::{Rng, SeedableRng};
+    use nurbslib::core::image::Image;
+    use nurbslib::core::isar::{extract_scatterers, generate_isar_image, image_to_tensor, make_chirp_reference, IsarInput, IsarRealtime, RadarParams};
+    use nurbslib::core::math_extensions::Complex;
+
+    fn create_isar_image() -> Result<(), Box<dyn std::error::Error>> {
+        // 입력 구성
+        let pulses = 256;
+        let range_bins = 512;
+        let params = RadarParams { fs: 20e6, bandwidth: 10e6, lambda: 0.03, range_bins, pulses };
+        let reference = make_chirp_reference(128, 0.9);
+
+        // iq[pulse][sample] 준비 (여기서는 예시로 zero)
+        let iq = vec![vec![Complex::new(0.0,0.0); range_bins + reference.len()]; pulses];
+
+        let input = IsarInput {
+            iq,
+            reference,
+            params,
+            look_vector: None,
+            target_center: None,
+        };
+
+        let img = generate_isar_image(&input)?;
+        img.save("asset/isar_out.png")?;
+        Ok(())
+    }
+```
+```rust
+    #[test]
+    fn create_isar_image_test()
+    {
+        create_isar_image().expect("Failed to create isar image");
+    }
+```
+```rust
+    fn realtime_example() -> Result<(), Box<dyn std::error::Error>> {
+        let pulses = 128;
+        let range_bins = 256;
+        let params = RadarParams { fs: 20e6, bandwidth: 10e6, lambda: 0.03, range_bins, pulses };
+        let reference = make_chirp_reference(64, 0.9);
+        let mut rt = IsarRealtime::new(params, reference);
+
+        // 실시간으로 펄스 수신
+        for _ in 0..pulses {
+            let iq_samples = vec![Complex::new(0.0,0.0); range_bins + 64];
+            rt.push_pulse(iq_samples);
+        }
+
+        if let Some(img) = rt.generate_frame() {
+            img.save("asset/isar_realtime.png")?;
+        }
+        Ok(())
+    }
+```
+```rust
+    #[test]
+    fn create_isar_realtime_image_test()
+    {
+        realtime_example().expect("Failed to realtime image");
+    }
+```
+```rust
+    #[test]
+    fn test_multi_scatterers_isar() {
+        use super::*;
+        use rand::{Rng, SeedableRng};
+        use rand::rngs::StdRng;
+
+        let pulses = 128;
+        let range_bins = 256;
+        let params = RadarParams {
+            fs: 20e6,
+            bandwidth: 10e6,
+            lambda: 0.03,
+            range_bins,
+            pulses,
+        };
+        let reference = make_chirp_reference(64, 0.9);
+
+        let mut iq: Vec<Vec<Complex>> = vec![vec![Complex::default(); range_bins + reference.len()]; pulses];
+
+        // 산란원 3개: 서로 다른 거리와 도플러 성분
+        let scatterers = vec![
+            (60usize, 8usize, 120.0),   // 가까운 거리, 낮은 도플러
+            (120usize, 20usize, 100.0), // 중간 거리, 중간 도플러
+            (200usize, 40usize, 80.0),  // 먼 거리, 높은 도플러
+        ];
+
+        let mut rng = StdRng::seed_from_u64(12345);
+        for m in 0..pulses {
+            let mut pulse = vec![Complex::default(); range_bins + reference.len()];
+            for &(rbin, dbin, amp) in &scatterers {
+                let phase = 2.0 * PI * (dbin as f32) * (m as f32) / (pulses as f32);
+                let s = Complex::new(phase.cos(), phase.sin()).scale(amp);
+                pulse[rbin] = s;
+            }
+            // 노이즈 추가
+            for v in &mut pulse {
+                v.re += rng.gen_range(-0.5..0.5);
+                v.im += rng.gen_range(-0.5..0.5);
+            }
+            iq[m] = pulse;
+        }
+
+        let input = IsarInput {
+            iq,
+            reference,
+            params,
+            look_vector: None,
+            target_center: None,
+        };
+
+        let img = generate_isar_image(&input).unwrap();
+        img.save("asset/isar_multi_scatterers.png").unwrap();
+    }
+```
+```rust
+    #[test]
+    fn test_isar_pipeline() {
+        // 가상 파라미터
+        let pulses = 128;
+        let range_bins = 256;
+        let params = RadarParams {
+            fs: 20e6,
+            bandwidth: 10e6,
+            lambda: 0.03, // X-band ~10GHz
+            range_bins,
+            pulses,
+        };
+        // 기준 신호
+        let reference = make_chirp_reference(64, 0.9);
+
+        // 가상 타깃: 특정 range_bin에 산란원, 슬로우타임에서 도플러 위상 누적
+        let mut iq: Vec<Vec<Complex>> = vec![vec![Complex::default(); range_bins + reference.len()]; pulses];
+
+        let target_range = 90usize;
+        let doppler_hz_bin = 12usize; // 슬로우타임 bin
+
+        let mut rng = StdRng::seed_from_u64(42);
+        for m in 0..pulses {
+            let mut pulse = vec![Complex::default(); range_bins + reference.len()];
+            // 타깃 반사 성분 (간단 모델)
+            let phase = 2.0 * PI * (doppler_hz_bin as f32) * (m as f32) / (pulses as f32);
+            let s = Complex::new(phase.cos(), phase.sin()).scale(100.0);
+            pulse[target_range] = s;
+
+            // 노이즈 추가
+            for v in &mut pulse {
+                v.re += rng.gen_range(-0.5..0.5);
+                v.im += rng.gen_range(-0.5..0.5);
+            }
+            iq[m] = pulse;
+        }
+
+        let input = IsarInput {
+            iq,
+            reference,
+            params,
+            look_vector: None,
+            target_center: None,
+        };
+
+        let img = generate_isar_image(&input).unwrap();
+        assert_eq!(img.channels, 1);
+        assert_eq!(img.width, pulses as u32);
+        assert_eq!(img.height, range_bins as u32);
+        // 간단 확인: 픽셀 범위
+        assert!(img.pixels.iter().all(|&p| p <= 255));
+    }
+```
+```rust
+    fn detect_isar() -> Result<(), Box<dyn std::error::Error>> {
+        let img = Image::load("asset/isar_multi_scatterers.png")?;
+
+        // CNN 입력 텐서로 변환
+        let tensor = image_to_tensor(&img);
+        println!("Tensor shape: {:?}", tensor.shape());
+
+        // 산란원 위치 추출
+        let scatterers = extract_scatterers(&img, 240);
+        println!("Detected scatterers: {:?}", scatterers);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_detect_isar() {
+        detect_isar().expect("Failed to detect ISAR");
+    }
+
+}
+```
