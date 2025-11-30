@@ -846,7 +846,7 @@ mod tests {
 ```
 
 ## Subdivide Adaptive 결과
-!(SubDivide Adaptive)(/image/subdivde_adaptive.png)
+![SubDivide Adaptive](/image/subdivde_adaptive.png)
 
 
 ---
