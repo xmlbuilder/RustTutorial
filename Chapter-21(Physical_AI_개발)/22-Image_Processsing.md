@@ -1,3 +1,36 @@
+# Image Processing 필요성
+
+이미지 프로세싱 모듈은 단순히 사진을 다루는 도구를 넘어서, AI 개발의 기반 기술로서 여러 가지 중요한 기여를 합니다.
+
+## 📌 AI 개발에서 이미지 프로세싱의 기여
+### 1. 데이터 전처리 (Preprocessing)
+- AI 모델은 원본 이미지를 그대로 쓰지 않고, 정규화/리사이즈/노이즈 제거 같은 전처리가 필요합니다.
+  - 예: normalize_min_max, resize_bilinear, gaussian_blur_f64 → 학습 데이터 품질 향상.
+### 2. 특징 추출 (Feature Extraction)
+- 전통적인 컴퓨터 비전에서는 에지 검출(Canny), 모폴로지 연산 등을 통해 중요한 구조를 뽑아냅니다.
+- 딥러닝에서도 CNN이 자동으로 특징을 학습하지만, 전처리 단계에서 에지/윤곽 강조를 해주면 학습이 더 안정적일 수 있습니다.
+### 3. 데이터 증강 (Data Augmentation)
+- AI 모델은 다양한 입력을 경험해야 일반화가 잘 됩니다.
+- rotate_gray_about_center, warp_rgb, resize_nearest 같은 변환 함수는 데이터 증강에 활용되어 모델의 성능을 높입니다.
+### 4. 후처리 (Postprocessing)
+- 모델이 출력한 결과(예: segmentation mask, heatmap)를 사람이 보기 좋게 변환해야 합니다.
+- ndarray_f64_to_gray, draw_rectangle 같은 함수는 결과 시각화와 검증에 쓰입니다.
+### 5. 고전 CV와 딥러닝의 연결
+- canny_edges, erode_gray, dilate_gray 같은 전통적인 영상 처리 기법은 딥러닝과 결합해 하이브리드 파이프라인을 만들 수 있습니다.
+  - 예: CNN으로 coarse segmentation → imageproc 모폴로지 연산으로 경계 다듬기.
+
+## 📊 정리: AI 개발에서의 역할
+
+| 단계        | 관련 함수들                                | AI 개발 효과                |
+|-------------|--------------------------------------------|-----------------------------|
+| 전처리      | normalize_min_max, resize_bilinear         | 데이터 품질 향상            |
+| 특징 추출   | canny_edges, gaussian_blur_gray            | 구조적 정보 강조            |
+| 데이터 증강 | rotate_rgb_about_center, warp_dynamic      | 일반화 성능 개선            |
+| 후처리      | draw_rectangle, ndarray_f64_to_gray        | 결과 시각화 및 평가         |
+| 하이브리드  | erode_gray, dilate_gray                    | 딥러닝 + 전통 CV 결합       |
+
+---
+
 ## 📌 image_utils 함수 문서화
 
 ### 타입 정의
@@ -7,7 +40,6 @@
 /// - 값 범위 [0,1] 로 정규화된 f64
 pub type ImgF64 = Array2<f64>;
 ```
-
 
 ### 변환 관련
 ```rust
@@ -50,8 +82,6 @@ pub fn resize_nearest(img: &ImgF64, new_width: u32, new_height: u32) -> ImgF64
 /// 간단한 contrast stretch: [min,max] → [0,1]
 pub fn normalize_min_max(img: &ImgF64) -> ImgF64
 ```
-
-
 ### Gray/RGB 공통 처리
 ```rust
 /// Gaussian Blur (RGB)
@@ -85,7 +115,6 @@ pub fn erode_gray(img: &GrayImage, norm: Norm, k: u8) -> GrayImage
 /// Dilate (팽창)
 pub fn dilate_gray(img: &GrayImage, norm: Norm, k: u8) -> GrayImage
 ```
-
 
 ### 기하학 변환 (Warp / Rotation)
 ```rust
