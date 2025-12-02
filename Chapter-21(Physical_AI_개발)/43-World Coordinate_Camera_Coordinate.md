@@ -251,6 +251,114 @@ transform.basis = R_align3x3 * transform.basis
 transform = Transform3D(R_align3x3, Vector3.ZERO) * transform
 ```
 ---
+# 📘 3D 그래픽스 좌표계와 변환 정리 문서
+## 1. MC (Model Coordinate, 모델 좌표계)
+- 정의: obj 등 메쉬 파일을 읽어들여 생성되는 개별 오브젝트의 로컬 좌표계
+- 특징: 오브젝트 내부의 정점(vertex), 삼각형, 폴리곤 위치를 정의
+  - 비유: 사람 오브젝트라면 팔, 머리, 다리의 위치가 MC 좌표로 표현됨
+
+## 2. WC (World Coordinate, 세상 좌표계)
+- 정의: 모든 오브젝트가 배치되는 전역 좌표계
+- 특징: 오브젝트 간 상대적 위치를 표현
+  - 예시: 손의 MC 좌표가 (-10,0,10), 사람 오브젝트가 WC에서 (100,100,100)에 있으면 손의 WC 좌표는 (90,100,110)
+
+## 3. EC (Eye/Camera Coordinate, 카메라 좌표계)
+- 정의: 카메라 위치와 방향을 기준으로 한 좌표계
+- 특징: 물체가 카메라에 어떻게 보이는지를 표현
+- 역할: WC까지는 “세상을 만드는 과정”, EC부터는 “세상을 2D 이미지로 그려내는 과정”
+- 인자: 카메라 위치(position), 방향(orientation, uvn 벡터)
+
+## 4. CC (Clip Coordinate, 클립 좌표계)
+- 정의: Vertex Shader의 출력(gl_Position)에 해당하는 좌표계
+- 특징: View Volume Clipping 후, 카메라에 보이는 부분만 남김
+- 형태: 원근 투영 시 잘린 사각뿔(Frustum) 형태
+
+## 5. NDC (Normalized Device Coordinate, 정규 디바이스 좌표계)
+- 정의: CC를 -1~1 범위의 정육면체로 정규화한 좌표계
+- 특징:
+  - x, y, z ∈ [-1, 1]
+  - 원근 나눗셈(Perspective Division)으로 w값을 1로 맞춤
+  - OpenGL에서는 이 과정에서 오른손 → 왼손 좌표계로 바뀜
+  - z=-1이 near, z=+1이 far
+
+## 6. WdC (Window Coordinate, 윈도우 좌표계)
+- 정의: 실제 화면(뷰포트)에 매핑된 2D 좌표계
+- 특징:
+- NDC를 뷰포트 크기(width, height)와 위치에 맞게 변환
+- z는 깊이 버퍼(0~1)로만 사용, 화면에는 x,y만 표시
+- 예시: 뷰포트 (100,100)~(300,200)일 때, NDC (0.4,0.3,1)은 WdC (180,130)에 매핑됨
 
 
+## 📐 변환 과정 요약
 
+| 단계 | 좌표계 | 변환 이름              | 설명                                      | 인자/특징                |
+|------|--------|------------------------|-------------------------------------------|---------------------------|
+| 1    | MC     | Modeling Transformation | 모델 로컬 → 월드 좌표 변환                 | translate, rotate, scale  |
+| 2    | WC     | Viewing Transformation  | 월드 → 카메라 좌표 변환                    | 카메라 위치, 방향(uvn)    |
+| 3    | EC     | Projection Transformation| 카메라 → 클립 좌표 변환                    | fov, near, far, frustum   |
+| 4    | CC     | Perspective Division    | 클립 → NDC (w로 나눔)                      | 원근 나눗셈, handedness 변화 |
+| 5    | NDC    | Viewport Transformation | NDC → 윈도우 좌표 변환                     | viewport width, height     |
+| 6    | WdC    | Window Coordinate       | 최종 화면 픽셀 좌표                        | 실제 모니터/윈도우 좌표   |
+
+
+## 📘 변환 종류
+### 1. 3D Affine Transformation (아핀 변환)
+- 정의: p'=Ap+v
+- 특징: 평행성과 거리 비율 유지
+- 예시: rotate, scale, translate, shearing
+- 역변환 가능
+### 2. Rigid Body Transformation (강체 변환)
+- 정의: 길이와 각도 보존, scale 불허
+- 특징: 이동과 회전만 허용
+- 현실 물체에 대응하는 변환
+
+## ✅ 결론
+- MC → WC → EC → CC → NDC → WdC 순으로 좌표계가 변환되며,
+- 각 단계는 행렬 연산으로 연결되어 최종적으로 화면 픽셀 좌표가 결정됨.
+- 모델링은 “세상을 만드는 과정”, 뷰잉 이후는 **세상을 카메라로 그려내는 과정** 으로 이해하면 직관적임.
+
+
+## 흐름도
+```
+   ┌───────────────┐
+   │   MC          │
+   │ Model Coord.  │
+   │ (오브젝트 로컬)│
+   └───────┬───────┘
+           │  <Modeling Transformation>
+           ▼
+   ┌───────────────┐
+   │   WC          │
+   │ World Coord.  │
+   │ (세상 좌표계)  │
+   └───────┬───────┘
+           │  <Viewing Transformation>
+           ▼
+   ┌───────────────┐
+   │   EC          │
+   │ Eye/Camera    │
+   │ Coord.        │
+   └───────┬───────┘
+           │  <Projection Transformation>
+           ▼
+   ┌───────────────┐
+   │   CC          │
+   │ Clip Coord.   │
+   │ (Frustum)     │
+   └───────┬───────┘
+           │  <Perspective Division>
+           ▼
+   ┌───────────────┐
+   │   NDC         │
+   │ Normalized    │
+   │ Device Coord. │
+   │ (-1 ~ +1 cube)│
+   └───────┬───────┘
+           │  <Viewport Transformation>
+           ▼
+   ┌───────────────┐
+   │   WdC         │
+   │ Window Coord. │
+   │ (화면 픽셀)    │
+   └───────────────┘
+```
