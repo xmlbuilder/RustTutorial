@@ -99,7 +99,9 @@ $$
 - 합성 확인: screen_to_clip * clip_to_screen ≈ identity.
 - 👉 요약하면, 카메라 축 방향과 깊이 매핑 규칙을 정확히 이해해야 테스트가 통과합니다.
 
-![Camera Coordinate](/image/camera_coordinate.png)
+<p align="center">
+  <img src="/image/camera_coordinate.png" alt="Camera Coordinate"/>
+</p>
 
 
 ## 카메라 좌표계에서 시선 방향은 Z축입니다
@@ -114,8 +116,9 @@ $$
 - 물체가 –Z 방향에 있어야 화면에 보이고,
 - +Z 방향에 있으면 카메라 뒤에 있어서 보이지 않습니다
 
-
-![Camera Visible](/image/camera_visible.png)
+<p align="center">
+  <img src="/image/camera_visible.png" alt="Camera Visible"/>
+</p>
 
 ---
 
