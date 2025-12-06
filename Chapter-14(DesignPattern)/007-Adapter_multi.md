@@ -1,6 +1,6 @@
 # Multi Adapter
-다중 어댑터(Multi Adapter), 비동기 어댑터(Async Adapter), 
-그리고 **enum 기반 전략 어댑터(Enum Strategy Adapter)**를 Rust, C++, C#, Python 네 가지 언어로 비교 설명.
+다중 어댑터(Multi Adapter), 비동기 어댑터(Async Adapter),  
+그리고 **enum 기반 전략 어댑터(Enum Strategy Adapter)** 를 Rust, C++, C#, Python 네 가지 언어로 비교 설명.
 
 ## 🧩 1. 다중 어댑터 (Multi Adapter)
 
