@@ -13,6 +13,77 @@ rand = "0.8"
 - "0.8"은 현재 안정적인 버전 중 하나예요. 최신 버전은 crates.io의 rand 페이지에서 확인 가능.
 - 추가 후 cargo build를 실행하면 자동으로 다운로드되고 프로젝트에 포함됩니다.
 
+## 📚 rand 크레이트 주요 기능
+### 1. RNG 생성기
+- thread_rng(): 스레드 로컬 RNG, 가장 흔히 쓰이는 기본 생성기
+- StdRng, SmallRng: 표준/경량 RNG
+- ChaChaRng: 암호학적으로 안전한 RNG (보안용)
+```rust
+let mut rng = rand::thread_rng();
+```
+
+### 2. 기본 난수 생성
+- rng.random::<T>(): 타입에 맞는 난수 생성 (i32, f64, bool 등)
+- rng.gen_range(a..b): 지정된 범위 내 난수 생성
+- rng.gen_bool(p): 확률 p로 true/false 생성
+```rust
+let x: i32 = rng.random();          // 임의의 i32
+let y: f64 = rng.gen_range(0.0..1.0); // 0~1 사이 실수
+let coin = rng.gen_bool(0.5);       // 동전 던지기
+```
+
+### 3. 분포 샘플링
+- Uniform::new(a, b): 균등분포
+- Normal::new(mean, stddev): 정규분포
+- Alphanumeric: 알파벳+숫자 랜덤 문자
+```rust
+use rand_distr::{Normal, Distribution};
+let normal = Normal::new(0.0, 1.0).unwrap();
+let sample = normal.sample(&mut rng); // 평균 0, 표준편차 1 정규분포 샘플
+```
+
+### 4. 시퀀스 관련 기능
+- shuffle: 벡터 섞기
+- choose: 벡터에서 임의의 원소 선택
+```rust
+let mut nums: Vec<i32> = (1..10).collect();
+nums.shuffle(&mut rng);
+let pick = nums.choose(&mut rng);
+```
+
+### 5. 기타 유틸리티
+- SeedableRng: 시드 고정 RNG (재현성 있는 난수)
+- fill: 배열이나 버퍼를 난수로 채우기
+```rust
+use rand::SeedableRng;
+use rand_chacha::ChaCha8Rng;
+let mut rng = ChaCha8Rng::seed_from_u64(12345); // 시드 고정
+```
+
+
+### 📊 비교 표
+| 구분           | 주요 함수/트레이트             | 설명                          |
+|----------------|-------------------------------|-------------------------------|
+| RNG 생성기      | thread_rng, StdRng, ChaChaRng | 난수 생성기 초기화             |
+| 기본 난수       | random, gen_range, gen_bool   | 기본 타입 난수 생성            |
+| 분포 샘플링     | Distribution::sample          | Uniform, Normal 등 분포 샘플링 |
+| 시퀀스 처리     | shuffle, choose               | 벡터 섞기, 원소 선택           |
+| 시드 고정 RNG   | SeedableRng                   | 재현성 있는 난수 생성          |
+
+
+
+### ⚠️ 주의할 점
+- 버전 호환성: rand와 rand_distr는 반드시 같은 메이저 버전에 맞춰야 합니다.  
+  예: rand 0.8.5 ↔ rand_distr 0.4.
+- trait import: use rand::Rng;과 use rand_distr::Distribution;을  
+  반드시 추가해야 gen_range, sample 메서드가 인식됩니다.
+
+
+
+
+
+
+
 ## 🎮 2. 숫자 맞추기 게임 코드 설명
 - 사용하는 함수 `rand::thread_rng().gen_range`
 ```rust
