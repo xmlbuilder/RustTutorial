@@ -134,6 +134,9 @@ pub struct AnomGroupResult {
 }
 ```
 
+### Anom Chart 이미지
+![Anom Chart](/image/anom_chart.png)
+
 ### ✔ SVG Chart 자동 생성
 - Rust에서 SVG 파일로 직접 ANOM 차트를 출력하는 기능 존재:
 ```rust
