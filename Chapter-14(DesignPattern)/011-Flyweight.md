@@ -5,6 +5,25 @@
 - Extrinsic state: 개별 객체마다 다른 외부 상태
 
 
+## 🗺️ Flyweight 패턴 클래스 다이어그램
+```mermaid
+classDiagram
+    class TreeType {
+        -name: str
+        -texture: str
+        +draw(x, y)
+    }
+
+    class TreeFactory {
+        -types: dict
+        +get_tree_type(name, texture) TreeType
+    }
+
+    TreeFactory --> TreeType : creates/reuses
+```
+
+
+
 ## 🦀 Rust 버전 (싱글 스레드 기준)
 ```rust
 use std::collections::HashMap;
