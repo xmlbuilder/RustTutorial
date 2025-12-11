@@ -575,3 +575,50 @@ u[ 8] =   1.000000000000
 ### Edge Divide Exp
 ![Edge Divide](/image/edge_divide_exp.png)
 
+---
+
+## 1. 선형(linear) 램프랑 뭐가 다르냐?
+- 선형 보간이면 보통 이렇게 쓰임:
+```
+t = (1 - s) * m_end + s * m_max;   // 직선
+```
+- 이건 직선 보간이니까 그래프가 straight line.
+
+- 지금 코드는:
+```
+t = m_end * (ratio^s);   // ratio = m_max / m_end
+```
+- 여기서 ^는 지수가 아니라 std::pow(ratio, s)야.
+- 즉,
+```
+t(s) = m_end * (m_max / m_end)^s
+```
+
+- 이건 기하 보간(geometric interpolation), 즉 지수(exponential) 형태.
+
+## 2. 왜 이게 exp 모양이냐? (로그로 보면 직선)
+
+- t(s)에 로그를 씌워보면:
+```
+t(s) = m_end * (m_max / m_end)^s
+
+ln t(s) = ln(m_end) + s * ln(m_max / m_end)
+        = (1 - s) * ln(m_end) + s * ln(m_max)
+
+```
+- ln t(s)가 s에 대해 직선(linear) 이라는 뜻 = t(s)가 지수 함수라는 뜻.
+
+- 그래서:
+
+```
+s = 0 → t = m_end
+s = 1 → t = m_end * (m_max / m_end) = m_max
+```
+
+- 중간에서는 직선이 아니라 살짝 휘어진 곡선으로 올라감  
+  (처음에는 천천히, 끝으로 갈수록 빠르게 / 반대로 보면 exp decay)
+
+---
+
+
+
