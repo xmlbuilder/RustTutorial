@@ -9,6 +9,7 @@
 - 수식:
   - 차수가 p인 B-스플라인/NURBS 곡선에서 i-번째 제어점의 Greville 파라미터 $\xi _i$ 는 다음과 같이 정의됩니다:
   - 여기서 $u_j$ 는 노트 벡터(knot vector)의 원소입니다.
+
 $$
 \xi _i=\frac{u_{i+1}+u_{i+2}+\cdots +u_{i+p}}{p}
 $$
