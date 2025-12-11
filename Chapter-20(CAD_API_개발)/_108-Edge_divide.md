@@ -572,3 +572,6 @@ u[ 6] =   0.842540556698
 u[ 7] =   0.950000000000
 u[ 8] =   1.000000000000
 ```
+### Edge Divide Exp
+![Edge Divide](/image/edge_divide_exp.png)
+
