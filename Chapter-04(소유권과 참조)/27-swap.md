@@ -223,6 +223,72 @@ impl Clone for MyType {
 | 자동 파생     | `#[derive(Copy, Clone)]`로 간편하게 구현 가능 |
 
 ---
+## swap 실전 점검
+- 두 위치의 값을 **자리 바꿈** 합니다. 소유권을 다시 구성하는 게 아니라,
+- 제자리에서 두 값을 서로 바꿉니다.
+    - 용도: 정렬, 선택적 자리 바꿈, 버퍼/행 교체
+    - 범위: 슬라이스, Vec, 배열 등 인덱싱 가능한 컬렉션
+    - 안전성: 동일 슬라이스 내 유효 인덱스여야 함; 같은 인덱스를 주면 no-op
+    - 예시: 슬라이스의 두 원소 교환
+
+```rust
+fn main() {
+    let mut xs = [1, 2, 3, 4];
+    xs.swap(1, 3); // 2와 4 자리 바꿈
+    assert_eq!(xs, [1, 4, 3, 2]);
+}
+```
+
+- 예시: 행렬의 두 행 교환
+```rust
+fn main() {
+    let mut m = [
+        [1, 2, 3, 4],
+        [5, 6, 7, 8],
+        [9,10,11,12],
+        [13,14,15,16],
+    ];
+
+    m.swap(0, 2); // 0번째 행과 2번째 행 자리 바꿈
+
+    assert_eq!(m[0], [9,10,11,12]);
+    assert_eq!(m[2], [1, 2, 3, 4]);
+}
+```
+
+- 예시: 선택 정렬에서 사용
+```rust
+fn selection_sort(xs: &mut [i32]) {
+    let n = xs.len();
+    for i in 0..n {
+        let mut min_idx = i;
+        for j in (i+1)..n {
+            if xs[j] < xs[min_idx] {
+                min_idx = j;
+            }
+        }
+        if min_idx != i {
+            xs.swap(i, min_idx);
+        }
+    }
+}
+```
+```rust
+fn main() {
+    let mut xs = [5, 3, 4, 1, 2];
+    selection_sort(&mut xs);
+    assert_eq!(xs, [1, 2, 3, 4, 5]);
+}
+```
+## 실전 팁
+- copy_from_slice vs. clone_from_slice:
+    - copy_from_slice는 원소를 “복사”합니다. Copy가 아닌 타입도 내부적으로 복제하여 이동하지만, 값 크기가 크면 비용이 큽니다.
+    - clone_from_slice는 각 원소의 clone()을 호출합니다. 원소 타입이 Clone를 효율적으로 구현했다면 더 적합할 수 있습니다.
+- 성능/안전:
+    - 길이가 같은지 확실하지 않다면 assert_eq!(a.len(), b.len())로 방어하고, 필요한 경우 zip으로 요소별 복사를 수행.
+    - swap은 O(1)이고, 소유권/할당을 건드리지 않아 매우 저비용입니다. 인덱스 유효성만 주의.
+
+---
 
 
 
