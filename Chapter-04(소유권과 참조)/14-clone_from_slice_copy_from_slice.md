@@ -113,3 +113,61 @@ the trait bound String: Copy is not satisfied
 
 ---
 
+## 실전 문제 적용
+
+## Rust slice copying and value swapping
+- 아주 간단하지만, 코드 품질을 확실히 올려주는 두 가지입니다: `copy_from_slice`와 `swap`. 
+
+### copy_from_slice
+- 배열이나 슬라이스 간에 원소를 “값 복사”로 한 번에 옮길 때 사용합니다. 
+- 두 슬라이스의 길이가 같아야 하며, 타입은 동일해야 합니다.
+    - 용도: 동일 길이 슬라이스/배열 간 빠른 복사
+    - 조건: 길이가 같지 않으면 패닉
+    - 특징: 원소 단위 복사; 포인터만 옮기는 게 아니라 실제 값을 복사
+    - 대상: Copy 타입뿐만 아니라 일반 타입도 가능(단, 값 복사 비용은 타입에 따라 커질 수 있음)
+    - 예시: 행 복사로 4x4 행렬 채우기
+
+```rust
+fn main() {
+    let b0 = [1.0, 0.0, 0.0, 0.0];
+    let b1 = [0.3, 0.4, 0.2, 0.1];
+    let b2 = [0.1, 0.3, 0.4, 0.2];
+    let b3 = [0.0, 0.0, 0.0, 1.0];
+
+    let mut a = [[0.0; 4]; 4];
+
+    a[0].copy_from_slice(&b0);
+    a[1].copy_from_slice(&b1);
+    a[2].copy_from_slice(&b2);
+    a[3].copy_from_slice(&b3);
+
+    // a는 이제 각 행이 b0..b3 내용으로 채워짐
+}
+```
+- 예시: 슬라이스 복사
+```rust
+fn main() {
+    let src = [10, 20, 30, 40];
+    let mut dst = [0; 4];
+
+    dst.copy_from_slice(&src); // 길이 동일해야 함
+
+    assert_eq!(dst, src);
+}
+```
+- 예시: 일부 범위만 복사
+```rust
+fn main() {
+    let src = [1, 2, 3, 4, 5, 6];
+    let mut dst = [0; 3];
+
+    // src[2..5]는 길이 3, dst[..]도 길이 3
+    dst.copy_from_slice(&src[2..5]);
+
+    assert_eq!(dst, [3, 4, 5]);
+}
+```
+---
+
+
+
