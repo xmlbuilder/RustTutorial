@@ -1,13 +1,13 @@
 # Bezier Curve
 
-베지어 곡선 및 함수의 핵심 연산들이 잘 구현되어 있습니다.  
-아래에 수식 정리와 함께 reparameterize() 함수의 구현도 제안.
+- 베지어 곡선 및 함수의 핵심 연산들이 잘 구현되어 있습니다.  
+- 아래에 수식 정리와 함께 reparameterize() 함수의 구현도 제안.
 
 ## ✅ 핵심 수식 정리
 ### 1. 🎯 베지어 곡선 평가
 
 $$
-P(u)=\sum _{i=0}^nB_i^n(u)\cdot P_i\quad \mathrm{where}\quad B_i^n(u)={n \choose i}u^i(1-u)^{n-i}
+P(u)=\sum _{i=0}^nB_i^n(u)\cdot P_i \quad \mathrm{where} \quad B_i^n(u)={n \choose i}u^i(1-u)^{n-i}
 $$
 
 - evaluate_point() → 유클리드 좌표
@@ -17,13 +17,13 @@ $$
 ### 2. 📈 차수 상승 (degree elevation)
 
 $$
-P_i'=\sum _{j=0}^nE_{ij}\cdot P_j\quad \mathrm{where}\quad E_{ij}=\mathrm{degree\  elevation\  matrix}
+P_i'=\sum _{j=0}^nE_{ij}\cdot P_j \quad \mathrm{where} \quad E_{ij}=\mathrm{degree\ elevation\  matrix}
 $$
 
 - elevate_degree() → 정확한 행렬 기반 구현
 
 ### 3. 📉 차수 감소 (degree reduction)
-- 근사 방식: $P_i'=P(t_i), where \quadt_i=\frac{i}{q}$
+- 근사 방식: $P_i'=P(t_i), where \quad t_i=\frac{i}{q}$
 - reduce_degree() → rational 평가 기반 보간
 - 정확한 방식은 least-squares 기반이지만, 현재는 보간 기반으로 충분
 
