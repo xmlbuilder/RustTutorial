@@ -117,8 +117,8 @@ T_5(0.5) =    0.5000 (직접) /    0.5000 (재귀)
 
 ## 보간 예제
 
-- 1차원 Chebyshev 보간 예제를 Rust로 만들어 드리겠습니다. 
-- 여기서는 간단히 함수 $f(x)=\frac{1}{1+25x^2}$ 를 [-1,1] 구간에서 Chebyshev 노드를 이용해 보간하는 예제를 보여드릴게요.
+- 1차원 Chebyshev 보간 예제를 Rust로 만들어 보겠습니다. 
+- 여기서는 간단히 함수 $f(x)=\frac{1}{1+25x^2}$ 를 [-1,1] 구간에서 Chebyshev 노드를 이용해 보간하는 예제.
 
 ### 📘 Rust 예제 코드
 ```rust
@@ -168,8 +168,6 @@ fn main() {
     }
 }
 ```
-
-
 ## 🏆 출력 예시
 ```
 x = -1, 보간값 = 0.03846, 실제값 = 0.03846
@@ -186,9 +184,7 @@ x = 1, 보간값 = 0.03846, 실제값 = 0.03846
 - f(x) → 보간할 함수.
 - 결과적으로 Chebyshev 노드를 사용하면 고차 보간에서도 안정적인 근사 결과를 얻을 수 있습니다.
 
-
 ---
-
 
 ## 📘 라그랑주 보간법이란?
 - 주어진 노드(points)  
@@ -271,8 +267,6 @@ fn chebyshev_nodes(n: usize) -> Vec<f64> {
         .collect()
 }
 ```
-
-
 - 단계 2. 노드에서 함수값 샘플링
   - 핵심: 생성된 노드에 목표 함수 f(x)를 적용해 샘플값을 얻습니다.
   - 입력: 노드 벡터, 함수 f
@@ -290,16 +284,15 @@ fn sample_values(nodes: &[f64]) -> Vec<f64> {
     nodes.iter().map(|&x| target_function(x)).collect()
 }
 ```
-
-
 - 단계 3. 라그랑주 보간 구현
-- 핵심: 라그랑주 기저 L_i(x)를 곱셈 형태로 계산해 P(x)를 구합니다.
-- 주의: 노드 수가 커지면 계산량이 많으니 데모에서는 적당한 n을 사용합니다.
+  - 핵심: 라그랑주 기저 L_i(x)를 곱셈 형태로 계산해 P(x)를 구합니다.
+  - 주의: 노드 수가 커지면 계산량이 많으니 데모에서는 적당한 n을 사용합니다.
+
+```rust
 /// 라그랑주 보간: 임의의 x에서 보간값 P(x) 계산
 fn lagrange_interpolation(x: f64, nodes: &[f64], values: &[f64]) -> f64 {
     let n = nodes.len();
     let mut result = 0.0;
-
     for i in 0..n {
         let xi = nodes[i];
         let mut li = 1.0; // L_i(x)
@@ -312,15 +305,15 @@ fn lagrange_interpolation(x: f64, nodes: &[f64], values: &[f64]) -> f64 {
         }
         result += values[i] * li;
     }
-
     result
 }
+```
 
 
-
-단계 4. 전체 예제 실행 및 비교 출력
-- 핵심: 몇 개의 테스트 점에서 보간값과 실제값을 비교합니다.
-- 관찰 포인트: Chebyshev 노드를 쓰면 끝점 근처에서 안정적인 근사가 나옵니다.
+- 단계 4. 전체 예제 실행 및 비교 출력
+  - 핵심: 몇 개의 테스트 점에서 보간값과 실제값을 비교합니다.
+  - 관찰 포인트: Chebyshev 노드를 쓰면 끝점 근처에서 안정적인 근사가 나옵니다.
+```rust
 fn main() {
     // 1) 노드 개수 선택 (너무 크면 라그랑주 방식은 느려질 수 있음)
     let n = 10;
@@ -348,25 +341,33 @@ fn main() {
         );
     }
 }
+```
 
-
-
-추가 팁
-- 성능 최적화: 라그랑주 보간은 O(n^2) 계산이 필요합니다. 반복 평가가 많다면 Newton 형태(분할차분)나 Barycentric Lagrange(바리센트릭) 공식을 사용하는 것이 효율적입니다.
+## 추가 팁
+- 성능 최적화: 라그랑주 보간은 O(n^2) 계산이 필요합니다.
+- 반복 평가가 많다면 Newton 형태(분할차분)나 Barycentric Lagrange(바리센트릭) 공식을 사용하는 것이 효율적입니다.
 - 범위 변환: 실제 문제에서 [a,b] 구간을 쓰면 x\in [-1,1]로 선형 변환해 Chebyshev 노드를 적용한 뒤, 다시 원래 좌표로 되돌리면 됩니다.
-- Numerical 안정성: 노드가 커지면 부동소수 오차가 누적됩니다. 바리센트릭 공식은 보다 안정적이고 빠릅니다. 원하시면 해당 버전도 만들어 드릴게요.
+- Numerical 안정성: 노드가 커지면 부동소수 오차가 누적됩니다.
+- 바리센트릭 공식은 보다 안정적이고 빠릅니다.
 
 
+---
+## 성능 개선
+- 가장 빠른 방식으로는 바리센트릭(Barycentric) 라그랑주 공식을 쓰는 것이 일반적입니다.
+- 이 방식은 노드와 가중치를 미리 계산해 두면, 보간값을 O(n) 시간에 얻을 수 있어 효율적이고 수치적으로 안정적입니다.
 
-좋습니다 🙂 앞서 만든 라그랑주 보간은 직관적이지만 계산량이 많습니다. 가장 빠른 방식으로는 바리센트릭(Barycentric) 라그랑주 공식을 쓰는 것이 일반적입니다. 이 방식은 노드와 가중치를 미리 계산해 두면, 보간값을 O(n) 시간에 얻을 수 있어 효율적이고 수치적으로 안정적입니다.
+## 📘 바리센트릭 보간 공식
+- 보간 다항식 P(x)는 다음과 같이 계산됩니다:
 
-📘 바리센트릭 보간 공식
-보간 다항식 P(x)는 다음과 같이 계산됩니다:
+$$
 P(x)=\frac{\sum _{i=0}^{n-1}\frac{w_i}{x-x_i}f(x_i)}{\sum _{i=0}^{n-1}\frac{w_i}{x-x_i}}
-여기서 w_i는 바리센트릭 가중치입니다.
-Chebyshev 노드의 경우 가중치는 간단히 계산할 수 있습니다.
+$$
 
-📘 Rust 예제 코드
+- 여기서 $w_i$ 는 바리센트릭 가중치입니다.
+- Chebyshev 노드의 경우 가중치는 간단히 계산할 수 있습니다.
+
+## 📘 Rust 예제 코드
+```rust
 use std::f64::consts::PI;
 
 /// Chebyshev 노드 생성
@@ -375,7 +376,8 @@ fn chebyshev_nodes(n: usize) -> Vec<f64> {
         .map(|k| (((2 * k + 1) as f64) * PI / (2.0 * n as f64)).cos())
         .collect()
 }
-
+```
+```rust
 /// 바리센트릭 가중치 계산
 fn barycentric_weights(nodes: &[f64]) -> Vec<f64> {
     let n = nodes.len();
@@ -392,7 +394,8 @@ fn barycentric_weights(nodes: &[f64]) -> Vec<f64> {
     }
     w
 }
-
+```
+```rust
 /// 바리센트릭 보간
 fn barycentric_interpolation(x: f64, nodes: &[f64], values: &[f64], weights: &[f64]) -> f64 {
     for (i, &xi) in nodes.iter().enumerate() {
@@ -410,7 +413,8 @@ fn barycentric_interpolation(x: f64, nodes: &[f64], values: &[f64], weights: &[f
     }
     num / den
 }
-
+```
+```rust
 fn main() {
     // 목표 함수
     let f = |x: f64| 1.0 / (1.0 + 25.0 * x * x);
@@ -436,25 +440,27 @@ fn main() {
         );
     }
 }
+```
 
-
-
-🏆 출력 예시
+### 🏆 출력 예시
+```
 Chebyshev 바리센트릭 보간 (n = 10)
 x = -1, 보간값 = 0.0384615, 실제값 = 0.0384615, 오차 = 0.000e+00
 x = -0.5, 보간값 = 0.1379310, 실제값 = 0.1379310, 오차 = 0.000e+00
 x = 0, 보간값 = 1.0000000, 실제값 = 1.0000000, 오차 = 0.000e+00
 x = 0.5, 보간값 = 0.1379310, 실제값 = 0.1379310, 오차 = 0.000e+00
 x = 1, 보간값 = 0.0384615, 실제값 = 0.0384615, 오차 = 0.000e+00
+```
 
-
-
-📊 정리
+## 📊 정리
 - 라그랑주 보간: 직관적이지만 계산량이 많음 (O(n^2)).
 - 바리센트릭 보간: 가중치를 미리 계산하면 빠르고 안정적 (O(n)).
 - Chebyshev 노드와 함께 쓰면 고차 보간에서도 안정적인 근사 결과를 얻을 수 있습니다.
 
 
+---
+## Python sample
+```python
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -505,32 +511,33 @@ plt.ylabel("y")
 plt.legend()
 plt.grid(True)
 plt.show()
+```
 
+---
 
-
-📘 Chebyshev Matrix
-- 정의: Chebyshev 다항식 기반의 **변환 행렬(interpolation/transform matrix)**입니다.
+## 📘 Chebyshev Matrix
+- 정의: Chebyshev 다항식 기반의 **변환 행렬(interpolation/transform matrix)** 입니다.
 - 역할:
-- 함수 값을 Chebyshev 계수로 변환하거나, 반대로 계수에서 함수 값을 복원할 때 사용합니다.
-- 예를 들어, 어떤 함수 f(x)를 Chebyshev 다항식 T_n(x)의 선형 결합으로 근사할 때, 노드에서의 함수값을 계수로 바꾸는 과정에 행렬이 필요합니다.
+  - 함수 값을 Chebyshev 계수로 변환하거나, 반대로 계수에서 함수 값을 복원할 때 사용합니다.
+  - 예를 들어, 어떤 함수 f(x)를 Chebyshev 다항식 T_n(x)의 선형 결합으로 근사할 때, 노드에서의 함수값을 계수로 바꾸는 과정에 행렬이 필요합니다.
 - 특징:
-- 행렬의 원소는 Chebyshev 다항식 값으로 채워집니다.
-- 정규화(normalization)를 통해 직교성을 반영합니다.
-- 수치해석 라이브러리나 CAD/CAE 커널에서 보간용으로 자주 사용됩니다.
+  - 행렬의 원소는 Chebyshev 다항식 값으로 채워집니다.
+  - 정규화(normalization)를 통해 직교성을 반영합니다.
+  - 수치해석 라이브러리나 CAD/CAE 커널에서 보간용으로 자주 사용됩니다.
 
-📘 Pole (극점, Nodes)
-- 정의: Chebyshev 다항식의 근(root) 또는 **극점(extrema)**을 의미합니다.
+## 📘 Pole (극점, Nodes)
+- 정의: Chebyshev 다항식의 근(root) 또는 **극점(extrema)** 을 의미합니다.
 - 역할:
-- 보간(interpolation)이나 근사(approximation)에서 샘플링할 위치로 사용됩니다.
-- Chebyshev 노드는 끝점 근처에 밀집되어 있어서 Runge 현상을 줄여줍니다.
+  - 보간(interpolation)이나 근사(approximation)에서 샘플링할 위치로 사용됩니다.
+  - Chebyshev 노드는 끝점 근처에 밀집되어 있어서 Runge 현상을 줄여줍니다.
 - 종류:
-- Roots: x_k=\cos \! \left( \frac{2k+1}{2n}\pi \right) , 끝점 제외
-- Extrema: x_k=\cos \! \left( \frac{k\pi }{n}\right) , 끝점 포함
+- Roots: $x_k=\cos \! \left( \frac{2k+1}{2n}\pi \right)$ , 끝점 제외
+- Extrema: $x_k=\cos \! \left( \frac{k\pi }{n}\right)$ , 끝점 포함
 - 특징:
-- 실제 보간에서는 “Pole”을 선택해 함수값을 샘플링합니다.
-- 이 값들을 기반으로 Chebyshev matrix를 채우거나, 바리센트릭 보간에 활용합니다.
+  - 실제 보간에서는 “Pole”을 선택해 함수값을 샘플링합니다.
+  - 이 값들을 기반으로 Chebyshev matrix를 채우거나, 바리센트릭 보간에 활용합니다.
 
-📊 차이 요약
+## 📊 차이 요약
 | Concept            | Chebyshev Matrix                                   | Pole (Nodes)                          |
 |--------------------|----------------------------------------------------|---------------------------------------|
 | Definition         | Matrix filled with Chebyshev polynomial values     | Roots or extrema of Chebyshev polynomials |
@@ -539,5 +546,8 @@ plt.show()
 | Relationship       | Built by evaluating polynomials at the nodes       | Provide the coordinates used to build the matrix |
 
 
-👉 쉽게 말하면, **Pole은 “점”이고, Chebyshev Matrix는 그 점들에서 다항식 값을 모아놓은 “표”**입니다.
-Pole을 먼저 정하고, 그 점들에서 Chebyshev 다항식을 평가해서 Chebyshev Matrix를 만드는 거죠.
+- 👉 쉽게 말하면, **Pole은 점 이고, Chebyshev Matrix는 그 점들에서 다항식 값을 모아놓은 표** 입니다.
+- Pole을 먼저 정하고, 그 점들에서 Chebyshev 다항식을 평가해서 Chebyshev Matrix를 만듬.
+
+---
+
