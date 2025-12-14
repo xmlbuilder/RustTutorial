@@ -1,6 +1,6 @@
 # 🧠 Rust trait bound 에러의 본질
-Rust는 정적 타입 시스템을 사용하기 때문에, 컴파일 시점에 모든 메서드 호출이 유효한 타입에 대해 정의되어 있는지를 확인합니다. 
-이 과정에서 다음 조건이 충족되지 않으면 에러가 발생합니다:
+- Rust는 정적 타입 시스템을 사용하기 때문에, 컴파일 시점에 모든 메서드 호출이 유효한 타입에 대해 정의되어 있는지를 확인합니다. 
+- 이 과정에서 다음 조건이 충족되지 않으면 에러가 발생합니다:
 
 ## 에러 예제
 ```rust
@@ -9,7 +9,8 @@ fn eval_point(&self, u: f64) -> Point3D {
     // 예: self.point_at(u) 같은 것을 호출
     self.point_at(u).euclid()
 }
-
+```
+```
 // 24  | pub struct BSplineCurve<T: HomogeneousPoint> {
 //     | -------------------------------------------- doesn't satisfy `BSplineCurve<T>: Curve`
 // ...
@@ -17,8 +18,8 @@ fn eval_point(&self, u: f64) -> Point3D {
 // 770 |         self.point_at(u).euclid()
 
 //     |              ^^^^^^^^ method cannot be called on `&BSplineCurve<T>` due to unsatisfied trait bounds
-
-
+```
+```rust
 fn point_at(&self, u: f64) -> Point4D {
         let n = self.n_ctrl();
         assert!(n >= 1 && self.knot.len() >= n + self.degree + 1, "Invalid B-spline data");
@@ -33,8 +34,8 @@ fn point_at(&self, u: f64) -> Point4D {
         }
         c
 }
-
-
+```
+```rust
 impl HomogeneousPoint for Point3D {
     #[inline] fn to_h4(&self) -> Point4D { Point4D::new(self.x, self.y, self.z, 1.0) }
     fn from_h4(p: Point4D) -> Self {
@@ -46,7 +47,8 @@ impl HomogeneousPoint for Point3D {
         }
     }
 }
-
+```
+```rust
 impl HomogeneousPoint for Point3D {
     #[inline] fn to_h4(&self) -> Point4D { Point4D::new(self.x, self.y, self.z, 1.0) }
     fn from_h4(p: Point4D) -> Self {
@@ -65,11 +67,11 @@ impl HomogeneousPoint for Point3D {
 self.point_at(u)
 ```
 
-이 호출은 Curve trait의 메서드입니다. 따라서 self가 Curve를 구현한 타입이어야 합니다.  
-그런데 self가 BSplineCurve<T> 타입일 때, 컴파일러는 이 타입이 Curve를 구현했다는 사실을 해당 컨텍스트에서 보장받지 못하면 에러를 발생시킵니다.
+- 이 호출은 Curve trait의 메서드입니다. 따라서 self가 Curve를 구현한 타입이어야 합니다.  
+- 그런데 self가 BSplineCurve<T> 타입일 때, 컴파일러는 이 타입이 Curve를 구현했다는 사실을 해당 컨텍스트에서 보장받지 못하면 에러를 발생시킵니다.
 
 ### ✅ 2. generic 타입 T에 필요한 trait bound가 명시되어 있는가?
-예를 들어 Curve trait이 내부적으로 T: Debug + Clone + HomogeneousPoint를 요구한다면, BSplineCurve<T>를 사용할 때도 이 조건을 명시적으로 만족시켜야 합니다.
+- 예를 들어 Curve trait이 내부적으로 T: Debug + Clone + HomogeneousPoint를 요구한다면, BSplineCurve<T>를 사용할 때도 이 조건을 명시적으로 만족시켜야 합니다.
 ```rust
 impl<T: HomogeneousPoint> BSplineCurve<T> {
     fn eval_point(&self, u: f64) -> Point3D {
@@ -77,7 +79,7 @@ impl<T: HomogeneousPoint> BSplineCurve<T> {
     }
 }
 ```
-→ 여기서 BSplineCurve<T>가 Curve를 구현했다는 사실이 보장되지 않기 때문에 point_at() 호출이 불가능합니다.
+- 여기서 BSplineCurve<T>가 Curve를 구현했다는 사실이 보장되지 않기 때문에 point_at() 호출이 불가능합니다.
 
 ## ✅ 해결 원칙: Trait Bound 에러 대응
 
@@ -101,7 +103,7 @@ where
 }
 ```
 
-→ 이 방식은 컴파일러에게 "이 타입은 Curve를 구현했으니 point_at()을 호출해도 된다"는 사실을 명확히 알려주는 것입니다.
+→ 이 방식은 컴파일러에게 **이 타입은 Curve를 구현했으니 point_at()을 호출해도 된다** 는 사실을 명확히 알려주는 것입니다.
 
 ## 📘 요약
 Rust에서 이런 에러가 나는 이유는:
@@ -129,9 +131,10 @@ fn make_speak<T>(item: T) {
 }
 ```
 
-❌ 컴파일 에러
+### ❌ 컴파일 에러
+```
 error[E0599]: no method named `say` found for type `T` in the current scope
-
+```
 
 
 ### 🔍 원인 분석
@@ -165,7 +168,6 @@ fn describe<T>(item: T) {
 fn describe<T: Debug>(item: T) {
     println!("{:?}", item); // ✅ 정상 작동
 }
-
 ```
 
 ## 📘 요약 테이블
@@ -174,8 +176,6 @@ fn describe<T: Debug>(item: T) {
 | trait 메서드 호출 시 에러 | `T: TraitName` 명시                  |
 | `println!("{:?}")` 사용 시 | `T: Debug` 명시                      |
 | 여러 trait 필요할 때      | `T: TraitA + TraitB + 'static` 등 조합 |
-
-
 
 ----
 
@@ -199,7 +199,6 @@ trait Drawable: Debug {
     fn draw(&self);
 }
 ```
-
 
 ## 🔧 대처 전략
 ### ✅ 1. trait bound는 항상 명시적으로
@@ -264,7 +263,7 @@ fn talk<T: Speak>(item: T) {
 }
 ```
 
-→ 여기서 Speak: Debug는 trait 상속이고, T: Speak는 trait bound입니다. 이 구조가 Rust에서 흔히 쓰이는 패턴이에요.
+→ 여기서 Speak: Debug는 trait 상속이고, T: Speak는 trait bound입니다. 이 구조가 Rust에서 흔히 쓰이는 패턴.
 
 ## 🧘 요약: Generic + Trait + Bound 대처 전략
 
@@ -296,7 +295,8 @@ where
 }
 ```
 
-→ impl Trait은 간단하고 직관적, where는 복잡한 bound를 정리할 때 유리합니다.
+- impl Trait은 간단하고 직관적, where는 복잡한 bound를 정리할 때 유리합니다.
+
 
 
 
