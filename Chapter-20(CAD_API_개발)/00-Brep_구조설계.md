@@ -1813,4 +1813,252 @@ for lu in faceuse.loops:
 ---
 
 
+# B-Rep Boolean & Intersection 심화 문서
+## (Region Classification · Euler Operator · Intersection Tracing)
 
+본 문서는 기존 B-Rep Topology 구조를 기반으로,
+다음 두 가지 고급 주제를 **이론 + 구현 관점**에서 정리한다.
+
+1. Boolean Region Classification (Euler Operator 관점 재해석)
+2. Intersection Curve Tracing 전용 설계 문서
+
+본 문서는 Boolean 커널 구현의 **마지막 퍼즐**에 해당한다.
+
+---
+
+## Brep Boolean
+
+## 1. Euler Operator 관점에서 본 Topology
+
+### 1.1 Euler-Poincaré 공식
+
+- Solid B-Rep는 다음 공식을 만족해야 한다.
+
+```
+V - E + F - (L - H) = 2 (1 - G)
+```
+
+  - V: Vertex 수
+  - E: Edge 수
+  - F: Face 수
+  - L: Loop 수
+  - H: Hole 수
+  - G: Genus
+
+**핵심**
+- Boolean 연산은 Topology를 변경하지만
+- Euler characteristic은 보존되어야 함
+
+---
+
+## 1.2 Euler Operator란 무엇인가
+
+- Euler Operator는 **Topology를 국소적으로 변경하면서** 전역 Euler 특성을 유지하는 연산이다.
+
+- 대표 연산:
+
+| Operator | 의미 |
+|--------|----|
+| MEV | Make Edge Vertex |
+| MEF | Make Edge Face |
+| KEV | Kill Edge Vertex |
+| KEF | Kill Edge Face |
+| MFK | Make Face Kill loop |
+| KFM | Kill Face Make loop |
+
+---
+
+## 1.3 현재 구조에서의 Euler Operator 대응
+
+| Euler Operator | 본 구조에서의 의미 |
+|--------------|------------------|
+| MEV | Vertex + Edge + EdgeUse 생성 |
+| MEF | Edge split + Face split |
+| KEV | VertexUse 제거 + Edge 병합 |
+| KEF | Face 제거 + Shell 재연결 |
+| MFK | LoopUse 생성 |
+| KFM | LoopUse 제거 |
+
+**중요**
+- EdgeUse / LoopUse / FaceUse가 Euler 연산의 실제 대상
+- Solid/Face/Edge는 결과 컨테이너에 가깝다
+
+---
+
+## 2. Boolean Region Classification
+
+### 2.1 Region Classification의 본질
+
+- Boolean 연산의 마지막 단계는:
+
+```
+이 Face가 결과 Solid에 포함되는가?
+```
+
+- 이는 **Geometry 문제가 아니라 Topology + Orientation 문제** 다.
+
+---
+
+## 2.2 Classification 기준
+
+- FaceUse 단위로 판단한다.
+
+| 조건 | 의미 |
+|----|----|
+| normal outward | outside |
+| normal inward | inside |
+| on intersection | ambiguous |
+
+- 판정은 다음 조합으로 결정:
+  - FaceUse.orientation
+  - EdgeUse orientation
+  - Intersection curve 진행 방향
+
+---
+
+## 2.3 Region Flood Fill 방식
+
+- 가장 안정적인 방식은 **Topology 기반 flood fill** 이다.
+
+### 알고리즘
+
+```
+mark all regions unknown
+
+pick seed face outside A/B
+
+queue.push(seed)
+
+while queue not empty:
+  fu = queue.pop
+  for each adjacent faceuse via radial:
+    if crossing intersection:
+      flip inside/outside
+    mark neighbor
+    queue.push(neighbor)
+```
+
+**adjacent 탐색의 핵심**
+- EdgeUse.radial fan traversal
+
+---
+
+## 2.4 validate_brep와 Classification
+
+- Classification 이후에도 반드시:
+
+```
+validate_brep()
+```
+
+  - loop 깨짐
+  - radial 끊김
+  - mate 불일치
+
+- 이 중 하나라도 발생하면 classification 결과는 신뢰 불가.
+
+---
+
+## 3. Intersection Curve Tracing
+
+### 3.1 Intersection Curve란
+
+- 두 Face의 교차 결과
+- 하나 이상의 Curve segment
+- Face 경계 / 내부를 자유롭게 통과
+
+- Topology 관점에서는:
+
+```
+EdgeUse들의 연결된 chain
+```
+
+---
+
+## 3.2 Tracing의 핵심 문제
+
+- 1. 시작점 선택
+- 2. 방향 유지
+- 3. 종료 조건 판정
+
+---
+
+## 3.3 Seed Point 선택
+
+Seed는 다음 중 하나:
+
+- Face-Face intersection point
+- Edge-Face intersection
+- Vertex intersection
+
+각 Seed는 다음 정보를 가진다:
+
+```
+Seed {
+  point3d
+  faceA, uvA
+  faceB, uvB
+}
+```
+
+---
+
+## 3.4 Tracing 알고리즘 (개념)
+
+```
+trace(seed):
+  cur = seed
+  while true:
+    step along tangent
+    project to both faces
+    if hit boundary:
+      switch face via radial
+    record segment
+    if close to seed:
+      break
+```
+
+**Topology가 개입하는 지점**
+- face 전환: radial traversal
+- loop 진입: LoopUse.start 업데이트
+
+---
+
+## 3.5 Tracing 결과의 Topology 반영
+
+Tracing 완료 후:
+
+- Curve → Edge 생성
+- EdgeUse 생성
+- 기존 Edge split
+- LoopUse 분할 또는 생성
+
+이 단계는 Euler Operator MEF에 해당한다.
+
+---
+
+## 4. Boolean + Tracing 통합 관점
+
+Boolean 커널은 다음 3단계로 요약된다.
+
+```
+1. Intersection Tracing  (Geometry heavy)
+2. Topology Reconstruction (Euler heavy)
+3. Region Classification (Traversal heavy)
+```
+
+이 구조는 이 3단계를 **명확히 분리**할 수 있도록 설계되었다.
+
+---
+
+## 5. 결론
+
+- Euler Operator는 Topology 변경의 이론적 기반
+- 본 구조는 Euler 연산을 EdgeUse / LoopUse 중심으로 자연스럽게 표현
+- Region classification은 flood fill + radial traversal 문제
+- Intersection tracing은 Geometry + Topology의 경계 영역
+
+- 이 문서까지 포함하면 B-Rep Boolean 커널의 전체 사고 흐름이 완성된다.
+
+
+---
