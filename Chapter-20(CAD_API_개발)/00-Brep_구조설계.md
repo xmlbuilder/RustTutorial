@@ -302,30 +302,42 @@ Topology는 Geometry를 직접 포함하지 않고 **ID로 참조** 한다.
 ```rust
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct VertexId(pub u32);
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct EdgeId(pub u32);
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct FaceId(pub u32);
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct LoopId(pub u32);
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct ShellId(pub u32);
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct RegionId(pub u32);
-
+```
+```rust
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct VertexUseId(pub u32);
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct EdgeUseId(pub u32);
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct LoopUseId(pub u32);
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct FaceUseId(pub u32);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct EdgeUseId(pub u32);
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct LoopUseId(pub u32);
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct FaceUseId(pub u32);
+```
+```rust
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct CurveId(pub u32);
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct PCurveId(pub u32);
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct SurfaceId(pub u32);
 ```
@@ -334,14 +346,13 @@ pub struct SurfaceId(pub u32);
 ```rust
 use std::cell::Cell;
 
-/// 기존 TopologyBase에서 "마킹"만 남긴 최소 공통부.
-/// (전역 owner/next/prev 리스트는 삭제하는 방향)
 #[derive(Debug, Clone)]
 pub struct TopoFlags {
     pub mark1: Cell<u64>,
     pub mark2: Cell<u64>,
 }
-
+```
+```rust
 impl Default for TopoFlags {
     fn default() -> Self {
         Self {
@@ -360,23 +371,10 @@ impl Default for TopoFlags {
 // - Face: Surface
 
 use crate::brep::{CurveId, PCurveId, SurfaceId};
-
-// 너 프로젝트 타입 경로에 맞춰 바꿔.
-// nurbs_curve.rs / nurbs_surface.rs에서 이미 쓰는 것과 맞추는 게 핵심.
 use crate::core::prelude::{Interval, Real};
 use crate::core::geom::{Point3D, Vector3D}; // 네 geom.rs 경로에 맞춰 조정
-
 use crate::nurbs_curve::NurbsCurve;
 use crate::nurbs_surface::NurbsSurface;
-
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Point2D {
-    pub x: Real,
-    pub y: Real,
-}
-impl Point2D {
-    #[inline] pub fn new(x: Real, y: Real) -> Self { Self { x, y } }
-}
 
 /// 3D 모델 곡선(Edge가 참조)
 pub trait ModelCurve3D: std::fmt::Debug + Send + Sync {
@@ -384,25 +382,30 @@ pub trait ModelCurve3D: std::fmt::Debug + Send + Sync {
     fn eval_point(&self, t: Real) -> Point3D;
     fn eval_tangent(&self, _t: Real) -> Option<Vector3D> { None }
 }
-
+```
+```rust
 /// UV p-curve(EdgeUse가 참조)
 pub trait PCurve2D: std::fmt::Debug + Send + Sync {
     fn domain(&self) -> Interval;
     fn eval_uv(&self, t: Real) -> Point2D;
 }
-
+```
+```rust
 /// Face의 surface
 pub trait SurfaceGeom: std::fmt::Debug + Send + Sync {
     fn domain_u(&self) -> Interval;
     fn domain_v(&self) -> Interval;
     fn eval_point(&self, u: Real, v: Real) -> Point3D;
 }
-
+```
+```rust
 /// 지원하는 3D curve 종류를 enum으로 고정(추가 확장 가능)
 #[derive(Debug, Clone)]
 pub enum ModelCurve {
     Nurbs(NurbsCurve),
 }
+```
+```rust
 impl ModelCurve3D for ModelCurve {
     fn domain(&self) -> Interval {
         match self {
@@ -420,7 +423,8 @@ impl ModelCurve3D for ModelCurve {
         }
     }
 }
-
+```
+```rust
 /// p-curve는 “2D Nurbs”가 따로 없다면,
 /// 임시로 NurbsCurve의 (x,y)를 (u,v)로 해석하는 방식으로 시작.
 /// (나중에 NurbsCurve2D를 만들면 여기만 바꾸면 됨)
@@ -428,6 +432,8 @@ impl ModelCurve3D for ModelCurve {
 pub enum PCurve {
     NurbsXY(NurbsCurve), // z는 무시
 }
+```
+```rust
 impl PCurve2D for PCurve {
     fn domain(&self) -> Interval {
         match self {
@@ -443,11 +449,14 @@ impl PCurve2D for PCurve {
         }
     }
 }
-
+```
+```rust
 #[derive(Debug, Clone)]
 pub enum Surface {
     Nurbs(NurbsSurface),
 }
+```
+```rust
 impl SurfaceGeom for Surface {
     fn domain_u(&self) -> Interval {
         match self {
@@ -465,7 +474,8 @@ impl SurfaceGeom for Surface {
         }
     }
 }
-
+```
+```rust
 /// Geometry 저장소: Topology는 ID로만 참조
 #[derive(Debug, Default, Clone)]
 pub struct GeometryStore {
@@ -473,7 +483,8 @@ pub struct GeometryStore {
     pub pcurves: Vec<PCurve>,
     pub surfaces: Vec<Surface>,
 }
-
+```
+```rust
 impl GeometryStore {
     #[inline]
     pub fn add_curve(&mut self, c: ModelCurve) -> CurveId {
@@ -481,37 +492,41 @@ impl GeometryStore {
         self.curves.push(c);
         CurveId(id)
     }
-
+```
+```rust
     #[inline]
     pub fn add_pcurve(&mut self, c: PCurve) -> PCurveId {
         let id = self.pcurves.len() as u32;
         self.pcurves.push(c);
         PCurveId(id)
     }
-
+```
+```rust
     #[inline]
     pub fn add_surface(&mut self, s: Surface) -> SurfaceId {
         let id = self.surfaces.len() as u32;
         self.surfaces.push(s);
         SurfaceId(id)
     }
-
+```
+```rust
     #[inline]
     pub fn curve(&self, id: CurveId) -> &ModelCurve {
         &self.curves[id.0 as usize]
     }
-
+```
+```rust
     #[inline]
     pub fn pcurve(&self, id: PCurveId) -> &PCurve {
         &self.pcurves[id.0 as usize]
     }
-
+```
+```rust
     #[inline]
     pub fn surface(&self, id: SurfaceId) -> &Surface {
         &self.surfaces[id.0 as usize]
     }
 }
-
 ```
 
 ### topology.rs
@@ -525,7 +540,8 @@ pub enum Orientation {
     Same,
     Opposite,
 }
-
+```
+```rust
 #[derive(Debug, Clone)]
 pub struct Vertex {
     pub id: VertexId,
@@ -534,7 +550,8 @@ pub struct Vertex {
     pub position: Point3D,
     pub uses: Vec<VertexUseId>,
 }
-
+```
+```rust
 #[derive(Debug, Clone)]
 pub struct Edge {
     pub id: EdgeId,
@@ -549,7 +566,8 @@ pub struct Edge {
     // edge 방향 기준 "대표" edgeuse (선택)
     pub primary: Option<EdgeUseId>,
 }
-
+```
+```rust
 #[derive(Debug, Clone)]
 pub struct Face {
     pub id: FaceId,
@@ -562,7 +580,8 @@ pub struct Face {
     pub primary: FaceUseId,
     pub mate: FaceUseId,
 }
-
+```
+```rust
 #[derive(Debug, Clone)]
 pub struct Loop {
     pub id: LoopId,
@@ -570,7 +589,8 @@ pub struct Loop {
     // mate pair의 loopuse (없을 수도 있음)
     pub uses: [Option<LoopUseId>; 2],
 }
-
+```
+```rust
 #[derive(Debug, Clone)]
 pub struct Shell {
     pub id: ShellId,
@@ -581,7 +601,8 @@ pub struct Shell {
     pub wire_start: Option<EdgeUseId>,
     pub vertex_start: Option<VertexUseId>,
 }
-
+```
+```rust
 #[derive(Debug, Clone)]
 pub struct Region {
     pub id: RegionId,
@@ -589,16 +610,17 @@ pub struct Region {
     pub shells: Vec<ShellId>,
     pub is_void: bool,
 }
-
+```
+```rust
 /// -------------------- USE 계층 --------------------
-
 #[derive(Debug, Clone)]
 pub enum VertexUseAttach {
     Shell(ShellId),
     Edge(EdgeUseId),
     Loop(LoopUseId),
 }
-
+```
+```rust
 #[derive(Debug, Clone)]
 pub struct VertexUse {
     pub id: VertexUseId,
@@ -606,7 +628,8 @@ pub struct VertexUse {
     pub vertex: VertexId,
     pub attach: VertexUseAttach,
 }
-
+```
+```rust
 /// EdgeUse는 B-Rep의 “실제 경계 방향/연결” 핵심.
 /// - loop 순회: next_ccw / prev_cw
 /// - edge fan:  radial_next
@@ -632,13 +655,15 @@ pub struct EdgeUse {
 
     pub pcurve: Option<PCurveId>,
 }
-
+```
+```rust
 #[derive(Debug, Clone)]
 pub enum LoopUseStart {
     Edge(EdgeUseId),
     Vertex(VertexUseId),
 }
-
+```
+```rust
 #[derive(Debug, Clone)]
 pub struct LoopUse {
     pub id: LoopUseId,
@@ -649,7 +674,8 @@ pub struct LoopUse {
     pub start: LoopUseStart,
     pub mate: Option<LoopUseId>,
 }
-
+```
+```rust
 #[derive(Debug, Clone)]
 pub struct FaceUse {
     pub id: FaceUseId,
@@ -659,9 +685,9 @@ pub struct FaceUse {
     pub mate: Option<FaceUseId>,
     pub loops: Vec<LoopUseId>, // ★ edgeuse 목록은 loop CCW로 유도
 }
-
+```
+```rust
 /// -------------------- Brep --------------------
-
 #[derive(Debug, Default, Clone)]
 pub struct Brep {
     pub geom: GeometryStore,
@@ -680,6 +706,7 @@ pub struct Brep {
     pub tolerance: Real,
 }
 ```
+
 ### builder.rs
 ```rust
 use crate::brep::*;
@@ -712,23 +739,25 @@ impl BrepBuilder {
     #[inline] fn euid(&self) -> EdgeUseId { EdgeUseId(self.brep.edgeuses.len() as u32) }
     #[inline] fn luseid(&self) -> LoopUseId { LoopUseId(self.brep.loopuses.len() as u32) }
     #[inline] fn fuseid(&self) -> FaceUseId { FaceUseId(self.brep.faceuses.len() as u32) }
-
+```
+```rust
     // -------------------- geometry add --------------------
-
     pub fn add_curve(&mut self, c: ModelCurve) -> CurveId {
         self.brep.geom.add_curve(c)
     }
-
+```
+```rust
     pub fn add_surface(&mut self, s: Surface) -> SurfaceId {
         self.brep.geom.add_surface(s)
     }
-
+```
+```rust
     pub fn add_pcurve(&mut self, c: PCurve) -> PCurveId {
         self.brep.geom.add_pcurve(c)
     }
-
+```
+```rust
     // -------------------- topo add --------------------
-
     pub fn add_region(&mut self, is_void: bool) -> RegionId {
         let id = self.rgid();
         self.brep.regions.push(Region {
@@ -739,7 +768,8 @@ impl BrepBuilder {
         });
         id
     }
-
+```
+```rust
     pub fn add_shell(&mut self) -> ShellId {
         let id = self.shid();
         self.brep.shells.push(Shell {
@@ -751,11 +781,13 @@ impl BrepBuilder {
         });
         id
     }
-
+```
+```rust
     pub fn add_shell_to_region(&mut self, region: RegionId, shell: ShellId) {
         self.brep.regions[region.0 as usize].shells.push(shell);
     }
-
+```
+```rust
     pub fn add_vertex(&mut self, p: Point3D, tol: Real) -> VertexId {
         let id = self.vid();
         self.brep.vertices.push(Vertex {
@@ -767,7 +799,8 @@ impl BrepBuilder {
         });
         id
     }
-
+```
+```rust
     pub fn add_vertexuse(&mut self, v: VertexId, attach: VertexUseAttach) -> VertexUseId {
         let id = self.vuid();
         self.brep.vertexuses.push(VertexUse {
@@ -779,7 +812,8 @@ impl BrepBuilder {
         self.brep.vertices[v.0 as usize].uses.push(id);
         id
     }
-
+```
+```rust
     pub fn add_edge(&mut self, curve: Option<CurveId>, interval: Interval, tol: Real) -> EdgeId {
         let id = self.eid();
         self.brep.edges.push(Edge {
@@ -793,7 +827,8 @@ impl BrepBuilder {
         });
         id
     }
-
+```
+```rust
     pub fn add_edgeuse(
         &mut self,
         edge: EdgeId,
@@ -829,7 +864,8 @@ impl BrepBuilder {
 
         id
     }
-
+```
+```rust
     /// Face 생성: surface + primary/mate faceuse 2개를 자동 생성
     pub fn add_face(&mut self, surface: Option<SurfaceId>, uv_domain: (Interval, Interval), tol: Real) -> FaceId {
         let face_id = self.fid();
@@ -867,11 +903,13 @@ impl BrepBuilder {
 
         face_id
     }
-
+```
+```rust
     pub fn add_faceuse_to_shell(&mut self, shell: ShellId, faceuse: FaceUseId) {
         self.brep.shells[shell.0 as usize].faceuses.push(faceuse);
     }
-
+```
+```rust
     pub fn add_loop(&mut self) -> LoopId {
         let id = self.luid();
         self.brep.loops.push(Loop {
@@ -881,7 +919,8 @@ impl BrepBuilder {
         });
         id
     }
-
+```
+```rust
     /// LoopUse 생성 (Edge loop)
     pub fn add_loopuse_edge(
         &mut self,
@@ -903,7 +942,8 @@ impl BrepBuilder {
         });
         id
     }
-
+```
+```rust
     /// LoopUse 생성 (Vertex-only loop)
     pub fn add_loopuse_vertex(
         &mut self,
@@ -925,12 +965,14 @@ impl BrepBuilder {
         });
         id
     }
-
+```
+```rust
     /// FaceUse에 loopuse 추가
     pub fn add_loopuse_to_faceuse(&mut self, faceuse: FaceUseId, loopuse: LoopUseId) {
         self.brep.faceuses[faceuse.0 as usize].loops.push(loopuse);
     }
-
+```
+```rust
     /// Edge loop를 만드는 헬퍼:
     /// - edgeuses: loop 경계를 이루는 edgeuse들의 순서 (CCW 순서로 넣어야 함)
     /// - 각 edgeuse.loop_use를 loopuse로 세팅
@@ -949,7 +991,8 @@ impl BrepBuilder {
             e.prev_cw = Some(prev);
         }
     }
-
+```
+```rust
     /// Edge의 radial ring 구축:
     /// - 해당 edge의 uses를 한 바퀴 원형으로 연결(radial_next)
     /// - mate는 별도로 set_mate_* 로 세팅
@@ -965,7 +1008,8 @@ impl BrepBuilder {
             self.brep.edgeuses[a.0 as usize].radial_next = Some(b);
         }
     }
-
+```
+```rust
     /// mate pairing (양방향)
     pub fn set_edgeuse_mate(&mut self, a: EdgeUseId, b: EdgeUseId) {
         self.brep.edgeuses[a.0 as usize].mate = Some(b);
@@ -987,7 +1031,8 @@ pub enum BrepValidateError {
     LoopUseStartInvalid { lu: LoopUseId },
     FaceUseLoopOrientationRule { fu: FaceUseId },
 }
-
+```
+```rust
 pub fn validate_brep(b: &Brep) -> Result<(), BrepValidateError> {
     // 1) EdgeUse의 loop 링크가 있으면 next/prev가 서로 맞아야 함
     for eu in &b.edgeuses {
@@ -1001,7 +1046,8 @@ pub fn validate_brep(b: &Brep) -> Result<(), BrepValidateError> {
             }
         }
     }
-
+```
+```rust
     // 2) radial ring: edge가 uses를 가지고 있으면, 각 eu.radial_next는 같은 edge여야 함
     for e in &b.edges {
         for &eu_id in &e.uses {
@@ -1017,7 +1063,8 @@ pub fn validate_brep(b: &Brep) -> Result<(), BrepValidateError> {
             }
         }
     }
-
+```
+```rust
     // 3) mate는 쌍방향이어야 함
     for eu in &b.edgeuses {
         if let Some(m) = eu.mate {
@@ -1027,7 +1074,8 @@ pub fn validate_brep(b: &Brep) -> Result<(), BrepValidateError> {
             }
         }
     }
-
+```
+```rust
     // 4) LoopUse start 체크
     for lu in &b.loopuses {
         match lu.start {
@@ -1044,7 +1092,8 @@ pub fn validate_brep(b: &Brep) -> Result<(), BrepValidateError> {
             }
         }
     }
-
+```
+```rust
     // 5) FaceUse loop orientation 규칙(선택):
     // - 첫 루프는 outer(=Same), 나머지는 inner(=Opposite)로 쓰는 걸 권장.
     //   네가 이 규칙을 강제하기 싫으면 이 블록을 주석 처리해도 됨.
@@ -1066,10 +1115,9 @@ pub fn validate_brep(b: &Brep) -> Result<(), BrepValidateError> {
 
     Ok(())
 }
-
-
+```
+```rust
 use crate::brep::*;
-
 pub fn smoke_build_one_face_loop(mut builder: BrepBuilder) -> Brep {
     // region/shell
     let r = builder.add_region(false);
@@ -1128,6 +1176,227 @@ pub fn smoke_build_one_face_loop(mut builder: BrepBuilder) -> Brep {
     let _ = validate_brep(&brep);
     brep
 }
+```
+### 테스트 코드
+```rust
+use crate::brep::*;
+use crate::core::prelude::{Interval, Real};
+use crate::core::geom::Point3D;
 
+// -------------------- helpers --------------------
 
+fn iv(a: Real, b: Real) -> Interval {
+    Interval { t0: a, t1: b }
+}
+
+fn p(x: Real, y: Real, z: Real) -> Point3D {
+    Point3D { x, y, z }
+}
+
+/// CCW edge loop 생성 유틸
+/// - FaceUse + Loop + LoopUse
+/// - vertex / vertexuse / edge / edgeuse 자동 생성
+/// - CCW 링크 + radial 링까지 구성
+fn make_ccw_loop(
+    b: &mut BrepBuilder,
+    fu: FaceUseId,
+    loop_topo: LoopId,
+    orientation: Orientation,
+    pts_ccw: &[Point3D],
+) -> (LoopUseId, Vec<EdgeUseId>) {
+    assert!(pts_ccw.len() >= 3);
+
+    // shell dummy (vertexuse attach 용)
+    let sh = b.add_shell();
+
+    // dummy edgeuse → loopuse 생성용
+    let vd = b.add_vertex(pts_ccw[0], 1e-9);
+    let vud = b.add_vertexuse(vd, VertexUseAttach::Shell(sh));
+    let ed = b.add_edge(None, iv(0.0, 1.0), 1e-9);
+    let eu_dummy = b.add_edgeuse(ed, vud, Orientation::Same, None, None, None);
+
+    let lu = b.add_loopuse_edge(loop_topo, fu, orientation, eu_dummy, None);
+    b.add_loopuse_to_faceuse(fu, lu);
+
+    // 실제 vertexuses
+    let mut vus = Vec::new();
+    for &pt in pts_ccw {
+        let v = b.add_vertex(pt, 1e-9);
+        let vu = b.add_vertexuse(v, VertexUseAttach::Loop(lu));
+        vus.push(vu);
+    }
+
+    // edges + edgeuses
+    let n = pts_ccw.len();
+    let mut eus = Vec::new();
+    for i in 0..n {
+        let e = b.add_edge(None, iv(0.0, 1.0), 1e-9);
+        let eu = b.add_edgeuse(e, vus[i], Orientation::Same, None, None, None);
+        eus.push(eu);
+    }
+
+    // loop start 교체
+    b.brep.loopuses[lu.0 as usize].start = LoopUseStart::Edge(eus[0]);
+
+    // CCW 링크 구성
+    b.build_loop_ccw_links(lu, &eus);
+
+    // radial ring 구성
+    for &eu in &eus {
+        let edge = b.brep.edgeuses[eu.0 as usize].edge;
+        b.rebuild_edge_radial_ring(edge);
+    }
+
+    (lu, eus)
+}
+```
+```rust
+// -------------------- tests --------------------
+#[test]
+fn topo_face_single_outer_loop_ok() {
+    let mut b = BrepBuilder::new(1e-6);
+
+    let r = b.add_region(false);
+    let sh = b.add_shell();
+    b.add_shell_to_region(r, sh);
+
+    let face = b.add_face(None, (iv(0.0, 1.0), iv(0.0, 1.0)), 1e-6);
+    let fu = b.brep.faces[face.0 as usize].primary;
+    b.add_faceuse_to_shell(sh, fu);
+
+    let loop_topo = b.add_loop();
+    let pts = [
+        p(0.0, 0.0, 0.0),
+        p(2.0, 0.0, 0.0),
+        p(0.0, 2.0, 0.0),
+    ];
+
+    let (_lu, eus) = make_ccw_loop(&mut b, fu, loop_topo, Orientation::Same, &pts);
+
+    let brep = b.brep.clone();
+    validate_brep(&brep).expect("validate_brep failed");
+
+    // CCW 순회 닫힘 확인
+    let start = eus[0];
+    let mut cur = start;
+    for _ in 0..eus.len() {
+        cur = brep.edgeuses[cur.0 as usize].next_ccw.unwrap();
+    }
+    assert_eq!(cur, start);
+}
+```
+```rust
+#[test]
+fn topo_face_outer_inner_loops_ok() {
+    let mut b = BrepBuilder::new(1e-6);
+
+    let r = b.add_region(false);
+    let sh = b.add_shell();
+    b.add_shell_to_region(r, sh);
+
+    let face = b.add_face(None, (iv(0.0, 1.0), iv(0.0, 1.0)), 1e-6);
+    let fu = b.brep.faces[face.0 as usize].primary;
+    b.add_faceuse_to_shell(sh, fu);
+
+    // outer
+    let l0 = b.add_loop();
+    let outer_pts = [
+        p(-5.0, -5.0, 0.0),
+        p( 5.0, -5.0, 0.0),
+        p( 5.0,  5.0, 0.0),
+        p(-5.0,  5.0, 0.0),
+    ];
+    make_ccw_loop(&mut b, fu, l0, Orientation::Same, &outer_pts);
+
+    // inner
+    let l1 = b.add_loop();
+    let inner_pts = [
+        p(-1.0, -1.0, 0.0),
+        p( 1.0, -1.0, 0.0),
+        p( 1.0,  1.0, 0.0),
+        p(-1.0,  1.0, 0.0),
+    ];
+    make_ccw_loop(&mut b, fu, l1, Orientation::Opposite, &inner_pts);
+
+    let brep = b.brep.clone();
+    validate_brep(&brep).expect("validate_brep failed");
+
+    assert_eq!(brep.faceuses[fu.0 as usize].loops.len(), 2);
+}
+```
+```rust
+#[test]
+fn topo_edgeuse_mate_and_radial_ok() {
+    let mut b = BrepBuilder::new(1e-6);
+
+    let e = b.add_edge(None, iv(0.0, 1.0), 1e-9);
+
+    let r = b.add_region(false);
+    let sh = b.add_shell();
+    b.add_shell_to_region(r, sh);
+
+    // face A/B는 “존재만” 시키고 (loop 링크는 안 만든다)
+    let f0 = b.add_face(None, (iv(0.0,1.0), iv(0.0,1.0)), 1e-6);
+    let fu0 = b.brep.faces[f0.0 as usize].primary;
+    b.add_faceuse_to_shell(sh, fu0);
+
+    let f1 = b.add_face(None, (iv(0.0,1.0), iv(0.0,1.0)), 1e-6);
+    let fu1 = b.brep.faces[f1.0 as usize].primary;
+    b.add_faceuse_to_shell(sh, fu1);
+
+    // loopuse를 억지로 만들 필요 없음 (mate/radial 테스트 목적상)
+    // 공유 edge의 EU 2개만 만들고 mate/radial 검사
+    let va = b.add_vertex(p(0.0,0.0,0.0), 1e-9);
+    let vua = b.add_vertexuse(va, VertexUseAttach::Shell(sh));
+    let eu_a = b.add_edgeuse(e, vua, Orientation::Same, None, None, None);
+
+    let vb = b.add_vertex(p(1.0,0.0,0.0), 1e-9);
+    let vub = b.add_vertexuse(vb, VertexUseAttach::Shell(sh));
+    let eu_b = b.add_edgeuse(e, vub, Orientation::Opposite, None, None, None);
+
+    b.set_edgeuse_mate(eu_a, eu_b);
+    b.rebuild_edge_radial_ring(e);
+
+    let brep = b.brep.clone();
+    validate_brep(&brep).expect("validate_brep failed (mate/radial)");
+
+    assert_eq!(brep.edgeuses[eu_a.0 as usize].mate, Some(eu_b));
+    assert_eq!(brep.edgeuses[eu_b.0 as usize].mate, Some(eu_a));
+
+    let rn = brep.edgeuses[eu_a.0 as usize].radial_next.unwrap();
+    assert_eq!(brep.edgeuses[rn.0 as usize].edge, e);
+}
+```
+```rust
+#[test]
+fn topo_validate_detects_broken_loop() {
+    let mut b = BrepBuilder::new(1e-6);
+
+    let r = b.add_region(false);
+    let sh = b.add_shell();
+    b.add_shell_to_region(r, sh);
+
+    let face = b.add_face(None, (iv(0.0, 1.0), iv(0.0, 1.0)), 1e-6);
+    let fu = b.brep.faces[face.0 as usize].primary;
+    b.add_faceuse_to_shell(sh, fu);
+
+    let loop_topo = b.add_loop();
+    let pts = [
+        p(0.0, 0.0, 0.0),
+        p(2.0, 0.0, 0.0),
+        p(0.0, 2.0, 0.0),
+    ];
+    let (_lu, eus) = make_ccw_loop(&mut b, fu, loop_topo, Orientation::Same, &pts);
+
+    // 링크 일부러 파손
+    b.brep.edgeuses[eus[1].0 as usize].prev_cw = None;
+
+    let brep = b.brep.clone();
+    let err = validate_brep(&brep).unwrap_err();
+
+    match err {
+        BrepValidateError::EdgeUseLoopLinkBroken { .. } => {}
+        _ => panic!("unexpected error: {:?}", err),
+    }
+}
 ```
