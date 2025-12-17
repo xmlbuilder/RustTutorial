@@ -1613,4 +1613,204 @@ FaceUse A           FaceUse B
 
 ---
 
+# B-Rep Topology 심화 문서 (Validate / Boolean / 비교 / Traversal)
+
+본 문서는 다음 네 가지 주제를 하나로 정리한 **심화 학습용 문서**이다.
+
+1. validate_brep 규칙 정리
+2. Boolean / Intersection 구현 순서 (pseudo-code)
+3. Parasolid / ACIS 개념 비교
+4. Topology Traversal 유틸 설계 가이드
+
+---
+
+## 1. validate_brep 규칙 정리
+
+- validate_brep는 Topology 구조의 **불변식(invariant)** 을 강제하기 위한 최종 방어선이다.
+
+### 1.1 Loop 관련 규칙
+
+- LoopUse.start는 반드시 유효해야 한다
+- LoopUse.start가 EdgeUse라면:
+  - next_ccw, prev_cw가 모두 존재해야 함
+  - CCW 순회 시 반드시 원형으로 닫혀야 함
+
+```
+eu0 -> eu1 -> eu2 -> eu0   (OK)
+eu0 -> eu1 -> null         (ERROR)
+```
+---
+
+### 1.2 EdgeUse Loop Link 규칙
+
+- EdgeUse.loop_use != None 이면:
+  - next_ccw != None
+  - prev_cw != None
+
+- 이를 어길 경우:
+```
+EdgeUseLoopLinkBroken
+```
+
+---
+
+### 1.3 Radial Ring 규칙
+
+- EdgeUse.radial_next는 None이거나,  
+  동일 Edge를 공유하는 EdgeUse로 원형 연결되어야 함
+
+```
+eu0 -> eu1 -> eu2 -> eu0
+```
+
+- 자기 자신만 가리켜도 허용 (fan size = 1)
+
+---
+
+### 1.4 Mate 규칙
+
+- mate는 선택 사항
+- mate가 있다면:
+  - 쌍방향이어야 함
+  - 동일 Edge를 참조해야 함
+---
+
+## 2. Boolean / Intersection 구현 순서 (Pseudo-code)
+
+### 2.1 전체 흐름
+
+```
+boolean(A, B):
+  faces = intersect_faces(A, B)
+  curves = build_intersection_curves(faces)
+  split_edges(curves)
+  split_faces(curves)
+  classify_regions()
+  rebuild_shells()
+```
+
+---
+
+### 2.2 Face-Face Intersection
+```
+for faceA in A.faces:
+  for faceB in B.faces:
+    if bbox_overlap(faceA, faceB):
+      curves += intersect_surface(faceA, faceB)
+```
+
+결과:
+- 0개 이상의 intersection curve 조각
+
+---
+
+### 2.3 Edge Split
+
+```
+for curve in intersection_curves:
+  for edge in crossed_edges(curve):
+    split_edge(edge, curve.t)
+```
+
+split_edge 내부:
+
+```
+edge -> edge0 + edge1
+edgeuses -> eu0 + eu1
+fix_loop_links()
+fix_radial_ring()
+```
+---
+
+### 2.4 Face Split
+
+```
+for face in faces_crossed_by_curve:
+  split_face(face, curve)
+```
+
+결과:
+- 새로운 Face 2개
+- LoopUse 재배치
+- Intersection curve는 새 loop의 일부
+
+---
+
+## 3. Parasolid / ACIS 개념 비교
+
+| 개념 | Parasolid | ACIS | 본 구조 |
+|----|----|----|----|
+| Half-edge | coedge | coedge | EdgeUse |
+| Edge fan | radial | radial | radial_next |
+| Face dir | face | face | FaceUse |
+| Loop | loop | loop | LoopUse |
+| Validation | check | audit | validate_brep |
+
+### 핵심 차이
+- Parasolid/ACIS는 포인터 기반
+- 본 구조는 ID + 불변식 기반
+- Rust에서 훨씬 안전
+---
+
+## 4. Topology Traversal 유틸 설계
+
+- Traversal은 알고리즘 구현의 핵심이다.
+
+### 4.1 Loop Traversal
+
+```
+fn walk_loop(start_eu):
+  cur = start_eu
+  do:
+    visit(cur)
+    cur = cur.next_ccw
+  while cur != start_eu
+```
+
+---
+
+### 4.2 Edge Radial Traversal
+
+```
+fn walk_radial(eu):
+  cur = eu
+  do:
+    visit(cur)
+    cur = cur.radial_next
+  while cur != eu
+```
+
+---
+
+### 4.3 Face Boundary Traversal
+
+```
+for lu in faceuse.loops:
+  if lu.start is Edge:
+    walk_loop(lu.start)
+```
+
+---
+
+### 4.4 Boolean에서의 Traversal 활용
+
+- 교선 추적 → radial traversal
+- 영역 분류 → faceuse/loopuse traversal
+- shell 재구성 → adjacency traversal
+
+---
+
+## 5. 결론
+
+- 이 문서까지 포함하면:
+  - Topology 구조 이해
+  - Validation 기준 명확화
+  - Boolean / Intersection 설계 가능
+  - 상용 커널과의 개념 대응 완료
+
+- 이 문서를 기준으로 Topology 구현을 확장하면 구조적 오류 없이 고급 CAD 기능을 구현할 수 있다.
+
+---
+
+
 
