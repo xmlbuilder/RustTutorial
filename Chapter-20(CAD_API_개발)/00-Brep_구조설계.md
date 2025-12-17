@@ -1400,3 +1400,217 @@ fn topo_validate_detects_broken_loop() {
     }
 }
 ```
+
+---
+
+# B-Rep Topology 구조 정리 (Rust 기반, 확장판)
+
+- 본 문서는 현재 프로젝트에서 사용하는 **B-Rep Topology 구조** 를  설명을 확장 한다.
+- 기본 구조 설명에 더해 다음을 포함한다.
+  - ASCII 다이어그램 기반 구조 설명
+  - Boolean / Intersection 관점의 Topology 동작
+  - Edge Split / Face Split 시 Topology 변화 정리
+
+
+## 1. 전체 Topology 계층
+
+```
+Region
+ └─ Shell
+     └─ FaceUse (Same / Opposite)
+         └─ LoopUse (outer / inner)
+             └─ EdgeUse (half-edge / coedge)
+                 └─ VertexUse
+```
+
+- Region은 공간, Shell은 연속된 경계, 나머지는 모두 **Use** 기반 방향 객체이다.
+
+---
+
+## 2. Face Boundary Loop
+
+- 하나의 FaceUse는 하나 이상의 LoopUse를 가진다.
+
+```
+FaceUse
+ └─ LoopUse (outer)
+     ┌─ eu0 -> eu1 -> eu2 -> eu3 ┐
+     └───────────────────────────┘
+```
+
+- LoopUse.start 에서 시작
+- EdgeUse.next_ccw 로 순회
+- 반드시 원형으로 닫혀야 함
+
+- Inner loop (hole)는 orientation = Opposite 로 구분한다.
+
+---
+
+## 3. Edge Radial Fan
+
+하나의 Edge는 여러 Face에서 사용될 수 있다.
+
+```
+           Face A
+             |
+           eu0
+             |
+           eu1
+             |
+           eu2
+             |
+           eu0   (radial_next)
+```
+
+- EdgeUse.radial_next 로 fan 순회
+- non-manifold 모델의 핵심 구조
+- Boolean / Intersection에서 가장 중요한 순회 경로
+
+---
+
+## 4. Mate 관계
+
+Manifold edge의 일반적인 형태:
+
+```
+ Face A        Face B
+   eu0 <----> eu1
+        mate
+```
+
+- mate는 **반대 방향 쌍** 의미
+- non-manifold에서는 mate가 없거나 불완전할 수 있음
+- 알고리즘은 mate보다 radial fan을 우선 사용해야 안전
+
+---
+
+## 5. Boolean 연산 관점의 Topology 흐름
+
+### 5.1 Boolean 연산의 핵심 단계
+
+1. Face–Face Intersection
+2. Intersection Curve 생성
+3. Edge / Face 분할
+4. 새로운 Topology 재연결
+5. 내부/외부 분류
+
+- Topology 관점에서 중요한 것은 **2, 3, 4 단계** 이다.
+
+---
+
+### 5.2 Intersection Curve 생성
+
+- 두 Surface의 교선은 하나 이상의 Curve 조각
+- 이 Curve는 기존 Edge와 일치하거나,
+  새로운 Edge로 Topology에 삽입됨
+
+```
+Face A      Face B
+  |   \    |
+  |    \   |
+  |-----X---|  <-- intersection curve
+```
+
+---
+
+### 5.3 Intersection 후 EdgeUse 생성
+
+- 교선이 Face 경계를 가로지르면:
+
+```
+기존:  eu0 ---------- eu1
+
+분할:  eu0 ---- e_new ---- eu1
+```
+
+- Edge split 발생
+- 기존 EdgeUse → 2개 EdgeUse로 분해
+- Radial fan 재구성 필수
+
+---
+
+## 6. Edge Split 시 Topology 변화
+
+### 6.1 Edge Split 전
+
+```
+Edge E
+ ├─ euA (FaceUse A)
+ └─ euB (FaceUse B)
+```
+
+### 6.2 Edge Split 후
+
+```
+Edge E0        Edge E1
+ ├─ euA0       ├─ euA1
+ └─ euB0       └─ euB1
+```
+
+- 변경 규칙:
+  - Edge → 두 Edge로 분할
+  - 기존 EdgeUse → 2개의 EdgeUse
+  - mate 관계 유지
+  - radial ring 재구성
+
+**주의**
+- LoopUse 경계에 포함된 경우,  
+  CCW/CW 링크도 반드시 업데이트해야 함
+
+---
+
+## 7. Face Split 시 Topology 변화
+
+### 7.1 Face Split 전
+
+```
+FaceUse
+ └─ LoopUse (outer)
+```
+
+### 7.2 Face Split 후
+
+```
+FaceUse A           FaceUse B
+ └─ LoopUse A        └─ LoopUse B
+      \ intersection //
+```
+
+- 변경 규칙:
+  - Face → 2개의 Face
+  - 각 Face는 자신의 FaceUse 쌍을 가짐
+  - 기존 LoopUse는 분할되어 재배치
+  - Intersection curve는 새 LoopUse의 일부가 됨
+
+---
+
+## 8. Intersection / Boolean 구현 시 핵심 불변식
+
+- 항상 유지되어야 할 규칙:
+  - 1. LoopUse는 반드시 닫힌 CCW 링
+  - 2. EdgeUse.loop_use != None 이면 next/prev 존재
+  - 3. EdgeUse.radial fan은 원형
+  - 4. mate는 선택적, radial은 필수
+  - 5. Topology 수정 후 validate_brep 통과
+
+---
+
+## 9. 구현 전략 요약
+
+- Geometry 계산 → Curve / Surface 레벨
+- Topology 변경 → EdgeUse / LoopUse / FaceUse 중심
+- Boolean/Intersection은 **Topology 재구성 문제**
+
+---
+
+## 10. 결론
+
+- 이 Topology 구조는:
+  - 일반 CAD B-Rep의 대부분을 수용
+  - Boolean / Intersection 구현에 충분한 표현력 제공
+  - Rust에서 안전하게 관리 가능
+- 본 문서와 `validate_brep`를 기준으로 Topology를 수정하면 구조적 오류를 방지할 수 있다.
+
+---
+
+
