@@ -1,11 +1,12 @@
 # clone / cloned/ copied
 
-Rust에서 iter().clone(), cloned(), copied()는  모두 **이터레이터(iterator)** 를 다룰 때 사용하는 메서드들이며,  
-각각의 차이점은 소유권, 복사 가능성, 성능과 관련이 있습니다.  
-아래에 각각을 비교해서 설명.
+- Rust에서 iter().clone(), cloned(), copied()는  모두 **이터레이터(iterator)** 를 다룰 때 사용하는 메서드들이며,    
+    각각의 차이점은 소유권, 복사 가능성, 성능과 관련이 있습니다.  
+- 아래에 각각을 비교해서 설명.
 
 ## 🌀 iter().clone()
-- 의미: 이터레이터 자체를 복제합니다. 즉, 이터레이터를 두 개 만들고 싶을 때 사용합니다.
+- 의미: 이터레이터 자체를 복제합니다.
+- 즉, 이터레이터를 두 개 만들고 싶을 때 사용합니다.
 - 예시:
 ```rust
 let v = vec![1, 2, 3];
@@ -46,9 +47,8 @@ for n in v.iter().copied() {
 | `cloned()`       | `T`       | `T: Clone`     | 참조된 값을 복제하여 소유권 획득   |
 | `copied()`       | `T`       | `T: Copy`      | 참조된 값을 복사하여 소유권 획득   |
 
-
-필요한 상황에 따라 적절한 메서드를 선택하면 됩니다.  
-예를 들어 i32, bool 같은 단순 타입이면 copied()가 가장 효율적이고, String 같은 복잡한 타입이면 cloned()를 써야 함.
+- 필요한 상황에 따라 적절한 메서드를 선택하면 됩니다.  
+- 예를 들어 i32, bool 같은 단순 타입이면 copied()가 가장 효율적이고, String 같은 복잡한 타입이면 cloned()를 써야 함.
 
 
 ## ✅ clone().collect 기본 개념
@@ -56,11 +56,11 @@ for n in v.iter().copied() {
 let v = vec![1, 2, 3];
 let collected = v.iter().clone().collect::<Vec<_>>();
 ```
-이 코드는 다음과 같은 과정을 거칩니다:
-- v.iter() → &v의 이터레이터를 생성 (&i32 타입 요소)
-- .clone() → 이터레이터 자체를 복제 (즉, v.iter()를 복사해서 또 하나 만듦)
-- .collect() → 복제된 이터레이터를 수집해서 Vec<&i32>로 만듦
-- 즉, iter().clone().collect()는 `Vec<&T>` 를 생성합니다. `clone()` 은 `이터레이터 자체를 복제` 할 뿐, `요소를 복제하지 않습니다`.
+- 이 코드는 다음과 같은 과정을 거칩니다:
+    - v.iter() → &v의 이터레이터를 생성 (&i32 타입 요소)
+    - .clone() → 이터레이터 자체를 복제 (즉, v.iter()를 복사해서 또 하나 만듦)
+    - .collect() → 복제된 이터레이터를 수집해서 Vec<&i32>로 만듦
+    - 즉, iter().clone().collect()는 `Vec<&T>` 를 생성합니다. `clone()` 은 `이터레이터 자체를 복제` 할 뿐, `요소를 복제하지 않습니다`.
 
 ## 🔍 예시로 비교
 ```rust
@@ -86,13 +86,11 @@ let c = v.iter().copied().collect::<Vec<_>>(); // Vec<i32>
 - iter().clone()은 이터레이터를 복제하는 것이지, 요소를 복제(clone)하는 것과는 다릅니다.
 - 요소를 복제하고 싶다면 .cloned() 또는 .copied()를 사용해야 합니다.
 
-필요하다면 .collect()의 타입 추론을 명시적으로 지정해주는 것도 좋습니다. 예를 들어:
+- 필요하다면 .collect()의 타입 추론을 명시적으로 지정해주는 것도 좋습니다.
+- 예를 들어:
 ```rust
 let refs: Vec<&i32> = v.iter().clone().collect();
 ```
-
-
-
 
 ## 🔍 self.ctrl.iter().cloned().collect() 에러 핵심 원인 요약
 ```rust
@@ -133,9 +131,8 @@ let mut cp = self.ctrl.clone();
 - Vec<T>는 Clone만 구현되어 있으면 .clone()으로 전체 복제 가능
 
 ## ✍️ 결론
-.cloned()는 참조를 값으로 복제할 때만 사용 가능하고,
-Vec<Point4D>처럼 값 자체를 반복하는 경우엔 **.clone() 또는 .to_vec()** 을 써야 합니다.
-
+- .cloned()는 참조를 값으로 복제할 때만 사용 가능하고,
+- Vec<Point4D>처럼 값 자체를 반복하는 경우엔 **.clone() 또는 .to_vec()** 을 써야 합니다.
 
 ---
 
@@ -199,6 +196,7 @@ let cp: Vec<Point4D> = self.ctrl.iter().map(|p| p.clone()).collect();
 - 문법적으로 다 맞더라고 타입 추론을 못해서 안되는 경우도 있습니다.
 
 ---
+
 
 
 
