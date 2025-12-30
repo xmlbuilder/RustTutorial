@@ -196,7 +196,7 @@ plt.show()
 
 ## 📌 Rust: SAR 이미지에 SVD 적용해 노이즈 제거하기
 ### 1. Cargo.toml 설정
-````
+```
 [package]
 name = "sar_svd"
 version = "0.1.0"
@@ -207,6 +207,7 @@ ndarray = "0.15"
 ndarray-linalg = { version = "0.16", features = ["openblas"] }
 image = "0.24"
 ```
+
 - openblas 기능을 켜야 SVD가 동작.
   (Windows, Linux, macOS 모두 지원)
 
@@ -258,12 +259,14 @@ fn main() {
     println!("Saved: sar_denoised.png");
 }
 ```
+
 ### 📌 코드 설명
 - ✔ 1) SAR 이미지 로드
   - Rust의 image crate로 PNG/JPG/TIFF 등 읽기 가능.
 - ✔ 2) ndarray로 변환
   - SVD는 f64 타입을 요구하므로 변환.
 - ✔ 3) SVD 수행
+
 ```rust
 let (u, s, vt) = mat.svd(true, true).unwrap();
 ```
