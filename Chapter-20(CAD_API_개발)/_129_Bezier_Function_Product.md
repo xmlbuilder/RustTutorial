@@ -279,8 +279,6 @@ mod tests_bivariate_bezier_product_with_matrices {
     use crate::core::bezier_surface_function::on_bezier_surface_function_product_with_matrices;
     use crate::core::basis::on_product_matrix;
 
-
-
     #[test]
     fn test_bivariate_bezier_product_constant_functions() -> Result<(), NurbsError> {
         // f: degree (p,q), g: degree (r,s)
@@ -427,3 +425,119 @@ mod tests_bivariate_bezier_product_with_matrices {
 - 까지 대부분 검증할 수 있다.
 
 ---
+
+## 📘 B_SFNPRT 함수의 용도 (핵심 요약)
+- 두 개의 2D Bezier Surface Function(스칼라 필드)의 곱을  
+    정확한 Bezier Surface Function 형태로 다시 표현하는 함수.
+- 즉,
+```math
+h(u,v)=f(u,v)\cdot g(u,v)
+```
+- 을 Bezier basis 위에서 다시 표현하기 위해 새로운 control value $h_{i,j}$ 를 계산하는 함수.
+
+## 📘 왜 이런 함수가 필요한가?
+- Bezier / NURBS 기반의 CAD·CAE 알고리즘에서는
+    **함수의 곱** 이 매우 자주 등장한다.
+- 예를 들어:
+    - NURBS 곡면의 weight function 곱
+    - rational surface의 분자/분모 곱
+    - partial derivative 계산 시 등장하는 항들
+    - Jacobian determinant 계산
+    - surface fitting / approximation
+    - implicit surface 변환
+    - FEM shape function product
+    - CFD boundary condition product
+    - Bezier patch 간의 blending
+- 이런 곳에서 두 개의 Bezier function을 곱한 결과를 다시 Bezier function으로 표현해야 한다.
+- 그때 필요한 것이 바로 B_SFNPRT.
+
+## 📘 함수의 역할을 직관적으로 설명하면
+- ✔ 입력
+    - f(u,v): degree (p,q)
+    - g(u,v): degree (r,s)
+- ✔ 출력
+    - h(u,v) = f(u,v) * g(u,v): degree (p+r, q+s)
+- ✔ 하는 일
+    - f 와 g 의 control value 를 **곱** 하는 것이 아니라
+    - Bezier basis 간의 곱을 product matrix로 변환하여 정확한 새로운 control value를 계산하는 것
+- 즉, 단순한 element-wise multiply 가 아니다.
+
+## 📘 왜 element-wise multiply 가 아닌가?
+- Bezier function은:
+```math
+f(u,v)=\sum f_{i,j}B_{i,p}(u)B_{j,q}(v)
+```
+- 이기 때문에 control value 자체는 **함수 값** 이 아니다.
+- 따라서:
+```math
+fg[i][j] = f[i][j] * g[i][j]
+```
+
+- 이렇게 하면 수학적으로 완전히 틀린 결과가 된다.
+- 정확한 곱을 얻으려면:
+```math
+B_{i,p}(u)B_{k,r}(u)
+```
+- 을 다시 degree (p+r) 의 Bernstein basis로 변환해야 한다.
+- 이 변환을 수행하는 것이 product matrix (pmu, pmv).
+
+## 📘 on_bezier_surface_function_product_with_matrices 의 실제 용도
+- 아래는 실제 CAD/CAE 알고리즘에서 이 함수가 쓰이는 대표적인 경우들이다.
+
+### 1) NURBS 곡면의 rational form 계산
+- NURBS surface:
+```math
+S(u,v)=\frac{\sum P_{i,j}w_{i,j}B_{i,p}(u)B_{j,q}(v)}{\sum w_{i,j}B_{i,p}(u)B_{j,q}(v)}
+```
+- 여기서 분자와 분모는 모두 Bezier surface function.
+- 분자 = control point * weight
+- 분모 = weight function
+- 이 둘을 곱하거나 나누는 과정에서 Bezier function product가 반드시 필요하다.
+
+### 2) Bezier surface의 partial derivative 계산
+- 편미분:
+```math
+\frac{\partial S}{\partial u}=\frac{S_uW-SW_u}{W^2}
+```
+- 여기서:
+    - $S_u$, $W_u$ 는 Bezier function
+    - 분자에 product가 들어감
+    - 분모 $W^2$ 도 product
+- 즉, Bezier function product 없이는 정확한 rational derivative 계산이 불가능하다.
+
+### 3) Bezier patch blending / multiplication
+- 두 개의 surface function을 곱해서 새로운 blending function을 만들 때 사용.
+- 예:
+    - Coons patch
+    - Gordon surface
+    - T-spline blending
+    - FEM shape function blending
+
+- 4) Implicit surface 변환
+- Implicit function:
+```math
+F(x,y,z)=0
+```
+- 을 Bezier basis로 변환할 때 항들 간의 곱이 등장한다.
+
+## 5) FEM/CFD shape function product
+- Finite Element Method 에서:
+    - shape function N_i(u,v)
+    - Jacobian determinant
+    - stiffness matrix integrand
+- 이런 것들이 모두 함수의 곱으로 구성된다.
+- Bezier 기반 FEM에서는 이 product를 Bezier basis로 변환해야 한다.
+
+## 📘 정리: on_bezier_surface_function_product_with_matrices 의 용도
+| 용도                  | 설명                                                         |
+|-----------------------|--------------------------------------------------------------|
+| Rational NURBS 계산   | 분자/분모 곱, weight function 곱                             |
+| Partial derivative    | $\( S_u W - S W_u \)$ 계산 시 product 필요                     |
+| Surface blending      | Coons, Gordon, T-spline blending                             |
+| FEM/CFD               | shape function product, Jacobian                             |
+| Implicit surface      | 항들의 곱을 Bezier basis로 변환                             |
+| Surface fitting       | basis 변환 과정에서 product 등장                            |
+
+- 즉,
+- ✔ **두 개의 Bezier surface function을 곱한 결과를 정확한 Bezier surface function으로 표현하는 함수**
+- 이게 on_bezier_surface_function_product_with_matrices 의 본질적인 용도다.
