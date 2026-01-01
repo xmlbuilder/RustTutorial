@@ -262,5 +262,675 @@ pub fn on_bezier_surface_function_degree_elevate_rowcol(
         fp, old_deg, t, &rm, dir, f, l, roc, fq,
     );
 }
-
 ```
+```rust
+/// Elevate the degree of a Bezier *surface function* (scalar control values)
+/// for a single row/column, using a precomputed degree elevation matrix.
+///
+/// Rust equivalent of C B_sfn del:
+///   B_sfndel(fp,r,t,&dm,dir,f,l,roc,fq);
+///
+/// Parameters:
+/// - fp  : original control values, size = (r+1) x N  (UDir) or N x (r+1) (VDir)
+/// - r   : original degree in the elevated direction
+/// - t   : increment (new degree = r + t)
+/// - rm  : degree elevation matrix, size = (r+t+1) x (r+1)
+/// - dir : SurfaceDir::UDir or SurfaceDir::VDir
+/// - f,l : first and last indices in the elevated direction to compute (inclusive)
+/// - roc : row or column index orthogonal to the elevated direction
+/// - fq  : output control values, must have size (r+t+1) x N (UDir) or N x (r+t+1) (VDir)
+pub fn on_bezier_surface_function_degree_elevate_rowcol_with_matrix(
+    fp: &[Vec<f64>],
+    r: usize,
+    t: usize,
+    rm: &[Vec<f64>],
+    dir: SurfaceDir,
+    f: usize,
+    l: usize,
+    roc: usize,
+    fq: &mut [Vec<f64>],
+) {
+    let new_deg = r + t;
+
+    debug_assert_eq!(rm.len(), new_deg + 1);
+    debug_assert!(rm.iter().all(|row| row.len() == r + 1));
+    debug_assert!(f <= l);
+    debug_assert!(l <= new_deg);
+
+    match dir {
+        SurfaceDir::UDir => {
+            // fp: (r+1) x M, fq: (new_deg+1) x M, column=roc 고정
+            debug_assert!(fp.len() >= r + 1);
+            debug_assert!(fq.len() >= new_deg + 1);
+            debug_assert!(fp.iter().all(|row| roc < row.len()));
+            debug_assert!(fq.iter().all(|row| roc < row.len()));
+
+            for i in f..=l {
+                let a = if i > t { i - t } else { 0 };
+                let b = if i > r { r } else { i };
+
+                let mut sum = 0.0;
+                for k in a..=b {
+                    sum += rm[i][k] * fp[k][roc];
+                }
+                fq[i][roc] = sum;
+            }
+        }
+
+        SurfaceDir::VDir => {
+            // fp: N x (r+1), fq: N x (new_deg+1), row=roc 고정
+            debug_assert!(roc < fp.len());
+            debug_assert!(roc < fq.len());
+            debug_assert!(fp[roc].len() >= r + 1);
+            debug_assert!(fq[roc].len() >= new_deg + 1);
+
+            for j in f..=l {
+                let a = if j > t { j - t } else { 0 };
+                let b = if j > r { r } else { j };
+
+                let mut sum = 0.0;
+                for k in a..=b {
+                    sum += rm[j][k] * fp[roc][k];
+                }
+                fq[roc][j] = sum;
+            }
+        }
+    }
+}
+```
+---
+### 테스트 코드
+```rust
+#[cfg(test)]
+mod tests_surface_function_degree_elevate {
+    use nurbslib::core::basis::on_degree_elevation_matrix;
+    use nurbslib::core::bezier_surface::on_bezier_surface_function_degree_elevate_rowcol_with_matrix;
+    use nurbslib::core::types::SurfaceDir;
+
+
+    // 간단한 스칼라 값 생성 헬퍼
+    fn val(i: usize, j: usize) -> f64 {
+        (i as f64) * 10.0 + (j as f64)
+    }
+
+    #[test]
+    fn test_surface_function_degree_elevate_u_direction() {
+        let r = 3usize;   // original degree
+        let t = 1usize;   // elevate by 1 → new degree = 4
+        let q = 2usize;   // v-direction count
+
+        // fp: (r+1) x (q+1)
+        let mut fp = vec![vec![0.0; q + 1]; r + 1];
+        for i in 0..=r {
+            for j in 0..=q {
+                fp[i][j] = val(i, j);
+            }
+        }
+
+        // fq: (r+t+1) x (q+1)
+        let mut fq = vec![vec![0.0; q + 1]; r + t + 1];
+
+        // degree elevation matrix
+        let rm = on_degree_elevation_matrix(r, t);
+
+        // column index
+        let roc = 1usize;
+
+        // compute only i = 0..4
+        on_bezier_surface_function_degree_elevate_rowcol_with_matrix(
+            &fp,
+            r,
+            t,
+            &rm,
+            SurfaceDir::UDir,
+            0,
+            r + t,
+            roc,
+            &mut fq,
+        );
+
+        // 검증: 첫 control value는 동일해야 함
+        assert!((fq[0][roc] - fp[0][roc]).abs() < 1e-12);
+
+        // 검증: 마지막 control value도 동일해야 함
+        assert!((fq[r + t][roc] - fp[r][roc]).abs() < 1e-12);
+
+        // 중간 값은 행렬 기반 가중합으로 계산됨
+        // 직접 계산해서 비교
+        for i in 1..(r + t) {
+            let mut expected = 0.0;
+            let a = if i > t { i - t } else { 0 };
+            let b = if i > r { r } else { i };
+            for k in a..=b {
+                expected += rm[i][k] * fp[k][roc];
+            }
+            assert!((fq[i][roc] - expected).abs() < 1e-12);
+        }
+    }
+```
+```rust
+    #[test]
+    fn test_surface_function_degree_elevate_v_direction() {
+        let r = 2usize;   // original degree in v
+        let t = 2usize;   // elevate by 2 → new degree = 4
+        let p = 3usize;   // u count
+
+        // fp: (p+1) x (r+1)
+        let mut fp = vec![vec![0.0; r + 1]; p + 1];
+        for i in 0..=p {
+            for j in 0..=r {
+                fp[i][j] = val(i, j);
+            }
+        }
+
+        // fq: (p+1) x (r+t+1)
+        let mut fq = vec![vec![0.0; r + t + 1]; p + 1];
+
+        let rm = on_degree_elevation_matrix(r, t);
+
+        let roc = 2usize; // row index
+
+        on_bezier_surface_function_degree_elevate_rowcol_with_matrix(
+            &fp,
+            r,
+            t,
+            &rm,
+            SurfaceDir::VDir,
+            0,
+            r + t,
+            roc,
+            &mut fq,
+        );
+
+        // 첫 control value 동일
+        assert!((fq[roc][0] - fp[roc][0]).abs() < 1e-12);
+
+        // 마지막 control value 동일
+        assert!((fq[roc][r + t] - fp[roc][r]).abs() < 1e-12);
+
+        // 중간 값 검증
+        for j in 1..(r + t) {
+            let mut expected = 0.0;
+            let a = if j > t { j - t } else { 0 };
+            let b = if j > r { r } else { j };
+            for k in a..=b {
+                expected += rm[j][k] * fp[roc][k];
+            }
+            assert!((fq[roc][j] - expected).abs() < 1e-12);
+        }
+    }
+}
+```
+```rust
+#[cfg(test)]
+mod tests_surface_function_degree_elevate_chatgpt {
+
+    // tests/bezier_surface_function_degree_elevate_tests.rs
+    //
+    // 대상 함수:
+    // - on_bezier_surface_function_degree_elevate_rowcol_with_matrix()
+    // - (필요하면) on_bezier_surface_function_degree_elevate_rowcol()
+    //
+    // 테스트 전략:
+    // 1) UDir: u-degree r -> r+t 로 올린 fq를 "전체 column(roc)" 반복으로 채운 뒤,
+    //    임의 (u,v)에서 scalar Bezier surface function 값이 fp와 동일한지 확인 (정확히 보존되어야 함).
+    // 2) VDir도 동일.
+    // 3) row/col kernel이 full 결과의 특정 roc에서 동일한지 확인.
+    //
+    // 중복 최소화:
+    // - Bernstein: crate::core::basis::on_bernstein 사용
+    // - 난수: 간단한 xorshift (테스트 내에만)
+
+    use nurbslib::core::basis::{on_bernstein, on_degree_elevation_matrix};
+    use nurbslib::core::bezier_surface::on_bezier_surface_function_degree_elevate_rowcol_with_matrix;
+    use nurbslib::core::types::SurfaceDir;
+
+
+    #[derive(Clone)]
+    struct XorShift64 {
+        s: u64,
+    }
+    impl XorShift64 {
+        fn new(seed: u64) -> Self { Self { s: seed } }
+        fn next_u64(&mut self) -> u64 {
+            let mut x = self.s;
+            x ^= x << 13;
+            x ^= x >> 7;
+            x ^= x << 17;
+            self.s = x;
+            x
+        }
+        fn next_f64(&mut self) -> f64 {
+            let u = self.next_u64() >> 11; // 53 bits
+            (u as f64) * (1.0 / ((1u64 << 53) as f64))
+        }
+        fn range_f64(&mut self, a: f64, b: f64) -> f64 {
+            a + (b - a) * self.next_f64()
+        }
+    }
+
+    // scalar Bezier surface function eval:
+    // fp size (p+1) x (q+1), degree p in u, q in v
+    fn eval_scalar_surface(fp: &[Vec<f64>], p: usize, q: usize, u: f64, v: f64) -> f64 {
+        let mut sum = 0.0;
+        for i in 0..=p {
+            let bu = on_bernstein(p, i, u);
+            for j in 0..=q {
+                let bv = on_bernstein(q, j, v);
+                sum += bu * bv * fp[i][j];
+            }
+        }
+        sum
+    }
+
+    fn approx(a: f64, b: f64, tol: f64) -> bool {
+        (a - b).abs() <= tol
+    }
+```
+```rust
+    #[test]
+    fn sfndel_udirection_preserves_values() {
+        let mut rng = XorShift64::new(0x1234_5678);
+
+        let r = 4usize; // u-degree
+        let q = 5usize; // v-degree
+        let t = 3usize; // elevate amount
+        let new_r = r + t;
+
+        // fp: (r+1) x (q+1)
+        let mut fp = vec![vec![0.0; q + 1]; r + 1];
+        for i in 0..=r {
+            for j in 0..=q {
+                fp[i][j] = rng.range_f64(-3.0, 3.0);
+            }
+        }
+
+        // fq: (new_r+1) x (q+1)
+        let mut fq = vec![vec![0.0; q + 1]; new_r + 1];
+
+        let rm = on_degree_elevation_matrix(r, t);
+
+        // fill all columns (roc = v-index)
+        for roc in 0..=q {
+            on_bezier_surface_function_degree_elevate_rowcol_with_matrix(
+                &fp,
+                r,
+                t,
+                &rm,
+                SurfaceDir::UDir,
+                0,
+                new_r,
+                roc,
+                &mut fq,
+            );
+        }
+
+        // Compare evals at random (u,v)
+        let tol = 1e-12;
+        for _ in 0..500 {
+            let u = rng.next_f64();
+            let v = rng.next_f64();
+
+            let a = eval_scalar_surface(&fp, r, q, u, v);
+            let b = eval_scalar_surface(&fq, new_r, q, u, v);
+
+            assert!(approx(a, b, tol), "UDir mismatch: u={} v={} a={} b={} diff={}", u, v, a, b, (a-b).abs());
+        }
+    }
+```
+```rust
+    #[test]
+    fn sfndel_vdirection_preserves_values() {
+        let mut rng = XorShift64::new(0xDEAD_BEEF);
+
+        let p = 6usize; // u-degree
+        let r = 3usize; // v-degree (elevate dir degree is r here)
+        let t = 2usize;
+        let new_r = r + t;
+
+        // fp: (p+1) x (r+1)
+        let mut fp = vec![vec![0.0; r + 1]; p + 1];
+        for i in 0..=p {
+            for j in 0..=r {
+                fp[i][j] = rng.range_f64(-2.0, 2.0);
+            }
+        }
+
+        // fq: (p+1) x (new_r+1)
+        let mut fq = vec![vec![0.0; new_r + 1]; p + 1];
+
+        let rm = on_degree_elevation_matrix(r, t);
+
+        // fill all rows (roc = u-index)
+        for roc in 0..=p {
+            on_bezier_surface_function_degree_elevate_rowcol_with_matrix(
+                &fp,
+                r,
+                t,
+                &rm,
+                SurfaceDir::VDir,
+                0,
+                new_r,
+                roc,
+                &mut fq,
+            );
+        }
+
+        // Compare evals at random (u,v)
+        let tol = 1e-12;
+        for _ in 0..500 {
+            let u = rng.next_f64();
+            let v = rng.next_f64();
+
+            let a = eval_scalar_surface(&fp, p, r, u, v);
+            let b = eval_scalar_surface(&fq, p, new_r, u, v);
+
+            assert!(approx(a, b, tol), "VDir mismatch: u={} v={} a={} b={} diff={}", u, v, a, b, (a-b).abs());
+        }
+    }
+```
+```rust
+    #[test]
+    fn sfndel_kernel_matches_full_for_one_roc_udirection() {
+        let mut rng = XorShift64::new(0xAAAA_BBBB);
+
+        let r = 5usize;
+        let q = 4usize;
+        let t = 2usize;
+        let new_r = r + t;
+
+        let mut fp = vec![vec![0.0; q + 1]; r + 1];
+        for i in 0..=r {
+            for j in 0..=q {
+                fp[i][j] = rng.range_f64(-5.0, 5.0);
+            }
+        }
+
+        let rm = on_degree_elevation_matrix(r, t);
+
+        // full fill
+        let mut fq_full = vec![vec![0.0; q + 1]; new_r + 1];
+        for roc in 0..=q {
+            on_bezier_surface_function_degree_elevate_rowcol_with_matrix(
+                &fp, r, t, &rm, SurfaceDir::UDir, 0, new_r, roc, &mut fq_full,
+            );
+        }
+
+        // kernel fill only one roc
+        let roc = 3usize;
+        let mut fq_one = vec![vec![0.0; q + 1]; new_r + 1];
+        on_bezier_surface_function_degree_elevate_rowcol_with_matrix(
+            &fp, r, t, &rm, SurfaceDir::UDir, 0, new_r, roc, &mut fq_one,
+        );
+
+        let tol = 1e-14;
+        for i in 0..=new_r {
+            let a = fq_full[i][roc];
+            let b = fq_one[i][roc];
+            assert!(approx(a, b, tol), "roc column mismatch i={} a={} b={} diff={}", i, a, b, (a-b).abs());
+        }
+    }
+
+}
+```
+```rust
+#[cfg(test)]
+mod tests_surface_function_degree_elevate_sample {
+    use nurbslib::core::basis::on_degree_elevation_matrix;
+    use nurbslib::core::bezier_surface::on_bezier_surface_function_degree_elevate_rowcol_with_matrix;
+    use nurbslib::core::types::SurfaceDir;
+
+    // 간단한 스칼라 값 생성
+    fn val(i: usize, j: usize) -> f64 {
+        (i as f64) * 10.0 + (j as f64)
+    }
+```
+```rust
+    #[test]
+    fn test_scalar_surface_degree_elevate_u_dir_by_2() {
+        // 원래 U 차수 r = 3  → control values: 0,1,2,3
+        // 차수 2 상승 → new degree = 5 → control values: 0,1,2,3,4,5
+        let r = 3usize;
+        let t = 2usize; // 차수 2 상승
+        let q = 2usize; // v 방향 개수
+
+        // fp: (r+1) x (q+1) = 4 x 3
+        let mut fp = vec![vec![0.0; q + 1]; r + 1];
+        for i in 0..=r {
+            for j in 0..=q {
+                fp[i][j] = val(i, j);
+            }
+        }
+
+        // fq: (r+t+1) x (q+1) = 6 x 3
+        let mut fq = vec![vec![0.0; q + 1]; r + t + 1];
+
+        // degree elevation matrix (5 x 4)
+        let rm = on_degree_elevation_matrix(r, t);
+
+        // column index (v 방향)
+        let roc = 1usize;
+
+        // 전체 범위 계산
+        on_bezier_surface_function_degree_elevate_rowcol_with_matrix(
+            &fp,
+            r,
+            t,
+            &rm,
+            SurfaceDir::UDir,
+            0,
+            r + t,
+            roc,
+            &mut fq,
+        );
+
+        // 원래 값 확인
+        assert!((fq[0][roc] - fp[0][roc]).abs() < 1e-12);
+        assert!((fq[5][roc] - fp[3][roc]).abs() < 1e-12);
+
+        // 중간 control value 2개가 새로 생겼는지 확인
+        // 새 degree = 5 → index: 0,1,2,3,4,5
+        // 기존 degree = 3 → index: 0,1,2,3
+        // 새로 생긴 index = 4, 5 중 4만 중간값 (5는 끝점)
+        // 하지만 t=2 이므로 실제로 새 control value는 index 1~4 전체가 재계산됨
+
+        // 직접 계산한 expected 값과 비교
+        for i in 0..=r + t {
+            let a = if i > t { i - t } else { 0 };
+            let b = if i > r { r } else { i };
+
+            let mut expected = 0.0;
+            for k in a..=b {
+                expected += rm[i][k] * fp[k][roc];
+            }
+
+            assert!(
+                (fq[i][roc] - expected).abs() < 1e-12,
+                "Mismatch at index {}: got {}, expected {}",
+                i,
+                fq[i][roc],
+                expected
+            );
+        }
+
+        // 중간 control value가 실제로 존재하는지 출력 확인용
+        println!("Original values (U dir): {:?}", fp.iter().map(|r| r[roc]).collect::<Vec<_>>());
+        println!("Elevated values (U dir): {:?}", fq.iter().map(|r| r[roc]).collect::<Vec<_>>());
+    }
+}
+```
+```rust
+#[cfg(test)]
+mod tests_surface_function_degree_elevate_sample_2d {
+    use nurbslib::core::basis::on_degree_elevation_matrix;
+    use nurbslib::core::bezier_surface::on_bezier_surface_function_degree_elevate_rowcol_with_matrix;
+    use nurbslib::core::types::SurfaceDir;
+
+    // 간단한 스칼라 값 생성
+    fn val(i: usize, j: usize) -> f64 {
+        (i as f64) * 10.0 + (j as f64)
+    }
+
+    #[test]
+    fn test_scalar_surface_degree_elevate_u_dir_by_2() {
+        // 원래 U 차수 r = 3  → control values: 0,1,2,3
+        // 차수 2 상승 → new degree = 5 → control values: 0,1,2,3,4,5
+        let r = 3usize;
+        let t = 2usize; // 차수 2 상승
+        let q = 2usize; // v 방향 개수
+
+        // fp: (r+1) x (q+1) = 4 x 3
+        let mut fp = vec![vec![0.0; q + 1]; r + 1];
+        for i in 0..=r {
+            for j in 0..=q {
+                fp[i][j] = val(i, j);
+            }
+        }
+
+        // fq: (r+t+1) x (q+1) = 6 x 3
+        let mut fq = vec![vec![0.0; q + 1]; r + t + 1];
+
+        // degree elevation matrix (5 x 4)
+        let rm = on_degree_elevation_matrix(r, t);
+
+        // column index (v 방향)
+        let roc = 1usize;
+
+        // 전체 범위 계산
+        on_bezier_surface_function_degree_elevate_rowcol_with_matrix(
+            &fp,
+            r,
+            t,
+            &rm,
+            SurfaceDir::UDir,
+            0,
+            r + t,
+            roc,
+            &mut fq,
+        );
+
+        // 원래 값 확인
+        assert!((fq[0][roc] - fp[0][roc]).abs() < 1e-12);
+        assert!((fq[5][roc] - fp[3][roc]).abs() < 1e-12);
+
+        // 중간 control value 2개가 새로 생겼는지 확인
+        // 새 degree = 5 → index: 0,1,2,3,4,5
+        // 기존 degree = 3 → index: 0,1,2,3
+        // 새로 생긴 index = 4, 5 중 4만 중간값 (5는 끝점)
+        // 하지만 t=2 이므로 실제로 새 control value는 index 1~4 전체가 재계산됨
+
+        // 직접 계산한 expected 값과 비교
+        for i in 0..=r + t {
+            let a = if i > t { i - t } else { 0 };
+            let b = if i > r { r } else { i };
+
+            let mut expected = 0.0;
+            for k in a..=b {
+                expected += rm[i][k] * fp[k][roc];
+            }
+
+            assert!(
+                (fq[i][roc] - expected).abs() < 1e-12,
+                "Mismatch at index {}: got {}, expected {}",
+                i,
+                fq[i][roc],
+                expected
+            );
+        }
+
+        // 중간 control value가 실제로 존재하는지 출력 확인용
+        println!("Original values (U dir): {:?}", fp.iter().map(|r| r[roc]).collect::<Vec<_>>());
+        println!("Elevated values (U dir): {:?}", fq.iter().map(|r| r[roc]).collect::<Vec<_>>());
+    }
+}
+```
+```rust
+#[cfg(test)]
+mod tests_surface_function_degree_elevate_full_2d_vdir {
+    use nurbslib::core::basis::on_degree_elevation_matrix;
+    use nurbslib::core::bezier_surface::on_bezier_surface_function_degree_elevate_rowcol_with_matrix;
+    use nurbslib::core::types::SurfaceDir;
+
+    // 보기 쉬운 스칼라 값 생성: i*10 + j
+    fn val(i: usize, j: usize) -> f64 {
+        (i as f64) * 10.0 + (j as f64)
+    }
+
+    #[test]
+    fn test_full_2d_surface_function_degree_elevate_v_dir() {
+        let p = 3usize; // U 방향 개수
+        let q = 2usize; // V 방향 원래 차수
+        let t = 2usize; // V 방향 차수 2 상승 → new degree = 4
+
+        // fp: (p+1) x (q+1) = 4 x 3
+        let mut fp = vec![vec![0.0; q + 1]; p + 1];
+        for i in 0..=p {
+            for j in 0..=q {
+                fp[i][j] = val(i, j);
+            }
+        }
+
+        // fq: (p+1) x (q+t+1) = 4 x 5
+        let mut fq = vec![vec![0.0; q + t + 1]; p + 1];
+
+        // degree elevation matrix (5 x 3)
+        let rm = on_degree_elevation_matrix(q, t);
+
+        // 전체 2D 배열을 V 방향으로 차수 상승
+        for roc in 0..=p {
+            on_bezier_surface_function_degree_elevate_rowcol_with_matrix(
+                &fp,
+                q,
+                t,
+                &rm,
+                SurfaceDir::VDir,
+                0,
+                q + t,
+                roc,
+                &mut fq,
+            );
+        }
+
+        // 출력 확인
+        println!("Original 2D array (fp):");
+        for row in &fp {
+            println!("{:?}", row);
+        }
+
+        println!("\nElevated 2D array (fq):");
+        for row in &fq {
+            println!("{:?}", row);
+        }
+
+        // 첫 열과 마지막 열은 동일해야 함
+        for i in 0..=p {
+            assert!((fq[i][0] - fp[i][0]).abs() < 1e-12);
+            assert!((fq[i][q + t] - fp[i][q]).abs() < 1e-12);
+        }
+
+        // 중간 열은 degree elevation matrix 기반으로 계산됨
+        for j in 1..(q + t) {
+            for i in 0..=p {
+                let a = if j > t { j - t } else { 0 };
+                let b = if j > q { q } else { j };
+
+                let mut expected = 0.0;
+                for k in a..=b {
+                    expected += rm[j][k] * fp[i][k];
+                }
+
+                assert!(
+                    (fq[i][j] - expected).abs() < 1e-12,
+                    "Mismatch at (i={}, j={}): got {}, expected {}",
+                    i,
+                    j,
+                    fq[i][j],
+                    expected
+                );
+            }
+        }
+    }
+}
+```
+---
+
