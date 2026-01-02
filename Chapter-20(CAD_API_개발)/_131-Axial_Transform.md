@@ -48,6 +48,7 @@ x'=x\cdot (af(y)),\quad z'=z\cdot (af(y))
 ```math
 \begin{aligned}x'&=x\cos \alpha -y\sin \alpha \\ y'&=x\sin \alpha +y\cos \alpha \end{aligned}
 ```
+
 - 일반식:
 ```math
 \mathrm{rotate\  around\  dir-axis\  by\  }\alpha =\pi af(\mathrm{dir})
@@ -64,5 +65,84 @@ z'=z+af(x)
 ```
 ---
 
+## 7. Curve Axial Deformation
+- NURBS curve:
+```math
+C(u)=\frac{\sum _iN_i^p(u)P_i^{(w)}}{\sum _iN_i^p(u)w_i}
+```
+- control point 집합 $P_i^{(w)}$ 에 대해
+- 각각 axial 변형을 적용하여 새로운 control net 생성:
+```math
+P_i^{(w)\, *}=\mathrm{AxialDeform}(P_i^{(w)})
+```
+- 새로운 곡선:
+```math
+C^*(u)=\frac{\sum _iN_i^p(u)P_i^{(w)\, *}}{\sum _iN_i^p(u)w_i}
+```
+- 즉, basis function과 knot vector는 변하지 않는다.
 
+## 8. Surface Axial Deformation
+- NURBS surface:
+```math
+S(u,v)=\frac{\sum _{i=0}^n\sum _{j=0}^mN_i^{p_u}(u)\, M_j^{p_v}(v)\, P_{i,j}^{(w)}}{\sum _{i=0}^n\sum _{j=0}^mN_i^{p_u}(u)\, M_j^{p_v}(v)\, w_{i,j}}
+```
+- control net은 row-major:
+```math
+\mathrm{idx}(u,v)=u+\mathrm{nu}\cdot v
+```
+- 각 control point에 대해:
+```math
+P_{i,j}^{(w)\, *}=\mathrm{AxialDeform}(P_{i,j}^{(w)})
+```
+- 새로운 surface:
+```math
+S^*(u,v)=\frac{\sum _{i,j}N_i^{p_u}(u)\, M_j^{p_v}(v)\, P_{i,j}^{(w)\, *}}{\sum _{i,j}N_i^{p_u}(u)\, M_j^{p_v}(v)\, w_{i,j}}
+```
+- 역시 basis와 knot vector는 변하지 않는다.
 
+## 9. Summary
+
+| Component        | Meaning                          |
+|------------------|----------------------------------|
+| t                | x, y, or z (depending on DIR)    |
+| f(t)             | B-spline shape function value     |
+| g = a * f(t)     | deformation amplitude             |
+| PINCH            | cor' = cor * g                    |
+| TAPER            | other_coords' = other_coords * g  |
+| TWIST            | rotate by alpha = π * g           |
+| SHEAR            | cor' = cor + g                    |
+
+## 📌 설명
+- t
+- 변형 방향(DIR)에 따라 선택되는 좌표
+  - XDIR → t = x
+  - YDIR → t = y
+  - ZDIR → t = z
+  - f(t)
+- CFun(B-spline function)으로 평가된 값
+  ```math
+  g = a * f(t)
+  ```
+  
+- 변형 강도 (amplitude × shape function)
+  - PINCH
+    - 특정 좌표만 scale
+    ```math
+    cor' = cor * g
+    ```
+  - TAPER
+    - 두 좌표를 scale
+    ```math
+    other_coords' = other_coords * g
+    ```
+  - TWIST
+    - 축 기준 회전
+    ```math
+    alpha = π * g
+    ```
+  - SHEAR
+    - 특정 좌표 translate
+    ```math
+    cor' = cor + g
+    ```
+---
