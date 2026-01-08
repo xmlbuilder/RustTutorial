@@ -19,8 +19,24 @@ d=n_0\times n_1
 ```math
 n_0\cdot x=d_0,\quad n_1\cdot x=d_1
 ```
+
+```math
+A=\left[ \begin{matrix}a_1&b_1&c_1\\ a_2&b_2&c_2\\ a_3&b_3&c_3\end{matrix}\right] ,\quad b=\left[ \begin{matrix}-d_1\\ -d_2\\ -d_3\end{matrix}\right]
+``` 
+- on_solve3x3 로 x=(x,y,z) 를 구하고, 교차선:
+```math
+L(t)=X+td
+```
+
 - 두 평면을 동시에 만족하는 점을 구한다.  
     (보통 2×2 선형 시스템으로 z=0 또는 특정 축을 고정하여 계산)
+
+### 1.4 구현 포인트
+- on_intersect_plane_plane → 방향 d 계산 후,
+- intersect_plane_plane_plane 로 한 점을 구해  
+    Line::new(origin, origin + d.to_point()) 생성.
+- intersect_plane_plane_plane 는 평면 방정식 계수로   
+    3×3 시스템 풀어서 out_p 채움.
 
 ## 2. Line–Circle Intersection
 - 평면 위의 원과 직선의 교차.
@@ -40,13 +56,56 @@ L(t)=P+tD
 ```math
 (D\cdot D)t^2+2D\cdot (P-C)t+|P-C|^2-r^2=0
 ```
+- 대입 후 2차 방정식:
+```math
+at^2+bt+c=0
+```
+```math
+a=dx^2+dy^2,\quad b=2(x_0dx+y_0dy),\quad c=x_0^2+y_0^2-r^2
+```
 ### 2.4 해의 개수
 - 판별식 $\Delta >0$ → 2점
 - $\Delta =0$ → 1점 (tangent)
 - $\Delta <0$ → 없음
 
+### 2.5 구현 디테일
+- a.abs() < tol → 선이 너무 짧음 → 0
+- disc.abs() <= tol → 접선, t0 = t1 = -b / (2a)
+- 일반 케이스:
+    - tt0 = (-b - s) / (2a)
+    - tt1 = (-b + s) / (2a)
+    - *t0 = tt0, *t1 = tt1
+- 반환값: 0, 1, 2 (여기서는 3 없음)
+
 ## 3. Circle–Circle Intersection
-- 두 원이 같은 평면에 있을 때의 교차.
+### 두 원이 같은 평면에 있지 않을 때.
+- 스케일 기반 절대 오차:
+```math
+\mathrm{abs\_ tol}=\max (\mathrm{c0.max\_ coord},\mathrm{c1.max\_ coord})\cdot \mathrm{ON\_ REL\_ TOL}
+```
+- 법선:
+- $n_0=c0.plane.z\_ axis$
+- $n_1=c1.plane.z\_ axis$
+- 평행:
+```math
+|n_0\cdot n_1|>1-\mathrm{cos\_ tol}
+```
+- 공면(coplanar):
+```math
+\mathrm{parallel}\wedge \mathrm{distance}(c0.plane,c1.center)<\mathrm{abs\_ tol}
+```
+
+- 두 원의 평면 교차선:
+    - px_line = on_intersect_plane_plane(&c0.plane, &c1.plane)
+- 이 직선과 각 원의 교차:
+    - on_intersect_line_circle(px_line, c0, ...) → 최대 2점
+    - on_intersect_line_circle(px_line, c1, ...) → 최대 2점
+- 두 집합에서 “같은 점” 찾기:
+    - points_are_coincident(p, q, abs_tol) 로 비교
+    - 일치하는 점들을 p0, p1 에 채우고 x_cnt 증가
+
+
+### 두 원이 같은 평면에 있을 때의 교차 (coplanar).
 ### 3.1 중심 거리
 ```math
 d=|C_1-C_0|
@@ -153,7 +212,7 @@ let p1_ref = &mut s1[0];
 ### 7.4 Arc–Arc는 Circle–Circle이 핵심
 - Arc–Arc의 90%는 Circle–Circle이 결정한다.
 
-## 8. 전체 흐름 요약
+## 8. Arc-Arc 흐름 요약
 ```
 Arc–Arc
  └─ Circle–Circle
@@ -161,6 +220,176 @@ Arc–Arc
       └─ non-coplanar → plane-plane → line-circle
  └─ Arc domain check
 ```
+
+## 9. Line–Arc 교차 on_intersect_line_arc
+
+### 9.1 기본 흐름
+- Arc의 circle을 꺼냄: c = arc.circle
+- on_intersect_line_circle 로 직선–원 교차점 후보 0~2개 구함:
+- p[0], p[1] : 후보 점
+- t[0], t[1] : line parameter
+- 각 후보에 대해 Arc domain 검사
+### 9.2 Arc domain 검사
+- Arc domain: [t_0,t_1]
+- Circle에서 parameter a[i] 를 구함:
+- c.closest_point_to(&p[i], &mut a[i])
+- Arc domain 에 대한 normalized parameter:
+```math
+s=\mathrm{arc\_ dom.normalized\_ parameter\_ at}(a[i])
+```
+- s < 0:
+- s >= -ON_SQRT_EPSILON → 시작점으로 snap:
+- a[i] = arc_dom.t0
+- p[i] = c.point_at(a[i])
+- 직선에서 이 점에 대한 최근접점 다시 계산 → t[i] 갱신
+- 아니면 arc 밖 → b[i] = false
+- s > 1 도 동일하게 끝점으로 snap 처리
+### 9.3 후보 정리
+- 둘 다 b[0], b[1] 가 false → xcnt = 0
+- xcnt == 2 인 경우:
+    - 한쪽만 false → 1개로 축소
+-    t[0] ≈ t[1] → 사실상 한 점 → 더 가까운 쪽 선택
+- 최종적으로:
+    - xcnt >= 1 → arc_point0 = p[0], line_t0 에 t[0]
+    - xcnt == 2 → arc_point1 = p[1], line_t1 에 t[1]
+## 10. Plane–Arc 교차 intersect_plane_arc
+### 10.1 기본 흐름
+- Arc의 평면과 - 주어진 평면의 교차선:
+    - xline = on_intersect_plane_plane(plane, &arc.plane())
+- 교차선과 Arc의 교차:
+    - on_intersect_line_arc(&xline, arc, ...) 호출
+    - 결과 점들을 point0, point1 에 저장
+- 두 평면이 평행인 경우:
+    - Arc 시작점에서 평면 방정식 값 d = plane.equation.value_at(arc.start_point())
+- d < ON_ZERO_TOL → 같은 평면 위에 있음 → 3 (overlap 의미)
+- 아니면 0 (교차 없음)
+
+## 11. Line–Cylinder 교차 on_intersect_line_cylinder
+### 11.1 기본 설정- 원기둥:
+- 축: circle.plane.z_axis = z
+- 중심: origin = circle.plane.origin
+- 높이: [h0, h1]
+- 축 선:
+```math
+\mathrm{axis\_ from}=origin+z\cdot h_0\mathrm{axis\_ to}=origin+z\cdot h_1
+```
+- 축 길이가 너무 짧으면 무한축으로 대체 (finite = false)
+### 11.2 1차: 축과 직선의 관계
+- on_intersect_line_line_param01(line, axis, &mut line_t, &mut axis_t)
+- 실패 시: 원점 기준 최근접점으로 fallback:
+    - axis.closest_point_param(origin)
+    - line.closest_point_param(origin)
+- 이로부터:
+    - line_pt = line.point_at_normalized(lt)
+    - axis_pt = axis.point_at_normalized(at)
+    - 거리 d = |line_pt - axis_pt|
+- 유한 축이면 at 를 [0,1] 로 clamp 후 다시 axis_pt 계산
+### 11.3 tangent / no hit 빠른 판정
+- d >= radius - tol:
+- d <= radius + tol → 접선/한 점 → rc = 1
+- 아니면 rc = 0
+- 한 점일 때:
+    - a = line_pt
+    - v = line_pt - axis_pt
+- 유한축이면 z 방향 성분 제거:
+```math
+v:=v-z\cdot (v\cdot z)
+```
+- v.unitize() 후:
+```math
+b=axis\_ pt+v\cdot radius
+```
+- 그리고 **겹침(overlap)** 체크:
+- line.start, line.end 를 축에 투영해서 거리 둘 다 ≈ radius 이면:
+    - rc = 3
+    - a = cylinder.closest_point_to(line.start)
+    - b = cylinder.closest_point_to(line.end)
+### 11.4 일반 케이스: 2차 방정식- 원기둥 로컬 좌표계:
+- x 방향: plane.x_axis
+- y 방향: plane.y_axis
+- 직선의 두 점을 원기둥 중심 기준으로 투영:
+```math
+x_0=(line.start-origin)\cdot x\_ axis
+```
+```math
+y_0=(line.start-origin)\cdot y\_ axis
+```
+```math
+x_1=(line.end-origin)\cdot x\_ axis
+```
+```math
+y_1=(line.end-origin)\cdot y\_ axis
+```
+- dx, dy:
+```math
+dx=x_1-x_0,\quad dy=y_1-y_0
+```
+- 2차 방정식:
+```math
+(ax+ay)t^2+(bx+by)t+(cx+cy-r^2)=0
+```
+```math
+ax=dx^2,\  bx=2dxx_0,\  cx=x_0^2ay=dy^2,\  by=2dyy_0,\  cy=y_0^2
+```
+- RealRootSolver::solve_quadratic([c, b, a], tol, &mut roots) 로 t0, t1 구함
+- 각 t 에 대해:
+    - pa = line.point_at_normalized(t0)
+    - pb = line.point_at_normalized(t1)
+    - 이를 원기둥 표면으로 투영: cylinder.closest_point_to
+- 두 점 사이 거리 d = |A - B|
+    - d <= ON_ZERO_TOL → 사실상 한 점 → tangent 처리
+    - 아니면 rc = 2
+## 12. Line–Sphere 교차 on_intersect_line_sphere 
+- 직선: $P(t)=P_0+tD$
+- 구: 중심 C, 반지름 r
+- 대입:
+```math
+\| P_0+tD-C\| ^2=r^2
+```
+- 2차 방정식 풀어서:
+    - 해 없음 → 0
+    - 한 점 → 1 (접선)
+    - 두 점 → 2
+- 구현에서는:
+- t0, t1 로 점 구하고
+- 필요 시 **겹침/특수** 케이스도 처리
+## 13. Point–Vector 연산 정리
+
+### 13.1 Point + Vector → Point
+```rust
+impl Add<Vector3D> for Point3D {
+    type Output = Point3D;
+
+    fn add(self, v: Vector3D) -> Point3D {
+        Point3D {
+            x: self.x + v.x,
+            y: self.y + v.y,
+            z: self.z + v.z,
+        }
+    }
+}
+```
+- 참조 버전까지 구현하면:
+- &Point3D + &Vector3D
+- &Point3D + Vector3D
+- Point3D + &Vector3D 모두 가능
+### 13.2 Point – Point → Vector
+```rust
+impl<'a, 'b> Sub<&'b Point3D> for &'a Point3D {
+    type Output = Vector3D;
+
+    fn sub(self, v: &'b Point3D) -> Vector3D {
+        Vector3D {
+            x: self.x - v.x,
+            y: self.y - v.y,
+            z: self.z - v.z,
+        }
+    }
+}
+```
+
+- 의미적으로도 **두 점의 차 = 벡터** 가 맞고,
+- 이걸 몰라서 코드가 지저분해졌던 부분을 깔끔하게 정리해줌.
 
 ---
 ## 소스 코드
