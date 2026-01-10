@@ -26,9 +26,9 @@ pub fn back_out(t: f64) -> f64 {
 
 ## 📐 수식
 
-$$
+```math
 f(t)=(t-1)^2\cdot ((s+1)(t-1)+s)+1\quad \mathrm{where}\quad s=1.70158
-$$
+```
 
 - $t ∈ [0, 1]$ 일 때도 결과값은 1.0을 초과할 수 있음
 - s는 overshoot 강도를 조절하는 상수
@@ -49,13 +49,15 @@ mod tests {
 
     use nurbslib::core::geom::Point2;
     use nurbslib::core::integrator::Integrator;
-    use nurbslib::core::interpolator::{DataInterpolatord, DataInterpolatorf, Interpolator, InterpolatorEase, PointInterpolator};
+    use nurbslib::core::interpolator::{DataInterpolatord, DataInterpolatorf, Interpolator,
+        InterpolatorEase, PointInterpolator};
     use nurbslib::core::prelude::Point;
 
     fn approx(a: f64, b: f64) -> bool {
         (a - b).abs() < 1e-9
     }
-
+```
+```rust
     #[test]
     fn data_interp_d() {
         let mut di = DataInterpolatord::new();
@@ -205,8 +207,8 @@ mod tests {
         assert!(e_io > 0.0 && e_io < 1.0);
         assert!(b_out > 0.0 && b_out < 1.0);
         assert!(el_out > 0.0 && el_out < 1.0);
-
         assert!(back_out > 1.0); // overshoot 확인
     }
 }
 ```
+---
