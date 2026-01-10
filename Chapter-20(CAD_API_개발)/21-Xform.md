@@ -1,7 +1,7 @@
 # Xform
 
-Xform 구조체는 3D 그래픽 및 기하학에서 자주 사용되는 4×4 변환 행렬을 다루며, 회전, 평행이동, 스케일, 역변환, 행렬 곱 등 다양한 기능을 제공합니다.  
-아래에 각 함수의 수식화, 함수 요약표, 그리고 수학적 점검을 정리.
+- Xform 구조체는 3D 그래픽 및 기하학에서 자주 사용되는 4×4 변환 행렬을 다루며, 회전, 평행이동, 스케일, 역변환, 행렬 곱 등 다양한 기능을 제공합니다.  
+- 아래에 각 함수의 수식화, 함수 요약표, 그리고 수학적 점검을 정리.
 
 ## 📐 Xform 주요 함수 수식 정리
 
@@ -20,7 +20,6 @@ Xform 구조체는 3D 그래픽 및 기하학에서 자주 사용되는 4×4 변
 | `Mul<Xform>`                 | $M = A \cdot B$                                                            |
 | `Add<Xform>`                 | $M = A + B$                                                                |
 | `Sub<Xform>`                 | $M = A - B$                                                                |
-
 
 ## 📊 Xform 함수 요약표
 | 함수 이름                      | 기능 설명                                 | 수식 기반 여부 |
@@ -58,12 +57,16 @@ Xform 구조체는 3D 그래픽 및 기하학에서 자주 사용되는 4×4 변
 | `rotation_from_to` | ✅ 정확    | ✅ 안정적     | 최소 회전: cross/dot 기반 |
 | `scale_xyz`   | ✅ 정확         | ✅ 안정적     | 축별 스케일 행렬 구성 |
 
+---
+
+## 소스 코드
 ```rust
 use crate::math::point2d::Point2D;
 use crate::math::prelude::{Point3D, Vector3D};
 use crate::math::vector2d::Vector2D;
 use core::ops::{Add, Mul, Sub};
-
+```
+```rust
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Xform {
     pub m: [[f64; 4]; 4],
@@ -801,7 +804,8 @@ pub mod nalgebra_compat_xform {
                 self.m[2][2],
             ])
         }
-
+```
+```rust
         // Extracts the translation component as a `Translation3<f64>` from nalgebra.
         pub fn to_na_translation3(&self) -> Translation3<f64> {
             Translation3::new(self.m[0][3], self.m[1][3], self.m[2][3])
@@ -813,7 +817,8 @@ pub mod nalgebra_compat_xform {
         //
         // Principle: A = R · S, where S = sqrt(AᵀA) ⇒ R = A · inv(sqrt(AᵀA))
         // Determinant correction: if det(R) < 0, the last axis is flipped.
-
+```
+```rust
         pub fn try_to_na_rotation3(&self, tol: f64) -> Option<Rotation3<f64>> {
             let a = self.to_na_matrix3(); // A (3x3)
             // AᵀA (symmetric positive definite)
@@ -861,13 +866,14 @@ pub mod nalgebra_compat_xform {
             // Wrap with Rotation3 (assuming it's nearly orthonormal)
             Some(Rotation3::from_matrix_unchecked(r))
         }
-
+```
+```rust
         /// (Note) Fast path used when the rotation is known to be a pure rotation (orthogonal with det = +1).
-
         pub fn to_na_rotation3_unchecked(&self) -> Rotation3<f64> {
             Rotation3::from_matrix_unchecked(self.to_na_matrix3())
         }
-
+```
+```rust
         /// Verifies whether the transform represents a rigid motion (pure rotation and translation only),
         /// and returns `(Translation3, Rotation3)` if valid.
         pub fn try_to_na_tr(&self, tol: f64) -> Option<(Translation3<f64>, Rotation3<f64>)> {
