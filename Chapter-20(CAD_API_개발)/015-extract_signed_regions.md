@@ -1,6 +1,6 @@
 # on_extract_signed_regions
-아래는 on_extract_signed_regions 함수의 수학적 원리, 단계별 수식, 그리고 소스 코드 흐름 설명을 정리한 내용입니다.  
-이 함수는 2D grid에서 양수/음수로 나뉜 영역을 탐색하고, 각 영역의 경계 점만 추출하는 알고리즘입니다.
+- 아래는 on_extract_signed_regions 함수의 수학적 원리, 단계별 수식, 그리고 소스 코드 흐름 설명을 정리한 내용입니다.  
+- 이 함수는 2D grid에서 양수/음수로 나뉜 영역을 탐색하고, 각 영역의 경계 점만 추출하는 알고리즘입니다.
 
 ## 소스
 ```rust
@@ -52,7 +52,6 @@ pub fn on_extract_signed_regions(grid: &Vec<Vec<f64>>) -> Vec<Vec<(usize, usize)
             regions.push(boundary);
         }
     }
-
     regions
 }
 ```
@@ -60,7 +59,7 @@ pub fn on_extract_signed_regions(grid: &Vec<Vec<f64>>) -> Vec<Vec<(usize, usize)
 
 ## 🧠 수학적 원리 요약
 ### 1. 부호 기반 영역 분할
-- 각 셀의 중심값 v_{i,j}가 양수 또는 음수인지 판단
+- 각 셀의 중심값 $v_{i,j}$ 가 양수 또는 음수인지 판단
 - 같은 부호끼리 연결된 셀들을 하나의 영역으로 묶음
 ### 2. 연결성 기준
 - 기본은 4방향 연결성: 상, 하, 좌, 우
@@ -72,19 +71,19 @@ pub fn on_extract_signed_regions(grid: &Vec<Vec<f64>>) -> Vec<Vec<(usize, usize)
 ## ✏️ 핵심 수식
 ### 🔹 연결성 판정
 
-$$
+```math
 \mathrm{neighbor}(i,j)=\{ (i\pm 1,j),(i,j\pm 1)\}
-$$
+```
 
-$$
+```math
 \mathrm{same\_ sign}(i,j)=\mathrm{sign}(v_{i,j})=\mathrm{sign}(v_{n,m})
-$$
+```
 
 ### 🔹 경계 셀 조건
 
-$$
+```math
 \exists (n,m)\in \mathrm{neighbor}(i,j)\mathrm{\  such\  that\  }(n,m)\notin \mathrm{region}\Rightarrow (i,j)\in \mathrm{boundary}
-$$
+```
 
 ## 🧩 단계별 소스 흐름 설명
 ### 1. 초기화
@@ -163,10 +162,10 @@ regions.push(boundary);
 - 입력: Vec<(usize, usize)> — 경계 셀 리스트
 - 출력: Vec<(usize, usize)> — 연결된 loop 순서로 정렬된 경계 셀
 - 방법:
-- 시작 셀에서 시작
-- 인접한 셀 중 아직 사용되지 않은 셀을 선택
-- 연결된 순서대로 리스트를 구성
-- 모든 셀을 사용할 때까지 반복
+    - 시작 셀에서 시작
+    - 인접한 셀 중 아직 사용되지 않은 셀을 선택
+    - 연결된 순서대로 리스트를 구성
+    - 모든 셀을 사용할 때까지 반복
 
 ```rust
 fn on_sort_boundary_loop(boundary: &Vec<(usize, usize)>) -> Vec<(usize, usize)> {
@@ -223,6 +222,8 @@ for (r, c) in looped {
 - 이 알고리즘은 단일 loop를 구성하는 경계 셀에 적합합니다
 - 경계가 분리된 여러 loop일 경우, 각 loop마다 따로 적용해야 합니다
 - 성능이 중요할 경우, HashSet 대신 BitSet이나 Vec<bool>로 최적화 가능
+
+---
 
 
 
