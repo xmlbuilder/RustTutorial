@@ -8,15 +8,23 @@ tri_area_vec(v0, v1, v2) = (v1 - v0) × (v2 - v0)
 
 - 수학적 의미:  
 
-$$ 
-\vec {A}=\vec {v}_1-\vec {v}_0,\quad \vec {B}=\vec {v}_2-\vec {v}_0,\quad \mathrm{면적벡터}=\vec {A}\times \vec {B}
-$$
+```math 
+\vec {A}=\vec {v}_1-\vec {v}_0
+```
+
+```math
+\vec {B}=\vec {v}_2-\vec {v}_0
+```
+
+```math
+\mathrm{면적벡터}=\vec {A}\times \vec {B}
+```
 
 - 크기:  
 
-$$
+```math
 |\vec {A}\times \vec {B}|=2\cdot \mathrm{Area}
-$$
+```
 
 - ✅ 정확한 수식입니다.
 
@@ -27,9 +35,9 @@ tri_signed_volume_from_origin(a, b, c) = a · (b × c)
 
 - 수학적 의미:  
 
-$$
+```math
 V=\frac{1}{6}\cdot \vec {a}\cdot (\vec {b}\times \vec {c})
-$$
+```
 
 - 코드에서는 누적 후 $s / 6.0$ 으로 나눔
 - ✅ 정확한 수식입니다.
@@ -51,9 +59,9 @@ vol = v1x*v2y*v3z + v1y*v2z*v3x + v2x*v3y*v1z
 
 - 수학적으로:  
 
-$$
+```math
 V=\frac{1}{6}\cdot \det \left[ \begin{matrix}v_1\\ v_2\\ v_3\end{matrix}\right] \quad \mathrm{(원점\  기준\  테트라)}
-$$
+```
 
 -✅ 정확한 체적 수식입니다.
 
@@ -64,11 +72,14 @@ centroid = (cx, cy, cz) / (4 * m)
 
 - 테트라 중심:
 
-$$
+```math
 \vec {C}=\frac{1}{4}(v_0+v_1+v_2+v_3)
-$$
+```
 
-- 누적 중심: $\sum V_i\cdot (v_1+v_2+v_3)$
+- 누적 중심:
+```math
+\sum V_i\cdot (v_1+v_2+v_3)
+```
 - ✅ 정확한 중심점 수식입니다.
 
 ### 6. 📈 1차 모멘트
@@ -78,9 +89,9 @@ world_x = x / 24, world_y = y / 24, world_z = z / 24
 
 - 수학적으로:  
 
-$$
+```math
 \int _Vx\, dV\approx \sum V_i\cdot \bar {x}_i
-$$
+```
 
 - 평균화 계수 $\frac{1}{24}$ 는 테트라 중심에 대한 근사치
 - ✅ 실무에서 널리 쓰이는 근사 수식입니다.
@@ -92,9 +103,9 @@ world_xx = xx / 120, world_yy = yy / 120, world_zz = zz / 120
 
 - 수학적으로:  
 
-$$
+```math
 I_{xx}=\int _Vx^2 dV
-$$
+```
 
 - 테트라 기준 근사 계수 $\frac{1}{120}$
 
@@ -104,8 +115,9 @@ $$
 ```rust
 world_xy = yx / 120, world_yz = zy / 120, world_zx = zx / 120
 ```
-
-- $I_{xy}=\int _Vxy dV$
+```math
+I_{xy}=\int _Vxy dV
+```
 - ✅ 정확한 근사 수식입니다.
 
 ### 9. 🧮 평행축 정리
@@ -113,9 +125,9 @@ world_xy = yx / 120, world_yz = zy / 120, world_zx = zx / 120
 ccs_xx = world_xx - mass * cx²
 ```
 
-$$
+```math
 I_{ccs}=I_{world}-m\cdot d^2
-$$
+```
 
 - ✅ 정확한 수식입니다.
 
@@ -169,7 +181,8 @@ mod tests {
     use nurbslib::core::mesh::MeshFace;
     use nurbslib::core::prelude::Point;
     use nurbslib::core::types::ON_TOL9;
-
+```
+```rust
     #[test]
     fn tetra_volume_positive_with_ccw() {
         // 간단한 테트라 (정방향)
@@ -313,9 +326,9 @@ mod tests {
         assert!(cv.write_result(&mut mp));
         assert!(on_are_equal(mp.mass, 1.0 / 6.0, ON_TOL9));
     }
-
 }
 ```
+---
 
 
 
