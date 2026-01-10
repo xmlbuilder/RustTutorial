@@ -6,8 +6,14 @@ fn tri_area(v1, v2, v3) = 0.5 * |(v3 - v1) × (v2 - v1)|
 ```
 
 ### 📌 수식 설명
-- 두 벡터 $\vec {a}=v2-v1$, $\vec {b}=v3-v1$
-- 면적 $A=\frac{1}{2}\cdot \| \vec {b}\times \vec {a}\|$ 
+- 두 벡터
+```math
+\vec {a}=v2-v1$, $\vec {b}=v3-v1
+```
+- 면적
+```math
+A=\frac{1}{2}\cdot \| \vec {b}\times \vec {a}\|
+``` 
 - 이는 벡터 외적의 크기로 삼각형의 면적을 구하는 고전적인 방식입니다.
 
 ## 🧠 2. 중심점(centroid) 계산
@@ -16,12 +22,15 @@ centroid = (cx, cy, cz) / (6 * total_area)
 ```
 
 ### 📌 수식 설명
-- 각 삼각형의 세 꼭짓점 평균: $\vec {c}_i=\frac{v_1+v_2+v_3}{3}$
+- 각 삼각형의 세 꼭짓점 평균:
+```math
+\vec {c}_i=\frac{v_1+v_2+v_3}{3}
+```
 - 전체 중심:
 
-$$
+```math
 \vec {C}=\frac{1}{\sum A_i}\sum A_i\cdot \vec {c}_i
-$$
+```
 
 - 코드에서는 $\mathrm{cx}+=2A\cdot (x_1+x_2+x_3)$ → 나중에 $cx/(6A)$
 
@@ -31,9 +40,9 @@ world_x = x / 6, world_y = y / 6, world_z = z / 6
 ```
 - 각 축에 대한 질량 중심의 위치를 계산하는 데 사용됨
 
-$$
+```math
 x=\sum 2A\cdot (x_1+x_2+x_3)
-$$
+```
 
 ## 🧲 4. 2차 모멘트 (Second Moment of Area)
 
@@ -42,7 +51,10 @@ world_xx = xx / 12, world_yy = yy / 12, world_zz = zz / 12
 ```
 
 ### 📌 수식 설명
-- $xx=\sum A\cdot (x_1^2+x_2^2+x_3^2+(x_1+x_2+x_3)^2)$
+```math
+xx=\sum A\cdot (x_1^2+x_2^2+x_3^2+(x_1+x_2+x_3)^2)
+```
+
 - 이는 각 삼각형의 면적 가중 평균 제곱 거리를 누적한 값
 - 12로 나누는 이유는 면적 중심 기준으로 평균화하기 위함
 
@@ -51,7 +63,10 @@ world_xx = xx / 12, world_yy = yy / 12, world_zz = zz / 12
 world_xy = yx / 2, world_yz = zy / 2, world_zx = zx / 2
 ```
 
-- $$yx=\sum 2A\cdot (y_1x_1+y_2x_2+y_3x_3+(y_1+y_2+y_3)(x_1+x_2+x_3))$$
+```math
+yx=\sum 2A\cdot (y_1x_1+y_2x_2+y_3x_3+(y_1+y_2+y_3)(x_1+x_2+x_3))
+```
+
 - 제품 모멘트는 회전축 간 상호작용을 나타냄
 
 ## 🧮 6. 중심 좌표계 관성 모멘트 (CCS)
@@ -62,9 +77,9 @@ ccs_xx = world_xx - mass * cx²
 - 중심 좌표계 기준으로 관성 모멘트를 변환
 - 이는 평행축 정리(Parallel Axis Theorem) 기반:
 
-$$
+```math
 I_{ccs}=I_{world}-m\cdot d^2
-$$
+```
 
 
 ## 📐 7. 선분 면적 기여 (add_line)
@@ -118,7 +133,8 @@ pub struct MassProperties {
     pub ccs_yy: f64,
     pub ccs_zz: f64,
 }
-
+```
+```rust
 impl Default for MassProperties {
     fn default() -> Self {
         Self {
@@ -148,7 +164,6 @@ impl Default for MassProperties {
     }
 }
 ```
-
 ```rust
 use crate::core::geom::PointF;
 use crate::core::mass_properties::MassProperties;
@@ -230,11 +245,13 @@ impl CalcArea {
         self.zx += 2.0 * area * (z1 * x1 + z2 * x2 + z3 * x3 + sumz * sumx);
         self.zy += 2.0 * area * (z1 * y1 + z2 * y2 + z3 * y3 + sumz * sumy);
     }
-
+```
+```rust
     pub fn add_triangle_f32(&mut self, v1: PointF, v2: PointF, v3: PointF) {
         self.add_triangle(v1.into(), v2.into(), v3.into());
     }
-
+```
+```rust
     pub fn add_line(&mut self, v1: Point, v2: Point) {
         // Project to XY for signed area contribution of segment wrt origin triangle (x1,y1)-(x2,y2)-(0,0)
         let (x1, y1, z1) = (v1.x, v1.y, v1.z);
@@ -268,7 +285,8 @@ impl CalcArea {
         self.zx += area * (x1 * z2 + 2.0 * x1 * z1 + 2.0 * x2 * z2 + x2 * z1);
         self.zy += area * (y1 * z2 + 2.0 * y1 * z1 + 2.0 * y2 * z2 + y2 * z1);
     }
-
+```
+```rust
     pub fn add_triangles(&mut self, vertices: &[Point], faces: &[MeshFace]) {
         for f in faces {
             if f.is_triangle() {
@@ -286,7 +304,8 @@ impl CalcArea {
             }
         }
     }
-
+```
+```rust
     pub fn add_triangles_f32(&mut self, vertices: &[PointF], faces: &[MeshFace]) {
         for f in faces {
             if f.is_triangle() {
@@ -304,11 +323,13 @@ impl CalcArea {
             }
         }
     }
-
+```
+```rust
     pub fn area(&self) -> f64 {
         self.m
     }
-
+```
+```rust
     pub fn centroid(&self) -> Point {
         if self.m == 0.0 {
             Point {
@@ -325,11 +346,13 @@ impl CalcArea {
             }
         }
     }
-
+```
+```rust
     pub fn mass(&self) -> f64 {
         self.area()
     }
-
+```
+```rust
     pub fn write_result(&self, mp: &mut MassProperties) -> bool {
         mp.mass_type = 2;
         mp.mass = self.area();
@@ -365,7 +388,6 @@ impl CalcArea {
     }
 }
 ```
-
 ---
 
 ## 수식 검증
