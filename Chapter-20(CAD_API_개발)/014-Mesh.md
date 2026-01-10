@@ -1,6 +1,6 @@
 #  Mesh
-메시 구조, 정점 최적화, 면 정렬, 평면성 검사, 위상 구조(Topology)까지 포함된 매우 정교한 메시 처리 모듈입니다.  
-아래에 요청하신 내용을 체계적으로 정리해드릴게요.
+- 메시 구조, 정점 최적화, 면 정렬, 평면성 검사, 위상 구조(Topology)까지 포함된 매우 정교한 메시 처리 모듈입니다.  
+- 아래에 요청하신 내용을 체계적으로 정리해드릴게요.
 
 ## 📘 1. 전체 함수 정리 및 역할 요약
 ### 🔹 메시 구조 관련 함수
@@ -84,8 +84,7 @@
 
 ---
 # Topology
-
-아래에 TopoVertex, TopoEdge, TopoFace의 필드 요약과 경계 루프 추출 흐름을 표 형식으로 정리.
+- 아래에 TopoVertex, TopoEdge, TopoFace의 필드 요약과 경계 루프 추출 흐름을 표 형식으로 정리.
 
 ## 🧩 Topology 구성 요소: 구조체 필드 요약
 ### 🔹 TopoVertex
@@ -164,21 +163,28 @@ impl MeshFace {
             vi: [v0, v1, v2, v2],
         }
     }
+```
+```rust
     #[inline]
     pub fn new_quad(v0: i32, v1: i32, v2: i32, v3: i32) -> Self {
         Self {
             vi: [v0, v1, v2, v3],
         }
     }
+```
+```rust
     #[inline]
     pub fn is_triangle(&self) -> bool {
         self.vi[2] == self.vi[3]
     }
+```
+```rust
     #[inline]
     pub fn is_quad(&self) -> bool {
         self.vi[2] != self.vi[3]
     }
-
+```
+```rust
     /// CCW/CW 맞출 때 사용. 삼각형은 (1,2) 스왑, 사각형은 (1,3) 스왑.
     #[inline]
     pub fn flip(&mut self) {
@@ -188,11 +194,13 @@ impl MeshFace {
             self.vi.swap(1, 3);
         }
     }
-
+```
+```rust
     pub fn face_is_tri(&self) -> bool {
         self.vi[2] == self.vi[3]
     }
-
+```
+```rust
     pub fn is_valid(&self, vertex_count: usize) -> bool {
         let ok_index = |i: i32| -> bool {
             let u = if i >= 0 { i as usize } else { usize::MAX };
@@ -216,7 +224,8 @@ impl MeshFace {
             !(v0 == v1 || v1 == v2 || v2 == v3 || v3 == v0)
         }
     }
-
+```
+```rust
     pub fn compute_face_normal_from_dv(
         face: &MeshFace,
         verts: &[Point],
@@ -238,7 +247,8 @@ impl MeshFace {
             false
         }
     }
-
+```
+```rust
     /// face plane equation 계산 (법선이 0이면 None)
     pub fn get_plane_equation(face: &MeshFace, verts: &[Point]) -> Option<PlaneEquation> {
         let mut n = Vector::ZERO_VECTOR;
@@ -247,7 +257,8 @@ impl MeshFace {
         }
         PlaneEquation::create(verts[face.vi[0] as usize], n)
     }
-
+```
+```rust
     pub fn is_planar(
         face: &MeshFace,
         planar_tolerance: f64,
@@ -382,7 +393,8 @@ impl Mesh {
             normals: None,
         }
     }
-
+```
+```rust
     pub fn compute_normals(&mut self) {
         let normals = self.normals.get_or_insert_with(|| vec![]);
         normals.clear();
@@ -400,7 +412,8 @@ impl Mesh {
             normals[i] = normal;
         }
     }
-
+```
+```rust
     pub fn optimize_mesh(mesh: &mut Mesh) {
         use std::collections::HashMap;
         let mut unique_map: HashMap<[NotNan<f32>; 3], i32> = HashMap::new();
@@ -434,7 +447,8 @@ impl Mesh {
 
         mesh.vertices = new_vertices;
     }
-
+```
+```rust
     pub fn filter_planar_faces(mesh: &Mesh, planar_tol: f64, angle_tol_rad: f64) -> Vec<usize> {
         let mut planar_faces = Vec::new();
 
