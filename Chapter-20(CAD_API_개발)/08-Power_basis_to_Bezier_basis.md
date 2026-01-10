@@ -1,9 +1,8 @@
 # Power basis Bezier basis 변환
 
 
-이 함수들은 수학적으로 정확하며, Power basis → Bézier basis 변환과 Bézier 곡선 평가를 올바르게 구현하고 있습니다.  
-각 단계는 Bernstein 다항식과 이항 계수를 기반으로 하며, 수식적으로도 문제가 없습니다.
-
+- 이 함수들은 Power basis → Bézier basis 변환과 Bézier 곡선 평가를 구현하고 있습니다.  
+- 각 단계는 Bernstein 다항식과 이항 계수를 기반으로 하고 있습니다.
 
 ## 소스 코드
 ```rust
@@ -185,7 +184,8 @@ fn binom_f64(n: usize, k: usize) -> f64 {
     }
     res
 }
-
+```
+```rust
 #[inline]
 fn binom_3(k: i32) -> f64 {
     match k {
@@ -195,7 +195,8 @@ fn binom_3(k: i32) -> f64 {
         _ => 0.0,
     }
 }
-
+```
+```rust
 pub fn power_to_bezier_deg3(a: &[f64; 4]) -> [f64; 4] {
     let a_vec = DVector::from_column_slice(a);
     let mut b_vec = DVector::zeros(4);
@@ -212,7 +213,8 @@ pub fn power_to_bezier_deg3(a: &[f64; 4]) -> [f64; 4] {
 
     [b_vec[0], b_vec[1], b_vec[2], b_vec[3]]
 }
-
+```
+```rust
 #[inline]
 pub fn on_nalgebra_bernstein3(i: usize, t: f64) -> f64 {
     match i {
@@ -223,13 +225,15 @@ pub fn on_nalgebra_bernstein3(i: usize, t: f64) -> f64 {
         _ => 0.0,
     }
 }
-
+```
+```rust
 pub fn on_nalgebra_eval_power_deg3(a: &[f64; 4], t: f64) -> f64 {
     let a_vec = DVector::from_column_slice(a);
     let t_vec = DVector::from_column_slice(&[1.0, t, t * t, t * t * t]);
     a_vec.dot(&t_vec)
 }
-
+```
+```rust
 pub fn on_nalgebra_eval_bezier_deg3(b: &[f64; 4], t: f64) -> f64 {
     let b_vec = DVector::from_column_slice(b);
     let b_basis = DVector::from_column_slice(&[
@@ -241,8 +245,6 @@ pub fn on_nalgebra_eval_bezier_deg3(b: &[f64; 4], t: f64) -> f64 {
     b_vec.dot(&b_basis)
 }
 ```
-
-
 ## 📌 유지된 구조
 
 | 항목 구분           | 구조 유지 여부 | 설명                                                   |
@@ -255,11 +257,10 @@ pub fn on_nalgebra_eval_bezier_deg3(b: &[f64; 4], t: f64) -> f64 {
 ---
 
 
-
 # on_power_to_bezier_2d_4x2
 
-이 함수는 2차원 다항식 형태의 데이터를 Power basis → Bézier basis로 변환하는 구조이며, 수학적으로 매우 타당한 방식입니다.  
-아래에 목적, 수식, 단계별 설명을 정리.
+- 이 함수는 2차원 다항식 형태의 데이터를 Power basis → Bézier basis로 변환하는 구조 입니다.  
+- 아래에 목적, 수식, 단계별 설명을 정리.
 
 
 ## 소스 코드
