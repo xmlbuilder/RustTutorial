@@ -1,15 +1,15 @@
 # QuickHull / Monotone Chain
-두 알고리즘 모두 수학적으로 타당하며, 각각 `QuickHull` 과 `Monotone Chain` 방식으로 `2D Convex Hull` 을 계산합니다.  
-아래에 수식 기반 알고리즘 설명과 Rust 소스 흐름을 단계별로 정리.
+- 두 알고리즘은 각각 `QuickHull` 과 `Monotone Chain` 방식으로 `2D Convex Hull` 을 계산합니다.  
+- 아래에 수식 기반 알고리즘 설명과 Rust 소스 흐름을 단계별로 정리.
 
 ## ✳️ 1. QuickHull 알고리즘 수학적 설명
-QuickHull은 `Divide & Conquer` 방식으로 최외곽 점들을 재귀적으로 연결하여 Convex Hull을 구성합니다.
+- QuickHull은 `Divide & Conquer` 방식으로 최외곽 점들을 재귀적으로 연결하여 Convex Hull을 구성합니다.
 ### 📐 수학적 개념
 - 기본 선분 선택:
-좌표 기준 가장 왼쪽 점 A와 가장 오른쪽 점 B를 선택  
-    → 이 두 점은 항상 Convex Hull에 포함됨
+    - 좌표 기준 가장 왼쪽 점 A와 가장 오른쪽 점 B를 선택  
+        - 이 두 점은 항상 Convex Hull에 포함됨
 - 거리 계산:
-점 P가 선분 AB에서 얼마나 떨어져 있는지 계산  
+    - 점 P가 선분 AB에서 얼마나 떨어져 있는지 계산  
 
 $$
 d(P,AB)=\frac{|(B_x-A_x)(A_y-P_y)-(B_y-A_y)(A_x-P_x)|}{\sqrt{(B_x-A_x)^2+(B_y-A_y)^2}}
@@ -23,7 +23,7 @@ $$
 
 - 양수면 P는 AB의 왼쪽에 있음
 - 재귀적 분할:  
-    가장 먼 점 F를 기준으로 AF, FB로 나누고, 각 구간에 대해 반복
+    - 가장 먼 점 F를 기준으로 AF, FB로 나누고, 각 구간에 대해 반복
 
 🧩 Rust 소스 흐름
 ```rust
@@ -38,10 +38,10 @@ let b = max_by_x(v); // 가장 오른쪽
 
 
 ## ✳️ 2. Monotone Chain 알고리즘 수학적 설명
-`Monotone Chain` 은 정렬 후 상/하 방향으로 Hull을 구성하는 방식입니다.
+- `Monotone Chain` 은 정렬 후 상/하 방향으로 Hull을 구성하는 방식입니다.
 ### 📐 수학적 개념
 - 정렬:  
-    점들을 x 기준 오름차순, tie-break는 y 기준
+    - 점들을 x 기준 오름차순, tie-break는 y 기준
 - 외적 기반 방향 판별:
 
 $$
@@ -76,8 +76,8 @@ v.sort_by(on_is_left_of); // 좌표 정렬
 
 QuickHull (분할정복)
 
-아이디어: x-최소/최대점을 잇는 직선으로 점들을 위/아래 집합으로 나눈 뒤,  
-각 집합에서 그 선분으로부터 가장 멀리 떨어진 점을 골라 삼각형 바깥쪽(즉, 선분의 바깥쪽)에 있는 점들만 남기고 재귀적으로 진행.
+- 아이디어: x-최소/최대점을 잇는 직선으로 점들을 위/아래 집합으로 나눈 뒤,  
+- 각 집합에서 그 선분으로부터 가장 멀리 떨어진 점을 골라 삼각형 바깥쪽(즉, 선분의 바깥쪽)에 있는 점들만 남기고 재귀적으로 진행.
 
 ## 단계 그림
 
@@ -169,7 +169,7 @@ lower: [p0, p2]
 Step C: 후보 p1
 체크 turn(p0, p2, p1):
 - 만약 오른쪽으로 꺾임(cross ≤ 0) → p2 pop
-→ lower: [p0], 다시 p1 push → [p0, p1]
+    - lower: [p0], 다시 p1 push → [p0, p1]
 
 Step D: 후보 p4
 turn(p0, p1, p4) 가 왼쪽이면 keep → [p0, p1, p4]
