@@ -1,7 +1,7 @@
 # bandec
 
-**밴드 행렬(Band Matrix)** 에 대한 **LU 분해(bandec)** 와 **전진/후진 대입(banbks)** 을 수행하는 알고리즘입니다.  
-아래에 각 함수의 수학적 의미, 수식 정리, 그리고 수학적 타당성 검토를 단계별로 정리.
+- **밴드 행렬(Band Matrix)** 에 대한 **LU 분해(bandec)** 와 **전진/후진 대입(banbks)** 을 수행하는 알고리즘입니다.  
+- 아래에 각 함수의 수학적 의미, 수식 정리, 그리고 수학적 타당성 검토를 단계별로 정리.
 
 ## 📐 1. DenseMat 트레잇의 수학적 의미
 ```rust
@@ -89,64 +89,7 @@ $$
 
 ---
 
-
-# bandec / banbks
-
-**밴드 행렬(Band Matrix)** 에 대한 **LU 분해(bandec)** 와 **전진/후진 대입(banbks)** 을 수행하는 알고리즘입니다.  
-아래에 각 함수의 수학적 의미, 수식 정리, 그리고 수학적 타당성 검토를 단계별로 정리.
-
-## 📐 1. DenseMat 트레잇의 수학적 의미
-```rust
-pub trait DenseMat {
-    fn n_rows(&self) -> usize;
-    fn n_cols(&self) -> usize;
-    fn get(&self, r: usize, c: usize) -> f64;
-    fn set(&mut self, r: usize, c: usize, v: f64);
-    fn swap_rows(&mut self, i: usize, j: usize);
-}
-```
-
-## 🔹 수학적 해석
-- 행렬 $A\in \mathbb{R^{\mathnormal{n\times m}}}$ 에 대해:
-- get(i, j) → $A_{ij}$
-- set(i, j, v) → $A_{ij}:=v$
-- swap_rows(i, j) → $A_{i\cdot }\leftrightarrow A_{j\cdot }$
-
-### ✅ 수학적 타당성
-- 행 스왑은 $A_{i\cdot }\leftrightarrow A_{j\cdot }$ 로 정확히 구현됨
-- 열 수만큼 루프를 돌며 각 원소를 교환하므로 수학적으로 문제 없음
-
-## 📘 2. bandec: 밴드 행렬 LU 분해
-
-### 🔹 입력 정의
-- $A\in \mathbb{R^{\mathnormal{n\times (m_1+m_2+1)}}}$ : 밴드 행렬
-- $L$: 하삼각 밴드 저장용 행렬
-- $U$: 상삼각 밴드로 변환된 A
-- $\mathrm{index}$: 피벗 인덱스 (1-based)
-- $d$: 행 교환 부호
-
-### 🔹 수학적 과정
-- 슬라이딩 정렬
-- 상단 행들을 왼쪽으로 정렬하여 밴드 형태로 맞춤
-- 피벗 선택
-
-$$
-\max _{j\in [i,i+m_1]}|A_{j,0}| → pivot row
-$$
-
-- 행 교환
-- $A_{i\cdot }\leftrightarrow A_{\mathrm{imax}\cdot }, d:=-d$
-- 하부 제거 (Forward Elimination)
-- $r=\frac{A_{j,0}}{A_{i,0}}$
-- $A_{j,k-1}:=A_{j,k}-r\cdot A_{i,k}$
-- $L_{i,j-i-1}:=r$
-
-## ✅ 수학적 타당성
-- LU 분해의 기본 원리와 일치
-- 밴드 구조를 유지하며 A=LU 형태로 분해
-- pivoting과 작은 값 방어도 포함되어 안정적
-
-## 📘 3. banbks: 전진/후진 대입
+## 📘 2. banbks: 전진/후진 대입
 ### 🔹 수학적 목적
 - `LUx=Pb` 를 풀기 위한 두 단계:
 - `Ly=Pb` → 전진 대입
@@ -385,32 +328,32 @@ $$
 ## 🧮 예제 설정
 - 행렬 A (3×3 tridiagonal):
 
-$$
-A=\left[ \begin{matrix}4&1&0\\ ; 1&4&1\\ ; 0&1&4\end{matrix}\right]
-$$
+```math
+A=\left[ \begin{matrix}4&1&0\\1&4&1\\0&1&4\end{matrix}\right]
+```
 
 - 해 x:
 
-$$
-x=\left[ \begin{matrix}1\\ ; 2\\ ; 3\end{matrix}\right]
-$$ 
+```math
+x=\left[ \begin{matrix}1\\2\\3\end{matrix}\right]
+```
 - 우변 b=Ax:
 
-$$
-b=\left[ \begin{matrix}4\cdot 1+1\cdot 2=6\\ ; 1\cdot 1+4\cdot 2+1\cdot 3=12\\ ; 1\cdot 2+4\cdot 3=14\end{matrix}\right] \Rightarrow b=\left[ \begin{matrix}6\\ ; 12\\ ;14\end{matrix}\right] 
-$$
+```math
+b=\left[ \begin{matrix}4\cdot 1+1\cdot 2=6\\1\cdot 1+4\cdot 2+1\cdot 3=12\\1\cdot 2+4\cdot 3=14\end{matrix}\right] \Rightarrow b=\left[ \begin{matrix}6\\12\\14\end{matrix}\right] 
+```
 
 ### 🔧 Step 1: bandec — LU 분해
 
 LU 분해 결과:
 
-$$
-( L = \begin{bmatrix} 1 & 0 & 0 \\ ; 0.25 & 1 & 0 \\ ; 0 & 0.2667 & 1 \end{bmatrix} )
-$$
+```math
+( L = \begin{bmatrix} 1 & 0 & 0 \\0.25 & 1 & 0 \\0 & 0.2667 & 1 \end{bmatrix} )
+```
 
-$$
-( U = \begin{bmatrix} 4 & 1 & 0 \\ ; 0 & 3.75 & 1 \\ ; 0 & 0 & 3.7333 \end{bmatrix} )
-$$
+```math
+( U = \begin{bmatrix} 4 & 1 & 0 \\0 & 3.75 & 1 \\0 & 0 & 3.7333 \end{bmatrix} )
+```
 
 - 피벗 index: [1, 2, 3] (1-based, no row swaps needed)
 - 행 교환 부호 d=+1
@@ -418,27 +361,188 @@ $$
 ### 🔧 Step 2: banbks — 해 계산
 #### 🔹 전진 대입: 
 
-$$
+```math
 Ly=b
-$$
+```
 
 #### 🔹 후진 대입: 
 
-$$
+```math
 Ux=y
-$$
+```
 
 - ✅ 원래 x와 정확히 일치!
 
 ## 🎯 요약
 | 단계       | 수식 또는 개념 | 함수 또는 처리 | 설명                         | 결과 또는 목적         |
 |------------|----------------|----------------|------------------------------|------------------------|
-| 문제 정의  | b = Ax         | —              | 선형 시스템 설정             | 해 x를 구하는 것이 목표 |
-| 분해 단계  | A = LU         | `bandec`       | 행렬 A를 LU로 분해           | L, U, 피벗 정보 생성    |
-| 해 계산    | LUx = b        | `banbks`       | LU 분해 결과와 b로 x 계산    | 해 x를 얻음            |
-
+| 문제 정의  | $b = Ax$         | —              | 선형 시스템 설정             | 해 x를 구하는 것이 목표 |
+| 분해 단계  | $A = LU$        | `bandec`       | 행렬 A를 LU로 분해           | L, U, 피벗 정보 생성    |
+| 해 계산    | $LUx = b$        | `banbks`       | LU 분해 결과와 b로 x 계산    | 해 x를 얻음            |
 
 ---
 
+## 소스 코드
+```rust
+/// Band matrix LU decomposition
+///
+/// - a: n x (m1 + m2 + 1) — transformed in-place into U
+/// - al: n x m1 — stores the lower band of L
+/// - index: length n, pivot indices (stored as 1-based; compatible with original C++ convention)
+/// - d: (out) sign of row exchanges (+/-1)
+pub fn on_bandec<A: DenseMat, L: DenseMat>(
+    a: &mut A,
+    m1: usize,
+    m2: usize,
+    al: &mut L,
+    index: &mut [usize],
+    d: &mut f64,
+) {
+    let n = a.n_rows();
+    let num1 = m1 + m2 + 1;
+
+    debug_assert_eq!(a.n_cols(), num1, "a must be n x (m1+m2+1)");
+    debug_assert_eq!(al.n_rows(), n);
+    debug_assert!(al.n_cols() >= m1, "al must have at least m1 columns");
+    debug_assert_eq!(index.len(), n);
+
+    // 상부로 정렬(슬라이딩) + 왼쪽 0 채우기
+    let mut num2 = m1;
+    for i in 0..m1 {
+        // a[i][0..] ← a[i][(m1-i)..(num1-1)]
+        for j in (m1 - i)..num1 {
+            let v = a.get(i, j);
+            a.set(i, j - num2, v);
+        }
+        num2 -= 1;
+        // 오른쪽 끝쪽을 0으로 채움
+        for j in (num1 - num2 - 1)..num1 {
+            a.set(i, j, 0.0);
+        }
+    }
+
+    *d = 1.0;
+    let mut num3 = m1;
+
+    for i in 0..n {
+        // 피벗 찾기: a[i..min(i+num3-i, n-1)][0] 중 절대값 최대
+        let mut val1 = a.get(i, 0);
+        let mut imax = i;
+
+        if num3 < n {
+            num3 += 1;
+        } // 다음 행까지의 밴드 높이 확장
+
+        for j in (i + 1)..num3.min(n) {
+            let aj0 = a.get(j, 0);
+            if aj0.abs() > val1.abs() {
+                val1 = aj0;
+                imax = j;
+            }
+        }
+
+        // 1-based pivot index 저장 (원본 C++과 동일)
+        index[i] = imax + 1;
+
+        if val1 == 0.0 {
+            // 원본과 동일한 '작은 값' 방어
+            a.set(i, 0, 1e-40);
+        }
+
+        // 행 교환 (0..num1-1 열까지만)
+        if imax != i {
+            *d = -*d;
+            for j in 0..num1 {
+                let tmp = a.get(i, j);
+                a.set(i, j, a.get(imax, j));
+                a.set(imax, j, tmp);
+            }
+        }
+
+        // 하부 제거 (forward elimination in band form)
+        for j in (i + 1)..num3.min(n) {
+            let r = a.get(j, 0) / a.get(i, 0);
+            // al[i][j - i - 1] = r;
+            al.set(i, j - i - 1, r);
+
+            // a[j][k-1] = a[j][k] - r * a[i][k]
+            for k in 1..num1 {
+                let new_val = a.get(j, k) - r * a.get(i, k);
+                a.set(j, k - 1, new_val);
+            }
+            // 마지막 칸 0으로
+            a.set(j, num1 - 1, 0.0);
+        }
+    }
+}
+```
+
+```rust
+/// Forward/Backward substitution
+///
+/// - a: Band matrix containing LU decomposition (n x (m1 + m2 + 1)) — result from `bandec`
+/// - al: Lower band of L (n x m1) — result from `bandec`
+/// - index: 1-based pivot indices obtained from `bandec`
+/// - b: n x n_rhs (right-hand side and solution stored in-place)
+pub fn on_banbks<A: DenseMat, L: DenseMat, B: DenseMat>(
+    a: &A,
+    m1: usize,
+    m2: usize,
+    al: &L,
+    index: &[usize],
+    b: &mut B,
+) {
+    let n = a.n_rows();
+    let num1 = m1 + m2 + 1;
+
+    debug_assert_eq!(a.n_cols(), num1, "a must be n x (m1+m2+1)");
+    debug_assert_eq!(al.n_rows(), n);
+    debug_assert!(al.n_cols() >= m1);
+    debug_assert_eq!(index.len(), n);
+    debug_assert_eq!(b.n_rows(), n, "b must have n rows");
+
+    let n_rhs = b.n_cols();
+
+    for col in 0..n_rhs {
+        // 전진 대입: L * y = P*b
+        let mut num2 = m1;
+        for j in 0..n {
+            let ip = index[j] - 1; // 1-based → 0-based
+            if ip != j {
+                let tmp = b.get(j, col);
+                b.set(j, col, b.get(ip, col));
+                b.set(ip, col, tmp);
+            }
+
+            if num2 < n {
+                num2 += 1;
+            }
+
+            for k in (j + 1)..num2.min(n) {
+                let new_val = b.get(k, col) - al.get(j, k - j - 1) * b.get(j, col);
+                b.set(k, col, new_val);
+            }
+        }
+
+        // 후진 대입: U * x = y  (banded back-substitution)
+        let mut num4 = 1usize;
+        for j in (0..n).rev() {
+            let mut val = b.get(j, col);
+            for k in 1..num4 {
+                // a[j][k]는 U의 상부밴드; b[k+j][col]는 그 위에 해당하는 y/x
+                val -= a.get(j, k) * b.get(j + k, col);
+            }
+            val /= a.get(j, 0);
+            b.set(j, col, val);
+
+            if num4 < num1 {
+                num4 += 1;
+            }
+        }
+    }
+}
+```
+
+---
 
 
