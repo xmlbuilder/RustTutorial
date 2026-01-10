@@ -1,6 +1,6 @@
 # InterpolatorEase
-InterpolatorEase 및 관련 보간 함수들의 수식, 원리, 설명을 포함한 문서와 함께 표 형식 요약도 정리한 것입니다.  
-이 문서는 easing 함수와 보간 로직을 이해하고 활용하는 데 도움이 됩니다.
+- InterpolatorEase 및 관련 보간 함수들의 수식, 원리, 설명을 포함한 문서와 함께 표 형식 요약도 정리한 것입니다.  
+- 이 문서는 easing 함수와 보간 로직을 이해하고 활용하는 데 도움이 됩니다.
 
 ## 📘 Interpolation & Easing Function Summary
 ### 🎯 핵심 개념
@@ -304,4 +304,6 @@ impl InterpolatorEase {
     }
 }
 ```
+---
+
 
