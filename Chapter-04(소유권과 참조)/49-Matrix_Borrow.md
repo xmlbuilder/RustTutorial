@@ -642,3 +642,75 @@ mod tests {
 
 ---
 
+## 1. 왜 이렇게 복잡한 구조가 필요했는가
+- Rust는 &mut T는 단 하나만 존재해야 한다는 규칙이 있음.
+- 그런데 행렬을 row/col/block 단위로 쪼개려면:
+    - 위쪽 행들(top)
+    - 아래쪽 행들(bottom)
+    - 왼쪽 열(left)
+    - 오른쪽 열(right)
+- 이렇게 여러 개의 서로 다른 부분을 동시에 &mut로 다뤄야 함.
+- C++이나 Python에서는 그냥 포인터로 하면 끝인데 Rust는 이걸 허용하지 않음.
+- 그래서 필요한 게 바로:
+    - ✔ **메모리는 하나지만, 서로 겹치지 않는 부분만 안전하게 가리키는 view 구조**
+- 이게 바로
+    - MatrixSliceMut, MatrixBlockMut, BlockMut
+
+
+## 2. MatrixSliceMut — “행 단위로 자른 연속 메모리”
+- 이건 완전 safe.
+- 왜냐하면:
+```rust
+let (top, bottom) = self.data.split_at_mut(row * cols);
+```
+- 이 split_at_mut은 Rust가 보장하는:
+    - top과 bottom은 절대 겹치지 않는다
+    - 둘 다 &mut로 써도 된다
+- 라는 성질을 갖고 있음.
+- 그래서 row 방향 split은 완전 safe.
+
+## 3. MatrixBlockMut 
+- “열 방향으로 자른 블록 (stride + offset)”
+    - 문제는 column split.
+- row-major 메모리에서는 열 방향으로 자르면 메모리가 이렇게 생김:
+```rust
+[0 1 2 3 4 5]
+[6 7 8 9 10 11]
+[12 13 14 15 16 17]
+```
+- 여기서 col=2로 split하면:
+    - left block: (0,1), (6,7), (12,13)
+    - right block: (2,3,4,5), (8,9,10,11), (14,15,16,17)
+- 즉, 물리적으로 연속이 아님.
+- 그래서 Rust는 split_at_mut을 쓸 수 없음.
+- 그래서 나온 게:
+- ✔ MatrixBlockMut = **stride + offset으로 논리적 2D 블록을 표현하는 구조**
+- 이 구조는:
+    - data는 전체 row-slice
+    - offset은 block의 시작 위치
+    - row_stride는 한 row의 전체 길이
+    - cols는 block의 폭
+- 그래서 인덱싱:
+```
+offset + r * stride + c
+```
+
+## 4. BlockMut — “완전히 safe한 block view”
+- MatrixBlockMut는 내부에 unsafe가 들어가 있어.
+- 그래서 일반 사용자에게는 부담이 있음.
+- 그래서 나온 게 BlockMut:
+    - row 범위는 실제 slice로 잘라서 safe
+    - col window는 offset으로만 처리
+    - 내부는 완전 safe
+- 즉:
+    - ✔ BlockMut은 **사용자 친화적인 safe block view**
+
+## 5. 왜 drop을 쓰는가
+- 테스트에서만 쓰는 이유는:
+    - top과 bottom이 여전히 m.data를 빌리고 있다고 Rust가 판단하기 때문에
+    - 원본 Matrix를 다시 읽으려면 borrow를 끝내야 해서
+    - drop(top), drop(bottom)으로 명시적으로 borrow를 종료시키는 것
+- 실제 라이브러리 코드에서는 필요 없음.
+
+---
+
