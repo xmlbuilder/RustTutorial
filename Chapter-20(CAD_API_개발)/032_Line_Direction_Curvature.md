@@ -4,11 +4,11 @@
 ### 1. 방향 판별 (2D/3D)
 - `on_line_point_side_2d`:  
 
-$$
-z=(b-a)\times (q-a)=(b_x-a_x)(q_y-a_y)-(b_y-a_y)(q_x-a_x)\]
-$$
+```math
+z=(b-a)\times (q-a)=(b_x-a_x)(q_y-a_y)-(b_y-a_y)(q_x-a_x)
+```
 
-- → $z>0: Left, z<0: Right$
+-  $z>0: Left, z<0: Right$
 
 - `on_line_point_side_xy` / `on_line_point_side`:  
     3D 점을 XY 또는 임의 평면에 투영 후 위 수식으로 방향 판별
@@ -67,49 +67,49 @@ $$
 
 ### 5. 곡률 계산- on_curve_kappa:
 
-$$
+```math
 \kappa =\frac{\| d_1\times d_2\| }{\| d_1\| ^3}
-$$
+```
 
 - `on_surface_curvature`:
     - First fundamental form: 
 
-$$
+```math
 E=\vec {s}_u\cdot \vec {s}_u \quad \  F=\vec {s}_u\cdot \vec {s}_v \quad \  G=\vec {s}_v\cdot \vec {s}_v
-$$
+```
 
-    - Second form: 
+- Second form: 
 
-$$
+```math
 e=\vec {n}\cdot \vec {s}_{uu} \quad \  f=\vec {n}\cdot \vec {s}_{uv} \quad \  g=\vec {n}\cdot \vec {s}_{vv}
-$$
+```
 
 - Gaussian:
 
-$$
+```math
 K=\frac{eg-f^2}{EG-F^2}
-$$
+```
 
 - Mean:
 
-$$
+```math
 H=\frac{Eg-2Ff+Ge}{2(EG-F^2)}
-$$
+```
 
 ### 6. 원호 Bezier- on_make_quarter_arc_bezier:
 - 0°, 45°, 90° 점과 가중치 
 
-$$
+```math
 w=[1,\frac{1}{\sqrt{2}},1]
-$$
+```
 
 ### 7. 평면 관련- on_plane_eval:
 - 평면 방정식 $ax+by+cz+d=0$ 에 점 대입
 - `on_intersect_line_plane` / `on_shoot_to_plane`:
 
-$$
+```math
 t=\frac{-(n\cdot p_0+d)}{n\cdot \vec {dir}}\Rightarrow p=p_0+t\cdot \vec {dir}
-$$
+```
 
 - `on_pass_plane_side`:  
     평면 평가값 s에 따라 Side 판별
@@ -612,5 +612,5 @@ fn test_on_make_quarter_arc_bezier() {
     assert_eq!(weights[1], 0.5f64.sqrt());
 }
 ```
-
+---
 
