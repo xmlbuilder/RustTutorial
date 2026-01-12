@@ -1,42 +1,41 @@
 # 근 찾기 (Newton-Raphson)
-아래는 제공해주신 다항식 근 찾기 함수들에 대한 수학적 원리, 단계별 설명, 그리고 기능 요약 표입니다.  
-이 코드는 수치해석에서 매우 중요한 근 찾기 알고리즘을 구현하고 있으며, Newton-Raphson, 이분법, 자동 브래킷팅을 포함합니다.
+- 아래는 제공해주신 다항식 근 찾기 함수들에 대한 수학적 원리, 단계별 설명, 그리고 기능 요약 표입니다.  
+- 이 코드는 수치해석에서 매우 중요한 근 찾기 알고리즘을 구현하고 있으며, Newton-Raphson, 이분법, 자동 브래킷팅을 포함합니다.
 
-📐 핵심 수식 정리
+## 📐 핵심 수식 정리
 ### 1. Newton-Raphson 방법
 
 - 반복식:
 
-$$
+```math
 u_{k+1}=u_k-\frac{f(u_k)}{f'(u_k)}
-$$
+```
 
 - 수렴 조건:
 
-$$
-|f(u_k)|<\mathrm{tol}\quad \mathrm{또는}\quad |(u_{k+1}-u_k)\cdot f'(u_k)|<\mathrm{tol}
-$$
+```math
+|f(u_k)|<\mathrm{tol}\quad \mathrm{또는} \quad |(u_{k+1}-u_k)\cdot f'(u_k)|<\mathrm{tol}
+```
 
 
 ### 2. 이분법 (Bisection)
 - 조건:
 
-$$
+```math
 f(u_l)\cdot f(u_r)<0\quad \mathrm{(부호\  변화)}
-$$
+```
 
 - 반복식:
 
-$$
+```math
 u_c=\frac{u_l+u_r}{2}
-$$
+```
 
 - 수렴 조건:
 
-$$
+```math
 |f(u_c)|<\mathrm{tol}\quad \mathrm{또는}\quad \frac{u_r-u_l}{2}<\mathrm{tol}
-$$
-
+```
 
 ### 3. 자동 브래킷팅 + Newton + 이분법
 - 1차 스캔으로 부호 변화 구간 탐색
@@ -46,24 +45,24 @@ $$
 
 
 ## 🧭 단계별 설명
-### 🔹 on_polynomial_newton_root
-- 초기값 $u0$ 을 구간 $[ul, ur]$ 에 클램핑
-- 반복적으로 Newton-Raphson 적용
-- 도함수가 너무 작으면 실패
-- 수렴 조건 만족 시 반환
+- 🔹 on_polynomial_newton_root
+    - 초기값 $u0$ 을 구간 $[ul, ur]$ 에 클램핑
+    - 반복적으로 Newton-Raphson 적용
+    - 도함수가 너무 작으면 실패
+    - 수렴 조건 만족 시 반환
 
-### 🔹 on_bisection_root
-- 구간 $[ul, ur]$ 에서 부호 변화 확인
-- 중간값 $c$ 계산
-- $f(c)$ 의 부호에 따라 구간 절반으로 축소
-- 수렴 시 근 반환
+- 🔹 on_bisection_root
+    - 구간 $[ul, ur]$ 에서 부호 변화 확인
+    - 중간값 $c$ 계산
+    - $f(c)$ 의 부호에 따라 구간 절반으로 축소
+    - 수렴 시 근 반환
 
-### 🔹 on_polynomial_auto_bracket_and_newton
-- samples 개수로 구간 $[umin, umax]$ 을 스캔
-- 부호 변화 구간들(Bracket) 수집
-- 가장 좋은 구간 선택 (중간값의 f 최소)
-- 초기 추정값 계산
-- Newton-Raphson 시도
+- 🔹 on_polynomial_auto_bracket_and_newton
+    - samples 개수로 구간 $[umin, umax]$ 을 스캔
+    - 부호 변화 구간들(Bracket) 수집
+    - 가장 좋은 구간 선택 (중간값의 f 최소)
+    - 초기 추정값 계산
+    - Newton-Raphson 시도
 - 실패 시 이분법으로 대체
 
 ## 📊 기능별 정리 표
@@ -76,6 +75,7 @@ $$
 | `initial_guess_from_bracket`     | 브래킷 기반 초기 추정값 계산             | 선형 보간 또는 $u_0 = \frac{u_l + u_r}{2}$               |
 | `on_polynomial_auto_bracket_and_newton` | 자동 브래킷팅 + Newton + 이분법 통합 | 부호 변화 탐색 → 초기 추정 → Newton → 실패 시 이분법       |
 
+---
 
 ```rust
 // ------------------------------------------------------------
@@ -455,3 +455,5 @@ mod tests {
     }
 }
 ```
+---
+
