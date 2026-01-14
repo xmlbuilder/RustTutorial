@@ -1,7 +1,7 @@
 # Sparse Matrix
-이 소스는 희소 행렬(Sparse Matrix)을 다루기 위한 선형대수 연산용 데이터 구조 및 알고리즘을 정의한 것입니다.  
-특히 SparseEquation 희소 벡터(또는 행렬의 한 행)를 표현하며,  
-SparseCoefficient 그 안의 개별 항(열 인덱스와 값)을 나타냅니다.
+- 이 소스는 희소 행렬(Sparse Matrix)을 다루기 위한 선형대수 연산용 데이터 구조 및 알고리즘을 정의한 것입니다.  
+- 특히 SparseEquation 희소 벡터(또는 행렬의 한 행)를 표현하며,  
+- SparseCoefficient 그 안의 개별 항(열 인덱스와 값)을 나타냅니다.
 
 ## 📦 전체 구조 요약
 ### 1. SparseCoefficient
@@ -339,7 +339,8 @@ pub fn on_transpose_sparse_equations(n: usize, m: usize, equations: &[SparseEqua
 #[cfg(test)]
 mod tests {
     use nurbslib::core::maths::on_solve_2x2;
-    use nurbslib::core::sparse_equation::{on_dense_mul, on_eqs_to_dense, on_merge_sparse_equation, on_multiply_diagonal_accum, on_transpose_sparse_equations, SparseCoefficient, SparseEquation};
+    use nurbslib::core::sparse_equation::{on_dense_mul, on_eqs_to_dense, on_merge_sparse_equation,
+        on_multiply_diagonal_accum, on_transpose_sparse_equations, SparseCoefficient, SparseEquation};
 
     fn approx(a: f64, b: f64, eps: f64) -> bool {
         (a - b).abs() <= eps
@@ -701,8 +702,8 @@ mod tests {
 
 # 테스트 코드 분석
 
-이 테스트는 희소 행렬의 CSR(Compressed Sparse Row) 포맷을 사용하여 행렬과 벡터의 내적을 계산하는 과정을 검증하는 것입니다.  
-아래에 단계적으로 상세히 설명.
+- 이 테스트는 희소 행렬의 CSR(Compressed Sparse Row) 포맷을 사용하여 행렬과 벡터의 내적을 계산하는 과정을 검증하는 것입니다.  
+- 아래에 단계적으로 상세히 설명.
 
 ```rust
 #[test]
@@ -774,10 +775,11 @@ A = [2.0, 1.0, 3.0, 4.0, 5.0] // 각 항의 값
     - 합계: 4.0 + 15.0 = 19.0
 
 ## ✅ 최종 검증
+```rust
 assert!(approx(y0, 5.0, 1e-12));  // row 0 결과
 assert!(approx(y1, 6.0, 1e-12));  // row 1 결과
 assert!(approx(y2, 19.0, 1e-12)); // row 2 결과
-
+```
 - 모든 결과가 정확히 계산되었음을 확인합니다.
 
 ## 📌 요약
