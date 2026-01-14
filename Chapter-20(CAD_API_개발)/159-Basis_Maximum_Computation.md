@@ -10,6 +10,10 @@
   **Newton iteration did not converge** 오류가 발생한다.
 - 이 문서는 **수렴하는 케이스(되는 경우)** 와 **수렴하지 않는 케이스(안 되는 경우)** 를 명확히 정리한다.
 
+## Basis Functions
+![Basis Functions](/image/basis.png)
+
+
 ## 2. 되는 케이스 (Newton iteration이 정상적으로 수렴하는 경우)
 - ✔ Case 1. 충분한 control point 수를 가진 `B‑spline (n ≥ p)`
 - degree p 에 대해 `control point` 수가 최소 `p+1` 이상일 때
