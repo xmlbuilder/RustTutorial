@@ -229,7 +229,11 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [41-to_owned](./Chapter-04(소유권과%20참조)/41-to_owned.md)
 - [42-to_string](./Chapter-04(소유권과%20참조)/42-to_string.md)
 - [43-Path_PathBuf](./Chapter-04(소유권과%20참조)/43-Path_PathBuf.md)
-- [44-unwrap_소유권_고찰](./Chapter-04(소유권과%20참조)/44-unwrap_소유권_고찰.md)
+- [45-PhantomData](./Chapter-04(소유권과%20참조)/45-PhantomData.md)
+- [46-Closure_life_time_문제](./Chapter-04(소유권과%20참조)/46-Closure_life_time_문제.md)
+- [47-많이_틀리는_mut_case](./Chapter-04(소유권과%20참조)/47-많이_틀리는_mut_case.md)
+- [48-as_deref_mut](./Chapter-04(소유권과%20참조)/48-as_deref_mut.md)
+- [49-Matrix_Borrow](./Chapter-04(소유권과%20참조)/49-Matrix_Borrow.md)
 
 🔼 [맨 위로](#-목차)
 
@@ -284,7 +288,12 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [33-Eq_Hash_Trait](./Chapter-06(트레잇과%20제네릭)/33-Eq_Hash_Trait.md)
 - [34-Any](./Chapter-06(트레잇과%20제네릭)/34-Any.md)
 - [35-Interpolation](./Chapter-06(트레잇과%20제네릭)/35-Interpolation.md)
-
+- [36-Generic_Float_심화](./Chapter-06(트레잇과%20제네릭)/36-Generic_Float_심화.md)
+- [37-Generic-Mut_의미](./Chapter-06(트레잇과%20제네릭)/37-Generic-Mut_의미.md)
+- [38-Generic_trait_bounds](./Chapter-06(트레잇과%20제네릭)/38-Generic_trait_bounds.md)
+- [39-01-Trait_상속](./Chapter-06(트레잇과%20제네릭)/39-01-Trait_상속.md)
+- [39-02-Trait_dyn_주의사항](./Chapter-06(트레잇과%20제네릭)/39-02-Trait_dyn_주의사항.md)
+- [40-Trait_Object_개념설명](./Chapter-06(트레잇과%20제네릭)/40-Trait_Object_개념설명.md)
 🔼 [맨 위로](#-목차)
 
 ### <a id="chapter07"></a> 📦 [Chapter-07(컬렉션과 반복자)](./Chapter-07(컬렉션과%20반복자))
@@ -330,9 +339,12 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [11-Array_접근_Panic](./Chapter-08(에러%20처리와Option-Result)/11-Array_접근_Panic.md)
 - [12-디버깅_출력용_포맷](./Chapter-08(에러%20처리와Option-Result)/12-디버깅_출력용_포맷.md)
 - [13-Option_Map](./Chapter-08(에러%20처리와Option-Result)/13-Option_Map.md)
-- [14-if문_에러_주의사항](./Chapter-08(에러%20처리와Option-Result)/14-if문_에러_주의사항.md)
-  
+- [15-std_error_Error](./Chapter-08(에러%20처리와Option-Result)/15-std_error_Error.md)
+- [16-never_type(!).md](./Chapter-08(에러%20처리와Option-Result)/16-never_type(!))
+- [17-Error_처리_문서화](./Chapter-08(에러%20처리와Option-Result)/17-Error_처리_문서화.md)
+- [18-Error처리_혼란_정리](./Chapter-08(에러%20처리와Option-Result)/18-Error처리_혼란_정리)
 🔼 [맨 위로](#-목차)
+
 
 ### <a id="chapter09"></a> 🧪 [Chapter-09(테스트와 디버깅)](./Chapter-09(테스트와%20디버깅))
 - [01-Test기본](./Chapter-09(테스트와%20디버깅)/01-Test기본.md)
@@ -469,6 +481,8 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [18-MutexGuard](./Chapter-15%28SmartPointers_and_MemoryModels%29/18-MutexGuard.md)
 - [19-Smart_Pointer_순서](./Chapter-15%28SmartPointers_and_MemoryModels%29/19-Smart_Pointer_순서.md)
 - [20-Allocator](./Chapter-15%28SmartPointers_and_MemoryModels%29/20-Allocator.md)
+- [21-TypedAllocator](./Chapter-15%28SmartPointers_and_MemoryModels%29/21-TypedAllocator.md)
+
 
 🔼 [맨 위로](#-목차)
 
@@ -484,7 +498,7 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [09-타언어와_문자열_호환](./Chapter-16(문자열처리)/09-타언어와_문자열_호환.md)
 - [10-format!_println!_포맷_정의](./Chapter-16(문자열처리)/10-format!_println!_포맷_정의.md)
 - [11-FromStr](./Chapter-16(문자열처리)/11-FromStr.md)
-
+- [12-UTF-8](./Chapter-16(문자열처리)/12-UTF-8.md)
 
 
 🔼 [맨 위로](#-목차)
@@ -545,7 +559,19 @@ Rust 학습을 위한 실전 중심 튜토리얼입니다.
 - [50-Excel_Read_Writer_Test](./Chapter-17(실전%20예제와%20프로젝트)/50-Excel_Read_Writer_Test.md)
 - [51-fs_watcher](./Chapter-17(실전%20예제와%20프로젝트)/51-fs_watcher.md)
 - [52-Fixed_Format_Writer](./Chapter-17(실전%20예제와%20프로젝트)/52-Fixed_Format_Writer.md)
-
+- [53-Head_Trajectory](./Chapter-17(실전%20예제와%20프로젝트)/53-Head_Trajectory.md)
+- [54-Calc_Damage](./Chapter-17(실전%20예제와%20프로젝트)/54-Calc_Damage.md)
+- [55-LU_Decomposition_실전_예](./Chapter-17(실전%20예제와%20프로젝트)/55-LU_Decomposition_실전_예.md)
+- [56-relative_matrix_구하기](./Chapter-17(실전%20예제와%20프로젝트)/56-relative_matrix_구하기.md)
+- [57-Memoize구현.md](./Chapter-17(실전%20예제와%20프로젝트)/57-Memoize구현.md)
+- [58-Chebyshev_Interpolation](./Chapter-17(실전%20예제와%20프로젝트)/58-Chebyshev_Interpolation.md)
+- [59-Chebyshev_Polynomials](./Chapter-17(실전%20예제와%20프로젝트)/59-Chebyshev_Polynomials.md)
+- [60-Gauss_Jordan_full_pivot_solver_for4x4](./Chapter-17(실전%20예제와%20프로젝트)/60-Gauss_Jordan_full_pivot_solver_for4x4.md)
+- [61-WebClient](./Chapter-17(실전%20예제와%20프로젝트)/61-WebClient.md)
+- [62-async_await_실전](./Chapter-17(실전%20예제와%20프로젝트)/62-async_await_실전.md)
+- [63-Rust_Numpy_구현](./Chapter-17(실전%20예제와%20프로젝트)/63-Rust_Numpy_구현.md)
+- [64-Rust_Pandas](./Chapter-17(실전%20예제와%20프로젝트)/64-Rust_Pandas.md)
+- [65-MeshMerger](./Chapter-17(실전%20예제와%20프로젝트)/65-MeshMerger.md)
 
 🔼 [맨 위로](#-목차)
   
