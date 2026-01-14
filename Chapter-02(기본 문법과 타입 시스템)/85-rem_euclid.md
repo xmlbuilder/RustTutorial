@@ -1,4 +1,4 @@
-# rem_euclid
+# rem_euclid (수학적 나머지 연산)
 - rem_euclid 은 러스트에서 나머지를 항상 **양수 범위** 로 돌려주는 함수.
 - 보통 % 연산자는 음수 나머지를 그대로 반환하는데, rem_euclid는 **수학적 유클리드 나머지(Euclidean remainder)** 를 반환합니다.
 - 이게 왜 중요하냐면, 각도(normalized angle) 같은 주기적 값 처리할 때 필수적.
