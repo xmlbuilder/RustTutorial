@@ -1,6 +1,6 @@
 # SpatialTree
-SpatialTree.md 문서를 기반으로 전체 구조를 정리하고, 주요 함수들의 동작과 관련 수식.  
-코드 검토도 포함해서 논리 흐름과 안전성까지 점검.
+- SpatialTree.md 문서를 기반으로 전체 구조를 정리하고, 주요 함수들의 동작과 관련 수식.  
+- 코드 검토도 포함해서 논리 흐름과 안전성까지 점검.
 
 ## 🌲 SpatialTree 구조 요약
 ### 📐 핵심 타입
@@ -604,10 +604,10 @@ pub fn update(&mut self, target: &Arc<T>) {
     - 결과적으로 트리 상태는 원래와 동일하게 보임
 
 ### 🔍 왜 Arc::ptr_eq로 비교했는데도 다시 삽입된 객체가 같을까?
-Arc::ptr_eq(&a, &b)는 두 Arc가 같은 힙 메모리를 가리키는지 확인합니다.  
-obj.clone()은 같은 힙을 가리키는 새로운 Arc를 만들기 때문에 ptr_eq는 여전히 true가 됩니다.  
-그래서 remove_arc(&obj)는 정확히 해당 객체를 찾아서 제거하고,  
-insert(obj.clone())은 같은 객체를 다시 삽입하는 것임.
+- Arc::ptr_eq(&a, &b)는 두 Arc가 같은 힙 메모리를 가리키는지 확인합니다.  
+- obj.clone()은 같은 힙을 가리키는 새로운 Arc를 만들기 때문에 ptr_eq는 여전히 true가 됩니다.  
+- 그래서 remove_arc(&obj)는 정확히 해당 객체를 찾아서 제거하고,  
+- insert(obj.clone())은 같은 객체를 다시 삽입하는 것임.
 
 ## ✅ 결론
 - before와 after가 같아 보이는 건 정상적인 동작
