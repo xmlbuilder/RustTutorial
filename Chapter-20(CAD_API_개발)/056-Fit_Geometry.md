@@ -1,7 +1,7 @@
 # fit_geom_tests
 
-아래는 fit_geom_tests 테스트 함수들과 관련된 평면, 직선, 원 적합 알고리즘을 수학적으로 정리한 문서입니다.  
-각 함수가 어떤 수학적 원리에 기반하는지, 단계별로 어떤 계산을 수행하는지를 명확하게 설명합니다.
+- 아래는 fit_geom_tests 테스트 함수들과 관련된 평면, 직선, 원 적합 알고리즘을 수학적으로 정리한 문서입니다.  
+- 각 함수가 어떤 수학적 원리에 기반하는지, 단계별로 어떤 계산을 수행하는지를 명확하게 설명합니다.
 
 ## 📐 1. 평면 적합: Plane::fit_from_points
 - 목적
@@ -20,12 +20,12 @@
 
 #### 산포 행렬 구성
 
-$$
+```math
 S = \sum_{i=1}^{n} (\mathbf{p}_i - \mathbf{c})(\mathbf{p}_i - \mathbf{c})^T \quad \text{(3×3 대칭 행렬)}
-$$
+```
 
 
-$\mathbf{u}i = \mathrm{project\{plane}}(\mathbf{p}_i)$
+$\mathbf{u}_{i} = \mathrm{project\{plane}}(\mathbf{p}_i)$
 
 #### 공분산 기반 산포 행렬   
 - ③ SVD 분해  $S=U\Sigma V^T$  최소 고유값에 대응하는 고유벡터 선택   
@@ -55,14 +55,14 @@ $\mathbf{u}i = \mathrm{project\{plane}}(\mathbf{p}_i)$
 
 ### 산포 행렬 구성
 
-$$
+```math
 S = \sum_{i=1}^{n} (\mathbf{p}_i - \mathbf{c})(\mathbf{p}_i - \mathbf{c})^T \quad \text{(3×3 대칭 행렬)}
-$$
+```
 
 ### 직선 끝점 계산
-$$
+```math
 \mathbf{start} = \mathbf{c} + t_{\min} \cdot \vec{d} \\ \quad \mathbf{end} = \mathbf{c} + t_{\max} \cdot \vec{d}
-$$
+```
 
 - 직선 양 끝점 정의 
 
@@ -90,22 +90,22 @@ $$
 
 #### ② 산포 행렬 구성 
 
-$$
+```math
 S = \sum_{i=1}^{n} (\mathbf{p}_i - \mathbf{c})(\mathbf{p}_i - \mathbf{c})^T \quad \text{(3×3 대칭 행렬)}
-$$
+```
 
 #### 2D 원 적합 (Kåsa 방식)
 
-$$
+```math
 \left[ \begin{matrix}S_{xx}&S_{xy}\\ S_{xy}&S_{yy}\end{matrix}\right] \left[ \begin{matrix}a\\ b\end{matrix}\right] =\frac{1}{2}\left[ \begin{matrix}S_{x^3}+S_{xy^2}\\ S_{x^2y}+S_{y^3}\end{matrix}\right]
-$$
+```
 
 
 
 
 #### 중심 및 반지름 계산 
  
-- ④ 3D 복원  $\mathbf{c_{\mathnormal{3D}}}=\mathrm{plane.point_at}(a,b)$  2D 중심을 3D로 복원   
+- ④ 3D 복원  $\mathbf{c_{\mathnormal{3D}}}=\mathrm{plane.point\\_at}(a,b)$  2D 중심을 3D로 복원   
 - ⑤ 평면 재정의  $\mathrm{Plane}(\mathbf{c_{\mathnormal{3D}}},\vec {n})$  중심 기준으로 평면 재정의   
 - ⑥ 원 생성  $\mathrm{Circle}(\mathrm{plane},r)$  최종 원 생성 
 
