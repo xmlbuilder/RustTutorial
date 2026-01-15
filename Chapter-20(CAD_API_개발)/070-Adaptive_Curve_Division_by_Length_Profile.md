@@ -106,8 +106,6 @@ s(u_k) = s_k
 //!         u_breaks.len() = N+1, seg_lengths.len() = N
 //!         Σ seg_lengths ≈ total_length
 //!
-//! C++ 버전을 그대로 옮긴 구조이며, Bezier / NURBS 등에서
-//! arc_len_norm(u)만 구현해 주면 그대로 적용할 수 있습니다.
 
 #[derive(Debug, Clone, Copy)]
 pub struct LengthProfileParams {
