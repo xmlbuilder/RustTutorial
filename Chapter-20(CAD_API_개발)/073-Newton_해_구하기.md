@@ -1,14 +1,14 @@
 # Newton-Raphson, Gauss-Newton, Hessian 기반 Newton
 
-Newton-Raphson, Gauss-Newton, Hessian 기반 Newton 방식은 모두 최적화 기반의 반복 수치 기법이지만  
-그 내부 수식과 적용 방식에는 중요한 차이가 있습니다.
+- Newton-Raphson, Gauss-Newton, Hessian 기반 Newton 방식은 모두 최적화 기반의 반복 수치 기법이지만  
+    그 내부 수식과 적용 방식에는 중요한 차이가 있습니다.
 
 ## 🎯 목표: 곡선 위 최근접 점 찾기
 - 주어진 곡선 C(u)와 3D 점 P에 대해, 다음 목적 함수를 최소화하는 u를 찾습니다:
 
-$$
+```math
 f(u)=\frac{1}{2}\| C(u)-P\| ^2
-$$
+```
 
 - $r(u)=C(u)-P$: 잔차(residual)
 - $f(u)$: 거리 제곱의 절반
@@ -16,13 +16,16 @@ $$
 ### 🧠 1. Newton-Raphson 방식
 #### 📌 수식
 
-$$
-f'(u)=r(u)\cdot C'(u),\quad f''(u)=\| C'(u)\| ^2+r(u)\cdot C''(u)
-$$
+```math
+f'(u)=r(u)\cdot C'(u)
+```
+```math
+f''(u)=\| C'(u)\| ^2+r(u)\cdot C''(u)
+```
 
-$$
+```math
 u_{k+1}=u_k-\frac{f'(u_k)}{f''(u_k)}=u_k-\frac{r\cdot C'}{\| C'\| ^2+r\cdot C''}
-$$
+```
 
 - ✅ 특징
     - 2차 도함수 $C''(u)$ 필요
@@ -33,9 +36,9 @@ $$
 ### 🧠 2. Gauss-Newton 방식
 #### 📌 수식
 
-$$
+```math
 u_{k+1}=u_k-\frac{J^Tr}{J^TJ}=u_k-\frac{r\cdot C'}{\| C'\| ^2}
-$$
+```
 
 - $J=\frac{dC}{du}=C'(u)$
 - $r=C(u)-P$
@@ -48,9 +51,9 @@ $$
 ### 🧠 3. Hessian 기반 Newton 방식
 #### 📌 수식
 
-$$
+```math
 u_{k+1}=u_k-H^{-1}\nabla f(u)
-$$
+```
 
 - $\nabla f(u)=r\cdot C'(u)$
 - $H=\nabla ^2f(u)=\| C'(u)\| ^2+r\cdot C''(u)$
@@ -148,41 +151,41 @@ fn main() {
 - Hessian 행렬은 스칼라 함수의 모든 2차 편미분을 모은 행렬입니다.
 - 예를 들어, 함수 f(x,y)의 Hessian은 다음과 같습니다:
 
-$$
-H(f)=\left[ \begin{matrix}\frac{\partial ^2f}{\partial x^2}&\frac{\partial ^2f}{\partial x\partial y}\\ ; \quad \frac{\partial ^2f}{\partial y\partial x}&\frac{\partial ^2f}{\partial y^2}\end{matrix}\right]
-$$
+```math
+H(f)=\left[ \begin{matrix}\frac{\partial ^2f}{\partial x^2}&\frac{\partial ^2f}{\partial x\partial y}\\ \frac{\partial ^2f}{\partial y\partial x}&\frac{\partial ^2f}{\partial y^2}\end{matrix}\right]
+```
 
 
 ##  📌 NURBS 곡선에서의 Hessian
 - 우리는 다음 목적 함수를 최소화합니다:
 
-$$
+```math
 f(u)=\frac{1}{2}\| C(u)-P\| ^2
-$$
+```
 
 - $C(u)$: NURBS 곡선
 - $P$: 외부 점
 - $r(u)=C(u)-P$: 잔차 벡터
 - 1차 도함수 (gradient):
 
-$$
+```math
 f'(u)=r(u)\cdot C'(u)
-$$
+```
 
 - 2차 도함수 (Hessian):
 
-$$
+```math
 f''(u)=\| C'(u)\| ^2+r(u)\cdot C''(u)
-$$
+```
 
 - ➡️ 이건 스칼라 값이지만, 다변수 확장 시에는 행렬 형태의 Hessian이 필요합니다.
 
 ### 🧮 Hessian의 역할
 - 📌 Newton-Raphson 업데이트:
 
-$$
+```math
 u_{k+1}=u_k-\frac{f'(u_k)}{f''(u_k)}
-$$
+```
 
 - $f'(u_k)$: 현재 기울기
 - $f''(u_k)$: 곡률 정보 → 얼마나 빠르게/어디로 이동할지 결정
@@ -191,40 +194,40 @@ $$
 ### 🧠 다변수 확장: 곡면(Surface)나 공간 최적화
 - 곡면 S(u,v)에 대해 외부 점 P와의 거리 최소화:
 
-$$
+```math
 f(u,v)=\frac{1}{2}\| S(u,v)-P\| ^2
-$$
+```
 
 - Gradient:
 
-$$
-\nabla f=\left[ \begin{matrix}\frac{\partial f}{\partial u}\\ ; \quad \frac{\partial f}{\partial v}\end{matrix}\right] =\left[ \begin{matrix}r\cdot S_u\\ ; \quad r\cdot S_v\end{matrix}\right]
-$$
+```math
+\nabla f=\left[ \begin{matrix}\frac{\partial f}{\partial u}\\ \frac{\partial f}{\partial v}\end{matrix}\right] =\left[ \begin{matrix}r\cdot S_u\\ r\cdot S_v\end{matrix}\right]
+```
 
 - Hessian:
 
-$$
-H(f)=\left[ \begin{matrix}S_u\cdot S_u+r\cdot S_{uu}&S_u\cdot S_v+r\cdot S_{uv}\\ ; \quad S_v\cdot S_u+r\cdot S_{vu}&S_v\cdot S_v+r\cdot S_{vv}\end{matrix}\right]
-$$
+```math
+H(f)=\left[ \begin{matrix}S_u\cdot S_u+r\cdot S_{uu}&S_u\cdot S_v+r\cdot S_{uv}\\ S_v\cdot S_u+r\cdot S_{vu}&S_v\cdot S_v+r\cdot S_{vv}\end{matrix}\right]
+```
 
 - ➡️ 이 행렬을 풀어야 최적의 (u,v)를 찾을 수 있습니다.
 
 ## ✍️ 결론
 - Hessian은 단순한 **행렬** 이 아니라, 기울기의 변화율을 담고 있는 곡률 정보의 집합입니다.
-- Newton-Raphson이나 Gauss-Newton 방식에서 수렴 방향과 속도를 결정하는 핵심 요소이며,
-- 특히 다변수 최적화에서는 행렬 형태로 직접 풀어야 합니다.
+- Newton-Raphson이나 Gauss-Newton 방식에서 수렴 방향과 속도를 결정하는 핵심 요소이며,  
+  특히 다변수 최적화에서는 행렬 형태로 직접 풀어야 합니다.
 
 
 ---
 
 # Hessian
 
-Hessian을 다른 문제에 적용할 때 어떤 입력이 필요하고, 어떤 방식으로 함수를 구성할 수 있는지 정리.  
-그리고 이해를 돕기 위해 다변수 다항식 함수를 예제로 사용한 샘플도 함께 제공합니다.
+- Hessian을 다른 문제에 적용할 때 어떤 입력이 필요하고, 어떤 방식으로 함수를 구성할 수 있는지 정리.  
+- 그리고 이해를 돕기 위해 다변수 다항식 함수를 예제로 사용한 샘플도 함께 제공합니다.
 
 ## ✅ Hessian 적용을 위한 구성 요소  
 ### 1. 입력 조건  
-Hessian을 적용하려면 다음이 필요합니다:
+- Hessian을 적용하려면 다음이 필요합니다:
 
 | 항목                     | 설명                                                                 |
 |--------------------------|----------------------------------------------------------------------|
@@ -237,22 +240,22 @@ Hessian을 적용하려면 다음이 필요합니다:
 ### 🧠 예제: 다변수 다항식 함수
 - 🎯 함수 정의
 
-$$
+```math
 f(x,y)=3x^2+2xy+y^2-4x+5y
-$$
+```
 
 - 📌 Gradient (1차 도함수)
 
-$$
-\nabla f=\left[ \begin{matrix}\frac{\partial f}{\partial x}\\ ; \quad \frac{\partial f}{\partial y}\end{matrix}\right] =\left[ \begin{matrix}6x+2y-4\\ ; \quad 2x+2y+5\end{matrix}\right] 
-$$
+```math
+\nabla f=\left[ \begin{matrix}\frac{\partial f}{\partial x}\\ \frac{\partial f}{\partial y}\end{matrix}\right] =\left[ \begin{matrix}6x+2y-4\\ 2x+2y+5\end{matrix}\right] 
+```
 
 
 - 📌 Hessian (2차 도함수 행렬)
 
-$$
-H(f)=\left[ \begin{matrix}\frac{\partial ^2f}{\partial x^2}&\frac{\partial ^2f}{\partial x\partial y}\\ ; \quad \frac{\partial ^2f}{\partial y\partial x}&\frac{\partial ^2f}{\partial y^2}\end{matrix}\right] =\left[ \begin{matrix}6&2\\ ; \quad2&2\end{matrix}\right]
-$$
+```math
+H(f)=\left[ \begin{matrix}\frac{\partial ^2f}{\partial x^2}&\frac{\partial ^2f}{\partial x\partial y}\\ \frac{\partial ^2f}{\partial y\partial x}&\frac{\partial ^2f}{\partial y^2}\end{matrix}\right] =\left[ \begin{matrix}6&2\\ 2&2\end{matrix}\right]
+```
 
 
 ### 🧩 Rust 스타일 의사코드 예시
@@ -279,9 +282,9 @@ fn hessian(_x: f64, _y: f64) -> [[f64; 2]; 2] {
 
 ### 🔁 Newton 업데이트 예시
 
-$$
+```math
 \mathbf{x_{\mathnormal{k+1}}}=\mathbf{x_{\mathnormal{k}}}-H^{-1}\nabla f(\mathbf{x_{\mathnormal{k}}})
-$$
+```
 
 
 ```rust
@@ -314,9 +317,9 @@ fn newton_step(x: f64, y: f64) -> (f64, f64) {
 
 ###  ✅ 테스트 대상 함수
 
-$$
-f(x,y)=3x^2+2xy+y^2-4x+5y\
-$$
+```math
+f(x,y)=3x^2+2xy+y^2-4x+5y
+```
 
 
 - 목적: 이 함수의 최소값을 찾기
@@ -399,28 +402,27 @@ mod tests {
 ### 🔁 반복 최적화 수식
 - 🎯 목적 함수
 
-$$
+```math
 f(x,y)=3x^2+2xy+y^2-4x+5y
-$$
+```
 
 - 🧠 Gradient (1차 도함수)
 
-$$
-\nabla f(x,y)=\left[ \begin{matrix}\frac{\partial f}{\partial x}\\ ; \quad \frac{\partial f}{\partial y}\end{matrix}\right] =\left[ \begin{matrix}6x+2y-4\\ ; \quad 2x+2y+5\end{matrix}\right] 
-$$
-
+```math
+\nabla f(x,y)=\left[ \begin{matrix}\frac{\partial f}{\partial x}\\ \frac{\partial f}{\partial y}\end{matrix}\right] =\left[ \begin{matrix}6x+2y-4\\ 2x+2y+5\end{matrix}\right] 
+```
 
 - 🧠 Hessian (2차 도함수 행렬)
 
-$$
-H(f)=\left[ \begin{matrix}6&2\\ ; \quad 2&2\end{matrix}\right]
-$$ 
+```math
+H(f)=\left[ \begin{matrix}6&2\\ 2&2\end{matrix}\right]
+```
 
 - 🔁 Newton 반복 수식
 
-$$
-\left[ \begin{matrix}x_{k+1}\\ ; \quad y_{k+1}\end{matrix}\right] =\left[ \begin{matrix}x_k\\ ; \quad y_k\end{matrix}\right] -H^{-1}\cdot \nabla f(x_k,y_k)
-$$
+```math
+\left[ \begin{matrix}x_{k+1}\\ y_{k+1}\end{matrix}\right] =\left[ \begin{matrix}x_k\\ y_k\end{matrix}\right] -H^{-1}\cdot \nabla f(x_k,y_k)
+```
 
 - 이 수식이 바로 newton_step(x, y) 함수에 해당합니다.
 - 루프는 이 수식을 최대 10번 반복하며, $\| \nabla f(x_k,y_k)\|$  (gradient의 크기)가 tol보다 작아지면 종료합니다.
@@ -435,12 +437,10 @@ $$
 | newton_step(x, y)         | $\mathbf{x_{k+1}} = \mathbf{x_k} - H^{-1} \nabla f$      |
 | x = nx; y = ny            | $\mathbf{x_k} \leftarrow \mathbf{x_{k+1}}$ (다음 반복 준비) |
 
-
 ---
 
-
-Hessian은 단순히 수학적인 개념을 넘어서, 실제로 다양한 분야에서 정확도 향상, 수렴 속도 개선, 곡률 기반 판단 등에 핵심적으로 사용됩니다.  
-아래에 대표적인 사례들을 분야별로 정리.
+- Hessian은 단순히 수학적인 개념을 넘어서, 실제로 다양한 분야에서 정확도 향상, 수렴 속도 개선, 곡률 기반 판단 등에 핵심적으로 사용됩니다.  
+- 아래에 대표적인 사례들을 분야별로 정리.
 
 ## 🧠 1. 최적화 이론 (Optimization)
 
@@ -496,8 +496,8 @@ Hessian은 단순히 수학적인 개념을 넘어서, 실제로 다양한 분�
 
 
 ## ✍️ 결론
-Hessian은 단순한 수학 개념이 아니라, 곡률(curvature), 민감도(sensitivity), 수렴 방향을 결정하는  
-고차원 문제 해결의 핵심 도구입니다.
+- Hessian은 단순한 수학 개념이 아니라, 곡률(curvature), 민감도(sensitivity), 수렴 방향을 결정하는  
+    고차원 문제 해결의 핵심 도구입니다.
 
 
 ---
@@ -509,9 +509,9 @@ Hessian은 단순한 수학 개념이 아니라, 곡률(curvature), 민감도(se
 
 ## ✅ 대상 함수
 
-$$
+```math
 f(x,y)=x^2+xy+y^2-6x-9y
-$$
+```
 
 - 목적: 이 함수의 최소값을 Newton-Raphson 방식으로 찾기
 - 특징: 2차 다항식 → gradient와 Hessian이 명확하게 정의됨
@@ -519,15 +519,15 @@ $$
 ### 🧠 수식 정리
 - Gradient (1차 도함수)
 
-$$
-\nabla f(x,y)=\left[ \begin{matrix}2x+y-6\\ ; \quad x+2y-9\end{matrix}\right]
-$$
+```math
+\nabla f(x,y)=\left[ \begin{matrix}2x+y-6\\ x+2y-9\end{matrix}\right]
+```
 
 - Hessian (2차 도함수 행렬)
 
-$$
-H(f)=\left[ \begin{matrix}2&1\\ ; \quad 1&2\end{matrix}\right]
-$$
+```math
+H(f)=\left[ \begin{matrix}2&1\\ 1&2\end{matrix}\right]
+```
 
 
 ### 🧪 Rust 스타일 샘플 코드
@@ -605,9 +605,9 @@ fn main() {
 - 비선형 최소제곱 문제를 푸는 데 특화된 알고리즘입니다.
 - 목적 함수가 다음과 같은 형태일 때 사용합니다:
 
-$$
+```math
 f(\mathbf{x})=\frac{1}{2}\sum _{i=1}^mr_i(\mathbf{x})^2
-$$
+```
 
 - 여기서 $r_i(\mathbf{x})는 잔차(residual)$ 함수입니다.
 - Gauss-Newton은 Hessian을 근사하여 계산량을 줄이고, 수렴 속도도 빠릅니다.
@@ -615,34 +615,34 @@ $$
 ### ✅ 예제 문제: 비선형 잔차 최소화
 - 문제 정의
 
-$$
-r_1(x)=x^2-2\\ ; \quad r_2(x)=x-1
-$$
+```math
+r_1(x)=x^2-2\\ r_2(x)=x-1
+```
 
-$$
+```math
 f(x)=\frac{1}{2}\left[ (x^2-2)^2+(x-1)^2\right]
-$$
+```
 
 - 이건 $f(x)=\frac{1}{2}\sum r_i(x)^2$ 꼴이므로 Gauss-Newton 적용 가능
 
 🧠 Gauss-Newton 수식
 - 잔차 벡터:
 
-$$
-\mathbf{r}(x)=\left[ \begin{matrix}x^2-2\\ ; \quad x-1\end{matrix}\right]
-$$
+```math
+\mathbf{r}(x)=\left[ \begin{matrix}x^2-2\\ x-1\end{matrix}\right]
+```
 
 - Jacobian (잔차의 도함수):
 
-$$
-J(x)=\left[ \begin{matrix}2x\\ ; \quad 1\end{matrix}\right]
-$$
+```math
+J(x)=\left[ \begin{matrix}2x\\ 1\end{matrix}\right]
+```
 
 - Gauss-Newton 업데이트:
 
-$$
+```math
 x_{k+1}=x_k-\left( J^TJ\right) ^{-1}J^T\mathbf{r}(x_k)
-$$
+```
 
 
 ### 🧪 Rust 스타일 샘플 코드
@@ -711,8 +711,8 @@ fn main() {
 
 # 샘플 코드
 
-아래는 세 가지 방식—Newton-Raphson, Hessian 기반 최적화, Gauss-Newton—을 각각 테스트할 수 있는 Rust 스타일 샘플 코드입니다.  
-모두 다항식 기반 함수를 사용하며, 구조와 수렴 방식이 다르기 때문에 비교 학습에 아주 적합합니다.  
+- 아래는 세 가지 방식—Newton-Raphson, Hessian 기반 최적화, Gauss-Newton—을 각각 테스트할 수 있는 Rust 스타일 샘플 코드입니다.  
+- 모두 다항식 기반 함수를 사용하며, 구조와 수렴 방식이 다르기 때문에 비교 학습에 아주 적합합니다.  
 
 ## ✅ 1. Newton-Raphson (단변수 방정식 근 찾기)
 ```rust
@@ -864,23 +864,22 @@ assert!(cost < 0.08); // 현실적인 수렴 한계 반영
 ## ✅ 참고: 실제 최소값 비교
 - 목적 함수:
 
-$$
+```math
 f(x)=\frac{1}{2}[(x^2-2)^2+(x-1)^2]
-$$
+```
 
 - 이 함수의 최소값은 $x=\sqrt{2}\approx 1.4142$ 근처가 아님
 - Gauss-Newton은 $x\approx 1.366$ 에서 멈추며, 이는 정확한 해가 아님
 
 ## ✍️ 결론
-이 테스트는 알고리즘이 틀린 게 아니라,
-Gauss-Newton이 근사 알고리즘이라는 점을 간과한 테스트 조건 때문에 실패한 것입니다.
+- 이 테스트는 알고리즘이 틀린 게 아니라,  
+    Gauss-Newton이 근사 알고리즘이라는 점을 간과한 테스트 조건 때문에 실패한 것입니다.
 
 테스트를 통과시키려면:
 ```rust
 assert!(cost < 0.08); // 또는 assert!(cost < 0.1)
 ```
 - 이렇게 수정하면 현실적인 수렴 한계를 반영할 수 있음.
-
 
 
 ## ✍️ 요약
@@ -891,42 +890,40 @@ assert!(cost < 0.08); // 또는 assert!(cost < 0.1)
 | Hessian 방식     | 다변수 함수의 최소값 찾기    | $\mathbf{x}_{k+1} = \mathbf{x}_k - H^{-1} \nabla f$      | gradient + 2차 도함수(Hessian) 사용  |
 | Gauss-Newton     | 잔차 제곱합 최소화 (비선형)  | $\mathbf{x}_{k+1} = \mathbf{x}_k - (J^T J)^{-1} J^T \mathbf{r}$ | 근사 Hessian 사용, 잔차 기반 최적화 |
 
-
-
 ---
 
 ## 🔍 Hessian 실제 함수 분석
 
 ### 대상 함수:
 
-$$
+```math
 f(x,y)=3x^2+2xy+y^2-4x+5y
-$$
+```
 
 - Gradient:
 
-$$
-\nabla f=\left[ \begin{matrix}6x+2y-4\\ ; \quad 2x+2y+5\end{matrix}\right]
-$$
+```math
+\nabla f=\left[ \begin{matrix}6x+2y-4\\ 2x+2y+5\end{matrix}\right]
+```
 
 - 최소값 조건:
 
-$$
+```math
 {
 \begin{array}{l}
   6x + 2y - 4 = 0 \\
   2x + 2y + 5 = 0
 \end{array}
 }
-$$
+```
 
 ### 🧮 연립방정식 풀기
 - 두 번째 식에서 $x=-y-2.5$
 - 첫 번째 식에 대입:
 
-$$
-6(-y-2.5)+2y-4=0\\ ; \quad \quad -6y-15+2y-4=0\\ ; \quad \quad -4y=19\Rightarrow y=-4.75\\ ; \quad \quad x=-(-4.75)-2.5=2.25
-$$
+```math
+6(-y-2.5)+2y-4=0\\ -6y-15+2y-4=0\\ -4y=19\Rightarrow y=-4.75\\ x=-(-4.75)-2.5=2.25
+```
 
 - ✅ 정답: 
 ```
@@ -972,7 +969,8 @@ mod tests {
 
             (x - dx, y - dy)
         }
-
+```
+```rust
         #[test]
         fn test_polynomial_newton_minimization() {
             let mut x = 0.0;
@@ -1011,26 +1009,26 @@ PGD는 제약 조건이 있는 최적화 문제에서 유용하게 쓰입니다.
 ## 🎯 문제 정의: 제약 조건이 있는 다항식 최소화
 ### 목적 함수:
 
-$$
+```math
 f(x)=(x-3)^2+1
-$$
+```
 
 - 이 함수는 x=3에서 최소값을 가짐
 
 ### 제약 조건:
 
-$$
+```math
 x\in [0,2]\quad \mathrm{(즉,\  x는\  0\  이상\  2\  이하)}
-$$
+```
 
 
 ## 🧠 Projected Gradient Descent 알고리즘
 - 일반적인 Gradient Descent 수행
 - 결과를 제약 범위로 투영 (projection)
 
-$$
+```math
 x_{k+1}=\Pi _{\mathcal{C}}(x_k-\alpha \nabla f(x_k))
-$$
+```
 
 - $\Pi _{\mathcal{C}}$: 제약 집합 $\mathcal{C}$ 로의 투영 연산
 - 여기선 $\Pi _{[0,2]}(x)=\min (\max (x,0),2)$
@@ -1049,7 +1047,8 @@ fn grad_f(x: f64) -> f64 {
 fn project(x: f64, lower: f64, upper: f64) -> f64 {
     x.max(lower).min(upper)
 }
-
+```
+```rust
 #[test]
 fn test_projected_gradient_descent() {
     let mut x = 0.0; // 초기값
