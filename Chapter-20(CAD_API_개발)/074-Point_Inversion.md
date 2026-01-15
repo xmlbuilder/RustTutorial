@@ -3,30 +3,30 @@
 ## ✅ 1. 기존 point_inversion() 방식 점검
 - 대부분의 NURBS point_inversion() 구현은 Newton-Raphson 방식을 사용합니다:
 ## 📌 기본 수식
-목표: 주어진 3D 점 P에 대해 곡선 C(u) 상의 최근접 파라미터 u를 찾는다.
-- 오차 벡터: $\mathbf{r}(u)=C(u)-P$
-- 목적 함수: $f(u)=\frac{1}{2}\| \mathbf{r}(u)\| ^2$
-- 도함수: $f'(u)=\mathbf{r}(u)\cdot C'(u)$
-- 뉴턴 업데이트:
+- 목표: 주어진 3D 점 P에 대해 곡선 C(u) 상의 최근접 파라미터 u를 찾는다.
+    - 오차 벡터: $\mathbf{r}(u)=C(u)-P$
+    - 목적 함수: $f(u)=\frac{1}{2}\| \mathbf{r}(u)\| ^2$
+    - 도함수: $f'(u)=\mathbf{r}(u)\cdot C'(u)$
+    - 뉴턴 업데이트:
 
-$$
+```math
 u_{k+1}=u_k-\frac{f'(u_k)}{f''(u_k)}=u_k-\frac{\mathbf{r}\cdot C'}{\| C'\| ^2+\mathbf{r}\cdot C''}
-$$
+```
 
 
 ## ✅ 2. Tangent 계산 방식 점검
 - 📌 Rational NURBS의 도함수
 ### 곡선:
 
-$$
+```math
 C(u)=\frac{\sum _iN_i(u)P_iw_i}{\sum _iN_i(u)w_i}=\frac{S(u)}{W(u)}
-$$
+```
 
 ### 도함수:
 
-$$
+```math
 C'(u)=\frac{S'(u)W(u)-S(u)W'(u)}{W(u)^2}
-$$
+```
 
 - $S(u)=\sum N_i(u)P_iw_i$
 - $W(u)=\sum N_i(u)w_i$
@@ -40,15 +40,15 @@ $$
 ## ✅ 3. Gauss-Newton 방식으로 개선
 ### 📌 목적 함수
 
-$$
+```math
 f(u)=\frac{1}{2}\| C(u)-P\| ^2
-$$
+```
 
 ### Gauss-Newton 업데이트:
 
-$$
+```math
 u_{k+1}=u_k-\frac{J^Tr}{J^TJ}
-$$
+```
 
 - $r=C(u_k)-P$
 - $J=\frac{dC}{du}$ (tangent)
@@ -57,9 +57,9 @@ $$
 ## ✅ 4. Projected Gradient 방식 (더 안정적)
 ### 📌 수식
 
-$$
+```math
 u_{k+1}=\mathrm{proj_{\mathnormal{[u_{\min },u_{\max }]}}}\left( u_k-\eta \cdot \frac{d}{du}\left( \frac{1}{2}\| C(u_k)-P\| ^2\right) \right)
-$$
+```
 
 - $\eta$ : step size (adaptive or fixed)
 - $\frac{d}{du}\| C(u)-P\| ^2=2(C(u)-P)\cdot C'(u)$
@@ -96,16 +96,15 @@ pub fn point_inversion_projected(&self, p: Point3D, u0: f64, max_iter: usize, to
 ### 🧠 핵심 수식 정리
 - Rational NURBS 곡선:
 
-$$
+```math
 C(u)=\frac{\sum _iN_i(u)P_iw_i}{\sum _iN_i(u)w_i}=\frac{S(u)}{W(u)}
-$$
-
+```
 
 - 도함수:
 
-$$
+```math
 C'(u)=\frac{S'(u)W(u)-S(u)W'(u)}{W(u)^2}
-$$
+```
 
 
 - $S(u)=\sum N_i(u)P_iw_i$
@@ -231,18 +230,18 @@ fn test_point_inversion_gauss_newton() {
 ```
 
 ## ✍️ 결론
-이제 point_inversion()은 rational 도함수를 정확히 반영하고, 
-Newton-Raphson 대신 Gauss-Newton 또는 Projected Gradient 방식으로  
-더 안정적이고 수렴률 높은 구조로 리팩토링되었습니다.  
+- 이제 point_inversion()은 rational 도함수를 정확히 반영하고,  
+    Newton-Raphson 대신 Gauss-Newton 또는 Projected Gradient 방식으로  
+    더 안정적이고 수렴률 높은 구조로 리팩토링되었습니다.
 
 ---
 
 ## ✅ 1. eval_second_derivative(u: f64) -> Option<Vector3D>
 ### 📌 Rational NURBS의 2차 도함수 수식
 
-$$
+```math
 C''(u)=\frac{S''W^2-2S'WW'-S(W''W-2(W')^2)}{W^3}
-$$
+```
 
 
 - $S=\sum N_iP_iw_i, W=\sum N_iw_i$
@@ -308,9 +307,9 @@ pub fn eval_second_derivative(&self, u: f64) -> Option<Vector3D> {
 ### 📌 수식
 
 
-$$
+```math
 u_{k+1}=u_k-\frac{r\cdot C'}{\| C'\| ^2+r\cdot C''}
-$$
+```
 
 
 ### 🧩 구현
@@ -343,46 +342,43 @@ pub fn point_inversion_newton_with_hessian(&self, p: Point3D, u0: f64, max_iter:
 }
 ```
 
-
 ## ✍️ 결론
-이제 NurbsCurve는 1차 및 2차 도함수를 정확하게 계산할 수 있으며,  
-point_inversion()도 Hessian 기반 Newton 방식으로 확장되어  
-더 정밀하고 빠르게 수렴할 수 있습니다.  
+- 이제 NurbsCurve는 1차 및 2차 도함수를 정확하게 계산할 수 있으며,  
+    point_inversion()도 Hessian 기반 Newton 방식으로 확장되어  
+    더 정밀하고 빠르게 수렴할 수 있습니다.  
 
 ---
 
 # Hessian 확장
-
-지금부터 NURBS 곡선의 Point Inversion을 Hessian 기반 Newton 방식으로 확장하는 전체 구조를 정리.
+- 지금부터 NURBS 곡선의 Point Inversion을 Hessian 기반 Newton 방식으로 확장하는 전체 구조를 정리.
 
 ## 🎯 목표
-주어진 3D 점 P에 대해, 곡선 C(u) 위에서 가장 가까운 점을 찾기 위해
-다음 목적 함수를 최소화합니다:
+- 주어진 3D 점 P에 대해, 곡선 C(u) 위에서 가장 가까운 점을 찾기 위해 다음 목적 함수를 최소화합니다:
 
-$$
+```math
 f(u)=\frac{1}{2}\| C(u)-P\| ^2
-$$
+```
 
 
 ### 🧠 수식 정리
 - 잔차 벡터: $r(u)=C(u)-P$
 - 1차 도함수 (gradient):
 
-$$
+```math
 f'(u)=r(u)\cdot C'(u)
-$$
+```
 
 - 2차 도함수 (Hessian):
 
-$$
+```math
 f''(u)=\| C'(u)\| ^2+r(u)\cdot C''(u)
-$$
+```
 
 - Newton 업데이트:
 
-$$
+```math
 u_{k+1}=u_k-\frac{f'(u_k)}{f''(u_k)}
-$$
+```
 
 ### 🧩 구현: point_inversion_hessian()
 ```rust
@@ -449,7 +445,9 @@ fn test_point_inversion_hessian() {
 }
 ```
 
-
 ## ✍️ 결론
 - 이제 point_inversion()은 Hessian 기반 Newton 방식으로 확장되어 더 빠르고 정밀한 수렴이 가능해졌습니다.
 - 특히 곡률이 급한 구간에서도 안정적으로 작동하며, rational NURBS에서도 정확한 도함수 기반으로 동작합니다.
+
+---
+
