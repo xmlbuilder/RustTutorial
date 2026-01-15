@@ -659,14 +659,14 @@ String 내용: Hello world
 ```
 
 ## 🧠 결론
-이 메모리 매니저는 C++의 low-level allocator 패턴을 Rust의 안전성과 타입 시스템에 맞게 훌륭히 재현한 구조입니다.  
-free-list, chunked allocation, placement new, drop tracking, tag-based grouping까지 모두 구현되어 있어 실전에서도 충분히 활용 가능합니다.
+- 이 메모리 매니저는 C++의 low-level allocator 패턴을 Rust의 안전성과 타입 시스템에 맞게 훌륭히 재현한 구조입니다.  
+- free-list, chunked allocation, placement new, drop tracking, tag-based grouping까지 모두 구현되어 있어 실전에서도 충분히 활용 가능합니다.
 
 --- 
 
 # 샘플 코드와 단위 테스트 코드
 
-아래는 각 구조체별로 사용자용 샘플 코드와 단위 테스트 코드를 하나씩 정리한 것입니다.
+- 아래는 각 구조체별로 사용자용 샘플 코드와 단위 테스트 코드를 하나씩 정리한 것입니다.
 
 ## 🧱 1. FixedSizeMemMgr 샘플
 ### 📦 사용 예제
