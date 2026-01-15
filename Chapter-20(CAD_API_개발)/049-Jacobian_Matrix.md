@@ -1,24 +1,24 @@
 # Jacobian Matrix
-아래는 유한요소법(FEM)에서의 Jacobian 행렬에 대한 수식적 설명과 함께,  
-mesh_jacobian 모듈의 주요 함수들을 수학적으로 해석하고 검증한 문서입니다.
+- 아래는 유한요소법(FEM)에서의 Jacobian 행렬에 대한 수식적 설명과 함께,  
+- mesh_jacobian 모듈의 주요 함수들을 수학적으로 해석하고 검증한 문서입니다.
 
 ## 📘 FEM 요소의 Jacobian 행렬: 수식 설명 및 함수 해석
 ## 🧮 1. Jacobian 행렬의 정의
-유한요소법에서 Jacobian 행렬은 **기준 좌표계(ξ, η, ζ)** 에서 **실제 좌표계(x, y, z)** 로의 변환을 나타냅니다.
+- 유한요소법에서 Jacobian 행렬은 **기준 좌표계(ξ, η, ζ)** 에서 **실제 좌표계(x, y, z)** 로의 변환을 나타냅니다.
 ### 🔧 정의:
 
-$$
-\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ ; \quad \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ ; \quad \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right]
-$$
+```math
+\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right]
+```
 
 - 이 행렬은 요소의 기하학적 왜곡, 뒤집힘 여부, 품질 평가에 사용됩니다.
 
 ## 📐 2. determinant of Jacobian (detJ)
 ### 🔧 수식:
 
-$$
+```math
 \det (\mathbf{J})=j_{00}(j_{11}j_{22}-j_{12}j_{21})-j_{01}(j_{10}j_{22}-j_{12}j_{20})+j_{02}(j_{10}j_{21}-j_{11}j_{20})
-$$
+```
 
 - `mesh_jacobian::det3(j)` 함수에서 정확히 이 수식을 구현
 - detJ > 0 → 요소가 올바르게 배치됨
@@ -30,25 +30,25 @@ $$
 - 벡터 $\vec {e}_1=p_1-p_0$, $\vec {e}_2=p_2-p_0$, $\vec {e}_3=p_3-p_0$
 - 수식:
 
-$$
+```math
 \det (\mathbf{J})=\det \left[ \begin{matrix}e_1&e_2&e_3\end{matrix}\right]
-$$
+```
 
 
 ### 🔹 tetra_signed_volume(p)
 - 부호 있는 체적 계산:
 
-$$
+```math
 V=\frac{\det (\mathbf{J})}{6}
-$$
+```
 
 ### 🔹 on_jacobian_quality_tetra4(x)
 - 선형 tetra 요소의 Jacobian 품질 평가
 - shape gradient는 상수:
 
-$$
+```math
 \frac{\partial N_1}{\partial \xi }=-1,\quad \frac{\partial N_2}{\partial \xi }=1,\quad \mathrm{etc.}
-$$
+```
 
 - $J = X · ∇N → detJ$ 계산 후 0 또는 $detJ$ 반환
 
@@ -57,15 +57,15 @@ $$
 - 2×2×2 Gauss 포인트에서 shape gradient 계산
 - 각 포인트에서:
 
-$$
+```math
 \mathbf{J}=\sum _{i=1}^8\vec {x}_i\otimes \nabla N_i
-$$
+```
 
 - detJ의 최소/최대 비율:
 
-$$
+```math
 \mathrm{품질}=\frac{\min (\det J)}{\max (\det J)}
-$$
+```
 
 ### 🔹 on_jacobian_quality_wedge6(x)
 - 6노드 wedge 요소
@@ -97,24 +97,23 @@ $$
 
 ---
 
-유한요소법(FEM)에서 Jacobian determinant 값이 1에 가까울수록 좋다는 말은 단순한 경험칙이 아니라,  
-수학적·물리적 원리에 기반한 것입니다.  
-아래에 그 이유를 수식과 개념 중심으로 자세히 설명.
+- 유한요소법(FEM)에서 Jacobian determinant 값이 1에 가까울수록 좋다는 말은 단순한 경험칙이 아니라,    
+  수학적·물리적 원리에 기반한 것입니다.  
+- 아래에 그 이유를 수식과 개념 중심으로 자세히 설명.
 
 ## 📐 Jacobian 행렬이란?
-Jacobian 행렬은 **기준 좌표계(ξ, η, ζ)** 에서 **실제 좌표계(x, y, z)** 로의 변환을 나타냅니다:
+- Jacobian 행렬은 **기준 좌표계(ξ, η, ζ)** 에서 **실제 좌표계(x, y, z)** 로의 변환을 나타냅니다:
 
-$$
-\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ ; \quad \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ ; \quad \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right] 
-$$
+```math
+\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right] 
+```
 
 ## ✅ 왜 det(J) ≈ 1이 이상적인가?
 ### 1️⃣ 기준 요소와 실제 요소의 크기 왜곡이 없을 때
 - 기준 요소(예: 단위 정육면체)에서 실제 요소로의 변환이 등방성이고 크기 보존이라면:
-$$
+```math
 \det (\mathbf{J})=1
-$$
-
+```
 - 즉, 요소가 뒤틀림 없이 균일하게 변환되었다는 뜻
 
 ### 2️⃣ 수치적 안정성과 정확도
@@ -132,18 +131,18 @@ $$
 - FEM에서 요소 내부 적분은 기준 좌표계에서 수행됨
 - 실제 좌표계로 변환 시:
 
-$$
+```math
 \int _{\Omega }f(x,y,z)\, dV=\int _{\hat {\Omega }}f(x(\xi ),y(\eta ),z(\zeta ))\cdot |\det (\mathbf{J})|\, d\xi d\eta d\zeta
-$$
+```
 
 - $det(J)$ 가 1에 가까우면 적분 가중치가 안정적이고, 수치 오차가 작아짐
 
 ### 📊 품질 평가 함수에서의 의미
-예를 들어 on_jacobian_quality_hexa8() 함수에서는:
+- 예를 들어 on_jacobian_quality_hexa8() 함수에서는:
 
-$$
+```math
 \mathrm{품질}=\frac{\min (\det J)}{\max (\det J)}
-$$
+```
 
 - 이 값이 1에 가까울수록 요소 내부의 변형이 균일함
 - FEM에서 이상적인 요소는 모든 Gauss 포인트에서 det(J)가 거의 동일 → 품질 ≈ 1
@@ -163,64 +162,61 @@ $$
 - FEM에서 정확도, 안정성, 적분 품질을 위해 det(J)는 1에 가까워야 함
 
 
-FEM 요소의 Jacobian 행렬은 단순한 수치 계산이 아니라,  
-기준 좌표계에서 실제 좌표계로의 좌표 변환을 수학적으로 표현한 결과입니다.  
-아래에 그 유도 과정을 단계별로 설명.
+- FEM 요소의 Jacobian 행렬은 단순한 수치 계산이 아니라,  
+  기준 좌표계에서 실제 좌표계로의 좌표 변환을 수학적으로 표현한 결과입니다.  
+- 아래에 그 유도 과정을 단계별로 설명.
 
 ## 📘 요소의 Jacobian 행렬 유도 과정
 ### 1️⃣ 기준 좌표계와 실제 좌표계
-유한요소법에서는 해석을 단순화하기 위해 모든 요소를 **기준 요소(reference element)** 로 정의합니다.
-예시:
-- 1D: $\xi \in [-1,1]$
-- 2D: $(\xi ,\eta )\in [-1,1]^2$
-- 3D: $(\xi ,\eta ,\zeta )\in [-1,1]^3$
+- 유한요소법에서는 해석을 단순화하기 위해 모든 요소를 **기준 요소(reference element)** 로 정의합니다.
+- 예시:
+  - 1D: $\xi \in [-1,1]$
+  - 2D: $(\xi ,\eta )\in [-1,1]^2$
+  - 3D: $(\xi ,\eta ,\zeta )\in [-1,1]^3$
 
-실제 요소의 좌표 (x,y,z)는 기준 좌표계에서 **형상 함수(N_i)**를  통해 보간됩니다:
+- 실제 요소의 좌표 (x,y,z)는 기준 좌표계에서 **형상 함수(N_i)** 를  통해 보간됩니다:
 
-$$
+```math
 \vec {x}(\xi ,\eta ,\zeta )=\sum _{i=1}^nN_i(\xi ,\eta ,\zeta )\cdot \vec {x}_i
-$$
+```
 
 
 ### 2️⃣ 좌표 변환의 미분: Jacobian 정의
 - 위 식을 기준 좌표계로 미분하면:
 
-$$
+```math
 \frac{\partial \vec {x}}{\partial \xi }=\sum _i\frac{\partial N_i}{\partial \xi }\cdot \vec {x}_i\quad \mathrm{(동일하게\  \eta ,\  \zeta 도)}
-$$
+```
 
 - 이 미분들을 모은 행렬이 바로 Jacobian 행렬입니다:
 
-$$
-\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ ; \quad \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ ; \quad \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right] =\sum _{i=1}^n\vec {x}_i\otimes \nabla N_i
-$$
-
-
+```math
+\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right] =\sum _{i=1}^n\vec {x}_i\otimes \nabla N_i
+```
 - 여기서 
 
-$$
+```math
 \nabla N_i=\left[ \frac{\partial N_i}{\partial \xi },\frac{\partial N_i}{\partial \eta },\frac{\partial N_i}{\partial \zeta }\right] 
-$$
+```
 
 ### 3️⃣ 예시: 4-노드 Tetra 요소
 - 형상 함수:
 
-$$
+```math
 N_1=1-\xi -\eta -\zeta ,\quad N_2=\xi ,\quad N_3=\eta ,\quad N_4=\zeta 
-$$
-
+```
 
 - 미분:
 
-$$
+```math
 \nabla N_1=[-1,-1,-1],\quad \nabla N_2=[1,0,0],\quad \nabla N_3=[0,1,0],\quad \nabla N_4=[0,0,1]
-$$
+```
 
 - Jacobian:
 
-$$
-\mathbf{J}=\sum _{i=1}^4\vec {x}_i\otimes \nabla N_i\Rightarrow \mathbf{J}=\left[ \begin{matrix}x_2-x_1&x_3-x_1&x_4-x_1\\ ; \quad y_2-y_1&y_3-y_1&y_4-y_1\\ ; \quad z_2-z_1&z_3-z_1&z_4-z_1\end{matrix}\right] 
-$$
+```math
+\mathbf{J}=\sum _{i=1}^4\vec {x}_i\otimes \nabla N_i\Rightarrow \mathbf{J}=\left[ \begin{matrix}x_2-x_1&x_3-x_1&x_4-x_1\\ y_2-y_1&y_3-y_1&y_4-y_1\\ z_2-z_1&z_3-z_1&z_4-z_1\end{matrix}\right] 
+```
 
 - 즉, 기준점에서의 edge 벡터로 구성된 행렬
 
@@ -229,9 +225,9 @@ $$
 - $|\det (J)|=\mathrm{요소\  체적의\  배율}$
 - 적분 시에도 사용됨:
 
-$$
+```math
 \int _{\Omega }f(x)\, dx=\int _{\hat {\Omega }}f(x(\xi ))\cdot |\det (J)|\, d\xi 
-$$
+```
 
 ## ✅ 결론
 - Jacobian은 기준 좌표계에서 실제 좌표계로의 변환 미분 행렬
@@ -240,67 +236,63 @@ $$
 
 ---
 # Hexa Jacobian
-유한요소법(FEM)에서 자주 사용되는 **8-노드 선형 Hexahedron 요소 (Hexa8)** 의 Jacobian 행렬이 어떻게 유도되고,  
-왜 중요한지 수식과 함께 자세히 설명.
+- 유한요소법(FEM)에서 자주 사용되는 **8-노드 선형 Hexahedron 요소 (Hexa8)** 의 Jacobian 행렬이 어떻게 유도되고,    
+  왜 중요한지 수식과 함께 자세히 설명.
 
 ## 🧊 Hexa8 요소의 Jacobian 행렬 유도 및 해석
 ### 1️⃣ 요소 정의
-Hexa8 요소는 3차원 공간에서 8개의 꼭짓점을 가지며, 각 꼭짓점은 기준 좌표계 $(\xi ,\eta ,\zeta )\in [-1,1]^3$ 상의 정육면체 정점에 대응됩니다.
-- 실제 좌표계: $(x,y,z)$
-- 기준 좌표계: $(\xi ,\eta ,\zeta )$
+- Hexa8 요소는 3차원 공간에서 8개의 꼭짓점을 가지며, 각 꼭짓점은 기준 좌표계 $(\xi ,\eta ,\zeta )\in [-1,1]^3$ 상의 정육면체 정점에 대응됩니다.
+  - 실제 좌표계: $(x,y,z)$
+  - 기준 좌표계: $(\xi ,\eta ,\zeta )$
 
 ### 2️⃣ 좌표 보간식
-실제 좌표는 기준 좌표계에서의 형상 함수 $N_i(\xi ,\eta ,\zeta )$ 를 이용해 보간됩니다:
+- 실제 좌표는 기준 좌표계에서의 형상 함수 $N_i(\xi ,\eta ,\zeta )$ 를 이용해 보간됩니다:
 
-$$
+```math
 \vec {x}(\xi ,\eta ,\zeta )=\sum _{i=1}^8N_i(\xi ,\eta ,\zeta )\cdot \vec {x}_i
-$$
+```
 
 각 $N_i$ 는 trilinear 형상 함수이며, 예를 들어:
 
-$$
+```math
 N_1(\xi ,\eta ,\zeta )=\frac{1}{8}(1-\xi )(1-\eta )(1-\zeta )
-$$
+```
 
 
 ### 3️⃣ Jacobian 행렬 유도
 - Jacobian 행렬은 다음과 같이 정의됩니다:
 
-$$
-\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ ; \quad \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ ; \quad \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right] =\sum _{i=1}^8\vec {x}_i\otimes \nabla N_i
-$$
+```math
+\mathbf{J}=\left[ \begin{matrix}\frac{\partial x}{\partial \xi }&\frac{\partial x}{\partial \eta }&\frac{\partial x}{\partial \zeta }\\ \frac{\partial y}{\partial \xi }&\frac{\partial y}{\partial \eta }&\frac{\partial y}{\partial \zeta }\\ \frac{\partial z}{\partial \xi }&\frac{\partial z}{\partial \eta }&\frac{\partial z}{\partial \zeta }\end{matrix}\right] =\sum _{i=1}^8\vec {x}_i\otimes \nabla N_i
+```
 
 -여기서:
-- $\vec {x}_i=[x_i,y_i,z_i]$
-- $\nabla N_i=\left[ \frac{\partial N_i}{\partial \xi },\frac{\partial N_i}{\partial \eta },\frac{\partial N_i}{\partial \zeta }\right]$
-
-- 즉, 각 노드의 좌표와 형상 함수의 기울기를 외적(outer product)하여 합산한 것이 Jacobian입니다.
+  - $\vec {x}_i=[x_i,y_i,z_i]$
+  - $\nabla N_i=\left[ \frac{\partial N_i}{\partial \xi },\frac{\partial N_i}{\partial \eta },\frac{\partial N_i}{\partial \zeta }\right]$
+  - 즉, 각 노드의 좌표와 형상 함수의 기울기를 외적(outer product)하여 합산한 것이 Jacobian입니다.
 
 ### 4️⃣ 수치적 구현 (코드 기반)
-on_jacobian_quality_hexa8() 함수에서는 다음을 수행합니다:
-- 8개의 Gauss 포인트(±1/√3)를 기준 좌표계에서 샘플링
-- 각 포인트에서 shape gradient $\nabla N_i$ 계산 → hexa8_shape_gradients()
-- Jacobian 행렬 계산:
+- on_jacobian_quality_hexa8() 함수에서는 다음을 수행합니다:
+  - 8개의 Gauss 포인트(±1/√3)를 기준 좌표계에서 샘플링
+  - 각 포인트에서 shape gradient $\nabla N_i$ 계산 → hexa8_shape_gradients()
+  - Jacobian 행렬 계산:
 
-$$
+```math
 J_{r,c}=\sum _{i=1}^8x_i^{(r)}\cdot \frac{\partial N_i}{\partial \xi _c}\quad \mathrm{for\  }r,c\in \{ x,y,z\} 
-$$
+```
 
 - $det(J)$ 계산 → $det3(j)$
 - 전체 품질:
 
-$$
+```math
 \mathrm{품질}=\frac{\min (\det J)}{\max (\det J)}
-$$
-
+```
 
 ### 5️⃣ det(J)의 의미
-
 - $\det (\mathbf{J})>0$: 요소가 뒤집히지 않고 올바르게 배치됨
 - $\det (\mathbf{J})\approx 1$: 기준 요소와 거의 동일한 크기 → 이상적
 - $\det (\mathbf{J})\ll$ 1: 요소가 납작하거나 퇴화됨
 - $\det (\mathbf{J})<0$: 요소가 뒤집힘 → 해석 실패
-
 
 ## ✅ 요약 
 | 항목                     | 수식 또는 설명 |
@@ -311,101 +303,97 @@ $$
 | 품질 평가 지표           | $\min(\det J) / \max(\det J)$ |
 | 이상적 상태             | $\det J \approx 1$ (모든 Gauss 포인트에서) |
 
-
 ---
 
-Hexa8 요소의 Jacobian 행렬 성분을 구성하는 각 성분이 어떻게 유도되는지,  
-수학적으로 하나하나 설명.
+- Hexa8 요소의 Jacobian 행렬 성분을 구성하는 각 성분이 어떻게 유도되는지, 수학적으로 하나하나 설명.
 
 ## 📘 Hexa8 요소의 Jacobian 행렬 성분 유도
 ### 🔧 기본 수식
 
-$$
+```math
 J_{r,c}=\sum _{i=1}^8x_i^{(r)}\cdot \frac{\partial N_i}{\partial \xi _c}\quad \mathrm{for\  }r,c\in \{ x,y,z\}
-$$
-
+```
 
 - $x_i^{(r)}$: i번째 노드의 r 방향 좌표 (예: x, y, z)
 - $\frac{\partial N_i}{\partial \xi _c}$: i번째 형상 함수의 기준 좌표계 방향 미분 (ξ, η, ζ)
 
 
-
 ### 🧊 Jacobian 행렬 구조
-Jacobian은 3×3 행렬로 구성됩니다:
+- Jacobian은 3×3 행렬로 구성됩니다:
 
-$$
-\mathbf{J}=\left[ \begin{matrix}J_{x,\xi }&J_{x,\eta }&J_{x,\zeta }\\ ; \quad J_{y,\xi }&J_{y,\eta }&J_{y,\zeta }\\ ;  \quad J_{z,\xi }&J_{z,\eta }&J_{z,\zeta }\end{matrix}\right]
-$$
+```math
+\mathbf{J}=\left[ \begin{matrix}J_{x,\xi }&J_{x,\eta }&J_{x,\zeta }\\ J_{y,\xi }&J_{y,\eta }&J_{y,\zeta }\\ J_{z,\xi }&J_{z,\eta }&J_{z,\zeta }\end{matrix}\right]
+```
 
 
 - 각 성분은 다음과 같이 계산됩니다:
 
 #### 🔢 예시: $J_{x,\xi }$ 계산
 
-$$
+```math
 J_{x,\xi }=\sum _{i=1}^8x_i\cdot \frac{\partial N_i}{\partial \xi }
-$$
+```
 
 - $x_i$: i번째 노드의 x 좌표
-- $\frac{\partial N_i}{\partial \xi }$: i번째 형상 함수의 ξ 방향 미분
-이렇게 해서 8개의 노드에 대해 각각의 $x_i\cdot \partial N_i/\partial \xi$  값을 더합니다.
+- $\frac{\partial N_i}{\partial \xi }$: i번째 형상 함수의 ξ 방향 미분  
+  이렇게 해서 8개의 노드에 대해 각각의 $x_i\cdot \partial N_i/\partial \xi$  값을 더합니다.
 
 
 
 #### 🔁 전체 9개 성분 계산 방식
 - 각 성분은 다음과 같이 계산됩니다:
 
-$$
+```math
 J_{x,ξ} = Σ x_i * ∂N_i/∂ξ
-$$  
+``` 
 
-$$
+```math
 J_{x,η} = Σ x_i * ∂N_i/∂η
-$$
+```
 
 
-$$
+```math
 J_{x,ζ} = Σ x_i * ∂N_i/∂ζ
-$$
+```
 
 
-$$
+```math
 J_{y,ξ} = Σ y_i * ∂N_i/∂ξ
-$$
+```
 
 
-$$
+```math
 J_{y,η} = Σ y_i * ∂N_i/∂η
-$$
+```
 
 
-$$
+```math
 J_{y,ζ} = Σ y_i * ∂N_i/∂ζ
-$$
+```
 
 
-$$
+```math
 J_{z,ξ} = Σ z_i * ∂N_i/∂ξ
-$$
+```
 
 
-$$
+```math
 J_{z,η} = Σ z_i * ∂N_i/∂η
-$$
+```
 
 
-$$
+```math
 J_{z,ζ} = Σ z_i * ∂N_i/∂ζ
-$$
+```
   
 
 
 #### 🧠 형상 함수 미분: $\nabla N_i$
 - 각 $N_i$ 는 trilinear 형상 함수로, 미분은 다음과 같은 형태:
 
-$$
+```math
 \frac{\partial N_i}{\partial \xi }=\pm \frac{1}{8}(1\pm \eta )(1\pm \zeta )\quad \mathrm{(유사하게\  \eta ,\  \zeta \  방향도)}
-$$
+```
 
 - 이 미분값은 hexa8_shape_gradients(ξ, η, ζ) 함수에서 계산됩니다.
 
@@ -434,8 +422,8 @@ for i in 0..8 {
 
 ---
 
-Hexa8 요소의 Jacobian 품질을 2×2×2 Gauss 포인트에서 계산하고 시각화한 것입니다.  
-각 포인트에서의 det(J)를 히트맵으로 보여줍니다.
+- Hexa8 요소의 Jacobian 품질을 2×2×2 Gauss 포인트에서 계산하고 시각화한 것입니다.  
+- 각 포인트에서의 det(J)를 히트맵으로 보여줍니다.
 
 ## 📊 Hexa8 요소의 Jacobian 품질 시각화
 ### 🔧 요소 좌표 (살짝 찌그러진 정육면체)
@@ -521,7 +509,7 @@ print("Computed Jacobian determinant at 8 Gauss points and visualized as 3D heat
 ![Hexa Jacobian Determinant](/image/hexa8_jacobian_determinant.png)
 
 ## 📍 Gauss 포인트 위치 (±1/√3)
-총 8개 포인트:
+- 총 8개 포인트:
 - $(\pm g,\pm g,\pm g), where g=\frac{1}{\sqrt{3}}\approx 0.577$
 
 ### 📐 각 포인트에서의 det(J)
@@ -538,9 +526,9 @@ print("Computed Jacobian determinant at 8 Gauss points and visualized as 3D heat
 
 ### 🎯 품질 지표
 
-$$
+```math
 \mathrm{품질}=\frac{\min (\det J)}{\max (\det J)}=\frac{1.0000}{1.0250}\approx 0.9756
-$$
+```
 
 - 요소는 거의 이상적이며, 약간의 꼭짓점 찌그러짐이 감지됨
 
