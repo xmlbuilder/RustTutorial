@@ -1,6 +1,6 @@
 # Circle
-Circle 구조체의 전체 함수 목록과 관련 수식 정리, 그리고 수학적 검토 결과입니다.  
-각 함수가 어떤 역할을 수행하는지, 어떤 수학적 원리에 기반하는지, 그리고 구현상 문제가 없는지를 분석했습니다.
+- Circle 구조체의 전체 함수 목록과 관련 수식 정리, 그리고 수학적 검토 결과입니다.  
+- 각 함수가 어떤 역할을 수행하는지, 어떤 수학적 원리에 기반하는지, 그리고 구현상 문제가 없는지를 분석했습니다.
 
 ## 🧩 Circle 구조체 함수 정리
 | 함수 이름                                | 수식 사용 여부 | 설명 및 수학적 의미                                                                 |
@@ -19,7 +19,7 @@ Circle 구조체의 전체 함수 목록과 관련 수식 정리, 그리고 수�
 | `points_by_length(step)`                 | ✅ 있음         | 일정 간격으로 원 위의 점 생성. $t_i = \frac{2\pi i}{n}$                         |
 | `get_param_from_length(length)`          | ✅ 있음         | $t = \frac{\text{length}}{r}$ — 길이 기준 파라미터 계산.                         |
 | `get_param_from_length_with_total(l, L)` | ✅ 있음         | $t = t_0 + \frac{l}{r}$ — 전체 길이 기준 파라미터 계산.                          |
-| `get_length_from_param(t)`               | ✅ 있음         | $\text{length} = |t - t_0| \cdot r$ — 파라미터 기준 길이 계산.                   |
+| `get_length_from_param(t)`               | ✅ 있음         | $\text{length} = \|t - t_0\| \cdot r$ — 파라미터 기준 길이 계산.                   |
 | `transform(t)`                           | ✅ 있음         | 평면 및 반지름에 변환 적용. 축별 스케일 고려.                                       |
 | `get_tight_bbox()`                       | ✅ 있음         | $r_i = r \cdot \sin(\theta_i)$ — 각 축에 대한 투영 반지름 계산.                  |
 | `to_nurbs()`                             | ✅ 있음         | 8분할 원 근사. 가중치 $w = \frac{1}{\sqrt{2}}$, degree 2, 9 control points.      |
@@ -45,9 +45,9 @@ Circle 구조체의 전체 함수 목록과 관련 수식 정리, 그리고 수�
 ## ✅ 1. 2D 원 적합 수식 (Kåsa 방식)
 - 수식:
 
-$$
-\left[ \begin{matrix}S_{xx}&S_{xy}\\ \quad S_{xy}&S_{yy}\end{matrix}\right] \left[ \begin{matrix}a\\ \quad b\end{matrix}\right] =\frac{1}{2}\left[ \begin{matrix}S_{x^3}+S_{xy^2}\\ \quad S_{x^2y}+S_{y^3}\end{matrix}\right]
-$$
+```math
+\left[ \begin{matrix}S_{xx}&S_{xy}\\ S_{xy}&S_{yy}\end{matrix}\right] \left[ \begin{matrix}a\\ b\end{matrix}\right] =\frac{1}{2}\left[ \begin{matrix}S_{x^3}+S_{xy^2}\\ S_{x^2y}+S_{y^3}\end{matrix}\right]
+```
 
 - 검토 결과:
     - 이 수식은 평균 중심 좌표계에서 원의 중심을 선형 시스템으로 근사하는 Kåsa 알고리즘의 핵심입니다.
@@ -58,9 +58,9 @@ $$
 ## ✅ 2. 원의 외접 박스 계산 수식
 - 수식:
 
-$$
+```math
 \mathrm{extent_{\mathnormal{i}}}=r\cdot \sin (\theta _i)\quad \mathrm{where\  }\theta _i=\cos ^{-1}(\vec {n}\cdot \vec {e}_i)
-$$
+```
 
 - 검토 결과:
     - 이 수식은 원의 법선 벡터 $\vec {n}$ 과 각 축 벡터 $\vec {e}_i (x, y, z)$ 에 대해 이루는 각도 $\theta _i$ 를 구하고, 그 축 방향으로 투영된 반지름을 계산합니다.
