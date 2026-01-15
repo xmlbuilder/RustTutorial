@@ -1,7 +1,8 @@
 # Enterpolation
 
-다양한 곡선 보간(interpolation) 방식들을 추상화한 인터페이스를 제공하며, Bezier, B-Spline, Linear 보간을 Interpolatable 타입에 대해 구현하고 있습니다.    
-아래에 코드를 정리하고, 각 보간 방식의 수학적 원리를 설명.
+- 다양한 곡선 보간(interpolation) 방식들을 추상화한 인터페이스를 제공하며,  
+  Bezier, B-Spline, Linear 보간을 Interpolatable 타입에 대해 구현하고 있습니다.    
+- 아래에 코드를 정리하고, 각 보간 방식의 수학적 원리를 설명.
 
 ## ✅ 코드 구조 정리
 
