@@ -1,6 +1,6 @@
 # BlockDef / BlockRef
-BlockDef와 BlockRef는 함께 Composite 패턴을 구현하는 핵심 구조입니다.  
-CAD/로보틱스/그래픽스 시스템에서 블록을 정의하고, 그 정의를 참조하여 계층적으로 배치·변환하는 데 쓰입니다.  
+- BlockDef와 BlockRef는 함께 Composite 패턴을 구현하는 핵심 구조입니다.  
+- CAD/로보틱스/그래픽스 시스템에서 블록을 정의하고, 그 정의를 참조하여 계층적으로 배치·변환하는 데 쓰입니다.  
 
 ## 📘 BlockDef + BlockRef 구조 문서화
 ### BlockDef
@@ -10,16 +10,16 @@ CAD/로보틱스/그래픽스 시스템에서 블록을 정의하고, 그 정의
 - 특징: 여러 BlockRef가 동일한 BlockDef를 참조할 수 있음 → 재사용 가능
 #### 필드
 - name: String  
-  블록 이름. 사용자가 블록을 식별할 때 사용.
+  - 블록 이름. 사용자가 블록을 식별할 때 사용.
 - base: Point3D  
-  블록의 기준점. 블록을 삽입할 때 기준이 되는 좌표.
+  - 블록의 기준점. 블록을 삽입할 때 기준이 되는 좌표.
 - geoms: Vec<String>  
-  블록에 포함된 지오메트리 목록. 실제 구현에서는 Geometry 객체가 들어감.
+  - 블록에 포함된 지오메트리 목록. 실제 구현에서는 Geometry 객체가 들어감.
 #### 함수
 - new(name: &str, base: Point3D) -> BlockDef  
-  새로운 블록 정의 생성.
+  - 새로운 블록 정의 생성.
 - add_geometry(&mut self, g: String)  
-  블록에 지오메트리 추가.
+  - 블록에 지오메트리 추가.
 
 ### BlockRef
 #### 개요
@@ -28,38 +28,38 @@ CAD/로보틱스/그래픽스 시스템에서 블록을 정의하고, 그 정의
 - 특징: Composite 패턴의 "Component" 역할. 부모-자식 관계를 통해 계층적 변환을 전파.
 #### 필드
 - def: Rc<BlockDef>  
-  참조하는 블록 정의.
+  - 참조하는 블록 정의.
 - pivot: Point3D  
-  회전·스케일링의 기준점.
+  - 회전·스케일링의 기준점.
 - local: Xform  
-  로컬 변환 행렬. 블록 자체의 이동/회전/스케일링.
+  - 로컬 변환 행렬. 블록 자체의 이동/회전/스케일링.
 - world: Xform  
-  월드 변환 행렬. 부모 변환과 로컬 변환을 합성한 결과.
+  - 월드 변환 행렬. 부모 변환과 로컬 변환을 합성한 결과.
 - children: Vec<Rc<RefCell<BlockRef>>>  
-  자식 블록들. Composite 패턴 구현.
+  - 자식 블록들. Composite 패턴 구현.
 - dirty: bool  
-  변환이 갱신 필요 상태인지 표시.
+  - 변환이 갱신 필요 상태인지 표시.
 #### 함수
 - new(def: Rc<BlockDef>) -> Rc<RefCell<BlockRef>>  
-  새로운 블록 참조 생성.
+  - 새로운 블록 참조 생성.
 - add_child(parent: &Rc<RefCell<Self>>, child: Rc<RefCell<Self>>)  
-  부모 블록에 자식 블록 추가.
+  - 부모 블록에 자식 블록 추가.
 - set_pivot(&mut self, p: Point3D)  
-  pivot 설정.
+  - pivot 설정.
 - set_local_xform(&mut self, xf: Xform)  
-  로컬 변환 행렬 덮어쓰기.
+  - 로컬 변환 행렬 덮어쓰기.
 - apply_local_xform(&mut self, xf: Xform)  
-  로컬 변환 행렬에 새로운 변환을 곱해 적용.
+  - 로컬 변환 행렬에 새로운 변환을 곱해 적용.
 - translate_local(&mut self, dx: f64, dy: f64, dz: f64)  
-  로컬 좌표계에서 평행이동.
+  - 로컬 좌표계에서 평행이동.
 - rotate_about_pivot(&mut self, radians: f64, axis_unit: &Vector3D)  
-  pivot을 기준으로 회전.
+  - pivot을 기준으로 회전.
 - update_matrices(&mut self, parent_world: &Xform)  
-  부모 변환과 로컬 변환을 합성하여 world 변환 갱신. 자식에게도 전파.
+  - 부모 변환과 로컬 변환을 합성하여 world 변환 갱신. 자식에게도 전파.
 - world_xform(&self) -> &Xform  
-  현재 world 변환 행렬 반환.
+  - 현재 world 변환 행렬 반환.
 - to_world_point(&self, p_local: Point3D) -> Point3D  
-  로컬 좌표계의 점을 world 좌표계로 변환.
+  - 로컬 좌표계의 점을 world 좌표계로 변환.
 
 ## 구조 관계 (Composite 패턴)
 ```
@@ -79,8 +79,6 @@ BlockDef (정의)
 - BlockRef: 블록 참조. 로컬/월드 변환, pivot, 자식 관리. Composite 패턴으로 계층적 변환 전파.
 - 전체 구조: BlockDef는 "정의", BlockRef는 "실체". 여러 BlockRef가 하나의 BlockDef를 공유하며,  
   부모-자식 관계로 계층적 변환을 구현.
-
-
 ---
 ## 소스 코드
 ```rust
@@ -89,14 +87,16 @@ use std::cell::RefCell;
 use std::ops::Mul;
 use crate::core::prelude::{Point3D, Vector3D};
 use crate::core::xform::Xform;
-
+```
+```rust
 /// BlockDef: 블록 정의
 pub struct BlockDef {
     pub name: String,
     pub base: Point3D,
     pub geoms: Vec<String>, // 단순화: 실제 Geometry 대신 문자열
 }
-
+```
+```rust
 impl BlockDef {
     pub fn new(name: &str, base: Point3D) -> Self {
         Self { name: name.to_string(), base, geoms: Vec::new() }
@@ -105,7 +105,8 @@ impl BlockDef {
         self.geoms.push(g);
     }
 }
-
+```
+```rust
 /// BlockRef: 블록 참조 (Composite)
 pub struct BlockRef {
     pub def: Rc<BlockDef>,
@@ -116,7 +117,8 @@ pub struct BlockRef {
     children: Vec<Rc<RefCell<BlockRef>>>,
     dirty: bool,
 }
-
+```
+```rust
 impl BlockRef {
     pub fn new(def: Rc<BlockDef>) -> Rc<RefCell<Self>> {
         Rc::new(RefCell::new(Self {
@@ -129,38 +131,44 @@ impl BlockRef {
             dirty: true,
         }))
     }
-
+```
+```rust
     pub fn add_child(parent: &Rc<RefCell<Self>>, child: Rc<RefCell<Self>>) {
         parent.borrow_mut().children.push(child);
     }
-
+```
+```rust
     pub fn set_pivot(&mut self, p: Point3D) {
         self.pivot = p;
         self.dirty = true;
     }
-
+```
+```rust
     pub fn set_local_xform(&mut self, xf: Xform) {
         self.local = xf;
         self.dirty = true;
     }
-
+```
+```rust
     pub fn translate_local(&mut self, dx: f64, dy: f64, dz: f64) {
         self.local = Xform::translation(dx, dy, dz); // 단순 덮어쓰기
         self.dirty = true;
     }
-
+```
+```rust
     pub fn rotate_about_pivot(&mut self, radians: f64, axis_unit: &Vector3D) {
         let r = Xform::rotation_about_axis(&self.pivot, axis_unit, radians);
         self.local = r * self.local;
         self.dirty = true;
     }
-
+```
+```rust
     // Compose: world = parent_world * T(base) * local
     fn composed_local(&self) -> Xform {
         Xform::translation(self.def.base.x, self.def.base.y, self.def.base.z) * self.local
     }
-
-
+```
+```rust
     pub fn update_matrices(&mut self, parent_world: &Xform) {
         if !self.dirty && self.parent_world == *parent_world {
             return;
@@ -175,16 +183,19 @@ impl BlockRef {
             c.borrow_mut().update_matrices(&self.world);
         }
     }
-
+```
+```rust
     pub fn world_xform(&self) -> &Xform {
         &self.world
     }
-
+```
+```rust
     // Convenience: transform a point in this block’s local model space to world
     pub fn to_world_point(&self, p_local: Point3D) -> Point3D {
         self.world.transform_point(p_local)
     }
-
+```
+```rust
     pub fn apply_local_xform(&mut self, xf: Xform) {
         self.local = xf * self.local;
         self.dirty = true;
@@ -198,7 +209,8 @@ use std::rc::Rc;
 use nurbslib::core::block::{BlockDef, BlockRef};
 use nurbslib::core::prelude::{Point3D, Vector3D};
 use nurbslib::core::xform::Xform;
-
+```
+```rust
 #[test]
 fn main() {
     let def = Rc::new(BlockDef::new("BaseBlock", Point3D::origin()));
