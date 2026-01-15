@@ -1,15 +1,14 @@
 # Ode Solver
 ## 📘 OdeSolver 핵심 알고리즘 설명
 ### 1️⃣ RK4 (Runge-Kutta 4차) 알고리즘
-- 고정 스텝 h를 사용하여 다음 상태 y_{n+1}를 계산:
+- 고정 스텝 h를 사용하여 다음 상태 $y_{n+1}$ 를 계산:
 
-$$
-\begin{aligned}k_1&=f(t_n,y_n)\\ \quad k_2&=f\left( t_n+\frac{h}{2},y_n+\frac{h}{2}k_1\right) \\ \quad k_3&=f\left( t_n+\frac{h}{2},y_n+\frac{h}{2}k_2\right) \\ \quad k_4&=f(t_n+h,y_n+hk_3)\\ \quad y_{n+1}&=y_n+\frac{h}{6}(k_1+2k_2+2k_3+k_4)\end{aligned}
-$$
-
-    - 정확도: 4차
-    - 스텝 크기 고정
-    - 구현 간단, 계산량 많음
+```math
+\begin{aligned}k_1&=f(t_n,y_n)\\ k_2&=f\left( t_n+\frac{h}{2},y_n+\frac{h}{2}k_1\right) \\ k_3&=f\left( t_n+\frac{h}{2},y_n+\frac{h}{2}k_2\right) \\ k_4&=f(t_n+h,y_n+hk_3)\\ y_{n+1}&=y_n+\frac{h}{6}(k_1+2k_2+2k_3+k_4)\end{aligned}
+```
+- 정확도: 4차
+- 스텝 크기 고정
+- 구현 간단, 계산량 많음
 
 ### 2️⃣ RK45 (Dormand-Prince 5(4)) 알고리즘
 - 적응형 스텝을 사용하여 5차와 4차 해를 동시에 계산하고 오차 추정:
@@ -42,9 +41,9 @@ $$
 ### 1️⃣ RK4 (Runge-Kutta 4차) 방법
 - RK4는 다음과 같은 방식으로 y(t)를 근사합니다:
 
-$$
-\begin{aligned}k_1&=f(t_n,y_n)\\ \quad k_2&=f\left( t_n+\frac{h}{2},y_n+\frac{h}{2}k_1\right) \\ \quad k_3&=f\left( t_n+\frac{h}{2},y_n+\frac{h}{2}k_2\right) \\ \quad k_4&=f(t_n+h,y_n+hk_3)\\ \quad y_{n+1}&=y_n+\frac{h}{6}(k_1+2k_2+2k_3+k_4)\end{aligned}
-$$
+```math
+\begin{aligned}k_1&=f(t_n,y_n)\\ k_2&=f\left( t_n+\frac{h}{2},y_n+\frac{h}{2}k_1\right) \\ k_3&=f\left( t_n+\frac{h}{2},y_n+\frac{h}{2}k_2\right) \\ k_4&=f(t_n+h,y_n+hk_3)\\ y_{n+1}&=y_n+\frac{h}{6}(k_1+2k_2+2k_3+k_4)\end{aligned}
+```
 
 - 정확도: 4차 (오차 $O(h^5)$ )
 - 검증 방법: 해석적 해 $y(t)$ 와 수치 해 $y_n$ 의 절대 오차 비교
