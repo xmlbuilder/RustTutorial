@@ -41,9 +41,9 @@ pub fn render_mip(&self) -> Option<Arc<Image>>
 
 #### 📐 수식:
 
-$$
+```math
 I_{\mathrm{MIP}}(x,y)=\max _kI_k(x,y)
-$$
+```
 
 ### 4. X-ray (평균 투영) 렌더링
 ```rust
@@ -53,9 +53,9 @@ pub fn render_xray(&self) -> Option<Arc<Image>>
 - 각 픽셀 위치에서 슬라이스들의 평균 그레이값을 계산하여 2D 이미지 생성
 ##### 📐 수식:
 
-$$
+```math
 I_{\mathrm{Xray}}(x,y)=\frac{1}{N}\sum _{k=1}^NI_k(x,y)
-$$
+```
 
 
 ### 5. 보간 슬라이스 생성
@@ -68,9 +68,9 @@ pub fn interpolated_slice(&self, z_mm: f64) -> Option<Arc<Image>>
 
 #### 📐 수식:
 
-$$
+```math
 I(x,y)=(1-t)\cdot I_0(x,y)+t\cdot I_1(x,y)\quad \mathrm{where\  }t=\frac{z-z_0}{z_1-z_0}
-$$
+```
 
 ### 6. 단일 복셀 강도 조회
 ```rust
@@ -133,7 +133,6 @@ fn test_extract_and_render_mip() {
 | `render_xray()`                  | ✅ 있음         | $I(x, y) = \frac{1}{N} \sum_k I_k(x, y)$ — 평균 투영                          |
 | `interpolated_slice(z_mm)`      | ✅ 있음         | $I(x, y) = (1 - t) I_0(x, y) + t I_1(x, y)$, <br> $t = \frac{z - z_0}{z_1 - z_0}$ — 선형 보간 |
 | `voxel_intensity(x, y, z)`       |  ✅ 있음          | 단일 픽셀 강도 조회                                                        |
-
 
 ---
 
@@ -370,7 +369,6 @@ pub fn on_draw_diag(img: &mut Image, val: u8) {
     }
 }
 ```
-
 ---
 
 # 테스트
@@ -384,7 +382,6 @@ pub fn on_draw_diag(img: &mut Image, val: u8) {
 | `test_voxel_intensity`        | `voxel_intensity`          | ✅ 있음         | 단일 픽셀 강도 조회                                           |
 | `test_invalid_voxel_access`   | `voxel_intensity`          | ✅ 있음         | 인덱스 범위 및 유효성 검사                                    |
 
-
 
 ## 📐 VolumeRendering 관련 수식 정리표
 
