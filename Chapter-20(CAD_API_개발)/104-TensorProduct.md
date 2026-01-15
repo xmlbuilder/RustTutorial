@@ -2,7 +2,7 @@
 
 ## 🔎 물리적 의미 설명
 ### 1. TensorProduct (추상 클래스)
-- 역할: 두 개의 매개변수 공간 A,B에서 정의된 점을 받아서 결과 공간 C의 점을 계산하는 "텐서 곱" 연산을 정의하는 인터페이스.
+- 역할: 두 개의 매개변수 공간 A,B에서 정의된 점을 받아서 결과 공간 C의 점을 계산하는 **텐서 곱** 연산을 정의하는 인터페이스.
 - 수학적으로는 함수
 
 $$
@@ -37,7 +37,7 @@ $$
   - 예: 두 곡선이 각각 x축, y축 방향이면, 합치면 평면이 됩니다.
 
 ## 🦀 Rust 코드 변환
-아래는 위 C++ 클래스를 Rust trait + struct로 옮긴 버전입니다.
+- 아래는 위 OpenNURB C++ 클래스를 Rust trait + struct로 옮긴 버전입니다.
 ```rust
 /// Trait: TensorProduct
 /// Defines a mapping T: R^dimA x R^dimB -> R^dimC
@@ -48,7 +48,8 @@ pub trait TensorProduct {
 
     fn evaluate(&self, a: f64, A: &[f64], b: f64, B: &[f64]) -> Vec<f64>;
 }
-
+```
+```rust
 /// 3D Point/Vector
 #[derive(Clone, Copy)]
 pub struct Point3 {
@@ -56,9 +57,11 @@ pub struct Point3 {
     pub y: f64,
     pub z: f64,
 }
-
+```
+```rust
 pub type Vector3 = Point3;
-
+```
+```rust
 /// RevolutionTensor: generates surface of revolution
 pub struct RevolutionTensor {
     pub O: Point3,
@@ -66,7 +69,8 @@ pub struct RevolutionTensor {
     pub Y: Vector3,
     pub Z: Vector3,
 }
-
+```
+```rust
 impl TensorProduct for RevolutionTensor {
     fn dimension_a(&self) -> usize { 2 }
     fn dimension_b(&self) -> usize { 3 }
@@ -103,13 +107,15 @@ impl TensorProduct for RevolutionTensor {
         ]
     }
 }
-
+```
+```rust
 /// SumTensor: adds two curves to form a surface
 pub struct SumTensor {
     pub dim: usize,
     pub basepoint: Point3,
 }
-
+```
+```rust
 impl TensorProduct for SumTensor {
     fn dimension_a(&self) -> usize { self.dim }
     fn dimension_b(&self) -> usize { self.dim }
@@ -124,6 +130,7 @@ impl TensorProduct for SumTensor {
     }
 }
 ```
+---
 
 
 ## ✨ 요약
