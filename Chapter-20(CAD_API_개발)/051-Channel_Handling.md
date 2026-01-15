@@ -111,86 +111,117 @@ impl Channel {
     pub fn new() -> Self {
         Self::default()
     }
-
+```
+```rust
     pub fn set_data_sample_size(&mut self, n: usize) {
         self.num_sample = n;
     }
     pub fn data_sample_size(&self) -> usize {
         self.num_sample
     }
-
+```
+```rust
     pub fn set_data_sample_interval(&mut self, dt: f64) {
         self.sample_interval = dt;
     }
+```
+```rust
     pub fn data_sample_interval(&self) -> f64 {
         self.sample_interval
     }
-
+```
+```rust
     pub fn set_channel_name(&mut self, name: impl Into<String>) {
         self.name = name.into();
     }
     pub fn channel_name(&self) -> &str {
         &self.name
     }
-
+```
+```rust
     pub fn set_channel_desc(&mut self, desc: impl Into<String>) {
         self.desc = desc.into();
     }
+```
+```rust
     pub fn channel_desc(&self) -> &str {
         &self.desc
     }
-
+```
+```rust
     pub fn set_start_time(&mut self, t: f64) {
         self.start_time = t;
     }
+```
+```rust
     pub fn start_time(&self) -> f64 {
         self.start_time
     }
+```
+```rust
     pub fn set_end_time(&mut self, t: f64) {
         self.end_time = t;
     }
+```
+```rust
     pub fn end_time(&self) -> f64 {
         self.end_time
     }
-
+```
+```rust
     pub fn data_x(&self) -> &TArray<f64> {
         &self.data_x
     }
+```
+```rust
     pub fn data_y(&self) -> &TArray<f64> {
         &self.data_y
     }
+```
+```rust
     pub fn data_x_mut(&mut self) -> &mut TArray<f64> {
         &mut self.data_x
     }
+```
+```rust
     pub fn data_y_mut(&mut self) -> &mut TArray<f64> {
         &mut self.data_y
     }
-
+```
+```rust
     pub fn set_data_x(&mut self, x: TArray<f64>) {
         self.data_x = x
     }
+```
+```rust
     pub fn set_data_y(&mut self, y: TArray<f64>) {
         self.data_y = y;
     }
-
+```
+```rust
     pub fn set_data_vec_x(&mut self, x: Vec<f64>) {
         self.data_x.set_data(x)
     }
+```
+```rust
     pub fn set_data_vec_y(&mut self, y: Vec<f64>) {
         self.data_y.set_data(y)
     }
-
+```
+```rust
     pub fn key_values(&self) -> &KeyValuePool {
         &self.props
     }
     pub fn key_values_mut(&mut self) -> &mut KeyValuePool {
         &mut self.props
     }
-
+```
+```rust
     pub fn add_key_val_data(&mut self, key: impl Into<String>, val: impl Into<String>) {
         let _ = self.props.set(key, val);
     }
-
+```
+```rust
     pub fn clear(&mut self) {
         self.data_x.remove_all();
         self.data_y.remove_all();
@@ -203,7 +234,8 @@ impl Channel {
         self.name.clear();
         self.desc.clear();
     }
-
+```
+```rust
     pub fn copy_from(&mut self, other: &Channel) {
         self.name = other.name.clone();
         self.desc = other.desc.clone();
@@ -222,7 +254,8 @@ impl Channel {
             let _ = self.props.set(k, v);
         }
     }
-
+```
+```rust
     pub fn from_xy(
         chn_name: impl Into<String>,
         desc: impl Into<String>,
@@ -258,7 +291,8 @@ impl Channel {
 
         ch
     }
-
+```
+```rust
     pub fn rename(&mut self, chn_name: impl Into<String>, desc: impl Into<String>) {
         let chn_name = chn_name.into();
         let desc = desc.into();
@@ -267,7 +301,8 @@ impl Channel {
         let _ = self.props.set("Name", chn_name);
         let _ = self.props.set("Desc", desc);
     }
-
+```
+```rust
     pub fn cut_time(&mut self, start: f64, end: f64) -> bool {
         if self.data_x.is_empty() || start > end {
             return false;
@@ -315,7 +350,8 @@ impl Channel {
         self.data_y = new_y;
         true
     }
-
+```
+```rust
     pub fn cut_time_index(&mut self, start_id_1based: isize, end_id_1based: isize) -> bool {
         if self.data_x.is_empty() {
             return false;
@@ -371,7 +407,8 @@ impl Channel {
         self.data_y = new_y;
         true
     }
-
+```
+```rust
     pub fn set_offset<O: ChannelOffset>(&mut self, offsetter: &O) -> bool {
         if let Some((new_y, y_min, y_max)) =
             offsetter.calc_channel_offset(&self.data_x, &self.data_y)
@@ -384,7 +421,8 @@ impl Channel {
             false
         }
     }
-
+```
+```rust
     pub fn apply_filter<E: FilterEngine>(&mut self, filter_name: &str, engine: &E) -> bool {
         let dt = if self.sample_interval.abs() > ON_TOL6 {
             self.sample_interval
@@ -401,15 +439,18 @@ impl Channel {
             false
         }
     }
-
+```
+```rust
     pub fn apply_filter_kind<E: FilterEngine>(&mut self, kind: ConvFilter, engine: &E) -> bool {
         self.apply_filter(ConvFilter::as_str(&kind), engine)
     }
-
+```
+```rust
     pub fn calc_min_max_value(&self) -> Option<(f64, f64)> {
         self.calc_min_max().map(|(mn, mx)| (mn, mx))
     }
-
+```
+```rust
     pub fn calc_abs_max_min_value(&self) -> Option<(f64, f64)> {
         let s = self.data_y.as_slice();
         if s.is_empty() {
@@ -428,7 +469,8 @@ impl Channel {
         }
         Some((mx, mn))
     }
-
+```
+```rust
     pub fn calc_max_min_value_time(&self) -> Option<(f64, f64, f64, f64)> {
         let x = self.data_x.as_slice();
         let y = self.data_y.as_slice();
@@ -454,7 +496,8 @@ impl Channel {
         }
         Some((max_val, min_val, max_t, min_t))
     }
-
+```
+```rust
     pub fn change_channel_data(&mut self, x: TArray<f64>, y: TArray<f64>) {
         self.data_x = x;
         self.data_y = y;
@@ -472,7 +515,8 @@ impl Channel {
         let _ = self.props.set("Maximum", format!("{}", y_max));
         let _ = self.props.set("Minimum", format!("{}", y_min));
     }
-
+```
+```rust
     fn refresh_time_and_counts_from_x(&mut self) {
         let n = self.data_x.get_count();
         self.num_sample = n;
@@ -489,11 +533,13 @@ impl Channel {
             0.0
         };
     }
-
+```
+```rust
     fn calc_min_max(&self) -> Option<(f64, f64)> {
         on_calc_min_max_slice(self.data_y.as_slice())
     }
-
+```
+```rust
     fn set_props_pairs<I>(&mut self, pairs: I)
     where
         I: IntoIterator<Item = (&'static str, String)>,
@@ -502,14 +548,16 @@ impl Channel {
             let _ = self.props.set(k, v);
         }
     }
-
+```
+```rust
     /// Name / Desc 만 갱신 (rename 등에 사용)
     pub fn update_props_basic(&mut self) {
         let name = self.name.clone();
         let desc = self.desc.clone();
         self.set_props_pairs([("Name", name), ("Desc", desc)]);
     }
-
+```
+```rust
     /// 모든 메타 갱신 (Min/Max를 내부에서 계산)
     pub fn update_props_all(&mut self) {
         // 1) 로컬 소유값 준비(빌림 충돌 방지)
@@ -537,7 +585,8 @@ impl Channel {
             ("Minimum", ymin),
         ]);
     }
-
+```
+```rust
     /// 모든 메타 갱신 (Min/Max 를 이미 갖고 있을 때 사용)
     pub fn update_props_all_with_min_max(&mut self, y_min: f64, y_max: f64) {
         let name = self.name.clone();
@@ -608,19 +657,23 @@ impl ChannelContainer {
             items: HashMap::new(),
         }
     }
-
+```
+```rust
     pub fn insert(&mut self, name: String, data: TArray<f64>) {
         self.items.insert(name, data);
     }
-
+```
+```rust
     pub fn get(&self, name: &str) -> Option<&TArray<f64>> {
         self.items.get(name)
     }
-
+```
+```rust
     pub fn get_many(&self, names: &[&str]) -> Vec<&TArray<f64>> {
         names.iter().filter_map(|&n| self.get(n)).collect()
     }
-
+```
+```rust
     pub fn apply_to_all_channels<F>(&mut self, mut func: F)
     where
         F: FnMut(&mut TArray<f64>),
@@ -629,7 +682,8 @@ impl ChannelContainer {
             func(data);
         }
     }
-
+```
+```rust
     pub fn compute_injury_metric<F>(&self, names: &[&str], func: F) -> Option<Vec<f64>>
     where
         F: Fn(&[&TArray<f64>]) -> Vec<f64>,
@@ -641,7 +695,8 @@ impl ChannelContainer {
             Some(func(&arrays))
         }
     }
-
+```
+```rust
     pub fn get_channel_names(&self) -> Vec<&String> {
         self.items.keys().collect()
     }
@@ -678,15 +733,18 @@ impl CsvChannelLoader {
 
         Ok(Self { headers, data })
     }
-
+```
+```rust
     pub fn header_count(&self) -> usize {
         self.headers.len()
     }
-
+```
+```rust
     pub fn get_header_by_index(&self, index: usize) -> Option<&String> {
         self.headers.get(index)
     }
-
+```
+```rust
     pub fn get_column(&self, header: &str) -> Option<&Vec<f64>> {
         self.data.get(header)
     }
