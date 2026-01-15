@@ -1,6 +1,6 @@
 # Line
-Line 구조체는 3D 선분을 파라메트릭 곡선처럼 다루는 매우 정교한 구현입니다.  
-아래에 전체 함수를 기능별로 정리하고, 수학적 검토와 함께 추가적으로 유용할 수 있는 함수들도 제안.
+- Line 구조체는 3D 선분을 파라메트릭 곡선처럼 다루는 매우 정교한 구현입니다.  
+- 아래에 전체 함수를 기능별로 정리하고, 수학적 검토와 함께 추가적으로 유용할 수 있는 함수들도 제안.
 
 ## 📘 전체 함수 설명
 ### 📌 생성자 및 초기화
@@ -81,8 +81,8 @@ Line 구조체는 3D 선분을 파라메트릭 곡선처럼 다루는 매우 정
 
 # 수학적인 특징
 
-아래는 Line 구조체의 주요 함수들에 대한 수학적 설명을 기능별로 정리한 내용입니다.  
-각 함수가 어떤 수학적 원리에 기반해 동작하는지, 어떤 계산을 수행하는지 명확하게 설명.
+- 아래는 Line 구조체의 주요 함수들에 대한 수학적 설명을 기능별로 정리한 내용입니다.  
+- 각 함수가 어떤 수학적 원리에 기반해 동작하는지, 어떤 계산을 수행하는지 명확하게 설명.
 
 ## 📐 수학적 설명: Line 구조체 핵심 함수
 ### 📌 기하적 특성
@@ -151,8 +151,6 @@ Line 구조체는 3D 선분을 파라메트릭 곡선처럼 다루는 매우 정
 | `extend(amount)`        | $A' = A - \hat{d} \cdot a,\quad B' = B + \hat{d} \cdot a$ — 선분을 양방향으로 연장     |
 | `sample_uniform(n)`     | $P_i = A + \frac{i}{n} \cdot (B - A)$ — 선분을 `n`등분하여 점 샘플링                 |
 
-
-
 ## 전체 소스
 ```rust
 use crate::core::tarray::TArray;
@@ -186,35 +184,44 @@ impl Line {
             domain: Interval { t0: 0.0, t1: 1.0 },
         }
     }
+```
+```rust
     #[inline]
     pub fn from_xy(x0: f64, y0: f64, x1: f64, y1: f64) -> Self {
         Self::new(Point::new(x0, y0, 0.0), Point::new(x1, y1, 0.0))
     }
+```
+```rust
     #[inline]
     pub fn from_xyz(x0: f64, y0: f64, z0: f64, x1: f64, y1: f64, z1: f64) -> Self {
         Self::new(Point::new(x0, y0, z0), Point::new(x1, y1, z1))
     }
-
+```
+```rust
     #[inline]
     pub fn midpoint(&self) -> Point {
         (self.start + self.end) * 0.5
     }
-
+```
+```rust
     #[inline]
     pub fn direction(&self) -> Vector {
         Vector::from_points(&self.start, &self.end)
     }
-
+```
+```rust
     #[inline]
     pub fn length(&self) -> f64 {
         self.direction().length()
     }
-
+```
+```rust
     #[inline]
     pub fn domain(&self) -> Interval {
         self.domain
     }
-
+```
+```rust
     /// Parametric evaluation. `t` is measured in arc-length from start, clamped into domain.
     pub fn point_at(&self, t: f64) -> Point {
         let dom = self.domain();
@@ -222,39 +229,47 @@ impl Line {
         let u = ((t - dom.t0) / l).clamp(0.0, 1.0);
         self.start + (self.end - self.start) * u
     }
-
+```
+```rust
     /// Unit tangent (constant).
     pub fn tangent_at(&self, _t: f64) -> Vector {
         self.direction().unitize()
     }
-
+```
+```rust
     #[inline]
     pub fn start_tangent(&self) -> Vector {
         self.tangent_at(0.0)
     }
+```
+```rust
     #[inline]
     pub fn end_tangent(&self) -> Vector {
         self.tangent_at(self.domain().t1)
     }
-
+```
+```rust
     /// Translate both endpoints by v.
     #[inline]
     pub fn translate(&mut self, v: Vector) {
         self.start += v.to_point();
         self.end += v.to_point();
     }
-
+```
+```rust
     /// Apply a 4x4 transform to both endpoints.
     pub fn transform(&mut self, x: &Transform) {
         self.start = x.transform_point3d(&self.start);
         self.end = x.transform_point3d(&self.end);
     }
-
+```
+```rust
     /// Reverse parameter direction (swap endpoints).
     pub fn reverse(&mut self) {
         std::mem::swap(&mut self.start, &mut self.end);
     }
-
+```
+```rust
     /// Offset the line by `amount` in the direction `cross(tangent, plane_normal)`.
     /// `plane_normal` does not need to be unit; zero-length input is ignored (no-op).
     pub fn offset(&self, amount: f64, plane_normal: Vector) -> Self {
@@ -271,7 +286,8 @@ impl Line {
             *self
         }
     }
-
+```
+```rust
     /// Uniformly sample points along the line so that each segment length ≈ `step`.
     /// Includes both endpoints. When `step <= 0`, returns just the two endpoints.
     pub fn points_by_length(&self, step: f64) -> Vec<Point> {
@@ -288,7 +304,8 @@ impl Line {
             })
             .collect()
     }
-
+```
+```rust
     /// Split at parameter `t` (in arc-length from start). Returns (lower, upper) if `t` is interior.
     pub fn split_at(&self, t: f64) -> Option<(Self, Self)> {
         let dom = self.domain();
@@ -298,7 +315,8 @@ impl Line {
         let p = self.point_at(t);
         Some((Self::new(self.start, p), Self::new(p, self.end)))
     }
-
+```
+```rust
     /// Trim the line at parameter `t`. If `flip_side=false`, keeps [0,t]; else keeps [t,L].
     pub fn trim_at(&mut self, t: f64, flip_side: bool) -> bool {
         if let Some((lo, hi)) = self.split_at(t) {
@@ -312,20 +330,23 @@ impl Line {
             false
         }
     }
-
+```
+```rust
     /// Project a point onto the segment; returns parameter `t` in domain [0,L].
     pub fn project(&self, p: Point) -> f64 {
         let seg = Segment3D::new(self.start, self.end);
         let u01 = seg.project(p);
         self.domain().t0 + u01 * self.domain().length()
     }
-
+```
+```rust
     pub fn closest_param_to(&self, p: Point) -> f64 {
         let seg = Segment3D::new(self.start, self.end);
         let u01 = seg.closest_param_to(p);
         self.domain().t0 + u01 * self.domain().length()
     }
-
+```
+```rust
     pub fn to_nurbs(&self) -> Curve {
         let p = 1;
         let knot = vec![0.0, 0.0, 1.0, 1.0];
@@ -457,12 +478,14 @@ impl Line {
             domain: Interval { t0: 0.0, t1: 1.0 },
         })
     }
-
+```
+```rust
     #[inline]
     pub fn is_degenerate(&self) -> bool {
         self.length() < 1e-10
     }
-
+```
+```rust
     pub fn angle_with(&self, other: &Line) -> f64 {
         let d1 = self.direction();
         let d2 = other.direction();
@@ -471,21 +494,23 @@ impl Line {
         let len2 = d2.length().max(1e-300);
         (dot / (len1 * len2)).clamp(-1.0, 1.0).acos()
     }
-
+```
+```rust
     pub fn intersects_with(&self, other: &Line) -> bool {
         let seg1 = Segment3D::new(self.start, self.end);
         let seg2 = Segment3D::new(other.start, other.end);
         seg1.intersects_with(&seg2)
     }
-
-
+```
+```rust
     pub fn extend(&self, amount: f64) -> Self {
         let dir = self.direction().unitize();
         let start = self.start - dir.to_point() * amount;
         let end = self.end + dir.to_point() * amount;
         Self::new(start, end)
     }
-
+```
+```rust
     pub fn sample_uniform(&self, n: usize) -> Vec<Point> {
         if n == 0 {
             return vec![self.start];
@@ -706,8 +731,8 @@ mod tests {
 
 # fit_from_points
 
-이 함수는 3D 점 집합으로부터 최적의 직선을 적합(fit)하는 알고리즘입니다.  
-아래는 수식 정리와 함께 단계별 설명, 그리고 수학적 검토입니다.
+- 이 함수는 3D 점 집합으로부터 최적의 직선을 적합(fit)하는 알고리즘입니다.  
+- 아래는 수식 정리와 함께 단계별 설명, 그리고 수학적 검토입니다.
 
 ## 📐 수식 정리
 | 단계 | 수식 표현                                                                 | 설명                                 |
@@ -724,18 +749,18 @@ mod tests {
 
 ### 2. 산포 행렬 (S)
 
-$$
+```math
 S = \begin{bmatrix}
 S_{xx} & S_{xy} & S_{xz} \\ \quad
 S_{xy} & S_{yy} & S_{yz} \\ \quad
 S_{xz} & S_{yz} & S_{zz}
 \end{bmatrix}
-$$
+```
 
 
-$$
+```math
 S_{uv} = \sum_{i=1}^{n} (p_i^u - c^u)(p_i^v - c^v)
-$$
+```
 
 ### 6. 시작/끝점
 
@@ -776,8 +801,7 @@ $$
 | 투영값 계산 및 끝점 결정     | $t_i = (\mathbf{p}_i - \mathbf{c}) \cdot \vec{d}$, <br>  $\mathbf{p} = \mathbf{c} + t \vec{d}$ — 직선 방정식 기반. 정확함 ✅ |
 | 직선 생성                    | 시작점과 끝점으로 구성된 선분 반환. 최소자승 적합 방식으로 타당함 ✅           |
 
-
-이 알고리즘은 **최소자승 기반의 직선 적합(PCA 방식)** 으로, 3D 점군의 방향성과 중심을 잘 반영합니다.
+- 이 알고리즘은 **최소자승 기반의 직선 적합(PCA 방식)** 으로, 3D 점군의 방향성과 중심을 잘 반영합니다.
 
 ---
 
