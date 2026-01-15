@@ -16,9 +16,9 @@ $$
 
 ### 3. 선분 vs AABB 교차 (slab 방식)
 
-$$
+```math
 t=\max _{ax}\left( \frac{min[ax]-a[ax]}{b[ax]-a[ax]}\right) ,\quad \mathrm{조건:\  }a[ax]\leq b[ax]
-$$
+```
 
 
 ### 4. 삼각형 vs AABB 교차 (SAT 방식)
@@ -28,7 +28,7 @@ $$
 $$
 
 $$
-\mathrm{rad}=|n_x|\cdot box\_ half_x+|n_y|\cdot box\_ half_y
+\mathrm{rad}=|n_x|\cdot box\\_half\\_x+|n_y|\cdot box\\_half\\_y
 $$
 
 $$
@@ -60,14 +60,14 @@ $$
 
 # 수식 검증
 
-문서에 포함된 주요 수학 로직들을 하나씩 검증.  
-특히 공간 파티셔닝에서 핵심이 되는 셀 인덱스 계산, AABB 범위 추출, 선분/삼각형 교차 판정 함수들을 수학적으로 분석합니다.
+- 문서에 포함된 주요 수학 로직들을 하나씩 검증.  
+- 특히 공간 파티셔닝에서 핵심이 되는 셀 인덱스 계산, AABB 범위 추출, 선분/삼각형 교차 판정 함수들을 수학적으로 분석합니다.
 
 ## ✅ 1. 셀 인덱스 계산: clamp_floor_index
 - 수식:
 
 $$
-\mathrm{index}=\left\lfloor \frac{\mathrm{coord}-\mathrm{min}}{\mathrm{cell\_ size}}\right\rfloor
+\mathrm{index}=\left\lfloor \frac{\mathrm{coord}-\mathrm{min}}{\mathrm{cell\\_size}}\right\rfloor
 $$
 
 - 검증:
