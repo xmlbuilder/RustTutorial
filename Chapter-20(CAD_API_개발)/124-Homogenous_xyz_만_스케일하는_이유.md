@@ -1,6 +1,6 @@
-## 🎯 결론:
-scale_xyz = 좌표만 스케일(scale)하고 weight는 그대로 유지
-h_scale = 좌표와 weight 모두 스케일(scale)
+## 🎯 Homogenous xyz 
+- scale_xyz = 좌표만 스케일(scale)하고 weight는 그대로 유지
+- h_scale = 좌표와 weight 모두 스케일(scale)
 
 ## ✅ 두 함수의 차이
 ```rust
@@ -24,7 +24,7 @@ pub fn h_scale(a: &Self, s: f64) -> Point4D {
 }
 ```
 
-1) scale_xyz
+### 1) scale_xyz
 - ✔ 의미
   - 기하학적 좌표(x,y,z)만 스케일
   - weight(w)는 절대 건드리지 않음
@@ -33,7 +33,7 @@ pub fn h_scale(a: &Self, s: f64) -> Point4D {
   - weight는 shape에 영향을 주므로 건드리면 안 되는 상황
   - 예: 모델 전체를 2배 확대할 때
 
-2) h_scale (scale control point + weight)
+### 2) h_scale (scale control point + weight)
 ```
 fn h_scale(self, s: Real) -> Point4D {
     Point4D {
@@ -61,7 +61,6 @@ fn h_scale(self, s: Real) -> Point4D {
   - 그래서 단순한 기하학적 스케일(scale)에서는 weight를 건드리면 안 된다.
 
 ## ✨ 요약 표
-
 | 함수 | 스케일되는 요소 | 의미 |
 |------|------------------|------|
 | scale_xyz | x, y, z | 기하학적 좌표만 스케일 (weight 유지) |
