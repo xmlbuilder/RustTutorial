@@ -1,7 +1,7 @@
 # Convex Poly
 ## Convex poly code walkthrough with formulas and test explanations
-이 코드는 2D 볼록 껍질(monotone chain)과 3D 볼록체 사이 GJK 기반 최근접점 계산을 구현합니다.  
-각 타입과 함수의 목적, 사용 수식, 수치 안정화 포인트, 그리고 테스트 케이스 의도를 단계별로 설명합니다.
+- 이 코드는 2D 볼록 껍질(monotone chain)과 3D 볼록체 사이 GJK 기반 최근접점 계산을 구현합니다.  
+- 각 타입과 함수의 목적, 사용 수식, 수치 안정화 포인트, 그리고 테스트 케이스 의도를 단계별로 설명합니다.
 
 ### Index4: 최대 4개의 정점 인덱스를 담는 컨테이너
 - 역할: GJK에서 활성화된 지지점(support)들의 원본 점 인덱스를 담습니다.  
@@ -2117,3 +2117,6 @@ mod tests_convex_poly_3d {
     }
 }
 ```
+
+---
+
