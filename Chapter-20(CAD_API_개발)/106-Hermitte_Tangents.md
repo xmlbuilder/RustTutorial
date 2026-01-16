@@ -58,30 +58,30 @@ tan = (1-r)*arTan[i+1] + r*arTan[i+2];
 ## 3. 수식 요약
 - 구간 벡터:
   
-$$
+```math
 v_i=Q_i-Q_{i-1}
-$$
+```
 
 - 끝점 보정:
 
-$$
+```math
 v_1 =
 \begin{cases}
   2v_2 - v_3, & \text{if } 2|v_2|^2 > |v_3|^2, \quad
   2\cdot \dfrac{|v_3|}{|v_2|} v_2 - v_3, & \text{otherwise}.
 \end{cases}
-$$
+```
 
 - 가중치 계산:
 
-$$
+```math
 r=\frac{|v_i\times v_{i+1}|}{|v_i\times v_{i+1}|+|v_{i+2}\times v_{i+3}|}
-$$
+```
 - 접선 벡터:
 
-$$
+```math
 t_i=(1-r)v_{i+1}+rv_{i+2},\quad \hat {t}_i=\frac{t_i}{|t_i|}
-$$
+```
 
 ## 4. 의미
 - 이 알고리즘은 Hermite 보간 곡선을 만들 때 각 점에서의 접선을 안정적으로 계산합니다.
@@ -94,6 +94,7 @@ $$
   - 최종 접선은 교차곱 기반 가중 평균으로 얻습니다.
  
 ---
+
 ### 소스 코드
 ```rust
 pub fn compute_hermite_tangents(
@@ -255,4 +256,7 @@ mod tests {
 ## Hermitte Tangent 이미지
 
 ![Hermitte Tangent](/image/Hermitte_Tangents.png)
+
+---
+
 
