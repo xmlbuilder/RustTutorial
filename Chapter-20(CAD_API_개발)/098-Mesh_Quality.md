@@ -2,8 +2,8 @@
 ## 1. Area (면적)
 - 정의: 요소의 실제 기하학적 면적
 - 계산식:
-- 삼각형:
-- 사각형: 두 삼각형으로 분할 후 합산
+    - 삼각형:
+    - 사각형: 두 삼각형으로 분할 후 합산
 - 의미: 요소 크기 확인, 음수/0이면 퇴화(degenerate) 요소.
 
 ## 2. Aspect Ratio (종횡비)
@@ -11,15 +11,15 @@
 - 계산식:
 - 삼각형:
 
-$$
+```math
 AR=\frac{0.433\cdot (L_{max})^2}{A}
-$$
+```
 
 - 사각형: 대각선 중점 연결 길이 비율
 
-$$
+```math
 AR=\frac{L_{max\\_ diag}}{L_{min\\_ diag}}
-$$
+```
 
 - 의미: 값이 클수록 요소가 길쭉하거나 왜곡됨.
 
@@ -27,45 +27,43 @@ $$
 - 정의: 사각형 요소의 두 대각선 삼각형 법선 벡터 간 각도
 - 계산식:
 
-$$
+```math
 Warp=\max (\angle (n_{013},n_{023}),\angle (n_{123},n_{023}))
-$$
-
-
+```
 - 의미: 평면 사각형은 0°, 비틀림이 심할수록 값 증가.
 
 ## 4. Skew (기울기)
 - 정의: 사각형 요소 대각선 교차 각도
 - 계산식:
-- 대각선 벡터 v_1,v_2의 각도
-- 90°가 이상적, 0° 또는 180°에 가까우면 퇴화
+    - 대각선 벡터 $v_1$, $v_2$ 의 각도
+    - 90°가 이상적, 0° 또는 180°에 가까우면 퇴화
 - 의미: 직각성이 깨질수록 값이 낮아짐.
 
 ## 5. Stretch (신장율)
 - 정의: 최소 변 길이 대비 최대 대각선 길이 비율
 - 계산식:
 
-$$
+```math
 Stretch=\sqrt{\frac{\sqrt{2}\cdot L_{min\\_ side}}{L_{max\\_ diag}}}
-$$
+```
 
 - 의미: 값이 1에 가까울수록 이상적, 0에 가까우면 요소가 찌그러짐.
 
 ## 6. Jacobian Quality
 - 정의: 요소의 Jacobian 행렬을 이용한 품질 평가
 - 계산식:
-- 샘플 지점에서 Jacobian 행렬 J 계산
-- det(J) 최소/최대 비율:
+    - 샘플 지점에서 Jacobian 행렬 J 계산
+    - det(J) 최소/최대 비율:
 
-$$
+```math
 Q_{det}=\frac{\min (\det J)}{\max (\det J)}
-$$
+```
 
 - Condition number:
 
-$$
+```math
 Q_{cond}=\| J\| \cdot \| J^{-1}\| 
-$$
+```
 
 - 의미:
 - $Q_{det}\approx 1.0$ → 요소가 잘 정의됨
@@ -75,9 +73,9 @@ $$
 - 정의: 두 벡터 간의 각도
 - 계산식:
 
-$$
+```math
 \theta =\arccos \left( \frac{\vec {a}\cdot \vec {b}}{|a||b|}\right) 
-$$
+```
 
 - 의미: Warp, Skew 계산에 활용.
 - 직교 → 90°
@@ -236,16 +234,16 @@ println!("Tri3 det quality = {:.3}, cond = {:.3}", t.det, t.cond);
 - Quad4 요소의 Jacobian은 **기준 좌표계(ksi, eta)** 에서 shape function gradient를 곱해 얻습니다.
 - 단위 정사각형 (0,0)-(1,0)-(1,1)-(0,1) 을 넣으면, 샘플 지점에서 Jacobian은 대략 다음과 같이 나옵니다:
 
-$$
-J=\left[ \begin{matrix}0.5&0.0\\ ; \quad 0.0&0.5\end{matrix}\right]
-$$
+```math
+J=\left[ \begin{matrix}0.5&0.0\\ 0.0&0.5\end{matrix}\right]
+```
 
 - 이 행렬의 norm은 $||J||=\sqrt{0.5^2+0.5^2}=\sqrt{0.5}\approx 0.707$.
 - 역행렬은
 
-$$
-J^{-1}=\left[ \begin{matrix}2.0&0.0\\ ; \quad 0.0&2.0\end{matrix}\right]
-$$
+```math
+J^{-1}=\left[ \begin{matrix}2.0&0.0\\ 0.0&2.0\end{matrix}\right]
+```
 
 - 역행렬의 norm은 $||J^{-1}||=\sqrt{2^2+2^2}=\sqrt{8}\approx 2.828$.
 - 따라서 condition number = $||J||\cdot ||J^{-1}||\approx 0.707\times 2.828=2.0$.
@@ -480,8 +478,6 @@ for (i, q) in qualities.iter().enumerate() {
         i, q.area, q.aspect_ratio, q.warp, q.skew, q.stretch);
 }
 ```
-
-
 ---
 
 
