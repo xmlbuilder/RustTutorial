@@ -233,6 +233,169 @@ xa ---- xb ---- xc
 
 ---
 
+## 샘플 코드
+```rust
+
+/// Brent's method for 1D function minimization (Numerical Recipes style).
+/// Requires a bracketing triple (xa < xb < xc) such that:
+///     f(xa) > f(xb) < f(xc)
+///
+/// - f: scalar function f(x)
+/// - xa, xb, xc: bracketing points
+/// - fb: f(xb)
+/// - x_tol: relative tolerance for x (fractional accuracy)
+/// - f_tol: absolute tolerance for f(x)
+///
+/// Returns (xmin, fmin)
+pub fn on_min_fun_brent<F>(
+    xa: f64,
+    xb: f64,
+    xc: f64,
+    fb: f64,
+    f: F,
+    x_tol: f64,
+    f_tol: f64,
+) -> (f64, f64)
+where
+    F: Fn(f64) -> f64,
+{
+    const GOLD: f64 = 0.3819660;
+    const MAX_IT: usize = 100;
+
+
+    let (mut a, mut b) = if xa < xc { (xa, xc) } else { (xc, xa) };
+
+    let mut x = xb;
+    let mut w = xb;
+    let mut v = xb;
+
+    let mut fx = fb;
+    let mut fw = fb;
+    let mut fv = fb;
+
+    let mut e = 0.0;
+    let mut d = 0.0;
+
+    for _ in 0..MAX_IT {
+        let xm = 0.5 * (a + b);
+        let tol1 = x_tol * x.abs() + ON_ZERO_TOL;
+        let tol2 = 2.0 * tol1;
+
+        // Convergence check
+        if (x - xm).abs() <= tol2 - 0.5 * (b - a) {
+            return (x, fx);
+        }
+
+        let mut p = 0.0;
+        let mut q = 0.0;
+        let mut r = 0.0;
+
+        let mut u;
+
+        if e.abs() > tol1 {
+            // Parabolic fit
+            r = (x - w) * (fx - fv);
+            q = (x - v) * (fx - fw);
+            p = (x - v) * q - (x - w) * r;
+            q = 2.0 * (q - r);
+
+            if q > 0.0 {
+                p = -p;
+            }
+            q = q.abs();
+
+            let e_temp = e;
+            e = d;
+
+            if p.abs() >= 0.5 * q * e_temp || p <= q * (a - x) || p >= q * (b - x) {
+                // Golden section step
+                e = if x >= xm { a - x } else { b - x };
+                d = GOLD * e;
+            } else {
+                // Parabolic step
+                d = p / q;
+                u = x + d;
+
+                if (u - a).abs() < tol2 || (b - u).abs() < tol2 {
+                    d = if d >= 0.0 { tol1 } else { -tol1 };
+                }
+            }
+        } else {
+            // Golden section step
+            e = if x >= xm { a - x } else { b - x };
+            d = GOLD * e;
+        }
+
+        u = if d.abs() >= tol1 {
+            x + d
+        } else {
+            x + d.signum() * tol1
+        };
+        let fu = f(u);
+
+        if fu <= f_tol {
+            return (u, fu);
+        }
+
+        if fu <= fx {
+            if u >= x {
+                a = x;
+            } else {
+                b = x;
+            }
+            v = w;
+            fv = fw;
+            w = x;
+            fw = fx;
+            x = u;
+            fx = fu;
+        } else {
+            if u < x {
+                a = u;
+            } else {
+                b = u;
+            }
+
+            if fu <= fw || w == x {
+                v = w;
+                fv = fw;
+                w = u;
+                fw = fu;
+            } else if fu <= fv || v == x || v == w {
+                v = u;
+                fv = fu;
+            }
+        }
+    }
+
+    (x, fx)
+}
+```
+---
+## 테스트 코드
+```rust
+#[test]
+fn brent_quadratic_min_at_shifted_point() {
+    // f(x) = (x-2.5)^2 + 3
+    let f = |x: f64| {
+        let t = x - 2.5;
+        t * t + 3.0
+    };
+
+    // bracket around 2.5: xa=0, xb=3, xc=6
+    // f(0)=9.25 > f(3)=3.25 < f(6)=15.25
+    let xa = 0.0;
+    let xb = 3.0;
+    let xc = 6.0;
+    let fb = f(xb);
+
+    let (xmin, fmin) = on_min_fun_brent(xa, xb, xc, fb, f, 1e-12, 1e-15);
+
+    assert!(approx(xmin, 2.5, 1e-8), "xmin={}", xmin);
+    assert!(approx(fmin, 3.0, 1e-10), "fmin={}", fmin);
+}
+```
+---
 
 
 
