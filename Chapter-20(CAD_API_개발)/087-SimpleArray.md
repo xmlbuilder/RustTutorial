@@ -1,12 +1,12 @@
 # SimpleArray
 
-지금까지 Rust로 옮겨온 SimpleArray<T>를 정리해서 소개 자료.  
-이 자료는 개념, 특징, 주요 기능, 사용 예시까지 포함된 간단한 문서 형식입니다.
+- 지금까지 Rust로 옮겨온 SimpleArray<T>를 정리해서 소개 자료.  
+- 이 자료는 개념, 특징, 주요 기능, 사용 예시까지 포함된 간단한 문서 형식입니다.
 
 ## 📄 SimpleArray 소개 자료
 ### 1. 개요
-SimpleArray<T>는 OpenNURBS의 ON_SimpleArray<T>를 Rust 스타일로 재구현한 경량 동적 배열 컨테이너입니다.  
-Rust의 Vec<T>를 내부적으로 사용하면서, OpenNURBS에서 제공하던 다양한 배열 조작 기능을 안전하게 제공합니다.
+- SimpleArray<T>는 OpenNURBS의 ON_SimpleArray<T>를 Rust 스타일로 재구현한 경량 동적 배열 컨테이너입니다.  
+- Rust의 Vec<T>를 내부적으로 사용하면서, OpenNURBS에서 제공하던 다양한 배열 조작 기능을 안전하게 제공합니다.
 
 ## 2. 특징
 - 경량성: 불필요한 오버헤드 없이 Vec<T> 기반으로 구현
@@ -146,7 +146,7 @@ impl<T> SimpleArray<T> {
 }
 ```
 ## 🧠 다음 단계 예고
-다음 단계에서는 아래 기능들을 Rust 스타일로 확장할 수 있어요:
+- 다음 단계에서는 아래 기능들을 Rust 스타일로 확장할 수 있어요:
 | C++ 기능        | Rust 확장 방향                          |
 |----------------|-----------------------------------------|
 | Search()       | find_index(&T), find_by(\|x\| ...)         |
