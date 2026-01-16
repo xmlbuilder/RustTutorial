@@ -22,9 +22,9 @@ a.x * cx + a.y * cy + a.z * cz  // dot product with a
 - 부피 계산
   -세 벡터가 만드는 평행육면체(parallelepiped)의 부피를 나타냅니다.
 
-$$
+```math
 |a\cdot (b\times c)| = 부피.
-$$
+```
 
 - 선형 독립성 판별
   - 결과가 0이면 세 벡터가 같은 평면에 놓여 있다는 뜻 → 선형 종속.
