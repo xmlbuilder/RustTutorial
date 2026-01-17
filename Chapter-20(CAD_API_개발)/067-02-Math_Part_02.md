@@ -1067,5 +1067,38 @@ pub fn project_point_onto_line(origin: &Point3D, target: &Point3D, point_to_proj
     point_to_project.z = origin.z + t * dir.z;
 }
 ```
+
+```rust
+pub fn on_project_point_onto_segment(
+    origin: &Point3D,
+    target: &Point3D,
+    pt_to_prj: &Point3D,
+)  ->  (Point3D, Real) {
+    let dir = Vector3D::new(
+        target.x - origin.x,
+        target.y - origin.y,
+        target.z - origin.z,
+    );
+    let vec = Vector3D::new(
+        pt_to_prj.x - origin.x,
+        pt_to_prj.y - origin.y,
+        pt_to_prj.z - origin.z,
+    );
+
+    let len_sq = dir.length_squared();
+    let t = if len_sq < 1.0e-15 {
+        0.0
+    } else {
+        Vector3D::dot(&dir, &vec) / len_sq
+    };
+
+    let prj = Point3D {
+        x : origin.x + t * dir.x,
+        y : origin.y + t * dir.y,
+        z : origin.z + t * dir.z,
+    };
+    (prj, t)
+}
+```
 ---
 
