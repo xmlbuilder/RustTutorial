@@ -1,7 +1,6 @@
 # Curve Direction
-
-이 코드는 두 개의 B-스플라인 곡선(BSplineCurve)의 방향 관계를 판별하는 유틸리티입니다.  
-즉, 곡선 A와 곡선 B가 서로 어떤 방향으로 이어져 있는지를 검사해서 CurveDirection 열거형으로 반환합니다.
+- 이 코드는 두 개의 B-스플라인 곡선(BSplineCurve)의 방향 관계를 판별하는 유틸리티입니다.  
+- 즉, 곡선 A와 곡선 B가 서로 어떤 방향으로 이어져 있는지를 검사해서 CurveDirection 열거형으로 반환합니다.
 
 ## 🧩 코드의 주요 흐름
 ### 1. CurveDirection 열거형
@@ -86,15 +85,17 @@ let best = candidates
 - open clamped knot 여부에 따라 끝점 계산 방식 달라짐
 - 길이 기반 오차 스케일링으로 안정성 확보
 - 네 가지 후보 관계 중 가장 가까운 것을 선택
-- 👉 쉽게 말하면, 이 함수는 두 곡선이 서로 이어질 때 방향이 같은지, 반대인지, 마주보는지를 판별하는 도우미.
+- 👉 쉽게 말하면, 이 함수는 두 곡선이 서로 이어질 때 방향이 같은지, 반대인지,
+    마주보는지를 판별하는 도우미.
 
 
 ---
 
 # Topology 연결
 
-Topology를 구성할 때 곡선(Curve) 연결은 핵심적인 단계.  
-지금까지 만든 CurveDirection::detect 같은 함수는 바로 이 곡선 간의 연결 관계를 판별해서 토폴로지 그래프를 만들 때 활용할 수 있습니다.
+- Topology를 구성할 때 곡선(Curve) 연결은 핵심적인 단계.  
+- 지금까지 만든 CurveDirection::detect 같은 함수는 바로 이 곡선 간의 연결 관계를 판별해서
+    토폴로지 그래프를 만들 때 활용할 수 있습니다.
 
 ## 🧩 Topology 구성에서 Curve 연결의 역할
 - 곡선의 끝점 매칭
@@ -255,7 +256,8 @@ mod tests {
         let ctrl = vec![Point4D::new(p0.x, p0.y, p0.z, 1.0), Point4D::new(p1.x, p1.y, p1.z, 1.0)];
         let kv = on_clamped_uniform_knot_vector(degree, ctrl.len());
         println!("kv {:?}", kv);
-        NurbsCurve { dimension: 3, degree : degree as Degree , ctrl, kv: KnotVector {knots : kv}, domain: Interval {t0: 0.0, t1: 1.0} }
+        NurbsCurve { dimension: 3, degree : degree as Degree ,
+            ctrl, kv: KnotVector {knots : kv}, domain: Interval {t0: 0.0, t1: 1.0} }
     }
 ```
 ```rust
