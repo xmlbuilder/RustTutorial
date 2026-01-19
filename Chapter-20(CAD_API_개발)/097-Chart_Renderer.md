@@ -1,7 +1,7 @@
 # Chart Renderer
 ## Chart renderer documentation
-이 문서는 내부 모듈로 사용하는 Rust chart renderer의 구조, 설정, 기능, 사용법을 단계별로 정리합니다.  
-폰트는 선택적으로 활성화할 수 있으며, 폰트가 없을 경우에도 차트(그리드, 축, 시리즈)는 정상 렌더링됩니다.  
+- 이 문서는 내부 모듈로 사용하는 Rust chart renderer의 구조, 설정, 기능, 사용법을 단계별로 정리합니다.  
+- 폰트는 선택적으로 활성화할 수 있으며, 폰트가 없을 경우에도 차트(그리드, 축, 시리즈)는 정상 렌더링됩니다.  
 
 ## Overview and architecture
 - 목적: 2D 라인 시리즈를 고정 크기 RGBA8 버퍼에 렌더링하고 PNG로 저장합니다.
@@ -70,14 +70,26 @@ rusttype = "0.9.3"
 ## Step-by-step usage
 ### 1) 데이터 준비
 - Label: 시리즈 작성
-- let mut s1 = Series::default();
-- s1.name = "Sine".into(); s1.color = Color::rgba(30,144,255,255);
-- for i in 0..200 { let x = i as f32 * 0.05; s1.pts.push(Point { x, y: (x * 2.0).sin() }); }
+```rust
+let mut s1 = Series::default();
+```
+```rust
+s1.name = "Sine".into(); s1.color = Color::rgba(30,144,255,255);
+```
+```rust
+for i in 0..200 { let x = i as f32 * 0.05; s1.pts.push(Point { x, y: (x * 2.0).sin() }); }
+```
 ### 2) 렌더러 구성
 - Label: 기본 설정
-- let mut r = Renderer::default();
-- r.title = "Demo Chart".into(); r.xlabel = "X".into(); r.ylabel = "Y".into();
-- r.attach(&s1);
+```rust
+let mut r = Renderer::default();
+```
+```rust
+r.title = "Demo Chart".into(); r.xlabel = "X".into(); r.ylabel = "Y".into();
+```
+```rust
+r.attach(&s1);
+```
 ### 3) 폰트(선택)
 - Label: feature 활성 빌드
 - cargo run --features ttf
