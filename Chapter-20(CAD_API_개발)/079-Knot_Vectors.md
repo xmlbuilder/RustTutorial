@@ -281,7 +281,8 @@ pub trait KnotVectorExt {
         min_knot_dist: f64,
     ) -> std::result::Result<(usize, usize), &'static str>;
 
-    fn first_similar_knot_index(&self, p: usize, min_dist: f64) -> Option<(usize, usize)>;
+    fn first_similar_knot_index(&self, p: usize, min_dist: f64)
+        -> Option<(usize, usize)>;
 
     fn min_acceptable_knot_distance(&self, p: usize) -> f64;
 
@@ -625,14 +626,14 @@ impl KnotVectorExt for [f64] {
         let start = on_are_equal(a, self[p], scale);
         let end = on_are_equal(self[n], b, scale);
 
-        // In the C# implementation, if start/end are true, the first and last p elements are overwritten with the same value.
+        // if start/end are true, the first and last p elements are overwritten with the same value.
         // But here, this is just a predicate function — it doesn't modify values, only returns the status.
         (start, end)
     }
 ```
 ```rust    
     fn split_mid(&self, p: usize, n: usize) -> (isize, usize, f64) {
-        // C# code: index1 = m + k + 1 (last index), mid = U[index1 / 2]
+        // index1 = m + k + 1 (last index), mid = U[index1 / 2]
         // Here, m ≡ n
         assert!(self.len() >= n + p + 1, "knot length < n+p+2");
         let last = n + p; // Last index
@@ -654,12 +655,12 @@ impl KnotVectorExt for [f64] {
         while i > 0 && self[i - 1] == mid_val {
             multi += 1;
             i -= 1;
-            mid_idx -= 1; // 좌측으로 한 칸씩 밀림(C#의 index2 감소와 동일)
+            mid_idx -= 1; // 좌측으로 한 칸씩 밀림
         }
 
         // Adjust when identical values are stuck to both ends
         if mid_idx == 0 {
-            // C#: midVal = (U[0]+U[index1])/2; index2 = index1/2; while U[index2+1] < midVal) ++index2;
+            // midVal = (U[0]+U[index1])/2; index2 = index1/2; while U[index2+1] < midVal) ++index2;
             mid_val = 0.5 * (self[0] + self[last]);
             mid_idx = last / 2;
             while mid_idx + 1 <= last && self[mid_idx + 1] < mid_val {
@@ -671,7 +672,7 @@ impl KnotVectorExt for [f64] {
         // deficit = k - multi
         let deficit = p as isize - multi as isize;
 
-        // splitPt = (deficit < k) ? index2-1 : index2   (C# 동일)
+        // splitPt = (deficit < k) ? index2-1 : index2
         let split_pt = if (deficit as isize) < p as isize {
             mid_idx.saturating_sub(1)
         } else {
@@ -720,7 +721,7 @@ impl KnotVectorExt for [f64] {
         let last = p + n_cp;
         assert!(last < self.len(), "knot length must be n_cp + p + 1");
 
-        // C#: int index1 = m + k + 1; double a = U[*mid_idx];
+        // int index1 = m + k + 1; double a = U[*mid_idx];
         // Original logic: AreEqual(a, u, U[index1] - U[0]) → a = U[*mid_idx], u = target
         let a = self[*mid_idx];
         let scale = self[last] - self[0];
@@ -1394,7 +1395,7 @@ pub fn on_normalize(u: &mut [f64]) {
 }
 ```
 ```rust
-/// Equivalent to C#'s IsClamped(out start, out end): checks clamping status,
+/// Equivalent to IsClamped(out start, out end): checks clamping status,
 /// and if `start` or `end` is true, snaps `p` control points at the corresponding boundary to identical values.
 /// - `p`: degree, `n`: last valid span index (= n = num_ctrl - 1)
 pub fn on_is_clamped_mut(u: &mut [f64], p: usize, n: usize) -> (bool, bool) {
@@ -1660,7 +1661,7 @@ pub fn on_detect_knot_type(u: &[f64], p: usize) -> KnotVectorType {
 ```
 ```rust
 /// Splitting near the median: (remaining insert count, splitPt, midVal)
-/// Equivalent to C# Split(U, m, k, out splitPt, out midVal)
+/// Equivalent to Split(U, m, k, out splitPt, out midVal)
 pub fn on_split_mid(u: &[f64], m: usize, k: usize) -> (i32, usize, f64) {
     // m: p + n, k: degree
     // length = m + k + 1
@@ -2366,7 +2367,7 @@ pub fn on_chord_length_params_in_u(pts: &[Point3D], nu: usize, nv: usize) -> Vec
     let mut seg_sum_per_u = vec![0.0; nu]; // 각 세그먼트(u-1,u)의 길이 합
     let mut total_len = 0.0;
 
-    // C# LocalInterpolation: numArray1, numArray2, num1 부분에 해당
+    // LocalInterpolation: numArray1, numArray2, num1 부분에 해당
     for v in 0..nv {
         let mut row_total = 0.0;
         for u in 1..nu {
@@ -2388,7 +2389,7 @@ pub fn on_chord_length_params_in_u(pts: &[Point3D], nu: usize, nv: usize) -> Vec
     let mut u_params = vec![0.0; nu];
     if total_len > 0.0 {
         for i in 1..(nu - 1) {
-            // C#: numArray1[i] = numArray1[i-1] + numArray1[i] / num1;
+            // numArray1[i] = numArray1[i-1] + numArray1[i] / num1;
             u_params[i] = u_params[i - 1] + seg_sum_per_u[i] / total_len;
         }
     } else {
@@ -2412,7 +2413,7 @@ pub fn on_chord_length_params_in_v(pts: &[Point3D], nu: usize, nv: usize) -> Vec
     let mut seg_sum_per_v = vec![0.0; nv]; // 각 세그먼트(v-1,v)의 길이 합
     let mut total_len = 0.0;
 
-    // C# LocalInterpolation: numArray3, numArray4, num3 부분에 해당
+    // LocalInterpolation: numArray3, numArray4, num3 부분에 해당
     for u in 0..nu {
         let mut col_total = 0.0;
         for v in 1..nv {
@@ -2434,7 +2435,7 @@ pub fn on_chord_length_params_in_v(pts: &[Point3D], nu: usize, nv: usize) -> Vec
     let mut v_params = vec![0.0; nv];
     if total_len > 0.0 {
         for j in 1..(nv - 1) {
-            // C#: numArray3[j] = numArray3[j-1] + numArray3[j] / num3;
+            // numArray3[j] = numArray3[j-1] + numArray3[j] / num3;
             v_params[j] = v_params[j - 1] + seg_sum_per_v[j] / total_len;
         }
     } else {
