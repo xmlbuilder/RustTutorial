@@ -1,7 +1,7 @@
 # Hermite Surface Derivative
 
-Hermite basis 함수와 그 도함수들을 이용해 n차 도함수를 계산.
-이 함수는 (u,v)에서 원하는 차수 d까지의 모든 편도함수를 2차원 벡터 배열로 반환합니다.
+- Hermite basis 함수와 그 도함수들을 이용해 n차 도함수를 계산.
+- 이 함수는 (u,v)에서 원하는 차수 d까지의 모든 편도함수를 2차원 벡터 배열로 반환합니다.
 
 ## 🛠 구현 예시
 ```rust
@@ -145,8 +145,8 @@ impl Surface for HermiteSurface {
 
 # 벡터 성분
 
-eval_ders_padded 함수는 (u,v)에서 원하는 차수까지의 **도함수 벡터(Vector3D)** 를 계산해 반환합니다.  
-여기서 결과로 나오는 Vector3D 성분은 각각 x, y, z 방향의 편도함수 값을 의미합니다.  
+- eval_ders_padded 함수는 (u,v)에서 원하는 차수까지의 **도함수 벡터(Vector3D)** 를 계산해 반환합니다.  
+- 여기서 결과로 나오는 Vector3D 성분은 각각 x, y, z 방향의 편도함수 값을 의미합니다.  
 
 ## 📘 결과 구조
 ```rust
@@ -174,7 +174,7 @@ $$
 
 ## 🛠 Rust에서 성분 표시하기
 
-원하는 성분을 직접 출력하려면 예를 들어:
+- 원하는 성분을 직접 출력하려면 예를 들어:
 
 ```rust
 let ders = surface.eval_ders_padded(u, v, 2);
@@ -196,11 +196,12 @@ println!("d²/(du dv): ({}, {}, {})",
     ders[1][1].x, ders[1][1].y, ders[1][1].z);
 ```
 
-
 ## ✅ 요약
 - 결과 벡터는 항상 (x, y, z) 성분을 포함.
 - ders[p][q]는 해당 차수의 편도함수 벡터.
 - 성분을 출력하려면 .x, .y, .z 필드를 사용.
+
+---
 
 
 
