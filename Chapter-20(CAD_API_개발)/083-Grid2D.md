@@ -58,15 +58,15 @@ let t_v = (j as f64 + eps * (j as f64).cos()) / self.nv as f64;
 - 목표 함수: 
 - Gradient:
 
-$$
-\nabla \phi =\left[ \begin{matrix}(S(u,v)-p)^{\top }S_u\\ ; \quad (S(u,v)-p)^{\top }S_v\end{matrix}\right]
-$$
+```math
+\nabla \phi =\left[ \begin{matrix}(S(u,v)-p)^{\top }S_u\\ (S(u,v)-p)^{\top }S_v\end{matrix}\right]
+```
 
 - Hessian (Gauss–Newton 근사):
 
-$$
-H\approx \left[ \begin{matrix}S_u^{\top }S_u&S_u^{\top }S_v\\ ; \quad S_v^{\top }S_u&S_v^{\top }S_v\end{matrix}\right] 
-$$
+```math
+H\approx \left[ \begin{matrix}S_u^{\top }S_u&S_u^{\top }S_v\\ S_v^{\top }S_u&S_v^{\top }S_v\end{matrix}\right] 
+```
 
 - 업데이트: $[\Delta u,\Delta v]^{\top }=-H^{-1}\nabla \phi$ , 이후 $u,v$ 를 도메인으로 클램프.
 - 라인서치: Armijo 백트래킹으로 안정화.
@@ -920,3 +920,6 @@ mod tests {
 - Grid2D만 테스트할 때는 단순한 평면 표면을 만들어서 best_initial_uv가 올바른 근사값을 반환하는지 확인하면 됩니다.
 - 트림 영역까지 포함해 best_initial_uv_with_trim이 올바르게 동작하는지도 검증할 수 있습니다.
 - 👉 이렇게 하면 Point Inversion 없이도 Grid2D의 샘플링 정확성과 트림 처리를 독립적으로 테스트할 수 있습니다.
+
+---
+
