@@ -1,7 +1,7 @@
 # clone_from_slice / copy_from_slice
 
-`clone_from_slice` 는 Rust에서 **한 슬라이스의 내용을 다른 슬라이스로 복제(clone)** 할 때 사용하는 메서드.  
-단순한 복사처럼 보이지만, 이 메서드는 Clone 트레이트를 구현한 타입에 대해 안전하게 복제를 수행.
+- `clone_from_slice` 는 Rust에서 **한 슬라이스의 내용을 다른 슬라이스로 복제(clone)** 할 때 사용하는 메서드.  
+- 단순한 복사처럼 보이지만, 이 메서드는 Clone 트레이트를 구현한 타입에 대해 안전하게 복제를 수행.
 
 ## 🧠 기본 개념
 ```rust
@@ -24,7 +24,6 @@ dst.clone_from_slice(&src);
 assert_eq!(dst, src);
 ```
 
-
 - dst는 &mut [T]로 변환 가능하고
 - src는 &[T]로 전달됨
 - 내부적으로 src[i].clone()을 반복해서 dst[i]에 복제함
@@ -32,8 +31,8 @@ assert_eq!(dst, src);
 ## 🔍 비교: clone_from_slice vs copy_from_slice
 | 메서드 | 요구 트레이트 | 동작 방식            | 성능 특성     |
 |---------------------------------------------|----------------|----------------------|----------------|
-| `clone_from_slice`                          | `Clone`        | 깊은 복사 (`clone()`) | 유연하지만 느림 |
-| `copy_from_slice`                           | `Copy`         | 얕은 복사 (`memcpy`) | 매우 빠름       |
+| `clone_from_slice`                          | `Clone`        | `깊은 복사` (`clone()`) | 유연하지만 느림 |
+| `copy_from_slice`                           | `Copy`         | `얕은 복사` (`memcpy`) | 매우 빠름       |
 
 
 `clone_from_slice` 는 더 일반적이고 유연하지만, `copy_from_slice` 는 더 빠르고 제한적.
@@ -57,8 +56,6 @@ assert_eq!(dst, src);
 | 사용 가능한 타입 예시   | `u8`, `i32`, `bool`, `f64` | `String`, `Vec<T>`, `Box<T>`, `Arc<T>` |
 | 슬라이스 길이 불일치 시 | panic 발생                 | panic 발생                       |
 | 성능 특성               | 매우 빠름                  | 유연하지만 느림                  |
-
-
 
 ## ⚠️ 에러가 나는 이유: Copy vs Clone
 
