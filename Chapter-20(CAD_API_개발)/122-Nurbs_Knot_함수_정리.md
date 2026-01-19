@@ -1,11 +1,11 @@
 ## 📘 NURBS 핵심 알고리즘 수식 문서
 - 정리 순서는 다음과 같음:
     - on_merge_knot_vectors
-    - on_evaluate_rational_basis_and_derivatives (N_kntrcd)
-    - on_basis_derivative_wrt_knot (N_kntbdk)
-    - on_basis_block_derivative_wrt_knot (N_kntadk)
-    - on_denominator_derivative_wrt_knot (N_cfndrk)
-    - on_rational_on_basis_derivative_wrt_knot (N_kntrck)
+    - on_evaluate_rational_basis_and_derivatives
+    - on_basis_derivative_wrt_knot
+    - on_basis_block_derivative_wrt_knot
+    - on_denominator_derivative_wrt_knot
+    - on_rational_on_basis_derivative_wrt_knot
     - CFun 구조와 denominator function W(u)
     - 전체 흐름 요약
 
@@ -25,7 +25,7 @@ W=U\cup V
 - ✔ Rust 개념
     - 단순히 두 벡터를 합치고 정렬.
 
-### 2️⃣ on_evaluate_rational_basis_and_derivatives (C: N_kntrcd)
+### 2️⃣ on_evaluate_rational_basis_and_derivatives
 - ✔ 목적
 - Rational basis $R_i(u)$ 와 그 도함수 $R_i^{(k)}(u)$ 계산.
 - ✔ Rational basis 정의
@@ -45,7 +45,7 @@ R_i^{(k)}(u)=\frac{1}{W(u)}\left[ w_iN_i^{(k)}(u)-\sum _{j=1}^k{k \choose j}W^{(
     - denominator 도함수: cfun_derivatives
     - 파스칼 삼각형: pascal_row
 
-### 3️⃣ on_basis_derivative_wrt_knot (C: N_kntbdk)
+### 3️⃣ on_basis_derivative_wrt_knot
 - ✔ 목적
     - 단일 basis N_i(u)의 knot u_k에 대한 편미분:
 ```math
@@ -68,7 +68,7 @@ i\in [k-p-1,k]
 
 - Rust에서는 이미 on_compute_basis_knot_derivative로 구현됨.
 
-### 4️⃣ on_basis_block_derivative_wrt_knot (C: N_kntadk)
+### 4️⃣ on_basis_block_derivative_wrt_knot
 - ✔ 목적
     - knot u_k에 대해 영향을 받는 모든 basis의 편미분을 한 번에 계산.
 - ✔ 수식
@@ -84,7 +84,7 @@ N_k[j]=\frac{\partial N_{i+j}(u)}{\partial u_k}
     - on_compute_on_basis_derivative_wrt_knot(kv, k, p, u, flk, flp, nk)
 
 
-### 5️⃣ on_denominator_derivative_wrt_knot (C: N_cfndrk)
+### 5️⃣ on_denominator_derivative_wrt_knot
 - ✔ 목적
 - $W(u)=\sum _jw_jN_j(u)$
 - 에 대해 knot u_k에 대한 편미분:
@@ -101,7 +101,7 @@ fd = Σ fu[i] * N_k[j]
 ```
 
 
-### 6️⃣ on_rational_on_basis_derivative_wrt_knot (C: N_kntrck)
+### 6️⃣ on_rational_on_basis_derivative_wrt_knot
 - ✔ 목적
 - 최종적으로 rational basis의 knot derivative:
 ```math
@@ -156,10 +156,8 @@ R_i^{(k)}(u)=\frac{1}{W(u)}\left[ w_iN_i^{(k)}(u)-\sum _{j=1}^k{k \choose j}W^{(
 
 ---
 
-- on_evaluate_basis_function() 은 사실 C의 N_kntcbf 를 Rust 스타일로 재구성한 것이고,  
-    그 내부에서 계산되는 기하학적 의미와 수학적 이론식을 정확히 이해하면  
+- on_evaluate_basis_function() 은 그 내부에서 계산되는 기하학적 의미와 수학적 이론식을 정확히 이해하면  
     전체 NURBS 커널 구조가 명확하게 정리.
-
 
 ### 🎯 1. B‑spline Basis Function $N_{i,p}(u)$ 이론식
 - B‑spline basis는 Cox–de Boor recurrence 로 정의.
@@ -182,27 +180,13 @@ N_{i,p}(u)=\frac{u-U_i}{U_{i+p}-U_i}N_{i,p-1}(u)+\frac{U_{i+p+1}-u}{U_{i+p+1}-U_
 ```math
 R_{i,p}(u)=\frac{w_iN_{i,p}(u)}{\sum _{j=0}^nw_jN_{j,p}(u)}
 ```
-- 이게 C의 N_kntrcb 가 계산하는 값.
-- Rust에서는:
+- 코드 에서는:
     - rational_basis_single_from_curve()
     - 또는 rational_basis_single()
 - 이 두 함수가 정확히 이 식을 구현하고 있어.
 
-### 🎯 3. C의 N_kntcbf 의미
-- C 코드:
-```cpp
-if( U_iscurr(cur) )
-    N_kntrcb(cur,k,u,flg,R);
-else
-    N_kntbas(knt,k,p,u,flg,R);
-```
 
-- 즉:
-    - 곡선이 rational이면 → rational basis 계산
-    - 곡선이 non‑rational이면 → B‑spline basis 계산
-    - flg(LEFT/RIGHT)는 non‑rational에서 span 결정에만 사용
-
-### 🎯 4. Rust의 on_evaluate_basis_function() 이론적 의미
+### 🎯 3. Rust의 on_evaluate_basis_function() 이론적 의미
 - Rust 버전:
 ```rust
 pub fn on_evaluate_basis_function(
@@ -269,21 +253,19 @@ N_{i,p}(u)
 
 ## ✨ 설명
 - Rational Basis
-    - C: N_kntrcb
-    - Rust: rational_basis_single_from_curve()
+    - rational_basis_single_from_curve()
 - 이론식:
 ```math
 R_{i,p}(u)=\frac{w_iN_{i,p}(u)}{\sum _jw_jN_{j,p}(u)}
 ```
 - Non‑rational Basis
-    - C: N_kntbas
-    - Rust: on_basis_func_ret_vec()
+    - on_basis_func_ret_vec()
 - 이론식: Cox–de Boor recurrence
 
 ---
 
 ## 📘 NURBS Basis Function & Derivatives — Rust Implementation Summary
-- 아래 문서는 C의 N_kntadb (Piegl & Tiller Algorithm A2.3) 를 Rust에서 어떻게 구현하고 테스트하는지 정리한 것이다.
+- 아래 문서는 Piegl & Tiller Algorithm A2.3 를 어떻게 구현하고 테스트하는지 정리한 것이다.
 
 ### 1. 수학적 배경 (이론식)
 #### 1.1 B‑spline Basis Function N_{i,p}(u)
@@ -302,7 +284,7 @@ N_{i,0}(u) =
 N_{i,p}(u)=\frac{u-U_i}{U_{i+p}-U_i}N_{i,p-1}(u)+\frac{U_{i+p+1}-u}{U_{i+p+1}-U_{i+1}}N_{i+1,p-1}(u)
 ```
 #### 1.2 Basis Derivatives $N_{i,p}^{(k)}(u)$
-- Piegl & Tiller Algorithm A2.3 (C의 N_kntadb):
+- Piegl & Tiller Algorithm A2.3:
 ```math
 ND[k][j]=\frac{d^k}{du^k}N_{i-p+j,p}(u)
 ```
@@ -344,7 +326,7 @@ pub fn compute_basis_and_derivatives(
 ```
 
 
-### 3. 테스트 코드 (Rust)
+### 3. 테스트 코드
 - 아래 테스트는:
     - span이 올바르게 계산되는지
     - basis sum = 1
@@ -420,7 +402,6 @@ mod tests {
 
 ---
 
-
 ### 🧠 이 함수의 수학적 의미
 - CFun은 다음과 같은 함수:
 ```math
@@ -469,7 +450,6 @@ use crate::core::nurbs_curve::NurbsCurve;
 use crate::core::types::{Real, Result, NurbsError};
 use crate::core::knots_extensions::on_rational_on_basis_derivative_wrt_knot;
 
-/// Rust version of C N_kntakr:
 /// Compute derivatives of all non-vanishing rational basis functions
 /// with respect to knot U[k].
 ///
@@ -488,7 +468,7 @@ pub fn rational_basis_derivatives_wrt_knot(
     let kv = curve.knots();
     let U = kv.as_slice();
 
-    // --- 1) multiplicity adjustment (C 코드의 kk 조정) ---
+    // --- 1) multiplicity adjustment ---
     let mut kk = k;
 
     // LEFT knot derivative: require U[k] != U[k-1]
