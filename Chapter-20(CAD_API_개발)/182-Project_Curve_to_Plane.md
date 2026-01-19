@@ -47,7 +47,7 @@ C'(u)=\sum _iN_{i,p}(u)Q_i
 - 즉, basis 함수는 그대로 두고 control point만 투영한다.
 
 ## 4. Parallel Projection (평행 투영)
-- ✔ 투영 방향: $\vec {E}$
+- ✔ 투영 방향: $\vec {W}$
 - ✔ 투영 평면: 점 O, 법선 N
 - 투영 공식:
 - 점 P에서 평면까지의 signed distance:
@@ -56,7 +56,7 @@ C'(u)=\sum _iN_{i,p}(u)Q_i
 ```
 - 방향 벡터와 평면 법선의 dot:
 ```math
-\mathrm{ne}=N\cdot E
+\mathrm{ne}=N\cdot W
 ```
 - 스칼라 배율:
 ```math
@@ -64,7 +64,7 @@ C'(u)=\sum _iN_{i,p}(u)Q_i
 ```
 - 투영된 점:
 ```math
-Q=P+\beta E
+Q=P+\beta W
 ```
 
 - ✔ Rational curve 처리
