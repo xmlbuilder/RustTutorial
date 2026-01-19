@@ -132,9 +132,8 @@ S^*(u,v)=\frac{\sum _{i,j}N_i^{p_u}(u)\, M_j^{p_v}(v)\, P_{i,j}^{(w)\, *}}{\sum 
     ```
   - TAPER
     - 두 좌표를 scale
-    ```math
-    other_coords' = other_coords * g
-    ```
+    - $other\\_coords' = other\\_coords * g$
+
   - TWIST
     - 축 기준 회전
     ```math
@@ -164,7 +163,7 @@ pub fn on_axial_transform<F>(
     let mut y = p.y;
     let mut z = p.z;
 
-    // 2) 방향에 따라 shape function 평가 (N_cfnevn(cfn, x|y|z, left, &f))
+    // 2) 방향에 따라 shape function 평가
     let t = match dir {
         AxialDir::X => x,
         AxialDir::Y => y,
