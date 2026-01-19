@@ -28,7 +28,10 @@ $$
 - 라셔널 처리: 국소 스텐실 $(p+1)\times (q+1)$ 에서
 
 $$
-\begin{aligned}x_w&=\sum _i\sum _jN_{i,p}(u) M_{j,q}(v) x_{ij} w_{ij},\\ \quad y_w&=\sum _i\sum _jN_{i,p}(u) M_{j,q}(v) y_{ij} w_{ij},\\ \quad z_w&=\sum _i\sum _jN_{i,p}(u) M_{j,q}(v) z_{ij} w_{ij},\\ \quad w&=\sum _i\sum _jN_{i,p}(u) M_{j,q}(v) w_{ij}.\end{aligned}
+\begin{aligned}x_w&=\sum _i\sum _jN_{i,p}(u) M_{j,q}(v) x_{ij} w_{ij},\\ 
+y_w&=\sum _i\sum _jN_{i,p}(u) M_{j,q}(v) y_{ij} w_{ij},\\ 
+z_w&=\sum _i\sum _jN_{i,p}(u) M_{j,q}(v) z_{ij} w_{ij},\\ 
+w&=\sum _i\sum _jN_{i,p}(u) M_{j,q}(v) w_{ij}.\end{aligned}
 $$
 
 
@@ -43,15 +46,21 @@ $$
 해석적 도함수 S_u, S_v (현재 구현)
 - U 방향:
 
-$$
-Q_k(v)=\sum _jM_{j,q}(v) P_{(i=k),j} \quad S_u=\sum _kN'_{k,p}(u) Q_k(v)
-$$
+```math
+Q_k(v)=\sum _jM_{j,q}(v) P_{(i=k),j}
+```
+```math
+S_u=\sum _kN'_{k,p}(u) Q_k(v)
+```
 
 - V 방향:
 
-$$
-R_{\ell }(u)=\sum _iN_{i,p}(u) P_{i,(j=\ell )} \quad S_v=\sum _{\ell }M'_{\ell ,q}(v) R_{\ell }(u)
-$$
+```math
+R_{\ell }(u)=\sum _iN_{i,p}(u) P_{i,(j=\ell )}
+```
+```math
+S_v=\sum _{\ell }M'_{\ell ,q}(v) R_{\ell }(u)
+```
 
 ### 주의:
 - 위 수식은 비라셔널 표면에 대해 정확합니다.  
@@ -138,9 +147,16 @@ $$
 ### 1) 라셔널 정확 도함수 추가
 - 아이디어: 라셔널일 때 C,W와 그 미분을 계산해 몫의 미분을 적용.
 
-$$
-C(u,v)=\sum N_iM_j w_{ij} P_{ij}^E,\quad W(u,v)=\sum N_iM_j w_{ij}C_u=\sum N'_iM_j w_{ij} P_{ij}^E,\quad W_u=\sum N'_iM_j w_{ij}- S_u=(C_uW-CW_u)/W^2, 
-$$
+```math
+C(u,v)=\sum N_iM_j w_{ij} P_{ij}^E
+```
+```math
+W(u,v)=\sum N_iM_j w_{ij}C_u=\sum N'_iM_j w_{ij} P_{ij}^E
+```
+```math
+W_u=\sum N'_iM_j w_{ij}- S_u=(C_uW-CW_u)/W^2
+```
+
 
 $S_v$ 도 동일.
 - 효과: 수치잡음 감소, 뉴턴 스텝 품질 개선.
