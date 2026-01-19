@@ -1,6 +1,5 @@
 # Basis Functin
-
-B-spline Basis Function 관련 수식들을 정리하고, 수학적으로 올바른지 점검한 뒤, 함수들을 표로 문서화.
+- B-spline Basis Function 관련 수식들을 정리하고, 수학적으로 올바른지 점검한 뒤, 함수들을 표로 문서화.
 
 ## 📐 Basis Function 수식 정리
 ### 1️⃣ 0차 기저함수 N_{i,0}(u)
@@ -65,15 +64,15 @@ $$
 
 ## ✨ 추가 설명이 필요한 항목
 - ders_basis_funs는 내부적으로 ndu 테이블을 만들고, 보조 테이블 a를 이용해 도함수를 계산합니다.  
-이 구조는 Piegl & Tiller 책의 Algorithm A2.3과 완전히 동일합니다.
-- basis_funs에서 마지막 knot 처리:
-```rust
-if (t - self[span + 1]).abs() <= tol {
-    n_vec[p] = 1.0;
-    return n_vec;
-}
-```
-- → 이 부분은 u=u_{n+1}일 때 마지막 기저함수만 1이 되도록 처리한 것입니다.
+- 이 구조는 Piegl & Tiller 책의 Algorithm A2.3과 완전히 동일합니다.
+    - basis_funs에서 마지막 knot 처리:
+    ```rust
+    if (t - self[span + 1]).abs() <= tol {
+        n_vec[p] = 1.0;
+        return n_vec;
+    }
+    ```
+    - 이 부분은 u=u_{n+1}일 때 마지막 기저함수만 1이 되도록 처리한 것입니다.
 
 
 ## 📘 KnotVector & BasisFunction API 문서
@@ -141,9 +140,8 @@ pub struct KnotVector {
 ---
 
 # 소스와 수식 연결
-
-소스의 Basis 관련 함수를 실제 수식과 연결해서 설명을 추가.  
-함수 내부 로직이 어떤 수학적 정의를 구현하는지 단계별로 정리합니다.
+- 소스의 Basis 관련 함수를 실제 수식과 연결해서 설명을 추가.  
+- 함수 내부 로직이 어떤 수학적 정의를 구현하는지 단계별로 정리합니다.
 
 ## 📘 Basis Function 함수와 수식 매핑
 ### 1️⃣ basis_funs(span, u, p)
@@ -278,9 +276,12 @@ $$
 m(i) = r_{\mathrm{left}}(i) + r_{\mathrm{right}}(i) + 1
 $$
 
-$$
-r_{\mathrm{left}}(i)=\max \{ \, r\geq 0 | u_{i-r}=u_i\, \} ,\quad r_{\mathrm{right}}(i)=\max \{ \, r\geq 0 | u_{i+r}=u_i\, \}
-$$
+```math
+r_{\mathrm{left}}(i)=\max \{ \, r\geq 0 | u_{i-r}=u_i\, \}
+```
+```math
+r_{\mathrm{right}}(i)=\max \{ \, r\geq 0 | u_{i+r}=u_i\, \}
+```
 
 
 - 3) 허용오차 포함 중복(수치 안정)
@@ -1541,4 +1542,5 @@ pub fn on_build_bezier_elevate_matrix(old_p: usize, t: usize) -> Vec<Vec<f64>> {
     e
 }
 ```
+---
 
