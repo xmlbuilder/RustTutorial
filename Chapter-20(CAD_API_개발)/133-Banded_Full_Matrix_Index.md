@@ -64,9 +64,11 @@ A[i][l + k] = N[k];
 - 이 식은 banded 내부 좌표계를 전제로 한 것이며,
 - full matrix에서는 절대 그대로 사용하면 안 된다.
 - banded 포맷에서의 열 인덱스 변환은 대략 이런 형태:
-```math
-𝑐_band = (𝑘_full − 𝑖) +(diagonal offset)
-```
+
+$$
+𝑐\\_band = (𝑘\\_full − 𝑖) +(diagonal offset)
+$$
+
 - 즉, **행 i 기준으로 몇 칸 대각에서 떨어졌나** 로 저장한다.
 - 그래서 A[i]의 길이는 n+1이 아니라 ub(=2p-1) 쪽으로 맞춰져 있어야 정상.
 
