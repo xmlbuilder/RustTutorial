@@ -1,9 +1,9 @@
 # Half Edge
 ## Half-edge mesh 원리와 함수 설명
-이 코드는 삼각형 기반 메쉬를 Half-Edge 자료구조로 표현하고, 삼각형 인덱스에서 Half-Edge 메쉬를 구축한 뒤,  
-반대 방향의 half-edge(twin)를 자동으로 연결합니다.  
-Half-Edge는 경량이고 순회가 빠르며, 국소적 수정이 용이해 많은 기하 알고리즘(메쉬 편집, subdivision, topology 검사, watertight 확인 등)  
-에서 표준으로 쓰입니다.
+- 이 코드는 삼각형 기반 메쉬를 Half-Edge 자료구조로 표현하고, 삼각형 인덱스에서 Half-Edge 메쉬를 구축한 뒤,  
+    반대 방향의 half-edge(twin)를 자동으로 연결합니다.  
+- Half-Edge는 경량이고 순회가 빠르며, 국소적 수정이 용이해 많은 기하 알고리즘  
+    (메쉬 편집, subdivision, topology 검사, watertight 확인 등) 에서 표준으로 쓰입니다.
 
 ## Half-edge 자료구조의 이론
 ### Half-edge 기본 개념
