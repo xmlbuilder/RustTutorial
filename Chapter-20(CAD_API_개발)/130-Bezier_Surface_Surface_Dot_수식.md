@@ -1,6 +1,3 @@
-
-
-
 # 📘 Bezier Surface Dot Product
 - bezier_surface_dot_product_with_matrices
     - Mathematical Definition, Meaning, and Applications
@@ -288,6 +285,9 @@ B_i^{m_1}(u)B_k^{m_2}(u)=\frac{{m_1 \choose i}{m_2 \choose k}}{{m_1+m_2 \choose 
 F(u,v)=\sum _{r,s}B_r^{m_1+m_2}(u)B_s^{n_1+n_2}(v)Q_{rs}Q_{rs}=\sum _{i+k=r}\sum _{j+l=s}\alpha _{i,k}^{(u)}\beta _{j,l}^{(v)}\left( P_{ij}^{(1)}\cdot P_{kl}^{(2)}\right) 
 ```
 - Rational의 경우는 “분자와 분모 각각 위 과정을 적용한 것”
+
+---
+
 
 
 
