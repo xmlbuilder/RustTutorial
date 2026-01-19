@@ -22,9 +22,9 @@ $$
 $$
 - View 행렬은 row-major로:
 
-$$
-V=\left[ \begin{matrix}x_x&x_y&x_z&-\mathbf{x}\cdot \mathbf{eye}\\ ; \quad y_x&y_y&y_z&-\mathbf{y}\cdot \mathbf{eye}\\ ; \quad z_x&z_y&z_z&-\mathbf{z}\cdot \mathbf{eye}\\ ; \quad 0&0&0&1\end{matrix}\right] 
-$$
+```math
+V=\left[ \begin{matrix}x_x&x_y&x_z&-\mathbf{x}\cdot \mathbf{eye}\\ y_x&y_y&y_z&-\mathbf{y}\cdot \mathbf{eye}\\ z_x&z_y&z_z&-\mathbf{z}\cdot \mathbf{eye}\\ 0&0&0&1\end{matrix}\right]
+```
 
 - update_view_matrix()
     - 위 수식 그대로 카메라 좌표계를 갱신합니다.
@@ -34,16 +34,16 @@ $$
     - 수직 FOV = fov_y, 종횡비 = aspect.
     - 투영 행렬:
 
-$$
-P=\left[ \begin{matrix}\frac{1}{a\tan (\frac{fov_y}{2})}&0&0&0\\ ; \quad 0&\frac{1}{\tan (\frac{fov_y}{2})}&0&0\\ ; \quad 0&0&\frac{f+n}{n-f}&\frac{2fn}{n-f}\\ ; \quad 0&0&-1&0\end{matrix}\right] 
-$$
+```math
+P=\left[ \begin{matrix}\frac{1}{a\tan (\frac{fov_y}{2})}&0&0&0\\ 0&\frac{1}{\tan (\frac{fov_y}{2})}&0&0\\ 0&0&\frac{f+n}{n-f}&\frac{2fn}{n-f}\\ 0&0&-1&0\end{matrix}\right] 
+```
 
 - set_orthogonal(left,right,bottom,top,near,far)
     - 직교 투영 행렬:
 
-$$
-P=\left[ \begin{matrix}\frac{2}{r-l}&0&0&-\frac{r+l}{r-l}\\ ; \quad 0&\frac{2}{t-b}&0&-\frac{t+b}{t-b}\\ ; \quad 0&0&-\frac{2}{f-n}&-\frac{f+n}{f-n}\\ ; \quad 0&0&0&1\end{matrix}\right]
-$$
+```math
+P=\left[ \begin{matrix}\frac{2}{r-l}&0&0&-\frac{r+l}{r-l}\\ 0&\frac{2}{t-b}&0&-\frac{t+b}{t-b}\\ 0&0&-\frac{2}{f-n}&-\frac{f+n}{f-n}\\ 0&0&0&1\end{matrix}\right]
+```
 
 
 ### 📐 이동/조작 관련
