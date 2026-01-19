@@ -371,7 +371,6 @@ impl Viewport {
 ```
 ```rust
     /// world space의 특정 점에서의 scale (perspective일 때 깊이를 내부에서 계산)
-    ///
     /// Camera가 "카메라 위치 + 카메라 Z축" 정보를 제공한다고 가정합니다.
     /// camera.rs API에 맞게 이 부분은 사용자가 약간 손을 봐야 합니다.
     pub fn world_to_screen_scale_at_point(&self, world_point: &Point3D) -> Option<f64> {
