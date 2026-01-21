@@ -28,6 +28,11 @@
 - 이게 바로 surface metric tensor를 이용한 tangent inversion 방식이고,  
     Piegl 책에서도 이 방식으로 설명.
 
+<div align="center">
+  <img src="/image/tangent_vec_inversion.png">
+</div>
+
+
 ### 🧮 Rust 코드 대응
 - 코드:
 ```rust
