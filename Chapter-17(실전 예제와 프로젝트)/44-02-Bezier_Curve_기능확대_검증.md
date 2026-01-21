@@ -42,9 +42,18 @@ $$
     - If rat = true:
         - Formula:
 
-$$
-X_w=\sum _iB_i^p(t) (x_iw_i),\quad Y_w=\sum _iB_i^p(t) (y_iw_i), \quad Z_w=\sum _iB_i^p(t) (z_iw_i),\quad W=\sum _iB_i^p(t) w_i
-$$
+```math
+X_w=\sum _iB_i^p(t) (x_iw_i),
+```
+```math
+Y_w=\sum _iB_i^p(t) (y_iw_i),
+```
+```math
+Z_w=\sum _iB_i^p(t) (z_iw_i),
+```
+```math
+W=\sum _iB_i^p(t) w_i
+```
 
   - 반환: $(X_w,Y_w,Z_w,W)$, 유클리드 변환은 $(X_w/W,Y_w/W,Z_w/W)$.
 
@@ -245,12 +254,14 @@ $$
 - Bounding box: bounding_box(samples)는 샘플링 기반.
 - Reverse: 제어점 역순.
 - Translate/Scale/transform_linear: 합리 좌표를 고려해 w를 곱하거나 유지하는 방식으로 안전하게 변환.
-- Degree-3 chord parameters: on_compute_bezier_degree3chord_parameters(q)는 chord-length 기반 내부 매개변수 추정으로 타당합니다. 예외 시 1/3, 2/3 기본값.
+- Degree-3 chord parameters: on_compute_bezier_degree3chord_parameters(q)는 chord-length 기반 내부 매개변수 추정으로 타당합니다.
+- 예외 시 1/3, 2/3 기본값.
 
 ---
 ## 소스 코드
 ```rust
-use crate::core::basis::{on_all_ber_1d, on_bernstein, on_bezier_to_power_matrix, on_binomial_usize, on_degree_elevation_matrix, on_fit_cubic_bezier_through4points, on_power_to_bezier_vec, on_product_matrix};
+use crate::core::basis::{on_all_ber_1d, on_bernstein, on_bezier_to_power_matrix, on_binomial_usize,
+    on_degree_elevation_matrix, on_fit_cubic_bezier_through4points, on_power_to_bezier_vec, on_product_matrix};
 use crate::core::curve_utils::is_rational_ctrl_array;
 use crate::core::domain::Interval;
 use crate::core::geom_trait::Curve;
@@ -1509,5 +1520,6 @@ pub fn on_make_cubic_interpolant_bezier(q: &[Point3D; 4]) -> Option<BezierCurve>
     })
 }
 ```
+---
 
 
