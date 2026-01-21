@@ -134,9 +134,13 @@ $$
 - 기능: 3자유도 2차 미분 방정식을 4차 Runge-Kutta 방법으로 적분합니다.
 - 수식 (단순화된 형태):
 
-$$
-\begin{aligned}\vec {k}_1&=f(t_i,x_i,\dot {x}_i)\\ \quad \vec {k}_2&=f\left( t_i+\frac{dt}{2},x_i+\frac{dt}{2}\vec {k}_1\right) \\ \quad \vec {k}_3&=f\left( t_i+\frac{dt}{2},x_i+\frac{dt}{2}\vec {k}_2\right) \\ \quad \vec {k}_4&=f(t_i+dt,x_i+dt\cdot \vec {k}_3)\\ \quad x_{i+1}&=x_i+\frac{dt}{6}(\vec {k}_1+2\vec {k}_2+2\vec {k}_3+\vec {k}_4)\end{aligned}
-$$
+```math
+\begin{aligned}\vec {k}_1&=f(t_i,x_i,\dot {x}_i)\\
+\vec {k}_2&=f\left( t_i+\frac{dt}{2},x_i+\frac{dt}{2}\vec {k}_1\right) \\
+\vec {k}_3&=f\left( t_i+\frac{dt}{2},x_i+\frac{dt}{2}\vec {k}_2\right) \\
+\vec {k}_4&=f(t_i+dt,x_i+dt\cdot \vec {k}_3)\\
+x_{i+1}&=x_i+\frac{dt}{6}(\vec {k}_1+2\vec {k}_2+2\vec {k}_3+\vec {k}_4)\end{aligned}
+```
 
 
 ### 6. calc_damage(time, data, unit)
@@ -207,17 +211,26 @@ $$
 $$
 
 #### 2. Runge-Kutta 4차 적분
-각 시간 구간 [t_i,t_{i+1}]에 대해:
+각 시간 구간 $[t_i,t_{i+1}]$ 에 대해:
 
-$$
-\begin{aligned}k_1^x&=\dot {x}_i\\ k_1^v&=f(t_i,x_i,\dot {x}_i)\\ \quad k_2^x&=\dot {x}_i+\frac{dt}{2}k_1^v\\ \quad k_2^v&=f\left( t_i+\frac{dt}{2},x_i+\frac{dt}{2}k_1^x,k_2^x\right) \\ \quad k_3^x&=\dot {x}_i+\frac{dt}{2}k_2^v\\ k_3^v&=f\left( t_i+\frac{dt}{2},x_i+\frac{dt}{2}k_2^x,k_3^x\right) \\ \quad k_4^x&=\dot {x}_i+dt\cdot k_3^v\\ \quad k_4^v&=f(t_i+dt,x_i+dt\cdot k_3^x,k_4^x)\\ \quad \end{aligned}
-$$
+```math
+\begin{aligned}k_1^x&=\dot {x}_i\\
+k_1^v&=f(t_i,x_i,\dot {x}_i)\\
+k_2^x&=\dot {x}_i+\frac{dt}{2}k_1^v\\
+k_2^v&=f\left( t_i+\frac{dt}{2},x_i+\frac{dt}{2}k_1^x,k_2^x\right)\\
+k_3^x&=\dot {x}_i+\frac{dt}{2}k_2^v\\
+k_3^v&=f\left( t_i+\frac{dt}{2},x_i+\frac{dt}{2}k_2^x,k_3^x\right)\\
+k_4^x&=\dot {x}_i+dt\cdot k_3^v\\
+k_4^v&=f(t_i+dt,x_i+dt\cdot k_3^x,k_4^x)\\
+\end{aligned}
+```
 
 #### 3. 상태 업데이트
 
-$$
-\begin{aligned}x_{i+1}&=x_i+dt\cdot \frac{1}{6}(k_1^x+2k_2^x+2k_3^x+k_4^x)\\ \dot {x}_{i+1}&=\dot {x}_i+dt\cdot \frac{1}{6}(k_1^v+2k_2^v+2k_3^v+k_4^v)\end{aligned}
-$$
+```math
+\begin{aligned}x_{i+1}&=x_i+dt\cdot \frac{1}{6}(k_1^x+2k_2^x+2k_3^x+k_4^x)\\
+\dot {x}_{i+1}&=\dot {x}_i+dt\cdot \frac{1}{6}(k_1^v+2k_2^v+2k_3^v+k_4^v)\end{aligned}
+```
 
 
 ## ✅ 수식 점검 결과
@@ -233,17 +246,6 @@ $$
 | `calcDamageRisk` | $1 - \exp\left(-\exp\left(\log(0.957D + 0.017) \cdot a - \log(b) \cdot a\right)\right)$   | 손상 기반 위험도 |
 | `calcUBRIC`      | $\text{UBRIC} = \sqrt{T_x^2 + T_y^2 + T_z^2}$,<br>$T_j = v_j + (a_j - v_j) \cdot e^{-a_j / v_j}$ | 속도/가속도 기반 UBRIC |
 | `calcUBRICRisk`  | $1 - \exp\left(-\exp\left(\log(1.054U - 0.014) \cdot a - \log(b) \cdot a\right)\right)$   | UBRIC 기반 위험도 |
-
-
-
-## ✅ 수식 점검 결과: rk4ode 함수
-
-| 항목             | 수식 표현                                                                 |
-|------------------|---------------------------------------------------------------------------|
-| 시스템 방정식     | $\ddot{x} = a - C \cdot \dot{x} - K \cdot x$                          |
-| 평균 외력         | $a_{\mathrm{ave}} = \frac{a_i + a_{i+1}}{2}$                          |
-| k₁ 계산          | $k_1^x = \dot{x}_i$, $k_1^v = f(t_i, x_i, \dot{x}_i)$              |
-| k₂ 계산          | $k_2^x = \dot{x}_i + \frac{dt}{2} k_1^v$,<br> $k_2^v = f(t_i + \frac{dt}{2}, x_i + \frac{dt}{
 
 
 ## 🧠 정리 요약: rk4ode 함수 수식
@@ -874,7 +876,6 @@ impl DamageData {
         (ubric, TVector3d::new(ubric_risk[0] * 100.0, ubric_risk[1] * 100.0, ubric_risk[2] * 100.0))
     }
 }
-```
 ```
 ```rust
 static DAMAGE: OnceCell<RwLock<DamageData>> = OnceCell::new();
