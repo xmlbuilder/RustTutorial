@@ -179,13 +179,17 @@ $$
 - 행렬 A:
 
 $$
-A=\left[ \begin{matrix}2&3&1\\ ; \quad 4&1&-3\\ ; \quad -2&5&2\end{matrix}\right]
+A=\left[ \begin{matrix}2&3&1\\
+4&1&-3\\
+-2&5&2\end{matrix}\right]
 $$ 
 
 - 벡터 b:
 
 $$
-b=\left[ \begin{matrix}9\\ ; \quad 1\\ ; \quad 13\end{matrix}\right]
+b=\left[ \begin{matrix}9\\
+1\\
+13\end{matrix}\right]
 $$ 
 
 ### Lu 분해 수행
@@ -207,7 +211,11 @@ $$
 - 중간 상태:
 
 $$
-L=\left[ \begin{matrix}1&0&0\\ ; \quad 2&1&0\\ ; \quad -1&0&1\end{matrix}\right] ,\quad U=\left[ \begin{matrix}2&3&1\\ ; \quad 0&?&?\\ ; \quad 0&?&?\end{matrix}\right]
+L=\left[ \begin{matrix}1&0&0\\
+2&1&0\\
+-1&0&1\end{matrix}\right] ,\quad U=\left[ \begin{matrix}2&3&1\\ 
+0&?&?\\
+0&?&?\end{matrix}\right]
 $$
 
 
