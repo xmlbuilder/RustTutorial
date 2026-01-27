@@ -438,6 +438,8 @@
 - [09-Rust에서_만든_library_c에서_연동](./Chapter-12(Unsafe와%20FFI)/09-Rust에서_만든_library_c에서_연동.md)
 - [10-Box::from_raw](./Chapter-12(Unsafe와%20FFI)/10-Box::from_raw.md)
 - [11-core::mem](./Chapter-12(Unsafe와%20FFI)/11-core::mem.md)
+- [12-from_raw_parts_mut](./Chapter-12(Unsafe와%20FFI)/12-from_raw_parts_mut.md)
+
 
 🔼 [맨 위로](#-목차)
 
