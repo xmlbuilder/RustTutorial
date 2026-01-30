@@ -1,6 +1,6 @@
 # PartialEq / Eq / PartialOrd / Ord
-아래는 요청하신 PartialEq, Eq, PartialOrd, Ord에 대한 핵심 정리입니다.  
-실무에서 타입 비교와 정렬을 설계할 때 꼭 알아야 할 부분만 간결하게 정리:
+- PartialEq, Eq, PartialOrd, Ord에 대한 핵심 정리입니다.  
+- 실무에서 타입 비교와 정렬을 설계할 때 꼭 알아야 할 부분만 간결하게 정리:
 
 ## ✅ PartialEq & Eq
 | Trait      | 핵심 기능           |
@@ -24,7 +24,7 @@ impl PartialEq for Key {
 
 - metadata는 비교하지 않음 → 부분 등가
 - Eq는 구현하지 않음 → 반사성 보장 안 됨
-서로 다른 타입 간 비교
+- 서로 다른 타입 간 비교
 ```rust
 impl PartialEq<u32> for Key {
     fn eq(&self, other: &u32) -> bool {
@@ -33,8 +33,8 @@ impl PartialEq<u32> for Key {
 }
 ```
 
-- PartialEq<T>는 `타입 간` 비교 가능
-- Eq는 `타입이 같아야만` 구현 가능
+- PartialEq<T>는 **타입 간** 비교 가능
+- Eq는 **타입이 같아야만** 구현 가능
 
 ### ✅ PartialOrd & Ord
 | Trait       | 핵심 기능                     |
@@ -76,19 +76,19 @@ impl PartialOrd for Citation {
 
 # 반사성
 
-**반사성(reflexivity)** 이라는 용어는 수학과 컴퓨터 과학에서 관계의 성질을 설명할 때 자주 등장하지만,  
-Rust나 일반 프로그래밍에서는 처음 들으면 낯설 수 있음.
+- **반사성(reflexivity)** 이라는 용어는 수학과 컴퓨터 과학에서 관계의 성질을 설명할 때 자주 등장하지만,  
+    Rust나 일반 프로그래밍에서는 처음 들으면 낯설 수 있음.
 
 ## 🔍 반사성(reflexivity)이란?
-자기 자신과의 관계가 항상 참(True)인 성질을 말합니다.
-예시로 설명하면:
+- 자기 자신과의 관계가 항상 참(True)인 성질을 말합니다.
+- 예시로 설명하면:
 - 어떤 값 a가 있을 때  
-    → a == a가 항상 참이면, 그 비교는 반사적이라고 말합니다.
+    - a == a가 항상 참이면, 그 비교는 반사적이라고 말합니다.
 
 ## ✅ Rust에서 반사성이 중요한 이유
 - Eq trait은 반사성을 보장해야만 구현 가능합니다.
 - 즉, Eq를 구현한 타입은  
-    → a == a가 항상 true여야 해요.
+    - a == a가 항상 true여야 해요.
 ### 예시
 ```rust
 #[derive(PartialEq, Eq)]
@@ -98,12 +98,12 @@ struct Point {
 }
 ```
 - 여기서 Point는 Eq를 구현했기 때문에  
-    → 어떤 p: Point에 대해 p == p는 항상 true여야 함
+    - 어떤 p: Point에 대해 p == p는 항상 true여야 함
 
 ### ⚠️ 반사성이 깨질 수 있는 경우
 - NaN (Not a Number) 같은 값은  
-    → NaN == NaN이 false이기 때문에  
-    → Eq를 구현할 수 없고, PartialEq만 가능함
+    - NaN == NaN이 false이기 때문에  
+    - Eq를 구현할 수 없고, PartialEq만 가능함
 
 ## 🔚 요약: Eq vs PartialEq
 | Trait       | 반사성 예시        |
@@ -115,9 +115,8 @@ struct Point {
 
 # PartialEq fro f64
 
-아래는 f64 타입에 대해 **허용 오차(tolerance)** 를 적용한 PartialEq 구현 예시입니다.  
-두 값이 10e-5 이내로 차이가 나면 같다고 판단하는 방식:
-
+- 아래는 f64 타입에 대해 **허용 오차(tolerance)** 를 적용한 PartialEq 구현 예시입니다.  
+- 두 값이 10e-5 이내로 차이가 나면 같다고 판단하는 방식:
 ```rust
 const TOLERANCE: f64 = 1e-5;
 
@@ -133,7 +132,6 @@ impl PartialEq for Approximate {
 fn main() {
     let a = Approximate(1.00001);
     let b = Approximate(1.00002);
-
     println!("a == b: {}", a == b); // true
 }
 ```
@@ -141,11 +139,11 @@ fn main() {
 
 ## ✅ 핵심 포인트
 - abs()로 절대값 차이를 구하고      
-    → TOLERANCE보다 작으면 같다고 판단
+    - TOLERANCE보다 작으면 같다고 판단
 - Eq는 구현하지 않음 → 반사성은 만족하지만, NaN 같은 예외를 고려하면 안전하게 PartialEq만
 
-Rust에서는 표준 타입(f64, i32 등)에 대해 직접 impl을 추가하는 것이 막혀 있습니다.    
-이건 Rust의 고의적인 안전 설계.
+- Rust에서는 표준 타입(f64, i32 등)에 대해 직접 impl을 추가하는 것이 막혀 있습니다.    
+- 이건 Rust의 고의적인 안전 설계.
 
 ## 🔒 왜 직접 impl이 막혀 있을까?
 | 원칙 또는 이유     | 설명 |
@@ -167,7 +165,7 @@ impl PartialEq for Approximate {
 ```
 
 - f64에 직접 impl은 불가능하지만  
-    → `Approximate(f64)` 처럼 `newtype` 패턴을 쓰면 가능
+    - `Approximate(f64)` 처럼 `newtype` 패턴을 쓰면 가능
 - 이 방식은 타입 안전성과 커스터마이징을 동시에 확보할 수 있음
 
 ## 🧠 Orphan Rule 요약
@@ -189,8 +187,8 @@ impl PartialEq for Approximate {
 
 # impl MyTrait for f64 허용 이유
 
-`impl MyTrait for f64` 가 가능한 이유는 From, Into 같은 trait을 사용자 정의 타입에 적용하기 위한 확장성도 있지만,  
-핵심은 Rust의 Orphan Rule이 허용하는 범위 내에서 표준 타입에 대해 내가 만든 trait은 자유롭게 구현할 수 있도록 설계되어 있기 때문.
+- `impl MyTrait for f64` 가 가능한 이유는 From, Into 같은 trait을 사용자 정의 타입에 적용하기 위한 확장성도 있지만,    
+    핵심은 Rust의 Orphan Rule이 허용하는 범위 내에서 표준 타입에 대해 내가 만든 trait은 자유롭게 구현할 수 있도록 설계되어 있기 때문.
 
 ## 🔍 왜 impl MyTrait for f64는 허용될까?
 | 조건 또는 목적             | 설명 |
@@ -215,7 +213,7 @@ impl MyTrait for f64 {
 ```
 
 - 이건 내 crate에서 만든 trait이기 때문에  
-    → 표준 타입 f64에 자유롭게 impl 가능
+    - 표준 타입 f64에 자유롭게 impl 가능
 
 ### ⚠️ 두개 다 내 triat가 아니면 불가능
 ```rust
@@ -245,7 +243,7 @@ impl PartialEq for Approximate {
 ```
 
 - `Approximate` 는 내가 만든 타입이므로  
-    → 표준 trait PartialEq, Ord, Hash 등을 자유롭게 구현 가능
+    - 표준 trait PartialEq, Ord, Hash 등을 자유롭게 구현 가능
   
 ### 2. 내 trait을 f64에 붙이기
 ```rust
@@ -261,7 +259,7 @@ impl MyFloatOps for f64 {
 ```
 
 - 내가 만든 trait이므로  
-    → 표준 타입 f64에 붙이는 건 허용됨
+    - 표준 타입 f64에 붙이는 건 허용됨
 
 ## 🔍 Rust vs C# 확장성 비교
 | 언어   | 확장 방식               | 적용 대상      | 구현 방식 예시               |
@@ -299,3 +297,5 @@ impl ApproxEq for f64 {
 - Rust는 trait 기반 확장이므로  
     → 명시적 trait import (use)가 필요할 수 있음
 - C#은 global scope에서 자동 확장됨
+
+---
