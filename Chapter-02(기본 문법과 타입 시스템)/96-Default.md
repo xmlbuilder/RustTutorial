@@ -7,11 +7,9 @@
 ```rust
 Interval::default()
 ```
-- 과
 ```rust
 Default::default()
 ```
-
 - 은 완전히 동일한 동작을 함.
 - 단, 전제 조건 : 컴파일러가 T가 무엇인지 알고 있어야 한다.
 
