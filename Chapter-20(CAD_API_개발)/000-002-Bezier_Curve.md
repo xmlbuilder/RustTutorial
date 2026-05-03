@@ -4,7 +4,7 @@
 ```math
 \mathbf{C}(u)=\sum _{i=0}^nB_{i,n}(u)\, \mathbf{P_{\mathnormal{i}}},\quad 0\leq u\leq 1
 ```
-- 여기서 $$\mathbf{P_{\mathnormal{i}}}$ 는 control point,
+- 여기서 $\mathbf{P_{\mathnormal{i}}}$ 는 control point,
 - $B_{i,n}(u)$ 는 n차 Bernstein 다항식:
 ```math
 B_{i,n}(u)={n \choose i}u^i(1-u)^{n-i}=\frac{n!}{i!(n-i)!}u^i(1-u)^{n-i}
