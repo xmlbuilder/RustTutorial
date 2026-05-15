@@ -2,7 +2,7 @@
 🧩 두 함수의 핵심 차이 (한 줄 요약)
 | Function                          | Purpose         | Reparam Formula          | Typical Use Case      |
 |-----------------------------------|---------------------------------|-------------------------|-----------------------------|
-|on_power_reparam_matrix_unit|Simple affine reparameterization |u = a + (b - a) * t|Normalize [a,b] → [0,1]|
+|on_power_reparam_matrix_unit|Simple affine reparameterization |u = a + (b - a) * t|Normalize [0,1] → [a,b]|
 |on_power_reparam_matrix     |General domain reparameterization|u = α·up + β     |Map [u0,u1] → [a,b] (full reparam) |
 
 즉:
