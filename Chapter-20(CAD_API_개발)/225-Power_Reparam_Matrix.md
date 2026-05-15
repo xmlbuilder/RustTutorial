@@ -15,7 +15,7 @@
 u=a+(b-a)t
 ```
 - 여기서 t ∈ [0,1].
-- 즉, old domain이 [a,b]이고 new domain은 항상 [0,1].
+- 즉, old domain이 [0,1]이고 new domain은 항상 [a,b].
 - ✔ 공식
 ```math
 d_i=\sum _{k=i}^pc_k{k \choose i}a^{k-i}(b-a)^i
