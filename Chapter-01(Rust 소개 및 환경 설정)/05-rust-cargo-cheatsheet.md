@@ -1,12 +1,12 @@
 
-# 🦀 Rust Cargo & Module System — Quick Guide
+## 📘 Rust Cargo & Module System — Quick Guide
 
-> 이 문서는 한 장짜리 스냅샷 이미지에 담긴 **Rust Cargo / 모듈 / 크레이트** 내용을 읽고, 핵심만 **표 + 다이어그램**으로 정리한 요약본입니다.  
-> 실습 가능한 **샘플 코드**와 **프로젝트 트리**도 함께 제공합니다.
+> 이 문서는 한 장짜리 스냅샷 이미지에 담긴 **Rust Cargo / 모듈 / 크레이트** 내용을 읽고, 핵심만 **표 + 다이어그램** 으로 정리한 요약본입니다.  
+> 실습 가능한 **샘플 코드**와 **프로젝트 트리** 도 함께 제공합니다.
 
 ---
 
-## 1) Cargo 한눈에 보기
+### 📌 1) Cargo 한눈에 보기
 
 | 목적 | 명령 | 비고 |
 |---|---|---|
@@ -27,7 +27,7 @@
 
 ---
 
-## 2) 크레이트(패키지) & 프로젝트 레이아웃
+### 📌 2) 크레이트(패키지) & 프로젝트 레이아웃
 
 - **바이너리 크레이트**: 실행 가능한 프로그램. `src/main.rs`가 **크레이트 루트**.
 - **라이브러리 크레이트**: 라이브러리. `src/lib.rs`가 **크레이트 루트**.
@@ -42,13 +42,13 @@ hello/
    └─ lib.rs         # (선택) 라이브러리 크레이트 루트
 ```
 
-**프로젝트 레이어:**
+#### 🔹 프로젝트 레이어:
 
 ```mermaid
 flowchart LR
-    A[📦 Package: hello]
+    A[🔹 Package: hello]
     B[🔹 Binary Crate<br>src/main.rs]
-    C[📚 Library Crate<br>src/lib.rs]
+    C[🔹 Library Crate<br>src/lib.rs]
 
     A --> B
     A --> C
@@ -58,14 +58,14 @@ flowchart LR
 
 ---
 
-## 3) 모듈 시스템(2018 에디션 기준)
+### 📌 3) 모듈 시스템(2018 에디션 기준)
 
 - `mod xxx;` : **파일/폴더를 모듈로 포함** (컴파일 타임에 연결)
 - `pub` : 다른 모듈에서 접근 가능하도록 공개
 - 경로 접두사: `crate::`(현재 크레이트), `super::`(부모), `self::`(자신)
 - **2018 에디션** 이후: 대부분의 경우 `extern crate` **불필요**
 
-### 예) `communicator` 모듈 구조
+#### 🔹 예) `communicator` 모듈 구조
 
 ```text
 src/
@@ -110,15 +110,15 @@ fn main() {
 }
 ```
 
-**모듈 트리:**
+#### 🔹 모듈 트리:
 
 
 ```mermaid
 flowchart TD
-    A[🟦 Crate Root<br>main.rs]
-    B[📦 mod communicator]
+    A[🔹 Crate Root<br>main.rs]
+    B[🔹 mod communicator]
     C[🔹 mod client]
-    D[🔸 mod server]
+    D[🔹 mod server]
 
     A --> B
     B --> C
@@ -137,7 +137,7 @@ flowchart TD
 
 ---
 
-## 4) 의존성 관리 – `Cargo.toml`
+### 📌 4) 의존성 관리 – `Cargo.toml`
 
 `Cargo.toml`의 대표 섹션:
 
@@ -163,7 +163,7 @@ lto = true
 codegen-units = 1
 ```
 
-### 버전 규칙(semver)
+### 📌 버전 규칙(semver)
 | 표기 | 의미(대략) |
 |---|---|
 | `1.2.3` | 정확히 그 버전(또는 `^1.2.3`과 동일로 보는 경우 多) |
@@ -172,7 +172,7 @@ codegen-units = 1
 | `1.*`   | 마이너/패치 와일드카드 |
 | `>=1.2, <2.0` | 범위 지정 |
 
-### 외부 크레이트 사용 예
+### 📌 외부 크레이트 사용 예
 
 - `Cargo.toml`
 
@@ -197,7 +197,7 @@ fn main() {
 
 ---
 
-## 5) 라이브러리 + 바이너리 동시 구성
+### 📌 5) 라이브러리 + 바이너리 동시 구성
 
 ```text
 myapp/
@@ -208,7 +208,6 @@ myapp/
 ```
 
 - `src/lib.rs`
-
 ```rust
 pub mod math;
 
@@ -218,7 +217,6 @@ pub fn greet(name: &str) -> String {
 ```
 
 - `src/math.rs`
-
 ```rust
 pub fn add(a: i32, b: i32) -> i32 { a + b }
 ```
@@ -236,7 +234,7 @@ fn main() {
 
 ---
 
-## 6) 여러 바이너리와 예제
+### 📌 6) 여러 바이너리와 예제
 
 ```
 src/bin/
@@ -251,7 +249,7 @@ examples/
 
 ---
 
-## 7) 테스트 배치
+### 📌 7) 테스트 배치
 
 - **단위 테스트**(크레이트 내부): `src/*.rs` 안에
 
@@ -267,7 +265,7 @@ mod tests {
 }
 ```
 
-- **통합 테스트**(외부 관점): `tests/` 폴더
+### 📌 **통합 테스트**(외부 관점): `tests/` 폴더
 
 ```text
 tests/
@@ -285,7 +283,7 @@ fn greet_api() {
 
 ---
 
-## 8) 워크스페이스(Workspace)
+### 📌 8) 워크스페이스(Workspace)
 
 여러 패키지를 **한 번에** 관리하는 루트:
 
@@ -306,7 +304,7 @@ resolver = "2"  # 최신 권장
 
 - 빌드: `cargo build` (전체) / `cargo build -p utils` (특정 멤버)
 
-**워크스페이스 의존성:**
+#### 🔹 워크스페이스 의존성:
 
 ```mermaid
 flowchart LR
@@ -320,7 +318,7 @@ flowchart LR
 
 ---
 
-## 9) 흔한 오류와 즉시 해결 팁
+### 📌 9) 흔한 오류와 즉시 해결 팁
 
 | 증상 | 원인 | 해결 |
 |---|---|---|
@@ -333,7 +331,7 @@ flowchart LR
 
 ---
 
-## 10) 한 장 예제 — `communicator`
+### 📌 10) 한 장 예제 — `communicator`
 
 ```text
 communicator_demo/
@@ -346,7 +344,7 @@ communicator_demo/
       └─ server.rs
 ```
 
-**Cargo.toml**
+#### 🔹 **Cargo.toml**
 
 ```toml
 [package]
@@ -357,14 +355,14 @@ edition = "2021"
 [dependencies]
 ```
 
-**src/communicator/mod.rs**
+#### 🔹 **src/communicator/mod.rs**
 
 ```rust
 pub mod client;
 pub mod server;
 ```
 
-**src/communicator/client.rs**
+#### 🔹 **src/communicator/client.rs**
 
 ```rust
 pub fn connect() {
@@ -372,7 +370,7 @@ pub fn connect() {
 }
 ```
 
-**src/communicator/server.rs**
+#### 🔹 **src/communicator/server.rs**
 
 ```rust
 pub fn connect() {
@@ -380,7 +378,7 @@ pub fn connect() {
 }
 ```
 
-**src/main.rs**
+#### 🔹 **src/main.rs**
 
 ```rust
 mod communicator;
@@ -391,7 +389,7 @@ fn main() {
 }
 ```
 
-실행:
+#### 🔹 실행:
 
 ```bash
 cargo run
@@ -400,7 +398,7 @@ cargo run
 
 ---
 
-### 참고 체크리스트
+### 📌 참고 체크리스트
 - [ ] 파일/폴더 이름 ↔ `mod` 선언 일치
 - [ ] 외부 크레이트는 `Cargo.toml`에 추가
 - [ ] 공개 API는 `pub`으로 노출
@@ -409,19 +407,19 @@ cargo run
 
 ---
 
-## 개요
+### 📌 개요
 이 문서는 예시를 기반으로, **모듈 파일 분리**, **공개 범위(`pub`)**, **하위 폴더 모듈(`mod.rs`)**, **상수 재사용**을 차례로 설명합니다.  
 코드는 모두 Rust 2018+ 에디션을 기준으로 하며, `cargo run`으로 즉시 실행할 수 있습니다.
 
-## 단일 파일 모듈: `my_module.rs`
+### 📌 단일 파일 모듈: `my_module.rs`
 
-### 폴더 구조
+#### 🔹 폴더 구조
 ```
 src/
 ├─ main.rs
 └─ my_module.rs
 ```
-### text 모듈 구현 (`my_module.rs`)
+#### 🔹 text 모듈 구현 (`my_module.rs`)
 
 ```rust
 pub fn greet() {
@@ -443,13 +441,13 @@ impl Person {
 }
 ```
 
-### 해설
+#### 🔹 해설
 
-pub 키워드: 외부 모듈에서 접근 가능하도록 공개 범위를 지정합니다.  
-구조체 Person: 공개지만, age 필드는 비공개입니다.  
-따라서 age에 직접 접근할 수 없고, 메서드(get_older)로만 조작합니다.
+- pub 키워드: 외부 모듈에서 접근 가능하도록 공개 범위를 지정합니다.  
+- 구조체 Person: 공개지만, age 필드는 비공개입니다.  
+- 따라서 age에 직접 접근할 수 없고, 메서드(get_older)로만 조작합니다.
 
-main.rs에서 모듈 사용
+#### 🔹 main.rs에서 모듈 사용
 ```rust
 mod my_module;                   // src/my_module.rs 포함
 use my_module::{greet, Person};  // 공개 항목만 임포트
@@ -464,8 +462,8 @@ fn main() {
 }
 ```
 
-## 폴더 기반 하위 모듈: bots
-### 폴더 구조
+### 📌 폴더 기반 하위 모듈: bots
+#### 🔹 폴더 구조
 ```
 textsrc/
  ├─ bots/
@@ -475,12 +473,14 @@ textsrc/
  └─ my_module.rs
 ```
 
-bots/mod.rs
-폴더를 모듈로 쓰려면 그 폴더 안에 mod.rs가 있어야 하며, 여기에서 하위 모듈들을 선언합니다.
+#### 🔹 bots/mod.rs
+- 폴더를 모듈로 쓰려면 그 폴더 안에 mod.rs가 있어야 하며, 여기에서 하위 모듈들을 선언합니다.
 
 ```rust
 pub mod hello_bot;   // hello_bot.rs를 하위 모듈로 노출
-bots/hello_bot.rs
+
+#### 🔹bots/hello_bot.rs
+```rust
 rustpub static BOT_NAME: &str = "hello_bot";
 
 pub fn hello() {
@@ -488,13 +488,12 @@ pub fn hello() {
 }
 ```
 
-### 해설
+#### 🔹 해설
 
-static: 프로그램 수명 전체에 존재하는 전역 불변 참조를 선언합니다.  
-pub: 붙였기 때문에 다른 모듈에서 crate::bots::hello_bot::BOT_NAME으로 접근 가능합니다.
+- static: 프로그램 수명 전체에 존재하는 전역 불변 참조를 선언합니다.  
+- pub: 붙였기 때문에 다른 모듈에서 crate::bots::hello_bot::BOT_NAME으로 접근 가능합니다.
 
-
-### my_module.rs에서 다른 모듈의 상수 사용
+#### 🔹 my_module.rs에서 다른 모듈의 상수 사용
 
 ```rust
 use crate::bots::hello_bot::BOT_NAME;
@@ -504,13 +503,13 @@ pub fn greet() {
 }
 ```
 
-### 해설
+#### 🔹 해설
 
-crate:: 접두사: 현재 크레이트의 루트에서부터 경로를 해석합니다.  
-이 예시에서는 bots가 크레이트 루트(src/main.rs)에서 선언되므로 crate::bots::... 경로가 유효합니다.
+- crate:: 접두사: 현재 크레이트의 루트에서부터 경로를 해석합니다.  
+- 이 예시에서는 bots가 크레이트 루트(src/main.rs)에서 선언되므로 crate::bots::... 경로가 유효합니다.
 
 
-### main.rs에서 두 모듈을 함께 사용
+#### 🔹 main.rs에서 두 모듈을 함께 사용
 
 ```rust
 mod my_module;  // src/my_module.rs
@@ -529,34 +528,34 @@ fn main() {
 }
 ```
 
-### 자주 하는 실수와 팁
+#### 🔹 자주 하는 실수와 팁
 
-파일 경로와 모듈 선언 불일치:  
-mod my_module; 선언을 했는데 src/my_module.rs가 없으면 에러.  
-공개 범위 누락:  
-외부에서 쓰려는 함수/구조체/상수에 pub 미지정.  
-경로 접두사 헷갈림:  
-크레이트 루트 기준은 crate::, 부모 모듈은 super::, 현재 모듈은 self::.  
-폴더 모듈에서 mod.rs 누락:  
-src/bots/mod.rs가 없으면 src/bots/hello_bot.rs를 모듈로 찾지 못함.  
+- 파일 경로와 모듈 선언 불일치:  
+   - mod my_module; 선언을 했는데 src/my_module.rs가 없으면 에러.  
+- 공개 범위 누락:  
+   - 외부에서 쓰려는 함수/구조체/상수에 pub 미지정.  
+- 경로 접두사 헷갈림:  
+   - 크레이트 루트 기준은 crate::, 부모 모듈은 super::, 현재 모듈은 self::.  
+- 폴더 모듈에서 mod.rs 누락:  
+   - src/bots/mod.rs가 없으면 src/bots/hello_bot.rs를 모듈로 찾지 못함.  
 
-### 빌드/실행 빠른 레퍼런스
+#### 🔹 빌드/실행 빠른 레퍼런스
 ```
 cargo build
 ```
-### 실행(자동 빌드)
+#### 🔹 실행(자동 빌드)
 ```
 cargo run
 ```
-### 빠른 타입체크
+#### 🔹 빠른 타입체크
 ```
 cargo check
 ```
 
-## 마무리
+### 📌 마무리
 
-위 구조를 그대로 복사해 사용하면, 단일 파일 모듈 → 폴더 모듈 → 상수/함수 재사용 흐름을 자연스럽게 학습할 수 있습니다.  
-문서에 포함된 코드는 그대로 컴파일/실행이 가능하며, 프로젝트가 커지면 워크스페이스로 확장하는 것을 권장합니다.
+- 위 구조를 그대로 복사해 사용하면, 단일 파일 모듈 → 폴더 모듈 → 상수/함수 재사용 흐름을 자연스럽게 학습할 수 있습니다.  
+- 문서에 포함된 코드는 그대로 컴파일/실행이 가능
 
 ---
 
