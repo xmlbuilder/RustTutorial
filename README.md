@@ -1,18 +1,18 @@
 # Rust Tutorial — Chapters
 
-## 🦀 Rust Tutorial for System & Engineering Developers
+### 📌 Rust Tutorial for System & Engineering Developers
 - Rust 학습을 위한 실전 중심 튜토리얼입니다.  
 - 기초 문법부터 고급 패턴, 디자인 패턴, 프로젝트 예제까지 폭넓게 다룹니다.
 - 이 저장소는 단순한 Rust 문법 입문서가 아닙니다.
 - C/C++ 기반 개발자, 엔지니어, 보안·성능을 중시하는 개발자를 위해
   Rust의 설계 철학과 사고 전환을 중심으로 정리한 튜토리얼입니다.
 
-## 이런 분께 추천합니다
+### 📌 이런 분께 추천합니다
 - C / C++ 개발 경험이 있는 분
 - Rust를 "왜 써야 하는지" 이해하고 싶은 분
 - 메모리 안전성, 설계 안정성을 중시하는 엔지니어
 
-## 주의 사항
+### 📌 주의 사항
 - ※ 이 문서는 Rust 공식 문서를 재정리한 것이 아니라,
   실제 시스템 개발 경험에서 도출된 설계 관점 정리입니다.
 
@@ -33,7 +33,7 @@
   
 ---
 
-## 📚 목차(바로가기)
+### 📌 목차(바로가기)
 - [Chapter 01 (Rust 소개 및 환경 설정)](#chapter01)
 - [Chapter 02 (기본 문법과 타입 시스템)](#chapter02)
 - [Chapter 03 (제어 흐름과 함수)](#chapter03)
@@ -55,9 +55,9 @@
 
 ---
 
-## 📚 목차
+### 📌 목차
 
-## <a id="chapter01"></a>[Chapter-01(Rust 소개 및 환경 설정)](./Chapter-01%28Rust%20소개%20및%20환경%20설정%29)
+#### <a id="chapter01"></a> 🔹 [Chapter-01(Rust 소개 및 환경 설정)](./Chapter-01%28Rust%20소개%20및%20환경%20설정%29)
 - [00-00-Rust_소개](./Chapter-01%28Rust%20소개%20및%20환경%20설정%29/00-00-Rust_소개.md)
 - [00-01-보안적_관점](./Chapter-01%28Rust%20소개%20및%20환경%20설정%29/00-01-보안적_관점.md)
 - [01-Cargo.toml_파일분석](./Chapter-01%28Rust%20소개%20및%20환경%20설정%29/01-Cargo.toml_%ED%8C%8C%EC%9D%BC%EB%B6%84%EC%84%9D.md)
@@ -86,7 +86,7 @@
   
 🔼 [맨 위로](#-목차)
 
-### <a id="chapter02"></a>🧮 [Chapter-02(기본 문법과 타입 시스템)](./Chapter-02(기본%20문법과%20타입%20시스템))
+#### <a id="chapter02"></a> 🔹 [Chapter-02(기본 문법과 타입 시스템)](./Chapter-02(기본%20문법과%20타입%20시스템))
 - [00-데이터_타입](./Chapter-02(기본%20문법과%20타입%20시스템)/00-%EB%8D%B0%EC%9D%B4%ED%84%B0_%ED%83%80%EC%9E%85.md)
 - [01-mutable](./Chapter-02(기본%20문법과%20타입%20시스템)/01-mutable.md)
 - [02-Const_Variable](./Chapter-02(기본%20문법과%20타입%20시스템)/02-Const_Variable.md)
@@ -186,7 +186,7 @@
 
 🔼 [맨 위로](#-목차)
 
-### <a id="chapter03"></a> 🧵 [Chapter-03(제어 흐름과 함수)](./Chapter-03(제어%20흐름과%20함수))
+#### <a id="chapter03"></a> 🔹 [Chapter-03(제어 흐름과 함수)](./Chapter-03(제어%20흐름과%20함수))
 - [01-Function](./Chapter-03(제어%20흐름과%20함수)/01-Function.md)
 - [02-01-FunctionParameter](./Chapter-03(제어%20흐름과%20함수)/02-01-FunctionParameter.md)
 - [02-02-FunctionParameter](./Chapter-03(제어%20흐름과%20함수)/02-02-FunctionParameter.md)  
@@ -206,7 +206,7 @@
 
 🔼 [맨 위로](#-목차)
 
-### <a id="chapter04"></a> 🧠 [Chapter-04(소유권과 참조)](./Chapter-04(소유권과%20참조))
+#### <a id="chapter04"></a> 🔹 [Chapter-04(소유권과 참조)](./Chapter-04(소유권과%20참조))
 - [00-Lifetime](./Chapter-04(소유권과%20참조)/00-Lifetime.md)
 - [01-Ownership&Borrowing](./Chapter-04(소유권과%20참조)/01-Ownership%26Borrowing.md)
 - [02-Reference&Borrowing](./Chapter-04(소유권과%20참조)/02-Reference&Borrowing.md)
@@ -263,7 +263,7 @@
 
 🔼 [맨 위로](#-목차)
 
-### <a id="chapter05"></a> 🧬 [Chapter-05(패턴 매칭과 분해)](./Chapter-05(패턴%20매칭과%20분해))
+#### <a id="chapter05"></a> 🔹 [Chapter-05(패턴 매칭과 분해)](./Chapter-05(패턴%20매칭과%20분해))
 - [01-Match](./Chapter-05(패턴%20매칭과%20분해)/01-Match.md)
 - [02-EnumPatternMatching](./Chapter-05(패턴%20매칭과%20분해)/02-EnumPatternMatching.md)
 - [03-구조체_Destructuring](./Chapter-05(패턴%20매칭과%20분해)/03-구조체_Destructuring.md)
@@ -277,7 +277,7 @@
 
 🔼 [맨 위로](#-목차)
 
-### <a id="chapter06"></a> 🧰 [Chapter-06(트레잇과 제네릭)](Chapter-06(트레잇과%20제네릭))
+#### <a id="chapter06"></a> 🔹 [Chapter-06(트레잇과 제네릭)](Chapter-06(트레잇과%20제네릭))
 - [01-Generic_Trait_Lifetime](./Chapter-06(트레잇과%20제네릭)/01-Generic_Trait_Lifetime.md)
 - [02-Generic](./Chapter-06(트레잇과%20제네릭)/02-Generic.md)
 - [03-Generic_Trait](./Chapter-06(트레잇과%20제네릭)/03-Generic_Trait.md)
@@ -322,7 +322,7 @@
 - [40-Trait_Object_개념설명](./Chapter-06(트레잇과%20제네릭)/40-Trait_Object_개념설명.md)
 🔼 [맨 위로](#-목차)
 
-### <a id="chapter07"></a> 📦 [Chapter-07(컬렉션과 반복자)](./Chapter-07(컬렉션과%20반복자))
+#### <a id="chapter07"></a> 🔹 [Chapter-07(컬렉션과 반복자)](./Chapter-07(컬렉션과%20반복자))
 - [01-Collection](./Chapter-07(컬렉션과%20반복자)/01-Collection.md)
 - [02-map](./Chapter-07(컬렉션과%20반복자)/02-map.md)
 - [03-FilterMap](./Chapter-07(컬렉션과%20반복자)/03-FilterMap.md)
@@ -350,7 +350,7 @@
 
 🔼 [맨 위로](#-목차)
 
-### <a id="chapter08"></a> 🚨 [Chapter-08(에러 처리)](Chapter-08(에러%20처리와Option-Result))
+#### <a id="chapter08"></a> 🔹 [Chapter-08(에러 처리)](Chapter-08(에러%20처리와Option-Result))
 - [01-Option](./Chapter-08(에러%20처리와Option-Result)/01-Option.md)
 - [02-에러처리](./Chapter-08(에러%20처리와Option-Result)/02-에러처리.md)
 - [03-에러처리전파](./Chapter-08(에러%20처리와Option-Result)/03-에러처리전파.md)
@@ -373,7 +373,7 @@
 🔼 [맨 위로](#-목차)
 
 
-### <a id="chapter09"></a> 🧪 [Chapter-09(테스트와 디버깅)](./Chapter-09(테스트와%20디버깅))
+#### <a id="chapter09"></a> 🔹 [Chapter-09(테스트와 디버깅)](./Chapter-09(테스트와%20디버깅))
 - [01-Test기본](./Chapter-09(테스트와%20디버깅)/01-Test기본.md)
 - [02-Test필요성](./Chapter-09(테스트와%20디버깅)/02-Test필요성.md)
 - [03-TestCargo](./Chapter-09(테스트와%20디버깅)/03-TestCargo.md)
@@ -388,7 +388,7 @@
 
 🔼 [맨 위로](#-목차)
 
-### <a id="chapter10"></a> 🧱 [Chapter-10(모듈과 크레이트 Cargo)](Chapter-10(모듈%2C%20크레이트%2C%20Cargo))
+#### <a id="chapter10"></a> 🔹 [Chapter-10(모듈과 크레이트 Cargo)](Chapter-10(모듈%2C%20크레이트%2C%20Cargo))
 - [01-module](Chapter-10(모듈%2C%20크레이트%2C%20Cargo)/01-module.md)
 - [02-use](./Chapter-10(모듈%2C%20크레이트%2C%20Cargo)/02-use.md)
 - [03-제한자](./Chapter-10(모듈%2C%20크레이트%2C%20Cargo)/03-제한자.md)
@@ -402,7 +402,7 @@
 
 🔼 [맨 위로](#-목차)
 
-### <a id="chapter11"></a> 🔀 [Chapter-11(비동기와 병렬 처리)](./Chapter-11(비동기와%20병렬%20처리))
+#### <a id="chapter11"></a> 🔹 [Chapter-11(비동기와 병렬 처리)](./Chapter-11(비동기와%20병렬%20처리))
 - [01-Async](./Chapter-11(비동기와%20병렬%20처리)/01-Async.md)
 - [02-Rayon](./Chapter-11(비동기와%20병렬%20처리)/02-Rayon.md)
 - [03-tokio_futures](./Chapter-11(비동기와%20병렬%20처리)/03-tokio_futures.md)
@@ -427,7 +427,7 @@
 
 🔼 [맨 위로](#-목차)
 
-### <a id="chapter12"></a> 🧨 [Chapter-12(Unsafe와 FFI)](./Chapter-12(Unsafe와%20FFI))
+#### <a id="chapter12"></a> 🔹 [Chapter-12(Unsafe와 FFI)](./Chapter-12(Unsafe와%20FFI))
 - [01-unsafe](./Chapter-12(Unsafe와%20FFI)/01-unsafe.md)
 - [02-raw_pointer](./Chapter-12(Unsafe와%20FFI)/02-raw_pointer.md)
 - [03-FFI기초](./Chapter-12(Unsafe와%20FFI)/03-FFI기초.md)
@@ -444,7 +444,7 @@
 
 🔼 [맨 위로](#-목차)
 
-### <a id="chapter13"></a> 🧩 [Chapter-13(매크로와 메타프로그래밍)](./Chapter-13(매크로와%20메타프로그래밍))
+#### <a id="chapter13"></a> 🔹 [Chapter-13(매크로와 메타프로그래밍)](./Chapter-13(매크로와%20메타프로그래밍))
 - [01-macro_rules](./Chapter-13(매크로와%20메타프로그래밍)/01-macro_rules.md)
 - [02-macro위치](./Chapter-13(매크로와%20메타프로그래밍)/02-macro%EC%9C%84%EC%B9%98.md)
 - [03-Turbofish](./Chapter-13(매크로와%20메타프로그래밍)/03-Turbofish.md)
@@ -458,7 +458,7 @@
 
 🔼 [맨 위로](#-목차)
 
-### <a id="chapter14"></a> 🧑‍🎓 [Chapter-14(디자인 패턴)](./Chapter-14%28DesignPattern%29)
+#### <a id="chapter14"></a> 🔹 [Chapter-14(디자인 패턴)](./Chapter-14%28DesignPattern%29)
 - [000-UML설명문서](./Chapter-14%28DesignPattern%29/000-UML설명문서.md)
 - [001-Singletone](./Chapter-14%28DesignPattern%29/001-Singletone.md)
 - [002-Observer](./Chapter-14%28DesignPattern%29/002-Observer.md)
@@ -487,7 +487,7 @@
 
 🔼 [맨 위로](#-목차)
 
-### <a id="chapter15"></a> 🧑‍🎓 [Chapter-15(SmartPointers_and_MemoryModels)](./Chapter-15%28SmartPointers_and_MemoryModels%29)
+#### <a id="chapter15"></a> 🔹 [Chapter-15(SmartPointers_and_MemoryModels)](./Chapter-15%28SmartPointers_and_MemoryModels%29)
 - [00-C_메모리_대체_함수_소개](./Chapter-15%28SmartPointers_and_MemoryModels%29/00-C_메모리_대체_함수_소개.md)
 - [01-메모리관리](./Chapter-15%28SmartPointers_and_MemoryModels%29/01-메모리관리.md)
 - [02-메모리해제](./Chapter-15%28SmartPointers_and_MemoryModels%29/02-메모리해제.md)
@@ -515,7 +515,7 @@
 
 🔼 [맨 위로](#-목차)
 
-### <a id="chapter16"></a> 🧑‍🎓 [Chapter-16(문자열처리)](./Chapter-16(문자열처리))
+#### <a id="chapter16"></a> 🔹 [Chapter-16(문자열처리)](./Chapter-16(문자열처리))
 - [01-r#](./Chapter-16(문자열처리)/01-r%23.md)
 - [02-문자열파싱](./Chapter-16(문자열처리)02-문자열파싱.md)
 - [03-문자열ASCII출력](./Chapter-16(문자열처리)/03-문자열ASCII출력.md)
@@ -532,7 +532,7 @@
 
 🔼 [맨 위로](#-목차)
 
-### <a id="chapter17"></a> 🧪 [Chapter-17(실전 예제와 프로젝트)](./Chapter-17(실전%20예제와%20프로젝트))
+#### <a id="chapter17"></a> 🔹 [Chapter-17(실전 예제와 프로젝트)](./Chapter-17(실전%20예제와%20프로젝트))
 - [01-HermiteCurve](./Chapter-17(실전%20예제와%20프로젝트)/01-HermiteCurve.md)
 - [02-JsonParsing](./Chapter-17(실전%20예제와%20프로젝트)/02-JsonParsing.md)
 - [03-CAN_Sample](./Chapter-17(실전%20예제와%20프로젝트)/03-CAN_Sample.md)
@@ -604,7 +604,7 @@
 
 🔼 [맨 위로](#-목차)
   
-### <a id="chapter18"></a> 🧪 [Chapter-18(기타 및 실험적 항목)](./Chapter-18(기타%20및%20실험적%20항목))
+#### <a id="chapter18"></a> 🔹 [Chapter-18(기타 및 실험적 항목)](./Chapter-18(기타%20및%20실험적%20항목))
 - [01-io](./Chapter-18(기타%20및%20실험적%20항목)/01-io.md)
 - [02-lazy_static](./Chapter-18(기타%20및%20실험적%20항목)/02-lazy_static.md)
 - [03-Rand](./Chapter-18(기타%20및%20실험적%20항목)/03-Rand.md)
@@ -632,7 +632,7 @@
   
 🔼 [맨 위로](#-목차)
 
-### <a id="chapter19"></a> 🛠️ [Chapter-19(도구와 생산성)](./Chapter-19(도구와%20생산성))
+#### <a id="chapter19"></a> 🔹 [Chapter-19(도구와 생산성)](./Chapter-19(도구와%20생산성))
 - [01-Clippy](./Chapter-19(도구와%20생산성)/01-Clippy.md)
 - [02-Coverage](./Chapter-19(도구와%20생산성)/02-Coverage.md)
 - [03-rustfmt](./Chapter-19(도구와%20생산성)/03-rustfmt.md)
@@ -640,8 +640,8 @@
 
 🔼 [맨 위로](#-목차)
 
-## License
-This project is licensed under the MIT License.
+### 📌 License
+- This project is licensed under the MIT License.
 
 ---
 
