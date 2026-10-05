@@ -29,7 +29,7 @@
   - 빌드 설정, 의존성, 타겟 정의를 포함
 
 ### 📌 예시 비교
-Rust
+#### 🔹 Rust
 ```
 [package]
 name = "my_package"
@@ -44,7 +44,7 @@ name = "binary2"
 path = "src/bin/binary2.rs"
 ```
 
-### 📌 C++
+#### 🔹 C++
 ```
 add_executable(binary1 src/bin/binary1.cpp)
 add_executable(binary2 src/bin/binary2.cpp)
