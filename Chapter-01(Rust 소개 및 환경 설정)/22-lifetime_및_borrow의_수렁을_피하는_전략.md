@@ -1,6 +1,6 @@
-# lifetime 및 borrow의 수렁을 피하는 전략
+## 📘 lifetime 및 borrow의 수렁을 피하는 전략
 
-## 1) 수렁을 피하는 대원칙 7
+### 📌 1) 수렁을 피하는 대원칙 7
 
 - 동사만 먼저, 타입/라이프타임은 나중
 - 시그니처를 일단 **값 중심** 으로 씀. 참조는 최대한 미루고, 가능하면 Clone + Cow/Arc로 시작합니다.
@@ -10,10 +10,10 @@
 trait Step { fn run(&self, input: &Input, ctx: &mut Ctx) -> Result<Output>; }
 ```
 
-### Trait Object(런타임 다형)부터 시작
+### 📌 Trait Object(런타임 다형)부터 시작
 - 제네릭로 시작하면 lifetime/타입 전파가 폭발.
 
-#### 초판은:
+#### 🔹 초판은:
   
 ```rust
 type BoxStep = Box<dyn Step>; // or Rc<dyn Step>
@@ -21,7 +21,7 @@ struct Pipeline { steps: Vec<BoxStep> }
 ```
 - 성능 병목이 보일 때만 제네릭로 올립니다.
 
-### ID/핸들 패턴 (Arena/ECS식)
+#### 🔹 ID/핸들 패턴 (Arena/ECS식)
 - 구조체 참조를 트레이트에 넣지 말고, ID로 참조하고 실제 데이터는 Ctx/아레나가 소유:
 ```rust
 struct MeshId(u32);
@@ -29,7 +29,7 @@ struct Ctx { meshes: Arena<Mesh>, /* ... */ }
 trait Op { fn apply(&self, id: MeshId, ctx: &mut Ctx); } // ← 수명 프리
 ```
 
-### 객체 안전(Object-safe) 규칙을 지켜라
+#### 🔹 객체 안전(Object-safe) 규칙을 지켜라
 - 트레이트 오브젝트로 쓸 거면: 제네릭 메서드/Self: Sized/연관 상수 남발 금지.
 - 필요하면 “두 개의 트레이트”로 나눠서, 바깥은 오브젝트-세이프, 안쪽은 제네릭로.
 - 콜백은 HRTB로 받기 (수명 오염 방지)
@@ -37,19 +37,21 @@ trait Op { fn apply(&self, id: MeshId, ctx: &mut Ctx); } // ← 수명 프리
 ```rust
 fn visit<F>(&self, f: F) where for<'a> F: FnMut(&'a Node) { /* ... */ }
 ```
-- 이렇게 하면 호출자 수명이 구현으로 새어들지 않아요.
+- 이렇게 하면 호출자 수명이 구현으로 새어들지 않음.
 - 초기에는 ‘소유’를 두껍게 &[T]보다 Arc<[T]> / Cow<'_, T> / SmallVec 등을 써서 설계 확정 전까지 수명 의존을 줄입니다.
 
-## 2) 나쁜/좋은 트레이트 시그니처 비교 (수명 폭탄 방지)
+---
 
-### ❌ 나쁨: 수명을 외부로 새게 만듦
+### 📌 2) 나쁜/좋은 트레이트 시그니처 비교 (수명 폭탄 방지)
+
+#### ❌ 나쁨: 수명을 외부로 새게 만듦
 ```rust
 trait Intersect<'a> {
     fn hit(&'a self, a: &'a Mesh, b: &'a Mesh) -> bool; // 'a가 전체를 지배
 }
 ```
 
-### ✅ 좋음: 컨텍스트에 소유/캐시 모음, 트레이트는 얇게
+#### 🔹 좋음: 컨텍스트에 소유/캐시 모음, 트레이트는 얇게
 ```rust
 struct Ctx<'s> { meshes: &'s Arena<Mesh>, scratch: Scratch, /* ... */ }
 trait Intersect {
@@ -59,30 +61,30 @@ trait Intersect {
 - 외부 수명이 트레이트 시그니처에 등장하지 않으니 트레이트는 ‘수명 중립’.
 - 실제 참조는 ctx.meshes.get(a) 안에서만 잠깐 빌려 씀.
 
-## 3) **초판은 런타임**, 병목만 제네릭 단계적 업그레이드
-### 1단계: 빠른 조립 (런타임 다형)
+### 📌 3) **초판은 런타임**, 병목만 제네릭 단계적 업그레이드
+#### 🔹 1단계: 빠른 조립 (런타임 다형)
 ```rust
 trait Step { fn run(&self, input: &Input, ctx: &mut Ctx) -> Output; }
 struct Pipeline { steps: Vec<Box<dyn Step>>; }
 ```
-### 2단계: 성능 민감 구간만 제네릭로
+#### 🔹 2단계: 성능 민감 구간만 제네릭로
 ```rust
 trait StepImpl { fn run_impl(&self, input: &Input, ctx: &mut Ctx) -> Output; }
 struct Pipeline<T: StepImpl> { steps: Vec<T> } // 핵심 루프만 monomorphization
 ```
-### 3단계: 하이브리드
+#### 🔹 3단계: 하이브리드
 - 상위 조립은 dyn Step, 내부 뜨거운 루프는 T: Kernel로 분리.
 
-## 4) 수명 줄이는 6가지 패턴 (코드 조각)
+### 📌 4) 수명 줄이는 6가지 패턴 (코드 조각)
 
-### (a) 입력은 값/경량복사
+#### 🔹 (a) 입력은 값/경량복사
 ```rust
 #[derive(Clone)]
 struct Command { name: Arc<str>, args: Arc<[u8]> }
 trait Handle { fn handle(&self, cmd: Command, ctx: &mut Ctx); }
 ```
 
-### (b) GAT로 이터레이터/뷰 노출 (필요할 때만)
+#### 🔹 (b) GAT로 이터레이터/뷰 노출 (필요할 때만)
 ```rust
 trait Scene {
     type Iter<'a>: Iterator<Item = &'a Node> where Self: 'a;
@@ -90,7 +92,7 @@ trait Scene {
 }
 ```
 
-### (c) 빌더로 ‘구성’과 ‘수행’ 분리
+#### 🔹 (c) 빌더로 ‘구성’과 ‘수행’ 분리
 ```rust
 struct PipelineBuilder { steps: Vec<Box<dyn Step>> }
 impl PipelineBuilder {
@@ -99,31 +101,31 @@ impl PipelineBuilder {
 }
 ```
 
-### (d) 에러 정책은 enum으로 중앙집중
+#### 🔹 (d) 에러 정책은 enum으로 중앙집중
 ```rust
 enum Policy { Strict, BestEffort }
 struct Ctx { policy: Policy, errors: Vec<anyhow::Error> }
 ```
 
-### (e) 스케줄/이벤트 파이프는 ‘데이터→행위’ 분리
+#### 🔹 (e) 스케줄/이벤트 파이프는 ‘데이터→행위’ 분리
 ```rust
 enum Event { Mouse{..}, Key{..} }
 trait Listener { fn on(&self, ev: &Event, ctx: &mut Ctx); }
 ```
 
-### (f) 어댑터/새장(Sealed)로 외부 확장 제어
+#### 🔹 (f) 어댑터/새장(Sealed)로 외부 확장 제어
 ```rust
 mod sealed { pub trait Sealed {} }
 pub trait Bounded: sealed::Sealed { fn bbox(&self) -> Aabb; }
 ```
 
-## 5) “되돌리기 쉬운” 안전장치
+### 📌 5) “되돌리기 쉬운” 안전장치
 - Facade 유지: 기존 API는 얇은 래퍼로 남겨두고 내부만 바꿔치기. 실패해도 외부 영향 최소화.
 - Feature flag: cargo feature="behavior_pipeline"로 새/구 동작 전환.
 - Contract Test 세트: 예전/새 구현에 같은 테스트 벡터를 돌려 비교(스냅샷 테스트 추천).
 - Migration 단계 문서: public 변경점/대체법/폐기기한을 README에 명시.
 
-## 6) 커밋 전 10문 체크리스트
+### 📌 6) 커밋 전 10문 체크리스트
 
 - 트레이트 메서드에 수명 파라미터가 꼭 필요한가? (대부분 아니어야 함)
 - 트레이트가 객체 안전인가? (dyn로 쓸 수 있는가)
@@ -136,15 +138,15 @@ pub trait Bounded: sealed::Sealed { fn bbox(&self) -> Aabb; }
 - 작은 합성으로 큰 행동을 만들 수 있는가?
 - 계측 포인트(시간/할당/카운터)가 있는가?
 
-## 7) 미니 예시: 공간 인덱스(데이터 중심 → 행위 중심)
+### 📌 7) 미니 예시: 공간 인덱스(데이터 중심 → 행위 중심)
 
-### 데이터 중심(OOP식)
+#### 🔹 데이터 중심(OOP식)
 ```rust
 struct Object { bbox: Aabb, kind: Kind /* ... */ }
 fn insert(tree: &mut Tree, o: &Object) { /* kind별 분기 */ }
 ```
 
-### 행위 중심
+#### 🔹 행위 중심
 ```rust
 trait Bounded { fn bbox(&self) -> HasAABB; }
 struct Spatial { items: Vec<Box<dyn Bounded>>; }
@@ -161,14 +163,14 @@ impl Spatial {
 
 --- 
 
-# 🧩 프로젝트 이름: collide
+## 📘 프로젝트 이름: collide
 
-## 목표: 
-다양한 객체를 공간에 삽입하고, 충돌 여부를 검사하는 시스템을  
+### 📌 목표: 
+- 다양한 객체를 공간에 삽입하고, 충돌 여부를 검사하는 시스템을  
 행위 중심 트레이트 + 컨텍스트 기반으로 설계
 
 
-## 🧱 1. 핵심 개념 정리
+### 📌 1. 핵심 개념 정리
 | 개념      | 설명 또는 핵심 메서드                      |
 |-----------|--------------------------------------------|
 | `Bounded` | `bbox()` 메서드를 통해 공간 영역을 제공     |
@@ -178,7 +180,7 @@ impl Spatial {
 | `Step`    | `run(input, ctx)` 메서드를 가진 파이프라인 단계 |
 
 
-## 📦 프로젝트 구조
+### 📌 프로젝트 구조
 ```
 collide/
 ├── src/
@@ -199,7 +201,7 @@ collide/
 ```
 
 
-## 🧪 2. 기본 타입 정의
+### 📌 2. 기본 타입 정의
 - src/ctx.rs
 ```rust
 use generational_arena::Arena;
@@ -232,7 +234,7 @@ pub trait Step {
 ```
 
 
-##🧪 3. 객체 정의 및 트레이트 구현
+### 📌 3. 객체 정의 및 트레이트 구현
 - src/impls/mesh.rs
 ```rust
 #[derive(Clone)]
@@ -263,7 +265,7 @@ impl crate::traits::bounded::Bounded for Mesh {
 ```
 
 
-## 🧪 4. 공간 인덱스
+### 📌 4. 공간 인덱스
 - src/impls/spatial.rs
 ```rust
 use crate::traits::bounded::Bounded;
@@ -285,7 +287,7 @@ impl Spatial {
 ```
 
 
-## 🧪 5. 파이프라인 단계 구현
+### 📌 5. 파이프라인 단계 구현
 - src/impls/steps/logger.rs
 ```rust
 use crate::traits::step::Step;
@@ -338,7 +340,7 @@ impl Step for Collider {
 ```
 
 
-## 🧪 6. 파이프라인 조립
+### 📌 6. 파이프라인 조립
 - src/pipeline.rs
 ```rust
 use crate::traits::step::Step;
@@ -358,7 +360,7 @@ impl Pipeline {
 ```
 
 
-## 🧪 7. 실행 예시
+### 📌 7. 실행 예시
 - src/main.rs
 ```rust
 mod ctx;
@@ -399,7 +401,7 @@ fn main() {
 ```
 
 
-## ✅ 이 프로젝트가 실전 연습에 좋은 이유
+### 📌 이 프로젝트가 실전 연습에 좋은 이유
 | 항목                        | 설명                                                                 |
 |-----------------------------|----------------------------------------------------------------------|
 | `Step`, `Bounded`, `Intersect` | 동사 중심 트레이트로 행위 분리. 각 기능은 작고 단일 책임을 가짐         |
@@ -412,7 +414,7 @@ fn main() {
 
 ---
 
-# 🧠 구조 분석
+### 📌 구조 분석
 
 ```rust
 impl Iterator<Item = &dyn Bounded>
@@ -421,7 +423,7 @@ impl Iterator<Item = &dyn Bounded>
 - Item = &dyn Bounded: 이 이터레이터가 반환하는 항목의 타입은 &dyn Bounded
 - 즉, Bounded 트레이트를 구현한 객체에 대한 불변 참조
 
-## ✅ 의미 요약
+#### 🔹 의미 요약
 “Bounded 트레이트를 구현한 객체들을 참조하는 이터레이터를 반환한다”  
 예를 들어, 공간 인덱스에서 query() 메서드가 이런 타입을 반환한다면:  
 ```rust
@@ -431,7 +433,7 @@ fn query(&self, q: Aabb) -> impl Iterator<Item = &dyn Bounded>
 - 이건 q와 충돌하는 모든 객체를 반복하면서
 - 각 객체를 &dyn Bounded로 반환해줌
 
-## 🧪 예시
+#### 🔹 예시
 ```rust
 let spatial = Spatial::new();
 spatial.insert(Box::new(MyObject));
@@ -444,7 +446,7 @@ for obj in spatial.query(some_bbox) {
 - obj는 &dyn Bounded
 - bbox()는 Bounded 트레이트의 메서드
 
-## ✨ 장점
+### 📌 장점
 | 항목                        | 설명                                                                 |
 |-----------------------------|----------------------------------------------------------------------|
 | `Bounded`                   | 공간 정보를 추상화하는 트레이트. 다양한 타입을 동일 인터페이스로 처리 가능 |
